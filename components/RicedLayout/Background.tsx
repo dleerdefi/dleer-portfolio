@@ -2,41 +2,67 @@
 
 import React from 'react';
 
-const Background: React.FC = () => {
+interface BackgroundProps {
+  wallpaperUrl?: string;
+}
+
+const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1a1b26] via-[#24283b] to-[#1a1b26]">
-        {/* Animated gradient orbs */}
-        <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
-        <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000"></div>
+      {/* Base gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1a1b26] via-[#292e42] to-[#16161e]">
+        {/* Custom wallpaper layer */}
+        {wallpaperUrl && (
+          <div
+            className="absolute inset-0 opacity-40"
+            style={{
+              backgroundImage: `url(${wallpaperUrl})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              filter: 'brightness(0.7) contrast(1.1)',
+            }}
+          />
+        )}
 
-        {/* Grid pattern overlay */}
+        {/* Vibrant animated gradient orbs - matching the mockup's pink/blue aesthetic */}
+        <div className="absolute top-10 left-10 w-96 h-96 bg-gradient-to-r from-[#f38ba8] to-[#cba6f7] rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob"></div>
+        <div className="absolute top-40 right-20 w-80 h-80 bg-gradient-to-r from-[#89b4fa] to-[#7dcfff] rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-20 left-1/3 w-72 h-72 bg-gradient-to-r from-[#cba6f7] to-[#89dceb] rounded-full mix-blend-screen filter blur-3xl opacity-15 animate-blob animation-delay-4000"></div>
+
+        {/* Extra vibrant spots for depth */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#bb9af7]/20 via-[#7aa2f7]/20 to-[#7dcfff]/20 rounded-full filter blur-3xl"></div>
+
+        {/* Grid pattern overlay - subtle */}
         <div
-          className="absolute inset-0 opacity-5"
+          className="absolute inset-0 opacity-[0.02]"
           style={{
-            backgroundImage: `linear-gradient(rgba(122, 162, 247, 0.1) 1px, transparent 1px),
-                             linear-gradient(90deg, rgba(122, 162, 247, 0.1) 1px, transparent 1px)`,
-            backgroundSize: '50px 50px'
+            backgroundImage: `linear-gradient(rgba(137, 180, 250, 0.15) 1px, transparent 1px),
+                             linear-gradient(90deg, rgba(137, 180, 250, 0.15) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px'
           }}
         />
 
-        {/* Noise texture */}
+        {/* Noise texture for depth */}
         <div
-          className="absolute inset-0 opacity-[0.015]"
+          className="absolute inset-0 opacity-[0.02]"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            mixBlendMode: 'overlay',
           }}
         />
+
+        {/* Vignette effect */}
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-[#1a1b26]/50"></div>
       </div>
 
-      {/* Additional animated elements */}
+      {/* Stars/particles effect */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-full filter blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-cyan-500/10 to-green-500/10 rounded-full filter blur-3xl animate-pulse animation-delay-2000"></div>
+        <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-white rounded-full opacity-50 animate-pulse"></div>
+        <div className="absolute top-3/4 left-2/3 w-1 h-1 bg-white rounded-full opacity-30 animate-pulse animation-delay-2000"></div>
+        <div className="absolute top-1/2 right-1/4 w-0.5 h-0.5 bg-white rounded-full opacity-40 animate-pulse animation-delay-4000"></div>
+        <div className="absolute bottom-1/3 left-1/2 w-0.5 h-0.5 bg-white rounded-full opacity-20 animate-pulse"></div>
       </div>
-
     </div>
   );
 };

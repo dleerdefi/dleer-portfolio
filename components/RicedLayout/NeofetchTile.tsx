@@ -2,12 +2,18 @@
 
 import React from 'react';
 
-const NeofetchTile: React.FC = () => {
+interface NeofetchTileProps {
+  isBlurred?: boolean;
+}
+
+const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
   return (
-    <div className="h-full flex p-6 font-mono text-sm text-[#a9b1d6]">
+    <div className={`h-full flex font-mono text-sm transition-all duration-300 ${
+      isBlurred ? 'text-[#eff1f5]/70' : 'text-[#eff1f5]'
+    }`}>
       {/* ASCII Art Column */}
       <div className="w-1/3 pr-4">
-        <pre className="text-[#7aa2f7] text-xs leading-tight">
+        <pre className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} text-xs leading-tight transition-all duration-300`}>
 {`
     ██████╗ ██╗
     ██╔══██╗██║
@@ -21,52 +27,52 @@ const NeofetchTile: React.FC = () => {
 
       {/* Info Column */}
       <div className="flex-1 space-y-1">
-        <div className="text-[#7aa2f7] font-bold mb-2">
-          david@portfolio
-          <div className="text-[#414868]">---------------</div>
+        <div className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold mb-2 transition-all duration-300`}>
+          <span className="text-[#a6e3a1]">dleer</span>@<span className="text-[#cba6f7]">portfolio</span>
+          <div className={`${isBlurred ? 'text-[#565f89]/40' : 'text-[#565f89]/60'} transition-all duration-300`}>---------------</div>
         </div>
 
         <div className="space-y-0.5">
           <div>
-            <span className="text-[#7aa2f7]">OS</span>: Arch Linux x86_64
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} transition-all duration-300`}>OS</span>: Arch Linux x86_64
           </div>
           <div>
-            <span className="text-[#7aa2f7]">Host</span>: DeFi Architect
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} transition-all duration-300`}>WM</span>: Hyprland
           </div>
           <div>
-            <span className="text-[#7aa2f7]">Kernel</span>: 5.0.0-blockchain
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} transition-all duration-300`}>Terminal</span>: kitty
           </div>
           <div>
-            <span className="text-[#7aa2f7]">Uptime</span>: 5 years
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} transition-all duration-300`}>Shell</span>: zsh 5.9
           </div>
           <div>
-            <span className="text-[#7aa2f7]">Packages</span>: 12 (production)
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} transition-all duration-300`}>Packages</span>: 1337 (pacman)
           </div>
           <div>
-            <span className="text-[#7aa2f7]">Shell</span>: zsh 5.9
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} transition-all duration-300`}>Uptime</span>: 16h 20m
           </div>
           <div>
-            <span className="text-[#7aa2f7]">Terminal</span>: Portfolio v1.0
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} transition-all duration-300`}>Memory</span>: 2048MiB / 16384MiB
           </div>
           <div>
-            <span className="text-[#7aa2f7]">CPU</span>: TokenEconomics @ 4.50 GHz
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} transition-all duration-300`}>CPU</span>: AMD Ryzen 9 @ 16x 3.8GHz
           </div>
           <div>
-            <span className="text-[#7aa2f7]">GPU</span>: Neo4j Graph Engine
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} transition-all duration-300`}>GPU</span>: NVIDIA RTX 4090
           </div>
           <div>
-            <span className="text-[#7aa2f7]">Memory</span>: 50M TVL / ∞ Available
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} transition-all duration-300`}>Resolution</span>: 3440x1440
           </div>
 
-          <div className="pt-2 flex gap-1">
-            <span className="w-3 h-3 bg-[#1a1b26] inline-block"></span>
-            <span className="w-3 h-3 bg-[#f7768e] inline-block"></span>
-            <span className="w-3 h-3 bg-[#9ece6a] inline-block"></span>
-            <span className="w-3 h-3 bg-[#e0af68] inline-block"></span>
-            <span className="w-3 h-3 bg-[#7aa2f7] inline-block"></span>
-            <span className="w-3 h-3 bg-[#bb9af7] inline-block"></span>
-            <span className="w-3 h-3 bg-[#7dcfff] inline-block"></span>
-            <span className="w-3 h-3 bg-[#a9b1d6] inline-block"></span>
+          <div className="pt-3 flex gap-1">
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#1a1b26'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#f38ba8'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#a6e3a1'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#e0af68'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#89b4fa'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#cba6f7'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#89dceb'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#eff1f5'}}></span>
           </div>
         </div>
       </div>

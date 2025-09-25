@@ -15,8 +15,8 @@ export type ContentType =
   | { type: 'home' };
 
 const LayoutManager: React.FC = () => {
-  const [activeContent, setActiveContent] = useState<ContentType>({ type: 'home' });
-  const [focusedTile, setFocusedTile] = useState<'neofetch' | 'navigation' | 'content'>('navigation');
+  const [activeContent, setActiveContent] = useState<ContentType>({ type: 'about' });
+  const [focusedTile, setFocusedTile] = useState<'neofetch' | 'navigation' | 'content'>('content');
   const [isMobile, setIsMobile] = useState(false);
   const [tileCount, setTileCount] = useState(3); // Default 3 tiles in desktop view
 
@@ -132,21 +132,30 @@ const LayoutManager: React.FC = () => {
           <div className="h-full flex" style={{ gap: '12px' }}>
             {/* Left Column - 50% */}
             <div className="w-1/2 flex flex-col" style={{ gap: '12px' }}>
-          {/* Neofetch Tile - Top */}
+          {/* Neofetch Tile - Top - Dynamic transparency based on content */}
           <div
-            className={`h-1/2 bg-[#24283b]/75 backdrop-blur-md rounded-lg shadow-xl border-2 transition-all duration-200 ${
-              focusedTile === 'neofetch' ? 'border-[#7aa2f7] shadow-[#7aa2f7]/20 shadow-2xl' : 'border-[#414868]/50'
-            } overflow-hidden`}
+            className={`h-1/2 rounded-lg shadow-xl border transition-all duration-300 p-6 overflow-auto ${
+              focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
+            }`}
+            style={{
+              backgroundColor: activeContent.type === 'about' ? 'rgba(30, 30, 46, 1)' : 'rgba(30, 30, 46, 0.6)',
+              backdropFilter: activeContent.type === 'about' ? 'blur(0px)' : 'blur(8px)',
+              borderWidth: '1px'
+            }}
             onClick={() => setFocusedTile('neofetch')}
           >
-            <NeofetchTile />
+            <NeofetchTile isBlurred={activeContent.type !== 'about'} />
           </div>
 
-          {/* Navigation Tile - Bottom */}
+          {/* Navigation Tile - Bottom - Fixed transparency for readability */}
           <div
-            className={`h-1/2 bg-[#24283b]/75 backdrop-blur-md rounded-lg shadow-xl border-2 transition-all duration-200 ${
-              focusedTile === 'navigation' ? 'border-[#7aa2f7] shadow-[#7aa2f7]/20 shadow-2xl' : 'border-[#414868]/50'
-            } overflow-hidden`}
+            className={`h-1/2 rounded-lg shadow-xl border transition-all duration-300 p-6 overflow-auto ${
+              focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
+            }`}
+            style={{
+              backgroundColor: 'rgba(30, 30, 46, 0.8)',
+              borderWidth: '1px'
+            }}
             onClick={() => setFocusedTile('navigation')}
           >
             <NavigationTile
@@ -156,11 +165,15 @@ const LayoutManager: React.FC = () => {
           </div>
             </div>
 
-            {/* Right Column - 50% */}
+            {/* Right Column - 50% - High opacity for readability */}
             <div
-              className={`w-1/2 bg-[#24283b]/75 backdrop-blur-md rounded-lg shadow-xl border-2 transition-all duration-200 ${
-                focusedTile === 'content' ? 'border-[#7aa2f7] shadow-[#7aa2f7]/20 shadow-2xl' : 'border-[#414868]/50'
-              } overflow-hidden`}
+              className={`w-1/2 rounded-lg shadow-xl border transition-all duration-300 p-6 overflow-auto ${
+                focusedTile === 'content' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
+              }`}
+              style={{
+                backgroundColor: 'rgba(30, 30, 46, 0.95)',
+                borderWidth: '1px'
+              }}
               onClick={() => setFocusedTile('content')}
             >
               <ContentViewer content={activeContent} />
