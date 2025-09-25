@@ -17,16 +17,15 @@ export type ContentType =
 const LayoutManager: React.FC = () => {
   const [activeContent, setActiveContent] = useState<ContentType>({ type: 'about' });
   const [focusedTile, setFocusedTile] = useState<'neofetch' | 'navigation' | 'content'>('content');
-  const [isMobile, setIsMobile] = useState(false);
-  const [tileCount, setTileCount] = useState(3); // Default 3 tiles in desktop view
+  const [isStacked, setIsStacked] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const checkLayout = () => {
+      setIsStacked(window.innerWidth < 1024);
     };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    checkLayout();
+    window.addEventListener('resize', checkLayout);
+    return () => window.removeEventListener('resize', checkLayout);
   }, []);
 
   useEffect(() => {
@@ -67,52 +66,71 @@ const LayoutManager: React.FC = () => {
     }
   };
 
-  // Mobile Layout
-  if (isMobile) {
+  // Stacked Layout (Mobile/Tablet)
+  if (isStacked) {
     return (
       <>
         <Background />
-        <div className="h-screen flex flex-col relative">
+        <div className="min-h-screen overflow-y-auto flex flex-col">
           <Polybar
             activeContent={activeContent}
             onNavigate={handlePolybarNavigate}
-            tileCount={1}
-            isMobile={true}
+            tileCount={3}
           />
-          <div className="flex border-b-2 border-[#414868]/50 bg-[#24283b]/80 backdrop-blur-md">
-          <button
-            onClick={() => setFocusedTile('neofetch')}
-            className={`flex-1 p-3 text-sm font-mono ${focusedTile === 'neofetch' ? 'text-[#7aa2f7] border-b-2 border-[#7aa2f7]' : 'text-[#565f89]'}`}
-          >
-            Info
-          </button>
-          <button
-            onClick={() => setFocusedTile('navigation')}
-            className={`flex-1 p-3 text-sm font-mono ${focusedTile === 'navigation' ? 'text-[#7aa2f7] border-b-2 border-[#7aa2f7]' : 'text-[#565f89]'}`}
-          >
-            Files
-          </button>
-          <button
-            onClick={() => setFocusedTile('content')}
-            className={`flex-1 p-3 text-sm font-mono ${focusedTile === 'content' ? 'text-[#7aa2f7] border-b-2 border-[#7aa2f7]' : 'text-[#565f89]'}`}
-          >
-            Content
-          </button>
+          <div className="flex-1" style={{ padding: '12px' }}>
+            <div className="flex flex-col" style={{ gap: '12px' }}>
+              {/* Neofetch Tile */}
+              <div
+                className={`rounded-lg shadow-xl border transition-all duration-300 ${
+                  focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
+                }`}
+                style={{
+                  backgroundColor: activeContent.type === 'about' ? 'rgba(30, 30, 46, 1)' : 'rgba(30, 30, 46, 0.6)',
+                  backdropFilter: activeContent.type === 'about' ? 'blur(0px)' : 'blur(8px)',
+                  borderWidth: '1px',
+                  padding: '24px'
+                }}
+                onClick={() => setFocusedTile('neofetch')}
+              >
+                <NeofetchTile isBlurred={activeContent.type !== 'about'} />
+              </div>
+
+              {/* Navigation Tile */}
+              <div
+                className={`rounded-lg shadow-xl border transition-all duration-300 ${
+                  focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
+                }`}
+                style={{
+                  backgroundColor: 'rgba(30, 30, 46, 0.8)',
+                  borderWidth: '1px',
+                  padding: '24px'
+                }}
+                onClick={() => setFocusedTile('navigation')}
+              >
+                <NavigationTile
+                  onContentSelect={setActiveContent}
+                  activeContent={activeContent}
+                />
+              </div>
+
+              {/* Content Viewer */}
+              <div
+                className={`rounded-lg shadow-xl border transition-all duration-300 ${
+                  focusedTile === 'content' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
+                }`}
+                style={{
+                  backgroundColor: 'rgba(30, 30, 46, 0.95)',
+                  borderWidth: '1px',
+                  padding: '24px',
+                  minHeight: '400px'
+                }}
+                onClick={() => setFocusedTile('content')}
+              >
+                <ContentViewer content={activeContent} />
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex-1 bg-[#24283b]/80 backdrop-blur-md overflow-auto">
-          {focusedTile === 'neofetch' && <NeofetchTile />}
-          {focusedTile === 'navigation' && (
-            <NavigationTile
-              onContentSelect={(content) => {
-                setActiveContent(content);
-                setFocusedTile('content');
-              }}
-              activeContent={activeContent}
-            />
-          )}
-          {focusedTile === 'content' && <ContentViewer content={activeContent} />}
-        </div>
-      </div>
       </>
     );
   }
