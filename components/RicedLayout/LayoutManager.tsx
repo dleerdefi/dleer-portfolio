@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import NeofetchTile from './NeofetchTile';
 import NavigationTile from './NavigationTile';
 import ContentViewer from './ContentViewer';
@@ -18,6 +18,11 @@ const LayoutManager: React.FC = () => {
   const [activeContent, setActiveContent] = useState<ContentType>({ type: 'about' });
   const [focusedTile, setFocusedTile] = useState<'neofetch' | 'navigation' | 'content'>('content');
   const [isStacked, setIsStacked] = useState(false);
+
+  // Create refs at top level (always called, regardless of mode)
+  const neofetchRef = useRef<HTMLDivElement>(null);
+  const navigationRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkLayout = () => {
@@ -41,6 +46,27 @@ const LayoutManager: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [focusedTile]);
+
+  // Auto-scroll to focused tile in stacked mode only
+  useEffect(() => {
+    if (!isStacked) return; // Only run in stacked mode
+
+    const tileRefs = {
+      'neofetch': neofetchRef,
+      'navigation': navigationRef,
+      'content': contentRef
+    };
+
+    // Small delay to ensure DOM updates
+    const timer = setTimeout(() => {
+      tileRefs[focusedTile]?.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, [focusedTile, isStacked]);
 
   // Handle navigation from polybar
   const handlePolybarNavigate = (section: string) => {
@@ -68,6 +94,18 @@ const LayoutManager: React.FC = () => {
 
   // Stacked Layout (Mobile/Tablet)
   if (isStacked) {
+    // Handle content selection with auto-scroll to content viewer
+    const handleContentSelectWithScroll = (content: ContentType) => {
+      setActiveContent(content);
+      // Delay to ensure content renders first
+      setTimeout(() => {
+        contentRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
+    };
+
     return (
       <>
         <Background />
@@ -81,6 +119,7 @@ const LayoutManager: React.FC = () => {
             <div className="flex flex-col" style={{ gap: '12px' }}>
               {/* Neofetch Tile */}
               <div
+                ref={neofetchRef}
                 className={`rounded-lg shadow-xl border transition-all duration-300 ${
                   focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
                 }`}
@@ -97,6 +136,7 @@ const LayoutManager: React.FC = () => {
 
               {/* Navigation Tile */}
               <div
+                ref={navigationRef}
                 className={`rounded-lg shadow-xl border transition-all duration-300 ${
                   focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
                 }`}
@@ -108,13 +148,14 @@ const LayoutManager: React.FC = () => {
                 onClick={() => setFocusedTile('navigation')}
               >
                 <NavigationTile
-                  onContentSelect={setActiveContent}
+                  onContentSelect={handleContentSelectWithScroll}
                   activeContent={activeContent}
                 />
               </div>
 
               {/* Content Viewer */}
               <div
+                ref={contentRef}
                 className={`rounded-lg shadow-xl border transition-all duration-300 ${
                   focusedTile === 'content' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
                 }`}
