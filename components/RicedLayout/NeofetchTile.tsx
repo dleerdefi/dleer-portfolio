@@ -8,7 +8,7 @@ interface NeofetchTileProps {
 
 const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
   return (
-    <div className={`h-full flex font-mono text-sm transition-all duration-300 ${
+    <div className={`flex font-mono text-sm transition-all duration-300 ${
       isBlurred ? 'text-[#eff1f5]/70' : 'text-[#eff1f5]'
     }`}>
       {/* ASCII Art Column */}
