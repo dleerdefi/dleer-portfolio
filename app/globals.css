@@ -25,36 +25,79 @@
   font-display: swap;
 }
 
-/* Terminal Theme - Catppuccin Latte + Tokyo Night */
+/* Terminal Theme - Catppuccin Latte + Tokyo Night Hybrid */
 :root {
-  /* Catppuccin Latte Base */
-  --term-bg: #eff1f5;
-  --term-bg-alt: #e6e9ef;
-  --term-surface: #dce0e8;
-  --term-surface-alt: #ccd0da;
-  --term-border: #bcc0cc;
+  /* Catppuccin Latte Base (for light/warm elements) */
+  --latte-base: #eff1f5;
+  --latte-mantle: #e6e9ef;
+  --latte-crust: #dce0e8;
+  --latte-surface0: #ccd0da;
+  --latte-surface1: #bcc0cc;
+  --latte-surface2: #acb0be;
+  --latte-text: #4c4f69;
+  --latte-subtext: #6c6f85;
+  --latte-overlay: #9ca0b0;
 
-  /* Text colors from Latte */
-  --term-text: #4c4f69;
-  --term-text-dim: #6c6f85;
-  --term-text-bright: #5c5f77;
+  /* Tokyo Night Deep Tones (for tile backgrounds) */
+  --tokyo-bg: #1a1b26;
+  --tokyo-bg-dark: #16161e;
+  --tokyo-bg-highlight: #292e42;
+  --tokyo-terminal-black: #414868;
+  --tokyo-fg: #c0caf5;
+  --tokyo-fg-dark: #a9b1d6;
+  --tokyo-fg-gutter: #3b4261;
+  --tokyo-comment: #565f89;
 
-  /* Tokyo Night Accents */
-  --term-accent: #7aa2f7;
-  --term-accent-alt: #9ece6a;
-  --term-purple: #bb9af7;
-  --term-orange: #ff9e64;
-  --term-red: #f7768e;
-  --term-cyan: #7dcfff;
-  --term-yellow: #e0af68;
+  /* Tokyo Night Vibrant Accents */
+  --tokyo-blue: #7aa2f7;
+  --tokyo-blue-bright: #89b4fa;
+  --tokyo-cyan: #7dcfff;
+  --tokyo-cyan-bright: #89dceb;
+  --tokyo-green: #9ece6a;
+  --tokyo-green-bright: #a6e3a1;
+  --tokyo-magenta: #bb9af7;
+  --tokyo-magenta-bright: #cba6f7;
+  --tokyo-red: #f7768e;
+  --tokyo-red-bright: #f38ba8;
+  --tokyo-yellow: #e0af68;
+  --tokyo-orange: #ff9e64;
+
+  /* RGBA Values for Transparency */
+  --tile-bg-solid: rgba(30, 30, 46, 1);
+  --tile-bg-transparent: rgba(30, 30, 46, 0.6);
+  --tile-bg-semi: rgba(30, 30, 46, 0.8);
+  --tile-border-default: rgba(137, 180, 250, 0.3);
+  --tile-border-active: rgba(137, 180, 250, 0.8);
+  --text-on-dark: rgba(239, 241, 245, 0.95);
+  --text-on-dark-dim: rgba(239, 241, 245, 0.7);
+
+  /* Applied Theme Variables */
+  --term-bg: var(--tokyo-bg);
+  --term-bg-alt: var(--tokyo-bg-dark);
+  --term-surface: var(--tokyo-bg-highlight);
+  --term-surface-alt: var(--tokyo-terminal-black);
+  --term-border: var(--tokyo-terminal-black);
+  --term-text: var(--tokyo-fg-dark);
+  --term-text-dim: var(--tokyo-comment);
+  --term-text-bright: var(--tokyo-fg);
+  --term-accent: var(--tokyo-blue);
+  --term-accent-alt: var(--tokyo-green);
+  --term-purple: var(--tokyo-magenta);
+  --term-orange: var(--tokyo-orange);
+  --term-red: var(--tokyo-red);
+  --term-cyan: var(--tokyo-cyan);
+  --term-yellow: var(--tokyo-yellow);
 
   /* UI elements */
-  --border: #ccd0da;
-  --code-bg: #e6e9ef;
+  --border: var(--tokyo-terminal-black);
+  --code-bg: var(--tokyo-bg-dark);
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
 
   /* Typography */
   --font-size-base: 14px;
-  --line-height-base: 1.5;
+  --line-height-base: 1.6;
+  --letter-spacing: 0.025em;
 }
 
 @theme inline {
@@ -420,8 +463,30 @@ pre code {
   }
 }
 
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 .animate-blob {
   animation: blob 7s infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .animation-delay-2000 {
@@ -430,6 +495,17 @@ pre code {
 
 .animation-delay-4000 {
   animation-delay: 4s;
+}
+
+/* Glass Morphism Effects */
+.glass-tile {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.glass-tile-clear {
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
 }
 
 /* Spacing utilities */

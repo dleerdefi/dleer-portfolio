@@ -47,13 +47,13 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
   };
 
   return (
-    <div className="h-full p-6 font-mono text-sm text-[#a9b1d6] overflow-auto">
-      <div className="mb-2 text-[#7aa2f7]">~/portfolio</div>
+    <div className="h-full font-mono text-sm text-[#a9b1d6]">
+      <div className="mb-3 text-[#7aa2f7] font-bold">~/portfolio</div>
 
       <div className="space-y-0.5">
         {/* About */}
         <div
-          className={`cursor-pointer hover:bg-[#414868]/20 px-2 py-0.5 ${
+          className={`cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-0.5 rounded transition-all duration-200 ${
             isActive('about') ? 'bg-[#7aa2f7]/20 text-[#7aa2f7]' : ''
           }`}
           onClick={() => onContentSelect({ type: 'about' })}
@@ -64,7 +64,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
         {/* Projects Directory */}
         <div>
           <div
-            className="cursor-pointer hover:bg-[#414868]/20 px-2 py-0.5"
+            className="cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-0.5 rounded transition-all duration-200"
             onClick={() => toggleDir('projects')}
           >
             <span className="text-[#9ece6a]">├──</span>{' '}
@@ -77,7 +77,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
               {projects.map((project, index) => (
                 <div
                   key={project.id}
-                  className={`cursor-pointer hover:bg-[#414868]/20 px-2 py-0.5 ${
+                  className={`cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-0.5 rounded transition-all duration-200 ${
                     isActive('project', project) ? 'bg-[#7aa2f7]/20 text-[#7aa2f7]' : ''
                   }`}
                   onClick={() => onContentSelect({ type: 'project', data: project })}
@@ -95,7 +95,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
         {/* Blog Directory */}
         <div>
           <div
-            className="cursor-pointer hover:bg-[#414868]/20 px-2 py-0.5"
+            className="cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-0.5 rounded transition-all duration-200"
             onClick={() => toggleDir('blog')}
           >
             <span className="text-[#9ece6a]">├──</span>{' '}
@@ -108,7 +108,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
               {blogs.map((blog, index) => (
                 <div
                   key={blog.id}
-                  className={`cursor-pointer hover:bg-[#414868]/20 px-2 py-0.5 ${
+                  className={`cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-0.5 rounded transition-all duration-200 ${
                     isActive('blog', blog) ? 'bg-[#7aa2f7]/20 text-[#7aa2f7]' : ''
                   }`}
                   onClick={() => onContentSelect({ type: 'blog', data: blog })}
@@ -125,22 +125,22 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
 
         {/* Contact */}
         <div
-          className={`cursor-pointer hover:bg-[#414868]/20 px-2 py-0.5 ${
+          className={`cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-0.5 rounded transition-all duration-200 ${
             isActive('contact') ? 'bg-[#7aa2f7]/20 text-[#7aa2f7]' : ''
           }`}
           onClick={() => onContentSelect({ type: 'contact' })}
         >
-          <span className="text-[#9ece6a]">├──</span> contact.sh
-        </div>
-
-        {/* Resume */}
-        <div className="cursor-pointer hover:bg-[#414868]/20 px-2 py-0.5">
-          <span className="text-[#9ece6a]">└──</span> resume.pdf
+          <span className="text-[#9ece6a]">└──</span> contact.sh
         </div>
       </div>
 
-      <div className="mt-4 pt-4 border-t border-[#414868] text-xs text-[#565f89]">
-        4 directories, 8 files
+      <div className="mt-auto pt-4 text-xs text-[#565f89]">
+        <div className="border-t border-[#565f89]/20 pt-3">
+          <div>4 directories, 8 files</div>
+          <div className="mt-2 text-[#565f89]/80">
+            Tab to navigate between tiles
+          </div>
+        </div>
       </div>
     </div>
   );
