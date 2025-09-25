@@ -1,0 +1,88 @@
+{
+  "projects": [
+    {
+      "id": "defi-protocol-v2",
+      "title": "DeFi Protocol V2",
+      "description": "Designed and implemented token economics for a next-gen AMM with concentrated liquidity",
+      "tech": ["Solidity", "Hardhat", "TypeScript", "Neo4j"],
+      "metrics": {
+        "tvl": "$25M",
+        "users": "5,000+",
+        "transactions": "100K+"
+      },
+      "status": "production",
+      "github": "https://github.com/example/defi-v2",
+      "demo": "https://defi-v2.example.com"
+    },
+    {
+      "id": "knowledge-graph-llm",
+      "title": "Neo4j Knowledge Graph for LLMs",
+      "description": "Built enterprise knowledge graph system for semantic search and RAG applications",
+      "tech": ["Neo4j", "Cypher", "Python", "LangChain"],
+      "metrics": {
+        "nodes": "10M+",
+        "queries": "50K/day",
+        "latency": "<100ms"
+      },
+      "status": "production",
+      "github": null,
+      "demo": null
+    },
+    {
+      "id": "token-vesting-platform",
+      "title": "Token Vesting Platform",
+      "description": "Smart contract system for managing token vesting schedules with cliff and linear release",
+      "tech": ["Solidity", "React", "ethers.js", "IPFS"],
+      "metrics": {
+        "locked": "$10M",
+        "contracts": "50+",
+        "users": "200+"
+      },
+      "status": "production",
+      "github": "https://github.com/example/vesting",
+      "demo": "https://vesting.example.com"
+    },
+    {
+      "id": "defi-analytics-dashboard",
+      "title": "DeFi Analytics Dashboard",
+      "description": "Real-time analytics platform for tracking DeFi protocol metrics and user behavior",
+      "tech": ["The Graph", "Neo4j", "React", "D3.js"],
+      "metrics": {
+        "protocols": "15",
+        "data_points": "1M/day",
+        "uptime": "99.9%"
+      },
+      "status": "production",
+      "github": null,
+      "demo": "https://analytics.example.com"
+    },
+    {
+      "id": "governance-framework",
+      "title": "DAO Governance Framework",
+      "description": "On-chain governance system with quadratic voting and timelock mechanisms",
+      "tech": ["Solidity", "OpenZeppelin", "Snapshot", "IPFS"],
+      "metrics": {
+        "proposals": "100+",
+        "voters": "1,000+",
+        "treasury": "$5M"
+      },
+      "status": "production",
+      "github": "https://github.com/example/governance",
+      "demo": null
+    },
+    {
+      "id": "yield-aggregator",
+      "title": "Yield Aggregator Protocol",
+      "description": "Automated yield farming strategies with risk-adjusted portfolio optimization",
+      "tech": ["Solidity", "Foundry", "Python", "Redis"],
+      "metrics": {
+        "tvl": "$15M",
+        "apy": "12-25%",
+        "strategies": "8"
+      },
+      "status": "beta",
+      "github": null,
+      "demo": "https://yield.example.com"
+    }
+  ]
+}
