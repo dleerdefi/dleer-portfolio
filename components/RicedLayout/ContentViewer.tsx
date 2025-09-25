@@ -264,7 +264,7 @@ contract Example {
   };
 
   return (
-    <div className="h-full font-mono text-sm">
+    <div className="font-mono text-sm">
       {renderContent()}
     </div>
   );

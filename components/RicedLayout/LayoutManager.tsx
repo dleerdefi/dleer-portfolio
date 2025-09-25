@@ -128,19 +128,20 @@ const LayoutManager: React.FC = () => {
           tileCount={3}
           isMobile={false}
         />
-        <div className="flex-1" style={{ padding: '12px' }}>
+        <div className="flex-1 overflow-hidden" style={{ padding: '12px' }}>
           <div className="h-full flex" style={{ gap: '12px' }}>
             {/* Left Column - 50% */}
             <div className="w-1/2 flex flex-col" style={{ gap: '12px' }}>
           {/* Neofetch Tile - Top - Dynamic transparency based on content */}
           <div
-            className={`h-1/2 rounded-lg shadow-xl border transition-all duration-300 p-6 overflow-auto ${
+            className={`h-1/2 rounded-lg shadow-xl border transition-all duration-300 overflow-auto ${
               focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
             }`}
             style={{
               backgroundColor: activeContent.type === 'about' ? 'rgba(30, 30, 46, 1)' : 'rgba(30, 30, 46, 0.6)',
               backdropFilter: activeContent.type === 'about' ? 'blur(0px)' : 'blur(8px)',
-              borderWidth: '1px'
+              borderWidth: '1px',
+              padding: '24px'
             }}
             onClick={() => setFocusedTile('neofetch')}
           >
@@ -149,12 +150,13 @@ const LayoutManager: React.FC = () => {
 
           {/* Navigation Tile - Bottom - Fixed transparency for readability */}
           <div
-            className={`h-1/2 rounded-lg shadow-xl border transition-all duration-300 p-6 overflow-auto ${
+            className={`h-1/2 rounded-lg shadow-xl border transition-all duration-300 overflow-auto ${
               focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
             }`}
             style={{
               backgroundColor: 'rgba(30, 30, 46, 0.8)',
-              borderWidth: '1px'
+              borderWidth: '1px',
+              padding: '24px'
             }}
             onClick={() => setFocusedTile('navigation')}
           >
@@ -167,12 +169,13 @@ const LayoutManager: React.FC = () => {
 
             {/* Right Column - 50% - High opacity for readability */}
             <div
-              className={`w-1/2 rounded-lg shadow-xl border transition-all duration-300 p-6 overflow-auto ${
+              className={`w-1/2 rounded-lg shadow-xl border transition-all duration-300 overflow-auto ${
                 focusedTile === 'content' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
               }`}
               style={{
                 backgroundColor: 'rgba(30, 30, 46, 0.95)',
-                borderWidth: '1px'
+                borderWidth: '1px',
+                padding: '24px'
               }}
               onClick={() => setFocusedTile('content')}
             >

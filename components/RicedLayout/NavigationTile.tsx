@@ -47,7 +47,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
   };
 
   return (
-    <div className="h-full font-mono text-sm text-[#a9b1d6]">
+    <div className="font-mono text-sm text-[#a9b1d6]">
       <div className="mb-3 text-[#7aa2f7] font-bold">~/portfolio</div>
 
       <div className="space-y-0.5">
