@@ -160,6 +160,76 @@ useEffect(() => {
 4. **Animation transitions**: Smooth layout change on resize
 5. **Very tall content**: Ensure individual tiles don't become too tall
 
+## Auto-Scroll Behavior (Stacked Mode Only)
+
+### Overview
+Auto-scroll features enhance navigation in stacked mode where tiles may extend beyond the viewport. These features are **disabled in desktop mode** where all tiles are visible simultaneously.
+
+### Feature 1: Tab Navigation Auto-Scroll
+**When**: User presses Tab key to cycle through tiles in stacked mode
+**Behavior**: The newly focused tile automatically scrolls into view
+**Implementation**:
+- Detect Tab keypress and focus change
+- Use `scrollIntoView()` with smooth behavior
+- Center the focused tile in viewport when possible
+- Account for Polybar height (36px) as fixed offset
+
+### Feature 2: Navigation Selection Auto-Scroll
+**When**: User clicks on a project/blog item in the Navigation tile in stacked mode
+**Behavior**: Content viewer tile automatically scrolls into view
+**Implementation**:
+- Trigger on `onContentSelect` callback
+- Scroll to Content tile with slight delay (100ms) to ensure content updates first
+- Use 'start' alignment to show top of content
+- Only active when `isStacked === true`
+
+### Technical Implementation Details
+
+```typescript
+// Conditional auto-scroll in stacked mode only
+if (isStacked) {
+  // Create refs for each tile
+  const neofetchRef = useRef<HTMLDivElement>(null);
+  const navigationRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Tab navigation handler
+  useEffect(() => {
+    if (!isStacked) return; // Guard clause
+
+    const tileRefs = {
+      'neofetch': neofetchRef,
+      'navigation': navigationRef,
+      'content': contentRef
+    };
+
+    tileRefs[focusedTile]?.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+  }, [focusedTile, isStacked]);
+
+  // Navigation selection handler
+  const handleContentSelect = (content: ContentType) => {
+    setActiveContent(content);
+    if (isStacked) {
+      setTimeout(() => {
+        contentRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
+    }
+  };
+}
+```
+
+### Important Considerations
+- **Mode Detection**: Always check `isStacked` before triggering auto-scroll
+- **Performance**: Use `requestAnimationFrame` if scroll performance issues arise
+- **User Control**: Respect manual scrolling - don't fight user's scroll position
+- **Smooth Transitions**: Use CSS `scroll-behavior: smooth` as fallback
+
 ## Success Criteria
 - [ ] Seamless transition at 1024px breakpoint
 - [ ] No horizontal scrolling in either mode
@@ -168,6 +238,9 @@ useEffect(() => {
 - [ ] ASCII art displays correctly in both modes
 - [ ] Performance remains smooth during resize
 - [ ] Touch navigation works in stacked mode
+- [ ] Tab navigation auto-scrolls to focused tile (stacked mode only)
+- [ ] Navigation clicks auto-scroll to content (stacked mode only)
+- [ ] Auto-scroll is completely disabled in desktop mode
 
 ## Future Considerations
 - Potential for user-selectable layout preference
