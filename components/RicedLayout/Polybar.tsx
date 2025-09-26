@@ -27,7 +27,10 @@ const Polybar: React.FC<PolybarProps> = ({ activeContent, onNavigate }) => {
   const isActive = (workspace: string) => {
     if (workspace === 'home' && activeContent.type === 'home') return true;
     if (workspace === activeContent.type) return true;
-    if (workspace === 'projects' && activeContent.type === 'project-detail') return true;
+    // Check for projects section
+    if (workspace === 'projects' && (activeContent.type === 'project' || activeContent.type === 'projects-overview')) return true;
+    // Check for blog section
+    if (workspace === 'blog' && (activeContent.type === 'blog' || activeContent.type === 'blog-overview')) return true;
     return false;
   };
 

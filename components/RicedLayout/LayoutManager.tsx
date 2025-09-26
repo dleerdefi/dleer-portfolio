@@ -73,7 +73,7 @@ const LayoutManager: React.FC = () => {
 
   // Framer Motion animation settings
   const layoutTransition = {
-    type: "spring",
+    type: "spring" as const,
     stiffness: 300,
     damping: 30,
     mass: 1
@@ -82,7 +82,7 @@ const LayoutManager: React.FC = () => {
   // Opacity transition for focus changes
   const opacityTransition = {
     duration: 0.2,
-    ease: "easeInOut"
+    ease: "easeInOut" as const
   };
 
   // Handle navigation from polybar
@@ -95,11 +95,11 @@ const LayoutManager: React.FC = () => {
         setActiveContent({ type: 'about' });
         break;
       case 'projects':
-        setActiveContent({ type: 'home' }); // Reset to home to see projects list
-        setFocusedTile('navigation');
+        setActiveContent({ type: 'projects-overview' });
+        setFocusedTile('content');
         break;
       case 'blog':
-        setActiveContent({ type: 'blog', data: { id: 'blog-list', title: 'Blog Posts' } });
+        setActiveContent({ type: 'blog-overview' });
         setFocusedTile('content');
         break;
       case 'contact':
@@ -114,6 +114,7 @@ const LayoutManager: React.FC = () => {
     // Handle content selection with auto-scroll to content viewer
     const handleContentSelectWithScroll = (content: ContentType) => {
       setActiveContent(content);
+      setFocusedTile('content'); // Set focus to content tile for proper transparency
       // Delay to ensure content renders first
       setTimeout(() => {
         contentRef.current?.scrollIntoView({
@@ -148,7 +149,6 @@ const LayoutManager: React.FC = () => {
                       ? 'rgba(30, 30, 46, 0.75)'
                       : 'rgba(30, 30, 46, 0.45)'
                   }}
-                  transition={opacityTransition}
                   style={{
                     backdropFilter: 'blur(8px)',
                     borderWidth: '1px',
@@ -175,7 +175,6 @@ const LayoutManager: React.FC = () => {
                       ? 'rgba(30, 30, 46, 0.8)'
                       : 'rgba(30, 30, 46, 0.5)'
                   }}
-                  transition={opacityTransition}
                   style={{
                     backdropFilter: 'blur(4px)',
                     borderWidth: '1px',
@@ -205,7 +204,6 @@ const LayoutManager: React.FC = () => {
                       ? 'rgba(30, 30, 46, 0.95)'
                       : 'rgba(30, 30, 46, 0.85)'
                   }}
-                  transition={opacityTransition}
                   style={{
                     borderWidth: '1px',
                     padding: '24px',
@@ -214,7 +212,7 @@ const LayoutManager: React.FC = () => {
                   }}
                   onClick={() => setFocusedTile('content')}
                 >
-                  <ContentViewer content={activeContent} />
+                  <ContentViewer content={activeContent} onNavigate={handleContentSelectWithScroll} />
                   </motion.div>
                 </div>
               </motion.div>
@@ -226,6 +224,12 @@ const LayoutManager: React.FC = () => {
   }
 
   // Desktop Layout
+  // Handle content selection for desktop with focus
+  const handleDesktopContentSelect = (content: ContentType) => {
+    setActiveContent(content);
+    setFocusedTile('content');
+  };
+
   return (
     <>
       <Background />
@@ -252,7 +256,6 @@ const LayoutManager: React.FC = () => {
                 ? 'rgba(30, 30, 46, 0.75)'
                 : 'rgba(30, 30, 46, 0.45)'
             }}
-            transition={opacityTransition}
             style={{
               backdropFilter: 'blur(8px)',
               borderWidth: '1px',
@@ -277,7 +280,6 @@ const LayoutManager: React.FC = () => {
                 ? 'rgba(30, 30, 46, 0.8)'
                 : 'rgba(30, 30, 46, 0.5)'
             }}
-            transition={opacityTransition}
             style={{
               backdropFilter: 'blur(4px)',
               borderWidth: '1px',
@@ -287,7 +289,7 @@ const LayoutManager: React.FC = () => {
             onClick={() => setFocusedTile('navigation')}
           >
             <NavigationTile
-              onContentSelect={setActiveContent}
+              onContentSelect={handleDesktopContentSelect}
               activeContent={activeContent}
             />
                 </motion.div>
@@ -303,10 +305,9 @@ const LayoutManager: React.FC = () => {
                 }`}
               animate={{
                 backgroundColor: focusedTile === 'content'
-                  ? 'rgba(30, 30, 46, 0.95)'
-                  : 'rgba(30, 30, 46, 0.85)'
+                  ? 'rgba(30, 30, 46, 0.75)'
+                  : 'rgba(30, 30, 46, 0.45)'
               }}
-              transition={opacityTransition}
               style={{
                 borderWidth: '1px',
                 padding: '24px',
@@ -314,7 +315,7 @@ const LayoutManager: React.FC = () => {
               }}
               onClick={() => setFocusedTile('content')}
             >
-              <ContentViewer content={activeContent} />
+              <ContentViewer content={activeContent} onNavigate={handleDesktopContentSelect} />
               </motion.div>
             </motion.div>
           </LayoutGroup>

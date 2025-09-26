@@ -6,9 +6,10 @@ import { usePersonalInfo, useProjects, useBlogPosts, useSkills, useUIStrings } f
 
 interface ContentViewerProps {
   content: ContentType;
+  onNavigate?: (content: ContentType) => void;
 }
 
-const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
+const ContentViewer: React.FC<ContentViewerProps> = ({ content, onNavigate }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const personal = usePersonalInfo();
   const projectsConfig = useProjects();
@@ -98,6 +99,18 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
         const project = (content as any).data;
         return (
           <div className="space-y-6">
+            {/* Breadcrumb Navigation */}
+            <div className="text-sm text-[#565f89] flex items-center gap-2">
+              <span
+                className="text-[#7aa2f7] hover:text-[#7aa2f7]/80 cursor-pointer transition-colors"
+                onClick={() => onNavigate?.({ type: 'projects-overview' })}
+              >
+                Projects
+              </span>
+              <span className="text-[#565f89]">/</span>
+              <span className="text-[#a9b1d6]">{project.displayName || project.name}</span>
+            </div>
+
             <div className="border-b border-[#414868]/30 pb-4">
               <h1 className="text-2xl font-bold text-[#7aa2f7]">{project.name}</h1>
               <p className="text-[#565f89] mt-1">{project.description}</p>
@@ -148,6 +161,18 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
         const blog = (content as any).data;
         return (
           <div className="space-y-6">
+            {/* Breadcrumb Navigation */}
+            <div className="text-sm text-[#565f89] flex items-center gap-2">
+              <span
+                className="text-[#7aa2f7] hover:text-[#7aa2f7]/80 cursor-pointer transition-colors"
+                onClick={() => onNavigate?.({ type: 'blog-overview' })}
+              >
+                Blog
+              </span>
+              <span className="text-[#565f89]">/</span>
+              <span className="text-[#a9b1d6]">{blog.displayName || blog.title}</span>
+            </div>
+
             <div className="border-b border-[#414868]/30 pb-4">
               <h1 className="text-2xl font-bold text-[#7aa2f7]">{blog.title}</h1>
               <p className="text-[#565f89] text-sm mt-1">{blog.name}</p>
@@ -232,23 +257,42 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
               A collection of my recent work and open-source contributions.
             </p>
             <div className="grid gap-4">
-              {projectsConfig.map((project) => (
-                <div
-                  key={project.id}
-                  className="border border-[#414868]/30 rounded-lg p-4 hover:border-[#7aa2f7]/50 transition-colors cursor-pointer"
-                  onClick={() => {/* Navigate to project */}}
-                >
-                  <h3 className="text-[#9ece6a] font-bold mb-2">{project.name}</h3>
-                  <p className="text-[#a9b1d6]/90 text-xs mb-3">{project.description}</p>
-                  <div className="flex gap-2 flex-wrap">
-                    {project.techStack.slice(0, 3).map((tech, idx) => (
-                      <span key={idx} className="text-[#7dcfff] text-xs bg-[#1a1b26] px-2 py-1 rounded">
-                        {tech}
-                      </span>
-                    ))}
+              {projectsConfig.map((project) => {
+                // Transform project to match navigation format
+                const projectData = {
+                  id: project.id,
+                  name: project.name.replace(/\.(tsx?|jsx?|py|rs|go)$/i, ''),
+                  displayName: project.name.split('.')[0].split('-').map(word =>
+                    word.charAt(0).toUpperCase() + word.slice(1)
+                  ).join(' '),
+                  description: project.description,
+                  overview: project.overview,
+                  features: project.features,
+                  techStack: project.techStack,
+                  sections: [
+                    'Overview',
+                    ...(project.features ? ['Features'] : []),
+                    'Tech Stack'
+                  ]
+                };
+                return (
+                  <div
+                    key={project.id}
+                    className="border border-[#414868]/30 rounded-lg p-4 hover:border-[#7aa2f7]/50 transition-colors cursor-pointer"
+                    onClick={() => onNavigate?.({ type: 'project', data: projectData })}
+                  >
+                    <h3 className="text-[#9ece6a] font-bold mb-2">{project.name}</h3>
+                    <p className="text-[#a9b1d6]/90 text-xs mb-3">{project.description}</p>
+                    <div className="flex gap-2 flex-wrap">
+                      {project.techStack.slice(0, 3).map((tech, idx) => (
+                        <span key={idx} className="text-[#7dcfff] text-xs bg-[#1a1b26] px-2 py-1 rounded">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         );
@@ -261,19 +305,35 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
               Technical articles, tutorials, and insights from my development journey.
             </p>
             <div className="space-y-4">
-              {blogPostsConfig.map((post) => (
-                <div
-                  key={post.id}
-                  className="border-b border-[#414868]/30 pb-4 hover:border-[#7aa2f7]/50 transition-colors cursor-pointer"
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-[#9ece6a] font-bold">{post.title}</h3>
-                    <span className="text-[#565f89] text-xs">{post.date}</span>
+              {blogPostsConfig.map((post) => {
+                // Transform blog post to match navigation format
+                const blogData = {
+                  id: post.id,
+                  name: post.filename.replace(/\.md$/i, ''),
+                  displayName: post.title,
+                  title: post.title,
+                  date: post.date,
+                  content: post.content,
+                  excerpt: post.excerpt,
+                  sections: post.content ?
+                    (post.content.match(/^##\s+(.+)$/gm) || []).map(s => s.replace(/^##\s+/, '')) :
+                    []
+                };
+                return (
+                  <div
+                    key={post.id}
+                    className="border-b border-[#414868]/30 pb-4 hover:border-[#7aa2f7]/50 transition-colors cursor-pointer"
+                    onClick={() => onNavigate?.({ type: 'blog', data: blogData })}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-[#9ece6a] font-bold">{post.title}</h3>
+                      <span className="text-[#565f89] text-xs">{post.date}</span>
+                    </div>
+                    <p className="text-[#a9b1d6]/90 text-sm mb-2">{post.excerpt}</p>
+                    <span className="text-[#bb9af7] text-xs">{post.category}</span>
                   </div>
-                  <p className="text-[#a9b1d6]/90 text-sm mb-2">{post.excerpt}</p>
-                  <span className="text-[#bb9af7] text-xs">{post.category}</span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         );
