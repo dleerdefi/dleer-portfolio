@@ -197,6 +197,71 @@ body {
   padding: 0 1rem;
 }
 
+/* Layout Transition Animations */
+.layout-transition {
+  transition: transform 400ms cubic-bezier(0.4, 0.0, 0.2, 1),
+              opacity 400ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+/* Stagger delays for each tile */
+.transition-delay-0 {
+  transition-delay: 0ms;
+}
+
+.transition-delay-100 {
+  transition-delay: 100ms;
+}
+
+.transition-delay-200 {
+  transition-delay: 200ms;
+}
+
+/* Desktop to Stacked animation states */
+.tile-neofetch-entering-stacked {
+  transform: translateY(-10px) scale(0.98);
+  opacity: 0.9;
+}
+
+.tile-navigation-entering-stacked {
+  transform: translateY(-10px) translateX(-10px) scale(0.98);
+  opacity: 0.9;
+}
+
+.tile-content-entering-stacked {
+  transform: translateX(10px) scale(0.98);
+  opacity: 0.9;
+}
+
+/* Stacked to Desktop animation states */
+.tile-neofetch-entering-tiled {
+  transform: translateY(10px) scale(0.98);
+  opacity: 0.9;
+}
+
+.tile-navigation-entering-tiled {
+  transform: translateY(10px) translateX(10px) scale(0.98);
+  opacity: 0.9;
+}
+
+.tile-content-entering-tiled {
+  transform: translateX(-10px) scale(0.98);
+  opacity: 0.9;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .layout-transition {
+    transition: none !important;
+  }
+
+  .transition-delay-0,
+  .transition-delay-100,
+  .transition-delay-200 {
+    transition-delay: 0ms !important;
+  }
+}
+
 @media (min-width: 475px) {
   .container {
     padding: 0 1.5rem;

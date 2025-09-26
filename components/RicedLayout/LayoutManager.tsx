@@ -1,11 +1,20 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import NeofetchTile from './NeofetchTile';
 import NavigationTile from './NavigationTile';
 import ContentViewer from './ContentViewer';
 import Background from './Background';
 import Polybar from './Polybar';
+
+// Simple debounce utility
+const debounce = (func: Function, delay: number) => {
+  let timeoutId: NodeJS.Timeout;
+  return (...args: any[]) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  };
+};
 
 export type ContentType =
   | { type: 'about' }
@@ -19,19 +28,33 @@ const LayoutManager: React.FC = () => {
   const [focusedTile, setFocusedTile] = useState<'neofetch' | 'navigation' | 'content'>('content');
   const [isStacked, setIsStacked] = useState(false);
 
+  // Animation state management
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionDirection, setTransitionDirection] = useState<'toStacked' | 'toTiled' | null>(null);
+  const prevIsStacked = useRef<boolean | null>(null);
+  const isInitialMount = useRef(true);
+
   // Create refs at top level (always called, regardless of mode)
   const neofetchRef = useRef<HTMLDivElement>(null);
   const navigationRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const checkLayout = () => {
+  // Create debounced layout check function
+  const debouncedCheckLayout = useCallback(
+    debounce(() => {
       setIsStacked(window.innerWidth < 1024);
-    };
-    checkLayout();
-    window.addEventListener('resize', checkLayout);
-    return () => window.removeEventListener('resize', checkLayout);
-  }, []);
+    }, 150),
+    []
+  );
+
+  useEffect(() => {
+    // Initial check without debounce
+    setIsStacked(window.innerWidth < 1024);
+
+    // Use debounced version for resize events
+    window.addEventListener('resize', debouncedCheckLayout);
+    return () => window.removeEventListener('resize', debouncedCheckLayout);
+  }, [debouncedCheckLayout]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -67,6 +90,52 @@ const LayoutManager: React.FC = () => {
 
     return () => clearTimeout(timer);
   }, [focusedTile, isStacked]);
+
+  // Detect layout changes and trigger transitions
+  useEffect(() => {
+    // Skip animation on initial mount
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      prevIsStacked.current = isStacked;
+      return;
+    }
+
+    // Detect if layout actually changed
+    if (prevIsStacked.current !== null && prevIsStacked.current !== isStacked) {
+      setIsTransitioning(true);
+      setTransitionDirection(isStacked ? 'toStacked' : 'toTiled');
+
+      // Clear transition state after animation completes
+      const timer = setTimeout(() => {
+        setIsTransitioning(false);
+        setTransitionDirection(null);
+      }, 600); // Total animation duration (400ms + 200ms max stagger)
+
+      prevIsStacked.current = isStacked;
+
+      return () => clearTimeout(timer);
+    }
+  }, [isStacked]);
+
+  // Helper function to build tile classes with animation support
+  const getTileClasses = (tileName: 'neofetch' | 'navigation' | 'content', baseClasses: string) => {
+    if (!isTransitioning) return baseClasses;
+
+    const transitionClasses = ['layout-transition'];
+
+    // Add stagger delay based on tile
+    const delays = { neofetch: '0', navigation: '100', content: '200' };
+    transitionClasses.push(`transition-delay-${delays[tileName]}`);
+
+    // Add direction-specific animation classes
+    if (transitionDirection === 'toStacked') {
+      transitionClasses.push(`tile-${tileName}-entering-stacked`);
+    } else if (transitionDirection === 'toTiled') {
+      transitionClasses.push(`tile-${tileName}-entering-tiled`);
+    }
+
+    return `${baseClasses} ${transitionClasses.join(' ')}`;
+  };
 
   // Handle navigation from polybar
   const handlePolybarNavigate = (section: string) => {
@@ -120,9 +189,9 @@ const LayoutManager: React.FC = () => {
               {/* Neofetch Tile */}
               <div
                 ref={neofetchRef}
-                className={`rounded-lg shadow-xl border transition-all duration-300 ${
+                className={getTileClasses('neofetch', `rounded-lg shadow-xl border transition-all duration-300 ${
                   focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
-                }`}
+                }`)}
                 style={{
                   backgroundColor: activeContent.type === 'about' ? 'rgba(30, 30, 46, 1)' : 'rgba(30, 30, 46, 0.6)',
                   backdropFilter: activeContent.type === 'about' ? 'blur(0px)' : 'blur(8px)',
@@ -137,9 +206,9 @@ const LayoutManager: React.FC = () => {
               {/* Navigation Tile */}
               <div
                 ref={navigationRef}
-                className={`rounded-lg shadow-xl border transition-all duration-300 ${
+                className={getTileClasses('navigation', `rounded-lg shadow-xl border transition-all duration-300 ${
                   focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
-                }`}
+                }`)}
                 style={{
                   backgroundColor: 'rgba(30, 30, 46, 0.8)',
                   borderWidth: '1px',
@@ -156,9 +225,9 @@ const LayoutManager: React.FC = () => {
               {/* Content Viewer */}
               <div
                 ref={contentRef}
-                className={`rounded-lg shadow-xl border transition-all duration-300 ${
+                className={getTileClasses('content', `rounded-lg shadow-xl border transition-all duration-300 ${
                   focusedTile === 'content' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
-                }`}
+                }`)}
                 style={{
                   backgroundColor: 'rgba(30, 30, 46, 0.95)',
                   borderWidth: '1px',
@@ -193,9 +262,9 @@ const LayoutManager: React.FC = () => {
             <div className="w-1/2 flex flex-col" style={{ gap: '12px' }}>
           {/* Neofetch Tile - Top - Dynamic transparency based on content */}
           <div
-            className={`h-1/2 rounded-lg shadow-xl border transition-all duration-300 overflow-auto ${
+            className={getTileClasses('neofetch', `h-1/2 rounded-lg shadow-xl border transition-all duration-300 overflow-auto ${
               focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
-            }`}
+            }`)}
             style={{
               backgroundColor: activeContent.type === 'about' ? 'rgba(30, 30, 46, 1)' : 'rgba(30, 30, 46, 0.6)',
               backdropFilter: activeContent.type === 'about' ? 'blur(0px)' : 'blur(8px)',
@@ -209,9 +278,9 @@ const LayoutManager: React.FC = () => {
 
           {/* Navigation Tile - Bottom - Fixed transparency for readability */}
           <div
-            className={`h-1/2 rounded-lg shadow-xl border transition-all duration-300 overflow-auto ${
+            className={getTileClasses('navigation', `h-1/2 rounded-lg shadow-xl border transition-all duration-300 overflow-auto ${
               focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
-            }`}
+            }`)}
             style={{
               backgroundColor: 'rgba(30, 30, 46, 0.8)',
               borderWidth: '1px',
@@ -228,9 +297,9 @@ const LayoutManager: React.FC = () => {
 
             {/* Right Column - 50% - High opacity for readability */}
             <div
-              className={`w-1/2 rounded-lg shadow-xl border transition-all duration-300 overflow-auto ${
+              className={getTileClasses('content', `w-1/2 rounded-lg shadow-xl border transition-all duration-300 overflow-auto ${
                 focusedTile === 'content' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
-              }`}
+              }`)}
               style={{
                 backgroundColor: 'rgba(30, 30, 46, 0.95)',
                 borderWidth: '1px',
