@@ -128,7 +128,6 @@ const LayoutManager: React.FC = () => {
           <Polybar
             activeContent={activeContent}
             onNavigate={handlePolybarNavigate}
-            tileCount={3}
           />
           <div className="flex-1" style={{ padding: '12px' }}>
             <LayoutGroup>
@@ -232,8 +231,6 @@ const LayoutManager: React.FC = () => {
         <Polybar
           activeContent={activeContent}
           onNavigate={handlePolybarNavigate}
-          tileCount={3}
-          isMobile={false}
         />
         <div className="flex-1 overflow-hidden" style={{ padding: '12px' }}>
           <LayoutGroup>

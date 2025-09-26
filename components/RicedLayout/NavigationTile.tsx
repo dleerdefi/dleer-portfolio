@@ -9,7 +9,7 @@ interface NavigationTileProps {
 }
 
 const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, activeContent }) => {
-  const [expandedDirs, setExpandedDirs] = useState<Set<string>>(new Set(['projects', 'blog']));
+  const [expandedDirs, setExpandedDirs] = useState<Set<string>>(new Set());
 
   const toggleDir = (dir: string) => {
     const newExpanded = new Set(expandedDirs);
@@ -50,26 +50,28 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
     <div className="font-mono text-sm text-[#a9b1d6]">
       <div className="mb-3 text-[#7aa2f7] font-bold">~/portfolio</div>
 
-      <div className="space-y-0.5">
+      <div className="touch-spacing">
         {/* About */}
         <div
-          className={`cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-0.5 rounded transition-all duration-200 ${
+          className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 ${
             isActive('about') ? 'bg-[#7aa2f7]/20 text-[#7aa2f7]' : ''
           }`}
           onClick={() => onContentSelect({ type: 'about' })}
         >
-          <span className="text-[#9ece6a]">├──</span> about.md
+          <span><span className="text-[#9ece6a]">├──</span> about.md</span>
         </div>
 
         {/* Projects Directory */}
         <div>
           <div
-            className="cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-0.5 rounded transition-all duration-200"
+            className="touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200"
             onClick={() => toggleDir('projects')}
           >
-            <span className="text-[#9ece6a]">├──</span>{' '}
-            <span className="text-[#7aa2f7]">
-              {expandedDirs.has('projects') ? '▼' : '▶'} projects/
+            <span>
+              <span className="text-[#9ece6a]">├──</span>{' '}
+              <span className="text-[#7aa2f7]">
+                {expandedDirs.has('projects') ? '▼' : '▶'} projects/
+              </span>
             </span>
           </div>
           {expandedDirs.has('projects') && (
@@ -77,15 +79,17 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
               {projects.map((project, index) => (
                 <div
                   key={project.id}
-                  className={`cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-0.5 rounded transition-all duration-200 ${
+                  className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 ${
                     isActive('project', project) ? 'bg-[#7aa2f7]/20 text-[#7aa2f7]' : ''
                   }`}
                   onClick={() => onContentSelect({ type: 'project', data: project })}
                 >
-                  <span className="text-[#9ece6a]">
-                    {index === projects.length - 1 ? '└──' : '├──'}
-                  </span>{' '}
-                  {project.name}
+                  <span>
+                    <span className="text-[#9ece6a]">
+                      {index === projects.length - 1 ? '└──' : '├──'}
+                    </span>{' '}
+                    {project.name}
+                  </span>
                 </div>
               ))}
             </div>
@@ -95,12 +99,14 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
         {/* Blog Directory */}
         <div>
           <div
-            className="cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-0.5 rounded transition-all duration-200"
+            className="touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200"
             onClick={() => toggleDir('blog')}
           >
-            <span className="text-[#9ece6a]">├──</span>{' '}
-            <span className="text-[#7aa2f7]">
-              {expandedDirs.has('blog') ? '▼' : '▶'} blog/
+            <span>
+              <span className="text-[#9ece6a]">├──</span>{' '}
+              <span className="text-[#7aa2f7]">
+                {expandedDirs.has('blog') ? '▼' : '▶'} blog/
+              </span>
             </span>
           </div>
           {expandedDirs.has('blog') && (
@@ -108,15 +114,17 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
               {blogs.map((blog, index) => (
                 <div
                   key={blog.id}
-                  className={`cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-0.5 rounded transition-all duration-200 ${
+                  className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 ${
                     isActive('blog', blog) ? 'bg-[#7aa2f7]/20 text-[#7aa2f7]' : ''
                   }`}
                   onClick={() => onContentSelect({ type: 'blog', data: blog })}
                 >
-                  <span className="text-[#9ece6a]">
-                    {index === blogs.length - 1 ? '└──' : '├──'}
-                  </span>{' '}
-                  {blog.name}
+                  <span>
+                    <span className="text-[#9ece6a]">
+                      {index === blogs.length - 1 ? '└──' : '├──'}
+                    </span>{' '}
+                    {blog.name}
+                  </span>
                 </div>
               ))}
             </div>
@@ -125,12 +133,12 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
 
         {/* Contact */}
         <div
-          className={`cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-0.5 rounded transition-all duration-200 ${
+          className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 ${
             isActive('contact') ? 'bg-[#7aa2f7]/20 text-[#7aa2f7]' : ''
           }`}
           onClick={() => onContentSelect({ type: 'contact' })}
         >
-          <span className="text-[#9ece6a]">└──</span> contact.sh
+          <span><span className="text-[#9ece6a]">└──</span> contact.sh</span>
         </div>
       </div>
 

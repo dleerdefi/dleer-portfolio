@@ -535,3 +535,47 @@ pre code {
 .px-3 { padding-left: 1.5rem; padding-right: 1.5rem; }
 .px-4 { padding-left: 2rem; padding-right: 2rem; }
 .px-5 { padding-left: 3rem; padding-right: 3rem; }
+
+/* Mobile Touch Utilities - Responsive */
+@media (max-width: 1023px) {
+  .touch-target {
+    min-height: 48px;
+    display: flex;
+    align-items: flex-start;  /* Keep tree structure left-aligned */
+    gap: 0;  /* No gap between flex items */
+    justify-content: flex-start;  /* Keep items left-aligned */
+  }
+
+  .touch-spacing > * + * {
+    margin-top: 8px;
+  }
+}
+
+/* Desktop - Compact but comfortable */
+@media (min-width: 1024px) {
+  .touch-target {
+    min-height: 28px;
+    display: flex;
+    align-items: flex-start;  /* Keep tree structure left-aligned */
+    gap: 0;  /* No gap between flex items */
+    justify-content: flex-start;  /* Keep items left-aligned */
+  }
+
+  .touch-spacing > * + * {
+    margin-top: 2px;
+  }
+}
+
+/* Touch feedback works on all devices */
+.touch-target {
+  cursor: pointer;
+}
+
+.touch-feedback {
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+}
+
+.touch-feedback:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
