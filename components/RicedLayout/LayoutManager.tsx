@@ -85,6 +85,22 @@ const LayoutManager: React.FC = () => {
     ease: "easeInOut" as const
   };
 
+  // Content-aware transparency for better readability
+  const getContentTileOpacity = () => {
+    // Less transparent for detail views (better readability)
+    if (activeContent.type === 'project' || activeContent.type === 'blog') {
+      return {
+        focused: 'rgba(30, 30, 46, 0.95)',
+        unfocused: 'rgba(30, 30, 46, 0.85)'
+      };
+    }
+    // Standard transparency for other content
+    return {
+      focused: 'rgba(30, 30, 46, 0.75)',
+      unfocused: 'rgba(30, 30, 46, 0.45)'
+    };
+  };
+
   // Handle navigation from polybar
   const handlePolybarNavigate = (section: string) => {
     switch (section) {
@@ -201,8 +217,8 @@ const LayoutManager: React.FC = () => {
                     }`}
                   animate={{
                     backgroundColor: focusedTile === 'content'
-                      ? 'rgba(30, 30, 46, 0.95)'
-                      : 'rgba(30, 30, 46, 0.85)'
+                      ? getContentTileOpacity().focused
+                      : getContentTileOpacity().unfocused
                   }}
                   style={{
                     borderWidth: '1px',
@@ -305,8 +321,8 @@ const LayoutManager: React.FC = () => {
                 }`}
               animate={{
                 backgroundColor: focusedTile === 'content'
-                  ? 'rgba(30, 30, 46, 0.75)'
-                  : 'rgba(30, 30, 46, 0.45)'
+                  ? getContentTileOpacity().focused
+                  : getContentTileOpacity().unfocused
               }}
               style={{
                 borderWidth: '1px',
