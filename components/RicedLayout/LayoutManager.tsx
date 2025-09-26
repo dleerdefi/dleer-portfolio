@@ -1,20 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import NeofetchTile from './NeofetchTile';
 import NavigationTile from './NavigationTile';
 import ContentViewer from './ContentViewer';
 import Background from './Background';
 import Polybar from './Polybar';
-
-// Simple debounce utility
-const debounce = (func: Function, delay: number) => {
-  let timeoutId: NodeJS.Timeout;
-  return (...args: any[]) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func(...args), delay);
-  };
-};
 
 export type ContentType =
   | { type: 'about' }
@@ -28,33 +20,19 @@ const LayoutManager: React.FC = () => {
   const [focusedTile, setFocusedTile] = useState<'neofetch' | 'navigation' | 'content'>('content');
   const [isStacked, setIsStacked] = useState(false);
 
-  // Animation state management
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [transitionDirection, setTransitionDirection] = useState<'toStacked' | 'toTiled' | null>(null);
-  const prevIsStacked = useRef<boolean | null>(null);
-  const isInitialMount = useRef(true);
-
   // Create refs at top level (always called, regardless of mode)
   const neofetchRef = useRef<HTMLDivElement>(null);
   const navigationRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Create debounced layout check function
-  const debouncedCheckLayout = useCallback(
-    debounce(() => {
-      setIsStacked(window.innerWidth < 1024);
-    }, 150),
-    []
-  );
-
   useEffect(() => {
-    // Initial check without debounce
-    setIsStacked(window.innerWidth < 1024);
-
-    // Use debounced version for resize events
-    window.addEventListener('resize', debouncedCheckLayout);
-    return () => window.removeEventListener('resize', debouncedCheckLayout);
-  }, [debouncedCheckLayout]);
+    const checkLayout = () => {
+      setIsStacked(window.innerWidth < 1024);
+    };
+    checkLayout();
+    window.addEventListener('resize', checkLayout);
+    return () => window.removeEventListener('resize', checkLayout);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -80,61 +58,23 @@ const LayoutManager: React.FC = () => {
       'content': contentRef
     };
 
-    // Small delay to ensure DOM updates
+    // Increased delay to account for Framer Motion layout animations
     const timer = setTimeout(() => {
       tileRefs[focusedTile]?.current?.scrollIntoView({
         behavior: 'smooth',
         block: 'center'
       });
-    }, 50);
+    }, 180); // Optimized delay for responsive feel with Framer Motion
 
     return () => clearTimeout(timer);
   }, [focusedTile, isStacked]);
 
-  // Detect layout changes and trigger transitions
-  useEffect(() => {
-    // Skip animation on initial mount
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      prevIsStacked.current = isStacked;
-      return;
-    }
-
-    // Detect if layout actually changed
-    if (prevIsStacked.current !== null && prevIsStacked.current !== isStacked) {
-      setIsTransitioning(true);
-      setTransitionDirection(isStacked ? 'toStacked' : 'toTiled');
-
-      // Clear transition state after animation completes
-      const timer = setTimeout(() => {
-        setIsTransitioning(false);
-        setTransitionDirection(null);
-      }, 850); // Total animation duration (550ms + 300ms max stagger)
-
-      prevIsStacked.current = isStacked;
-
-      return () => clearTimeout(timer);
-    }
-  }, [isStacked]);
-
-  // Helper function to build tile classes with animation support
-  const getTileClasses = (tileName: 'neofetch' | 'navigation' | 'content', baseClasses: string) => {
-    if (!isTransitioning) return baseClasses;
-
-    const transitionClasses = ['layout-transition'];
-
-    // Add stagger delay based on tile - updated for better rhythm
-    const delays = { neofetch: '0', navigation: '150', content: '300' };
-    transitionClasses.push(`transition-delay-${delays[tileName]}`);
-
-    // Add direction-specific animation classes
-    if (transitionDirection === 'toStacked') {
-      transitionClasses.push(`tile-${tileName}-entering-stacked`);
-    } else if (transitionDirection === 'toTiled') {
-      transitionClasses.push(`tile-${tileName}-entering-tiled`);
-    }
-
-    return `${baseClasses} ${transitionClasses.join(' ')}`;
+  // Framer Motion animation settings
+  const layoutTransition = {
+    type: "spring",
+    stiffness: 300,
+    damping: 30,
+    mass: 1
   };
 
   // Handle navigation from polybar
@@ -185,60 +125,74 @@ const LayoutManager: React.FC = () => {
             tileCount={3}
           />
           <div className="flex-1" style={{ padding: '12px' }}>
-            <div className="flex flex-col" style={{ gap: '12px' }}>
-              {/* Neofetch Tile */}
-              <div
-                ref={neofetchRef}
-                className={getTileClasses('neofetch', `rounded-lg shadow-xl border transition-all duration-300 ${
-                  focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
-                }`)}
-                style={{
-                  backgroundColor: activeContent.type === 'about' ? 'rgba(30, 30, 46, 1)' : 'rgba(30, 30, 46, 0.6)',
-                  backdropFilter: activeContent.type === 'about' ? 'blur(0px)' : 'blur(8px)',
-                  borderWidth: '1px',
-                  padding: '24px'
-                }}
-                onClick={() => setFocusedTile('neofetch')}
-              >
-                <NeofetchTile isBlurred={activeContent.type !== 'about'} />
-              </div>
+            <LayoutGroup>
+              <motion.div className="flex flex-col" style={{ gap: '12px' }}>
+                {/* Neofetch Tile */}
+                <div ref={neofetchRef}>
+                  <motion.div
+                    layout
+                    layoutId="tile-neofetch"
+                    transition={layoutTransition}
+                    className={`rounded-lg shadow-xl border ${
+                      focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
+                    }`}
+                  style={{
+                    backgroundColor: activeContent.type === 'about' ? 'rgba(30, 30, 46, 1)' : 'rgba(30, 30, 46, 0.6)',
+                    backdropFilter: activeContent.type === 'about' ? 'blur(0px)' : 'blur(8px)',
+                    borderWidth: '1px',
+                    padding: '24px'
+                  }}
+                  onClick={() => setFocusedTile('neofetch')}
+                >
+                  <NeofetchTile isBlurred={activeContent.type !== 'about'} />
+                  </motion.div>
+                </div>
 
-              {/* Navigation Tile */}
-              <div
-                ref={navigationRef}
-                className={getTileClasses('navigation', `rounded-lg shadow-xl border transition-all duration-300 ${
-                  focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
-                }`)}
-                style={{
-                  backgroundColor: 'rgba(30, 30, 46, 0.8)',
-                  borderWidth: '1px',
-                  padding: '24px'
-                }}
-                onClick={() => setFocusedTile('navigation')}
-              >
-                <NavigationTile
-                  onContentSelect={handleContentSelectWithScroll}
-                  activeContent={activeContent}
-                />
-              </div>
+                {/* Navigation Tile */}
+                <div ref={navigationRef}>
+                  <motion.div
+                    layout
+                    layoutId="tile-navigation"
+                    transition={layoutTransition}
+                    className={`rounded-lg shadow-xl border ${
+                      focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
+                    }`}
+                  style={{
+                    backgroundColor: 'rgba(30, 30, 46, 0.8)',
+                    borderWidth: '1px',
+                    padding: '24px'
+                  }}
+                  onClick={() => setFocusedTile('navigation')}
+                >
+                  <NavigationTile
+                    onContentSelect={handleContentSelectWithScroll}
+                    activeContent={activeContent}
+                  />
+                  </motion.div>
+                </div>
 
-              {/* Content Viewer */}
-              <div
-                ref={contentRef}
-                className={getTileClasses('content', `rounded-lg shadow-xl border transition-all duration-300 ${
-                  focusedTile === 'content' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
-                }`)}
-                style={{
-                  backgroundColor: 'rgba(30, 30, 46, 0.95)',
-                  borderWidth: '1px',
-                  padding: '24px',
-                  minHeight: '400px'
-                }}
-                onClick={() => setFocusedTile('content')}
-              >
-                <ContentViewer content={activeContent} />
-              </div>
-            </div>
+                {/* Content Viewer */}
+                <div ref={contentRef}>
+                  <motion.div
+                    layout
+                    layoutId="tile-content"
+                    transition={layoutTransition}
+                    className={`rounded-lg shadow-xl border ${
+                      focusedTile === 'content' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
+                    }`}
+                  style={{
+                    backgroundColor: 'rgba(30, 30, 46, 0.95)',
+                    borderWidth: '1px',
+                    padding: '24px',
+                    minHeight: '400px'
+                  }}
+                  onClick={() => setFocusedTile('content')}
+                >
+                  <ContentViewer content={activeContent} />
+                  </motion.div>
+                </div>
+              </motion.div>
+            </LayoutGroup>
           </div>
         </div>
       </>
@@ -257,14 +211,18 @@ const LayoutManager: React.FC = () => {
           isMobile={false}
         />
         <div className="flex-1 overflow-hidden" style={{ padding: '12px' }}>
-          <div className="h-full flex" style={{ gap: '12px' }}>
-            {/* Left Column - 50% */}
-            <div className="w-1/2 flex flex-col" style={{ gap: '12px' }}>
-          {/* Neofetch Tile - Top - Dynamic transparency based on content */}
-          <div
-            className={getTileClasses('neofetch', `h-1/2 rounded-lg shadow-xl border transition-all duration-300 overflow-auto ${
-              focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
-            }`)}
+          <LayoutGroup>
+            <motion.div className="h-full flex" style={{ gap: '12px' }}>
+              {/* Left Column - 50% */}
+              <motion.div className="w-1/2 flex flex-col" style={{ gap: '12px' }}>
+                {/* Neofetch Tile - Top - Dynamic transparency based on content */}
+                <motion.div
+                  layout
+                  layoutId="tile-neofetch"
+                  transition={layoutTransition}
+                  className={`h-1/2 rounded-lg shadow-xl border overflow-auto ${
+                    focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
+                  }`}
             style={{
               backgroundColor: activeContent.type === 'about' ? 'rgba(30, 30, 46, 1)' : 'rgba(30, 30, 46, 0.6)',
               backdropFilter: activeContent.type === 'about' ? 'blur(0px)' : 'blur(8px)',
@@ -274,13 +232,16 @@ const LayoutManager: React.FC = () => {
             onClick={() => setFocusedTile('neofetch')}
           >
             <NeofetchTile isBlurred={activeContent.type !== 'about'} />
-          </div>
+                </motion.div>
 
-          {/* Navigation Tile - Bottom - Fixed transparency for readability */}
-          <div
-            className={getTileClasses('navigation', `h-1/2 rounded-lg shadow-xl border transition-all duration-300 overflow-auto ${
-              focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
-            }`)}
+                {/* Navigation Tile - Bottom - Fixed transparency for readability */}
+                <motion.div
+                  layout
+                  layoutId="tile-navigation"
+                  transition={layoutTransition}
+                  className={`h-1/2 rounded-lg shadow-xl border overflow-auto ${
+                    focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
+                  }`}
             style={{
               backgroundColor: 'rgba(30, 30, 46, 0.8)',
               borderWidth: '1px',
@@ -292,14 +253,17 @@ const LayoutManager: React.FC = () => {
               onContentSelect={setActiveContent}
               activeContent={activeContent}
             />
-          </div>
-            </div>
+                </motion.div>
+              </motion.div>
 
-            {/* Right Column - 50% - High opacity for readability */}
-            <div
-              className={getTileClasses('content', `w-1/2 rounded-lg shadow-xl border transition-all duration-300 overflow-auto ${
-                focusedTile === 'content' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
-              }`)}
+              {/* Right Column - 50% - High opacity for readability */}
+              <motion.div
+                layout
+                layoutId="tile-content"
+                transition={layoutTransition}
+                className={`w-1/2 rounded-lg shadow-xl border overflow-auto ${
+                  focusedTile === 'content' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
+                }`}
               style={{
                 backgroundColor: 'rgba(30, 30, 46, 0.95)',
                 borderWidth: '1px',
@@ -308,8 +272,9 @@ const LayoutManager: React.FC = () => {
               onClick={() => setFocusedTile('content')}
             >
               <ContentViewer content={activeContent} />
-            </div>
-          </div>
+              </motion.div>
+            </motion.div>
+          </LayoutGroup>
         </div>
       </div>
     </>

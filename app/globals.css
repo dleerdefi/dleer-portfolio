@@ -197,84 +197,8 @@ body {
   padding: 0 1rem;
 }
 
-/* Layout Transition Animations */
-.layout-transition {
-  transition: transform 550ms cubic-bezier(0.68, -0.55, 0.265, 1.55),
-              opacity 550ms cubic-bezier(0.23, 1, 0.32, 1),
-              box-shadow 550ms ease-out,
-              filter 550ms ease-out;
-  will-change: transform, opacity, box-shadow, filter;
-}
-
-/* Stagger delays for each tile - increased for better rhythm */
-.transition-delay-0 {
-  transition-delay: 0ms;
-}
-
-.transition-delay-150 {
-  transition-delay: 150ms;
-}
-
-.transition-delay-300 {
-  transition-delay: 300ms;
-}
-
-/* Desktop to Stacked animation states - more dramatic movement */
-.tile-neofetch-entering-stacked {
-  transform: translateY(-40px) scale(0.93) rotate(-1deg);
-  opacity: 0.6;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-  filter: blur(1px);
-}
-
-.tile-navigation-entering-stacked {
-  transform: translateY(-35px) translateX(-50px) scale(0.94) rotate(1deg);
-  opacity: 0.6;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-  filter: blur(1px);
-}
-
-.tile-content-entering-stacked {
-  transform: translateX(60px) translateY(-30px) scale(0.92) rotate(-0.5deg);
-  opacity: 0.6;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-  filter: blur(1px);
-}
-
-/* Stacked to Desktop animation states - spreading out effect */
-.tile-neofetch-entering-tiled {
-  transform: translateY(40px) translateX(30px) scale(0.92) rotate(1deg);
-  opacity: 0.6;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  filter: blur(0.5px);
-}
-
-.tile-navigation-entering-tiled {
-  transform: translateY(50px) translateX(40px) scale(0.93) rotate(-1deg);
-  opacity: 0.6;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  filter: blur(0.5px);
-}
-
-.tile-content-entering-tiled {
-  transform: translateX(-60px) translateY(35px) scale(0.94) rotate(0.5deg);
-  opacity: 0.6;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-  filter: blur(0.5px);
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .layout-transition {
-    transition: none !important;
-  }
-
-  .transition-delay-0,
-  .transition-delay-100,
-  .transition-delay-200 {
-    transition-delay: 0ms !important;
-  }
-}
+/* Framer Motion handles all layout animations now */
+/* The library provides better performance and smoother transitions */
 
 @media (min-width: 475px) {
   .container {
