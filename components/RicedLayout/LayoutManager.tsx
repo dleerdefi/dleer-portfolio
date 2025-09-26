@@ -77,6 +77,12 @@ const LayoutManager: React.FC = () => {
     mass: 1
   };
 
+  // Opacity transition for focus changes
+  const opacityTransition = {
+    duration: 0.2,
+    ease: "easeInOut"
+  };
+
   // Handle navigation from polybar
   const handlePolybarNavigate = (section: string) => {
     switch (section) {
@@ -117,7 +123,7 @@ const LayoutManager: React.FC = () => {
 
     return (
       <>
-        <Background />
+        <Background wallpaperUrl="/images/rice-wallpaper.jpg" />
         <div className="min-h-screen overflow-y-auto flex flex-col">
           <Polybar
             activeContent={activeContent}
@@ -136,11 +142,17 @@ const LayoutManager: React.FC = () => {
                     className={`rounded-lg shadow-xl border ${
                       focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
                     }`}
+                  animate={{
+                    backgroundColor: focusedTile === 'neofetch'
+                      ? 'rgba(30, 30, 46, 0.75)'
+                      : 'rgba(30, 30, 46, 0.45)'
+                  }}
+                  transition={opacityTransition}
                   style={{
-                    backgroundColor: activeContent.type === 'about' ? 'rgba(30, 30, 46, 1)' : 'rgba(30, 30, 46, 0.6)',
-                    backdropFilter: activeContent.type === 'about' ? 'blur(0px)' : 'blur(8px)',
+                    backdropFilter: 'blur(8px)',
                     borderWidth: '1px',
-                    padding: '24px'
+                    padding: '24px',
+                    willChange: 'background-color'
                   }}
                   onClick={() => setFocusedTile('neofetch')}
                 >
@@ -157,10 +169,17 @@ const LayoutManager: React.FC = () => {
                     className={`rounded-lg shadow-xl border ${
                       focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
                     }`}
+                  animate={{
+                    backgroundColor: focusedTile === 'navigation'
+                      ? 'rgba(30, 30, 46, 0.8)'
+                      : 'rgba(30, 30, 46, 0.5)'
+                  }}
+                  transition={opacityTransition}
                   style={{
-                    backgroundColor: 'rgba(30, 30, 46, 0.8)',
+                    backdropFilter: 'blur(4px)',
                     borderWidth: '1px',
-                    padding: '24px'
+                    padding: '24px',
+                    willChange: 'background-color'
                   }}
                   onClick={() => setFocusedTile('navigation')}
                 >
@@ -180,11 +199,17 @@ const LayoutManager: React.FC = () => {
                     className={`rounded-lg shadow-xl border ${
                       focusedTile === 'content' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
                     }`}
+                  animate={{
+                    backgroundColor: focusedTile === 'content'
+                      ? 'rgba(30, 30, 46, 0.95)'
+                      : 'rgba(30, 30, 46, 0.85)'
+                  }}
+                  transition={opacityTransition}
                   style={{
-                    backgroundColor: 'rgba(30, 30, 46, 0.95)',
                     borderWidth: '1px',
                     padding: '24px',
-                    minHeight: '400px'
+                    minHeight: '400px',
+                    willChange: 'background-color'
                   }}
                   onClick={() => setFocusedTile('content')}
                 >
@@ -223,11 +248,17 @@ const LayoutManager: React.FC = () => {
                   className={`h-1/2 rounded-lg shadow-xl border overflow-auto ${
                     focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
                   }`}
+            animate={{
+              backgroundColor: focusedTile === 'neofetch'
+                ? 'rgba(30, 30, 46, 0.75)'
+                : 'rgba(30, 30, 46, 0.45)'
+            }}
+            transition={opacityTransition}
             style={{
-              backgroundColor: activeContent.type === 'about' ? 'rgba(30, 30, 46, 1)' : 'rgba(30, 30, 46, 0.6)',
-              backdropFilter: activeContent.type === 'about' ? 'blur(0px)' : 'blur(8px)',
+              backdropFilter: 'blur(8px)',
               borderWidth: '1px',
-              padding: '24px'
+              padding: '24px',
+              willChange: 'background-color'
             }}
             onClick={() => setFocusedTile('neofetch')}
           >
@@ -242,10 +273,17 @@ const LayoutManager: React.FC = () => {
                   className={`h-1/2 rounded-lg shadow-xl border overflow-auto ${
                     focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
                   }`}
+            animate={{
+              backgroundColor: focusedTile === 'navigation'
+                ? 'rgba(30, 30, 46, 0.8)'
+                : 'rgba(30, 30, 46, 0.5)'
+            }}
+            transition={opacityTransition}
             style={{
-              backgroundColor: 'rgba(30, 30, 46, 0.8)',
+              backdropFilter: 'blur(4px)',
               borderWidth: '1px',
-              padding: '24px'
+              padding: '24px',
+              willChange: 'background-color'
             }}
             onClick={() => setFocusedTile('navigation')}
           >
@@ -264,10 +302,16 @@ const LayoutManager: React.FC = () => {
                 className={`w-1/2 rounded-lg shadow-xl border overflow-auto ${
                   focusedTile === 'content' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
                 }`}
+              animate={{
+                backgroundColor: focusedTile === 'content'
+                  ? 'rgba(30, 30, 46, 0.95)'
+                  : 'rgba(30, 30, 46, 0.85)'
+              }}
+              transition={opacityTransition}
               style={{
-                backgroundColor: 'rgba(30, 30, 46, 0.95)',
                 borderWidth: '1px',
-                padding: '24px'
+                padding: '24px',
+                willChange: 'background-color'
               }}
               onClick={() => setFocusedTile('content')}
             >
