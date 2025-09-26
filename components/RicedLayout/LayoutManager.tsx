@@ -109,7 +109,7 @@ const LayoutManager: React.FC = () => {
       const timer = setTimeout(() => {
         setIsTransitioning(false);
         setTransitionDirection(null);
-      }, 600); // Total animation duration (400ms + 200ms max stagger)
+      }, 850); // Total animation duration (550ms + 300ms max stagger)
 
       prevIsStacked.current = isStacked;
 
@@ -123,8 +123,8 @@ const LayoutManager: React.FC = () => {
 
     const transitionClasses = ['layout-transition'];
 
-    // Add stagger delay based on tile
-    const delays = { neofetch: '0', navigation: '100', content: '200' };
+    // Add stagger delay based on tile - updated for better rhythm
+    const delays = { neofetch: '0', navigation: '150', content: '300' };
     transitionClasses.push(`transition-delay-${delays[tileName]}`);
 
     // Add direction-specific animation classes
