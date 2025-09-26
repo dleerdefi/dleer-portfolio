@@ -1,15 +1,24 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { getPortfolioConfig } from "@/config/portfolio.config";
+
+// Get configuration at build time
+const config = getPortfolioConfig();
 
 export const metadata: Metadata = {
-  title: "David Leer | Terminal Portfolio",
-  description: "Terminal-inspired portfolio showcasing expertise in DeFi, token economics, and Neo4j knowledge graphs for AI/LLM applications.",
-  keywords: ["DeFi", "Token Economics", "Neo4j", "AI", "Knowledge Graphs", "Blockchain", "Solidity", "Smart Contracts"],
-  authors: [{ name: "David Leer" }],
+  title: config.seo.title,
+  description: config.seo.description,
+  keywords: config.seo.keywords,
+  authors: [{ name: config.seo.author }],
   openGraph: {
-    title: "David Leer - DeFi Architect",
-    description: "Terminal-inspired portfolio showcasing DeFi and blockchain expertise",
+    title: config.seo.title,
+    description: config.seo.description,
     type: "website",
+    images: config.seo.ogImage ? [config.seo.ogImage] : undefined,
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: config.seo.twitterHandle,
   },
 };
 

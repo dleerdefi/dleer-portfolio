@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { ContentType } from './LayoutManager';
+import { useProjects, useBlogPosts } from '@/lib/config';
 
 interface NavigationTileProps {
   onContentSelect: (content: ContentType) => void;
@@ -10,6 +11,8 @@ interface NavigationTileProps {
 
 const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, activeContent }) => {
   const [expandedDirs, setExpandedDirs] = useState<Set<string>>(new Set());
+  const projects = useProjects();
+  const blogs = useBlogPosts();
 
   const toggleDir = (dir: string) => {
     const newExpanded = new Set(expandedDirs);
@@ -21,17 +24,18 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
     setExpandedDirs(newExpanded);
   };
 
-  const projects = [
-    { id: 'defi-lending', name: 'defi-lending.sol', description: 'Decentralized lending protocol' },
-    { id: 'neo4j-rag', name: 'neo4j-rag.py', description: 'Knowledge graph RAG system' },
-    { id: 'token-model', name: 'token-model.ts', description: 'Token economics simulator' },
-    { id: 'amm-opt', name: 'amm-optimization.sol', description: 'Concentrated liquidity AMM' },
-  ];
+  // Map configuration data to navigation format
+  const projectItems = projects.map(p => ({
+    id: p.id,
+    name: p.filename,
+    description: p.description
+  }));
 
-  const blogs = [
-    { id: 'defi-security', name: '2024-12-20-defi-security.md', title: 'Building Secure DeFi Protocols' },
-    { id: 'neo4j-llm', name: '2024-12-15-neo4j-llm.md', title: 'Neo4j and LLMs' },
-  ];
+  const blogItems = blogs.map(b => ({
+    id: b.id,
+    name: b.filename,
+    title: b.title
+  }));
 
   const isActive = (type: string, data?: any) => {
     if (activeContent.type === type) {
@@ -76,7 +80,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
           </div>
           {expandedDirs.has('projects') && (
             <div className="ml-4">
-              {projects.map((project, index) => (
+              {projectItems.map((project, index) => (
                 <div
                   key={project.id}
                   className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 ${
@@ -86,7 +90,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
                 >
                   <span>
                     <span className="text-[#9ece6a]">
-                      {index === projects.length - 1 ? '└──' : '├──'}
+                      {index === projectItems.length - 1 ? '└──' : '├──'}
                     </span>{' '}
                     {project.name}
                   </span>
@@ -111,7 +115,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
           </div>
           {expandedDirs.has('blog') && (
             <div className="ml-4">
-              {blogs.map((blog, index) => (
+              {blogItems.map((blog, index) => (
                 <div
                   key={blog.id}
                   className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 ${
@@ -121,7 +125,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
                 >
                   <span>
                     <span className="text-[#9ece6a]">
-                      {index === blogs.length - 1 ? '└──' : '├──'}
+                      {index === blogItems.length - 1 ? '└──' : '├──'}
                     </span>{' '}
                     {blog.name}
                   </span>
