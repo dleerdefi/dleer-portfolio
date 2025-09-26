@@ -6,10 +6,9 @@ import { ContentType } from './LayoutManager';
 interface PolybarProps {
   activeContent: ContentType;
   onNavigate: (section: string) => void;
-  tileCount: number;
 }
 
-const Polybar: React.FC<PolybarProps> = ({ activeContent, onNavigate, tileCount }) => {
+const Polybar: React.FC<PolybarProps> = ({ activeContent, onNavigate }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -61,10 +60,6 @@ const Polybar: React.FC<PolybarProps> = ({ activeContent, onNavigate, tileCount 
 
         {/* Right Section */}
         <div className="flex items-center gap-3">
-          <span className="hidden sm:inline text-[#565f89]">
-            Tiles: <span className="text-[#7aa2f7]">{tileCount}</span>
-          </span>
-          <span className="text-[#414868] hidden sm:inline">│</span>
           <span className="text-[#a9b1d6]">
             {time.toLocaleTimeString('en-US', {
               hour: '2-digit',

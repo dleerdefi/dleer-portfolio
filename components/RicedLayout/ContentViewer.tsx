@@ -131,14 +131,12 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
 
               <div>
                 <h2 className="text-[#9ece6a] font-bold mb-2">Technical Stack</h2>
-                <div className="bg-[#1a1b26] p-3 rounded-lg mt-2 border border-[#414868]/50">
-                  <code className="text-[#7dcfff] text-xs font-mono">
-                    {project.id === 'defi-lending' && 'Solidity, Hardhat, OpenZeppelin, Chainlink'}
-                    {project.id === 'neo4j-rag' && 'Python, Neo4j, LangChain, FastAPI'}
-                    {project.id === 'token-model' && 'TypeScript, React, D3.js, Web3.js'}
-                    {project.id === 'amm-opt' && 'Solidity, Foundry, Python, Uniswap V3'}
-                  </code>
-                </div>
+                <code className="text-[#7dcfff] text-xs font-mono bg-[#1a1b26] p-3 rounded-lg mt-2 border border-[#414868]/50 block">
+                  {project.id === 'defi-lending' && 'Solidity, Hardhat, OpenZeppelin, Chainlink'}
+                  {project.id === 'neo4j-rag' && 'Python, Neo4j, LangChain, FastAPI'}
+                  {project.id === 'token-model' && 'TypeScript, React, D3.js, Web3.js'}
+                  {project.id === 'amm-opt' && 'Solidity, Foundry, Python, Uniswap V3'}
+                </code>
               </div>
 
               <div>
@@ -152,10 +150,10 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
               </div>
 
               <div className="flex gap-3" style={{ paddingTop: '32px' }}>
-                <button className="px-4 py-2 bg-[#7aa2f7] text-[#1a1b26] text-sm rounded hover:bg-[#7aa2f7]/90 transition-all duration-200">
+                <button className="touch-target touch-feedback px-4 py-2 bg-[#7aa2f7] text-[#1a1b26] text-sm rounded hover:bg-[#7aa2f7]/90 transition-all duration-200">
                   View on GitHub
                 </button>
-                <button className="px-4 py-2 border border-[#7aa2f7] text-[#7aa2f7] text-sm rounded hover:bg-[#7aa2f7]/10 transition-all duration-200">
+                <button className="touch-target touch-feedback px-4 py-2 border border-[#7aa2f7] text-[#7aa2f7] text-sm rounded hover:bg-[#7aa2f7]/10 transition-all duration-200">
                   Live Demo
                 </button>
               </div>
@@ -185,18 +183,16 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
                 that demonstrate deep understanding of the subject matter.
               </p>
 
-              <div className="bg-[#1a1b26] p-4 rounded-lg border border-[#414868]/50">
-                <pre className="text-xs">
-                  <code className="text-[#7dcfff] font-mono">
+              <pre className="text-xs">
+                <code className="text-[#7dcfff] font-mono">
 {`// Example code snippet
 contract Example {
     function demo() public pure returns (bool) {
         return true;
     }
 }`}
-                  </code>
-                </pre>
-              </div>
+                </code>
+              </pre>
 
               <h2 className="text-[#9ece6a] font-bold">Conclusion</h2>
               <p className="text-[#a9b1d6]/90">
@@ -245,7 +241,7 @@ contract Example {
               <div style={{ marginTop: '24px' }}>
                 <button
                   type="submit"
-                  className="px-10 py-2 bg-[#7aa2f7] text-[#1a1b26] text-sm rounded hover:bg-[#7aa2f7]/90 transition-all duration-200 min-w-[160px]"
+                  className="touch-target touch-feedback px-10 py-2 bg-[#7aa2f7] text-[#1a1b26] text-sm rounded hover:bg-[#7aa2f7]/90 transition-all duration-200 min-w-[160px]"
                 >
                   Send Message
                 </button>
