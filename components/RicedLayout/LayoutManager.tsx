@@ -130,25 +130,33 @@ const LayoutManager: React.FC = () => {
     // Handle content selection with auto-scroll to content viewer
     const handleContentSelectWithScroll = (content: ContentType) => {
       setActiveContent(content);
-      setFocusedTile('content'); // Set focus to content tile for proper transparency
-      // Delay to ensure content renders first
-      setTimeout(() => {
-        contentRef.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }, 100);
+
+      // Only change focus and scroll if we're not already on content tile
+      // This prevents the double-scroll bounce
+      if (focusedTile !== 'content') {
+        setFocusedTile('content');
+        // Delay to ensure content renders first
+        setTimeout(() => {
+          contentRef.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }, 100);
+      }
+      // If already on content, no scroll needed (user is already looking at it)
     };
 
     return (
       <>
         <Background wallpaperUrl="/images/rice-wallpaper.jpg" />
-        <div className="min-h-screen overflow-y-auto flex flex-col">
-          <Polybar
-            activeContent={activeContent}
-            onNavigate={handlePolybarNavigate}
-          />
-          <div className="flex-1" style={{ padding: '12px' }}>
+        <div className="min-h-screen flex flex-col">
+          <div className="sticky top-0 z-50">
+            <Polybar
+              activeContent={activeContent}
+              onNavigate={handlePolybarNavigate}
+            />
+          </div>
+          <div className="flex-1 overflow-y-auto" style={{ padding: '12px' }}>
             <LayoutGroup>
               <motion.div className="flex flex-col" style={{ gap: '12px' }}>
                 {/* Neofetch Tile */}
