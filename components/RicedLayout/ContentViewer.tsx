@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { ContentType } from './LayoutManager';
+import { usePersonalInfo, useProjects, useBlogPosts, useSkills } from '@/lib/config';
 
 interface ContentViewerProps {
   content: ContentType;
@@ -9,6 +10,10 @@ interface ContentViewerProps {
 
 const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const personal = usePersonalInfo();
+  const projectsConfig = useProjects();
+  const blogPostsConfig = useBlogPosts();
+  const skills = useSkills();
 
   const renderContent = () => {
     switch (content.type) {
@@ -39,12 +44,11 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
             </div>
             <div className="text-[#a9b1d6]">
               <p className="text-lg mb-4 text-[#c0caf5] font-bold">
-                DeFi Architect & Token Economics Designer
+                {personal.title}
               </p>
               <p className="text-sm leading-relaxed text-[#a9b1d6]/90">
-                Navigate through the file tree on the left to explore my portfolio.
-                Each project showcases expertise in blockchain development, Neo4j knowledge graphs,
-                and AI/LLM applications.
+                {personal.bio.homeDescription ||
+                  "Navigate through the file tree on the left to explore my portfolio. Each project showcases my expertise and passion for building exceptional software."}
               </p>
             </div>
             <div className="text-xs text-[#565f89] mt-8">
@@ -63,47 +67,33 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
 
             <div className="text-[#a9b1d6] space-y-4">
               <p className="leading-relaxed">
-                Greetings. I'm David Leer, a passionate web developer with a deep enthusiasm
-                for building modern, performant, and aesthetically pleasing applications.
-                I specialize in crafting clean, minimalist interfaces that embody the power
-                and elegance of modern Linux environments.
+                {personal.bio.long.split('\n\n')[0]}
               </p>
 
               <p className="leading-relaxed">
-                This site serves as a live portfolio for my coding experiments. Explore my
-                projects and articles via the navigation tile.
+                {personal.bio.long.split('\n\n')[1]}
               </p>
 
               <div className="grid grid-cols-2 gap-8 mt-6">
-                <div>
-                  <h2 className="text-[#9ece6a] font-bold mb-3">Technical Skills</h2>
-                  <ul className="space-y-1 text-sm text-[#a9b1d6]/90">
-                    <li>• React & Next.js</li>
-                    <li>• TypeScript & JavaScript</li>
-                    <li>• Tailwind CSS</li>
-                    <li>• Node.js & Python</li>
-                    <li>• PostgreSQL & Neo4j</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h2 className="text-[#bb9af7] font-bold mb-3">Interests</h2>
-                  <ul className="space-y-1 text-sm text-[#a9b1d6]/90">
-                    <li>• Linux Ricing & Hyprland</li>
-                    <li>• Terminal UIs</li>
-                    <li>• Open Source Development</li>
-                    <li>• System Architecture</li>
-                    <li>• Performance Optimization</li>
-                  </ul>
-                </div>
+                {skills.slice(0, 2).map((skillCategory, index) => (
+                  <div key={skillCategory.category}>
+                    <h2 className={`${index === 0 ? 'text-[#9ece6a]' : 'text-[#bb9af7]'} font-bold mb-3`}>
+                      {skillCategory.category}
+                    </h2>
+                    <ul className="space-y-1 text-sm text-[#a9b1d6]/90">
+                      {skillCategory.skills.map(skill => (
+                        <li key={skill}>• {skill}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
 
               <div className="mt-6 pt-6 border-t border-[#414868]/30">
                 <h2 className="text-[#e0af68] font-bold mb-3">Current Focus</h2>
                 <p className="text-sm text-[#a9b1d6]/90 leading-relaxed">
-                  Currently exploring the intersection of terminal aesthetics and modern web development,
-                  creating experiences that blur the line between desktop environments and web applications.
-                  Always seeking new challenges that push the boundaries of what's possible in the browser.
+                  {personal.bio.currentFocus ||
+                    "Continuously learning and exploring new technologies to build better software and create exceptional user experiences."}
                 </p>
               </div>
             </div>
@@ -132,10 +122,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
               <div>
                 <h2 className="text-[#9ece6a] font-bold mb-2">Technical Stack</h2>
                 <code className="text-[#7dcfff] text-xs font-mono bg-[#1a1b26] p-3 rounded-lg mt-2 border border-[#414868]/50 block">
-                  {project.id === 'defi-lending' && 'Solidity, Hardhat, OpenZeppelin, Chainlink'}
-                  {project.id === 'neo4j-rag' && 'Python, Neo4j, LangChain, FastAPI'}
-                  {project.id === 'token-model' && 'TypeScript, React, D3.js, Web3.js'}
-                  {project.id === 'amm-opt' && 'Solidity, Foundry, Python, Uniswap V3'}
+                  {project.techStack?.join(', ') || projectsConfig.find(p => p.id === project.id)?.techStackDisplay || 'Technologies not specified'}
                 </code>
               </div>
 
@@ -241,7 +228,7 @@ contract Example {
               <div style={{ marginTop: '24px' }}>
                 <button
                   type="submit"
-                  className="touch-target touch-feedback px-10 py-2 bg-[#7aa2f7] text-[#1a1b26] text-sm rounded hover:bg-[#7aa2f7]/90 transition-all duration-200 min-w-[160px]"
+                  className="touch-target touch-feedback px-4 py-2 bg-[#7aa2f7] text-[#1a1b26] text-sm rounded hover:bg-[#7aa2f7]/90 transition-all duration-200"
                 >
                   Send Message
                 </button>

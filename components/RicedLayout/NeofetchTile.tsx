@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { archLogoASCII, archLogoCompact, dlLogoASCII, minimalLogo, dleerBlockLetters, dleerShadow, dleerCompact, dleerMini } from './archAscii';
+import { usePersonalInfo, useSystemInfo } from '@/lib/config';
 
 interface NeofetchTileProps {
   isBlurred?: boolean;
@@ -9,6 +10,8 @@ interface NeofetchTileProps {
 
 const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
+  const personal = usePersonalInfo();
+  const system = useSystemInfo();
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -46,28 +49,28 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
         <div
           className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold mb-2 transition-all duration-300`}
         >
-          <span className="text-[#a6e3a1]">dleer</span>@<span className="text-[#cba6f7]">portfolio</span>
+          <span className="text-[#a6e3a1]">{personal.username}</span>@<span className="text-[#cba6f7]">portfolio</span>
           <div className={`${isBlurred ? 'text-[#565f89]/40' : 'text-[#565f89]/60'} transition-all duration-300`}>---------------</div>
         </div>
 
         <div className="space-y-0.5" style={{ fontSize: 'clamp(0.65rem, 1.5vw, 0.813rem)' }}>
           <div>
-            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>OS</span>: Arch Linux x86_64
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>OS</span>: {system.os}
           </div>
           <div>
-            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Host</span>: Hyprland WM
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Terminal</span>: {system.terminal}
           </div>
           <div>
-            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Kernel</span>: 6.6.10-arch1-1
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Kernel</span>: {system.kernel}
           </div>
           <div>
-            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Shell</span>: zsh 5.9
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Shell</span>: {system.shell}
           </div>
           <div>
-            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Packages</span>: 1337 (pacman)
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>CPU</span>: {system.cpu}
           </div>
           <div>
-            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Memory</span>: 4.2GiB / 16GiB
+            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Memory</span>: {system.memory}
           </div>
 
           <div className="pt-2 flex gap-1">
