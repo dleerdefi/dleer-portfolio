@@ -1,5 +1,5 @@
 import { portfolioConfig, getPortfolioConfig } from '@/config/portfolio.config';
-import { PortfolioConfig, Project, BlogPost, SocialLink } from '@/config/types';
+import { PortfolioConfig, Project, BlogPost, SocialLink, UIStrings } from '@/config/types';
 
 // Configuration utilities and helpers
 
@@ -101,6 +101,52 @@ export function useFeatureFlags() {
     contact: true,
     about: true,
     neofetch: true
+  };
+}
+
+/**
+ * Get UI strings configuration
+ */
+export function useUIStrings(): UIStrings {
+  const config = usePortfolioConfig();
+  return config.uiStrings || {
+    buttons: {
+      viewGithub: "View on GitHub",
+      liveDemo: "Live Demo",
+      sendMessage: "Send Message"
+    },
+    placeholders: {
+      name: "John Doe",
+      email: "john@example.com",
+      message: "Your message here..."
+    },
+    headers: {
+      about: "// About Me",
+      overview: "Overview",
+      techStack: "Technical Stack",
+      keyFeatures: "Key Features",
+      currentFocus: "Current Focus",
+      introduction: "Introduction",
+      conclusion: "Conclusion",
+      contact: "Contact"
+    },
+    labels: {
+      name: "Name:",
+      email: "Email:",
+      message: "Message:"
+    },
+    navigation: {
+      rootPath: "~/portfolio",
+      tabHint: "Tab to navigate between tiles"
+    },
+    tips: {
+      title: "Quick Tips:",
+      items: [
+        "• Click navigation items to view content",
+        "• Projects contain detailed technical information",
+        "• Blog posts share insights and tutorials"
+      ]
+    }
   };
 }
 

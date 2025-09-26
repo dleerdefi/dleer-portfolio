@@ -11,7 +11,9 @@ import Polybar from './Polybar';
 export type ContentType =
   | { type: 'about' }
   | { type: 'project'; data: any }
+  | { type: 'projects-overview' }
   | { type: 'blog'; data: any }
+  | { type: 'blog-overview' }
   | { type: 'contact' }
   | { type: 'home' };
 

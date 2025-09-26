@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { archLogoASCII, archLogoCompact, dlLogoASCII, minimalLogo, dleerBlockLetters, dleerShadow, dleerCompact, dleerMini } from './archAscii';
+import { archLogoASCII, archLogoCompact, dlLogoASCII, minimalLogo, dleerBlockLetters, dleerCompact } from './archAscii';
 import { usePersonalInfo, useSystemInfo } from '@/lib/config';
 
 interface NeofetchTileProps {
@@ -19,15 +19,25 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Switch ASCII art based on screen size
-  const asciiArt = windowWidth < 400 ? dleerCompact : dleerBlockLetters;
+  // Get ASCII logo preference from environment or default to dleer
+  const logoType = process.env.NEXT_PUBLIC_ASCII_LOGO || 'dleer';
+
+  // Switch ASCII art based on screen size and preference
+  let asciiArt;
+  if (logoType === 'dleer') {
+    asciiArt = windowWidth < 400 ? dleerCompact : dleerBlockLetters;
+  } else if (logoType === 'arch') {
+    asciiArt = windowWidth < 400 ? archLogoCompact : archLogoASCII;
+  } else {
+    asciiArt = minimalLogo;
+  }
 
   return (
     <div className={`flex gap-2 sm:gap-4 md:gap-6 font-mono text-sm transition-all duration-300 ${
       isBlurred ? 'text-[#eff1f5]/70' : 'text-[#eff1f5]'
     }`}>
-      {/* ASCII Art Column - Placeholder for future artwork */}
-      <div className="w-1/2 sm:w-3/5 flex items-center justify-center overflow-hidden">
+      {/* ASCII Art Column */}
+      <div className="flex-shrink-0 flex items-start overflow-hidden" style={{ width: logoType === 'dleer' ? 'auto' : '40%' }}>
         <pre
           className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} leading-tight transition-all duration-300`}
           style={{
@@ -35,7 +45,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
             padding: 0,
             border: 'none',
             margin: 0,
-            fontSize: 'clamp(0.4rem, 1.8vw, 0.75rem)',
+            fontSize: logoType === 'dleer' ? 'clamp(0.5rem, 1.2vw, 0.65rem)' : 'clamp(0.4rem, 1.8vw, 0.75rem)',
             overflow: 'auto',
             whiteSpace: 'pre'
           }}

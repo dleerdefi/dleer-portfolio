@@ -1,10 +1,10 @@
-# David Leer Portfolio
+# Tile Portfolio Template
 
-A Hyprland/Arch Linux rice-inspired portfolio website featuring a tiled window manager aesthetic with Tokyo Night color scheme.
+A Hyprland/Arch Linux rice-inspired portfolio template featuring a tiled window manager aesthetic with Tokyo Night color scheme.
 
 ## 🖥️ Overview
 
-This portfolio showcases expertise in decentralized finance, token economics, and AI applications with a minimalist, terminal-inspired design. Built with a distinctive tiled window manager interface reminiscent of Hyprland configurations.
+A customizable portfolio template with a minimalist, terminal-inspired design. Built with a distinctive tiled window manager interface reminiscent of Hyprland configurations. Perfect for developers who appreciate the Linux rice aesthetic.
 
 ## 🎨 Design Features
 
@@ -94,20 +94,39 @@ node >= 18.0.0
 npm >= 9.0.0
 ```
 
-### Installation
+### Quick Start
+
+#### 1. Clone and Setup
 ```bash
 # Clone the repository
-git clone https://github.com/dleer/dleer-portfolio.git
+git clone https://github.com/yourusername/tile-portfolio.git
 
 # Navigate to project
-cd dleer-portfolio
+cd tile-portfolio
 
 # Install dependencies
 npm install
 
-# Run development server with Turbopack
+# Copy environment template
+cp .env.example .env.local
+```
+
+#### 2. Configure Your Portfolio
+```bash
+# Edit .env.local with your information
+nano .env.local
+
+# Or edit the main configuration file
+nano config/portfolio.config.ts
+```
+
+#### 3. Run Development Server
+```bash
+# Start with Turbopack
 npm run dev
 ```
+
+Visit `http://localhost:3000` to see your portfolio!
 
 ### Build & Production
 ```bash
@@ -191,7 +210,7 @@ MIT License - feel free to use this project as inspiration for your own tiled po
 
 ## 🤝 Contact
 
-- GitHub: [@dleer](https://github.com/dleer)
+- GitHub: [@dleerdefi](https://github.com/dleerdefi)
 - Portfolio: [In Development]
 
 ---
