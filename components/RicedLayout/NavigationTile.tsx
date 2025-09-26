@@ -95,19 +95,24 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
 
         {/* Projects Directory */}
         <div>
-          <div className="flex items-center">
-            <span
-              className="touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 flex-1"
-              onClick={() => onContentSelect({ type: 'projects-overview' })}
-            >
+          <div
+            className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 flex items-center justify-between ${
+              isActive('projects-overview') ? 'bg-[#7aa2f7]/20' : ''
+            }`}
+            onClick={() => onContentSelect({ type: 'projects-overview' })}
+          >
+            <span>
               <span className="text-[#9ece6a]">├──</span>{' '}
               <span className={`text-[#7aa2f7] ${isActive('projects-overview') ? 'font-bold' : ''}`}>
                 Projects/
               </span>
             </span>
             <span
-              className="cursor-pointer px-1 text-[#7aa2f7] hover:text-[#7aa2f7]/80"
-              onClick={() => toggleDir('projects')}
+              className="text-[#7aa2f7] hover:text-[#7aa2f7]/80 px-2 -mr-1 rounded cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleDir('projects');
+              }}
             >
               {expandedDirs.has('projects') ? '▼' : '▶'}
             </span>
@@ -136,19 +141,24 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
 
         {/* Blog Directory */}
         <div>
-          <div className="flex items-center">
-            <span
-              className="touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 flex-1"
-              onClick={() => onContentSelect({ type: 'blog-overview' })}
-            >
+          <div
+            className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 flex items-center justify-between ${
+              isActive('blog-overview') ? 'bg-[#7aa2f7]/20' : ''
+            }`}
+            onClick={() => onContentSelect({ type: 'blog-overview' })}
+          >
+            <span>
               <span className="text-[#9ece6a]">├──</span>{' '}
               <span className={`text-[#7aa2f7] ${isActive('blog-overview') ? 'font-bold' : ''}`}>
                 Blog/
               </span>
             </span>
             <span
-              className="cursor-pointer px-1 text-[#7aa2f7] hover:text-[#7aa2f7]/80"
-              onClick={() => toggleDir('blog')}
+              className="text-[#7aa2f7] hover:text-[#7aa2f7]/80 px-2 -mr-1 rounded cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleDir('blog');
+              }}
             >
               {expandedDirs.has('blog') ? '▼' : '▶'}
             </span>
