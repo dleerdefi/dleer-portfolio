@@ -230,6 +230,211 @@ if (isStacked) {
 - **User Control**: Respect manual scrolling - don't fight user's scroll position
 - **Smooth Transitions**: Use CSS `scroll-behavior: smooth` as fallback
 
+## Layout Transition Animation
+
+### Overview
+Smooth animated transitions enhance the user experience when resizing the viewport across the 1024px breakpoint. Tiles gracefully animate between their tiled and stacked positions, creating a cohesive visual flow.
+
+### Design Goals
+- **Visual Continuity**: Tiles smoothly transition rather than instantly snapping
+- **Performance**: Use CSS transforms for GPU acceleration
+- **Accessibility**: Respect user's motion preferences
+- **Subtlety**: Lightweight animations that don't distract from content
+
+### Animation Behavior
+
+#### Trigger Conditions
+- **Active**: Only when viewport crosses 1024px breakpoint during resize
+- **Inactive**: Initial page loads at any size (no animation on first render)
+- **Disabled**: When user has `prefers-reduced-motion` enabled
+
+#### Animation Sequences
+
+##### Desktop → Stacked (Viewport shrinks below 1024px)
+```
+Neofetch:    Slides down and expands to full width
+Navigation:  Slides down and right, expands to full width
+Content:     Slides left and down into bottom position
+```
+- Duration: 400ms base + 100ms stagger
+- Easing: cubic-bezier(0.4, 0.0, 0.2, 1) - Material Design "ease-out"
+- Opacity: Slight fade (1.0 → 0.8 → 1.0) during transition
+
+##### Stacked → Desktop (Viewport expands above 1024px)
+```
+Neofetch:    Contracts width and slides up-left into position
+Navigation:  Slides up into bottom-left position
+Content:     Slides right and contracts into right column
+```
+- Duration: 400ms base + 100ms stagger (reversed)
+- Easing: cubic-bezier(0.4, 0.0, 0.2, 1)
+- Opacity: Maintains full opacity for "rising" effect
+
+### Implementation Phases
+
+#### Phase 1: Transition State Management
+1. Add transition detection logic
+   ```typescript
+   const [isTransitioning, setIsTransitioning] = useState(false);
+   const [transitionDirection, setTransitionDirection] = useState<'toStacked' | 'toTiled' | null>(null);
+   const prevIsStacked = useRef(isStacked);
+   ```
+
+2. Detect layout changes
+   ```typescript
+   useEffect(() => {
+     if (prevIsStacked.current !== isStacked) {
+       setIsTransitioning(true);
+       setTransitionDirection(isStacked ? 'toStacked' : 'toTiled');
+       prevIsStacked.current = isStacked;
+
+       // Clear transition state after animation completes
+       setTimeout(() => {
+         setIsTransitioning(false);
+         setTransitionDirection(null);
+       }, 600); // Total animation duration
+     }
+   }, [isStacked]);
+   ```
+
+#### Phase 2: CSS Animation Classes
+1. Create transition utility classes in globals.css
+   ```css
+   /* Base transition class */
+   .layout-transition {
+     transition: transform 400ms cubic-bezier(0.4, 0.0, 0.2, 1),
+                 opacity 400ms cubic-bezier(0.4, 0.0, 0.2, 1);
+   }
+
+   /* Stagger delays for each tile */
+   .transition-delay-0 { transition-delay: 0ms; }
+   .transition-delay-100 { transition-delay: 100ms; }
+   .transition-delay-200 { transition-delay: 200ms; }
+
+   /* Reduced motion support */
+   @media (prefers-reduced-motion: reduce) {
+     .layout-transition {
+       transition: none;
+     }
+   }
+   ```
+
+2. Position classes for animation states
+   ```css
+   /* Initial positions for desktop → stacked */
+   .tile-neofetch-entering-stacked {
+     transform: translateY(-20px);
+     opacity: 0.8;
+   }
+
+   .tile-navigation-entering-stacked {
+     transform: translateY(-20px) translateX(-20px);
+     opacity: 0.8;
+   }
+
+   .tile-content-entering-stacked {
+     transform: translateX(20px);
+     opacity: 0.8;
+   }
+   ```
+
+#### Phase 3: Component Integration
+1. Apply transition classes conditionally
+   ```typescript
+   const getTileClasses = (tileName: string) => {
+     const baseClasses = 'rounded-lg shadow-xl border';
+
+     if (!isTransitioning) return baseClasses;
+
+     const transitionClasses = [
+       'layout-transition',
+       `transition-delay-${getStaggerDelay(tileName)}`
+     ];
+
+     if (transitionDirection === 'toStacked') {
+       transitionClasses.push(`tile-${tileName}-entering-stacked`);
+     }
+
+     return `${baseClasses} ${transitionClasses.join(' ')}`;
+   };
+   ```
+
+2. Add GPU acceleration hints
+   ```typescript
+   const tileStyle = {
+     ...existingStyles,
+     willChange: isTransitioning ? 'transform, opacity' : 'auto'
+   };
+   ```
+
+#### Phase 4: Performance Optimization
+1. Debounce resize events
+   ```typescript
+   const debouncedCheckLayout = useMemo(
+     () => debounce(() => {
+       setIsStacked(window.innerWidth < 1024);
+     }, 150),
+     []
+   );
+   ```
+
+2. Use ResizeObserver for better performance
+   ```typescript
+   useEffect(() => {
+     const resizeObserver = new ResizeObserver((entries) => {
+       for (let entry of entries) {
+         const width = entry.contentRect.width;
+         debouncedCheckLayout(width);
+       }
+     });
+
+     resizeObserver.observe(document.body);
+     return () => resizeObserver.disconnect();
+   }, []);
+   ```
+
+### Technical Specifications
+
+#### Animation Timing
+| Tile | Delay | Duration | Total Time |
+|------|-------|----------|------------|
+| Neofetch | 0ms | 400ms | 400ms |
+| Navigation | 100ms | 400ms | 500ms |
+| Content | 200ms | 400ms | 600ms |
+
+#### Browser Compatibility
+- CSS Transitions: All modern browsers
+- ResizeObserver: Chrome 64+, Firefox 69+, Safari 13.1+
+- Fallback: Standard resize event listener
+
+#### Performance Metrics
+- Target FPS: 60fps throughout transition
+- Paint time: < 16ms per frame
+- No layout thrashing (transform-only animations)
+
+### Testing Checklist
+- [ ] Smooth animation when crossing 1024px breakpoint
+- [ ] No animation on initial page load
+- [ ] Proper stagger timing between tiles
+- [ ] Animation respects prefers-reduced-motion
+- [ ] Performance maintains 60fps
+- [ ] No visual glitches or jumps
+- [ ] Animations work in both directions
+- [ ] Debouncing prevents animation spam during rapid resize
+
+### Accessibility Considerations
+1. **Motion Sensitivity**: Respect `prefers-reduced-motion` media query
+2. **Focus Management**: Maintain focus state during transitions
+3. **Screen Readers**: Transitions don't affect content reading order
+4. **Keyboard Navigation**: Tab order remains consistent
+
+### Future Enhancements
+- Spring physics animations for more natural motion
+- Configurable animation duration/easing preferences
+- Alternative transition styles (fade, slide, morph)
+- Per-tile animation customization
+- Gesture-based transitions for touch devices
+
 ## Success Criteria
 - [ ] Seamless transition at 1024px breakpoint
 - [ ] No horizontal scrolling in either mode
@@ -241,6 +446,9 @@ if (isStacked) {
 - [ ] Tab navigation auto-scrolls to focused tile (stacked mode only)
 - [ ] Navigation clicks auto-scroll to content (stacked mode only)
 - [ ] Auto-scroll is completely disabled in desktop mode
+- [ ] Layout transition animations work smoothly when crossing breakpoint
+- [ ] No animation on initial page load
+- [ ] Animations respect prefers-reduced-motion setting
 
 ## Future Considerations
 - Potential for user-selectable layout preference

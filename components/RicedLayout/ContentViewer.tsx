@@ -15,7 +15,18 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
       case 'home':
         return (
           <div className="space-y-6">
-            <pre className="text-[#7aa2f7] text-xs opacity-90">
+            <div className="text-center overflow-x-auto">
+              <pre
+                className="text-[#7aa2f7] opacity-90 inline-block"
+                style={{
+                  background: 'transparent',
+                  padding: 0,
+                  border: 'none',
+                  margin: '0 auto',
+                  fontSize: 'clamp(0.5rem, 2.5vw, 0.75rem)',
+                  whiteSpace: 'pre'
+                }}
+              >
 {`
  ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗
  ██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝
@@ -24,7 +35,8 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
  ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗
   ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
 `}
-            </pre>
+              </pre>
+            </div>
             <div className="text-[#a9b1d6]">
               <p className="text-lg mb-4 text-[#c0caf5] font-bold">
                 DeFi Architect & Token Economics Designer
@@ -139,7 +151,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content }) => {
                 </ul>
               </div>
 
-              <div className="flex gap-3 pt-6">
+              <div className="flex gap-3" style={{ paddingTop: '32px' }}>
                 <button className="px-4 py-2 bg-[#7aa2f7] text-[#1a1b26] text-sm rounded hover:bg-[#7aa2f7]/90 transition-all duration-200">
                   View on GitHub
                 </button>
@@ -196,12 +208,12 @@ contract Example {
 
       case 'contact':
         return (
-          <div className="space-y-6">
-            <h1 className="text-2xl font-bold text-[#7aa2f7]">$ ./contact.sh</h1>
+          <div className="space-y-4">
+            <h1 className="text-2xl font-bold text-[#7aa2f7]">Contact</h1>
 
             <form className="space-y-4">
               <div>
-                <label className="block text-[#565f89] text-sm mb-1">Name:</label>
+                <label className="block text-[#565f89] text-sm">Name:</label>
                 <input
                   type="text"
                   value={formData.name}
@@ -210,9 +222,8 @@ contract Example {
                   placeholder="John Doe"
                 />
               </div>
-
               <div>
-                <label className="block text-[#565f89] text-sm mb-1">Email:</label>
+                <label className="block text-[#565f89] text-sm">Email:</label>
                 <input
                   type="email"
                   value={formData.email}
@@ -221,40 +232,25 @@ contract Example {
                   placeholder="john@example.com"
                 />
               </div>
-
               <div>
-                <label className="block text-[#565f89] text-sm mb-1">Message:</label>
+                <label className="block text-[#565f89] text-sm">Message:</label>
                 <textarea
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  rows={6}
+                  rows={5}
                   className="w-full bg-[#1a1b26] border border-[#414868]/50 rounded px-3 py-2 text-[#a9b1d6] text-sm focus:outline-none focus:border-[#7aa2f7] resize-none transition-colors"
                   placeholder="Your message here..."
                 />
               </div>
-
-              <button
-                type="submit"
-                className="px-6 py-2 bg-[#7aa2f7] text-[#1a1b26] text-sm rounded hover:bg-[#7aa2f7]/90 transition-all duration-200"
-              >
-                Send Message
-              </button>
-            </form>
-
-            <div className="pt-6 border-t border-[#414868]/30 space-y-2">
-              <p className="text-[#e0af68] text-sm font-bold">Quick Links</p>
-              <div className="space-y-1 text-sm text-[#a9b1d6]">
-                <a href="https://github.com/dleer" className="block hover:text-[#7aa2f7] transition-colors">
-                  → github.com/dleer
-                </a>
-                <a href="https://linkedin.com/in/dleer" className="block hover:text-[#7aa2f7] transition-colors">
-                  → linkedin.com/in/dleer
-                </a>
-                <a href="mailto:david@example.com" className="block hover:text-[#7aa2f7] transition-colors">
-                  → david@example.com
-                </a>
+              <div style={{ marginTop: '24px' }}>
+                <button
+                  type="submit"
+                  className="px-10 py-2 bg-[#7aa2f7] text-[#1a1b26] text-sm rounded hover:bg-[#7aa2f7]/90 transition-all duration-200 min-w-[160px]"
+                >
+                  Send Message
+                </button>
               </div>
-            </div>
+            </form>
           </div>
         );
 
