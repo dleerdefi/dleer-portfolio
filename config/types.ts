@@ -33,6 +33,8 @@ export interface Project {
   filename: string;
   description: string;
   longDescription?: string;
+  overview?: string;
+  features?: string[];
   techStack: string[];
   techStackDisplay: string; // Formatted string for display
   github?: string;
@@ -99,6 +101,43 @@ export interface ASCIIArt {
   mini?: string;
 }
 
+export interface UIStrings {
+  buttons: {
+    viewGithub: string;
+    liveDemo: string;
+    sendMessage: string;
+  };
+  placeholders: {
+    name: string;
+    email: string;
+    message: string;
+  };
+  headers: {
+    about: string;
+    overview: string;
+    techStack: string;
+    keyFeatures: string;
+    currentFocus: string;
+    introduction: string;
+    conclusion: string;
+    contact: string;
+  };
+  labels: {
+    name: string;
+    email: string;
+    message: string;
+  };
+  navigation: {
+    rootPath: string;
+    tabHint: string;
+  };
+  tips: {
+    title: string;
+    items: string[];
+  };
+  welcomeAscii?: string;
+}
+
 export interface PortfolioConfig {
   personal: PersonalInfo;
   social: SocialLink[];
@@ -110,6 +149,7 @@ export interface PortfolioConfig {
   theme?: ThemeConfig;
   seo: SEOConfig;
   ascii?: ASCIIArt[];
+  uiStrings?: UIStrings;
   features?: {
     blog?: boolean;
     projects?: boolean;

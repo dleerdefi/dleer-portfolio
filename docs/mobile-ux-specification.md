@@ -197,7 +197,7 @@ The portfolio currently uses a responsive stacked tile layout for screens <1024p
    // Show condensed version when collapsed
    {isNeofetchCollapsed ? (
      <div className="flex items-center justify-between p-4">
-       <span className="text-[#a6e3a1]">dleer</span>@
+       <span className="text-[#a6e3a1]">user</span>@
        <span className="text-[#cba6f7]">portfolio</span>
        <ChevronDownIcon onClick={() => setIsNeofetchCollapsed(false)} />
      </div>
@@ -335,7 +335,7 @@ The portfolio currently uses a responsive stacked tile layout for screens <1024p
 #### Collapsed State
 ```
 ┌─────────────────────────┐
-│ dleer@portfolio      ⌄  │
+│ user@portfolio       ⌄  │
 └─────────────────────────┘
 ```
 
@@ -350,7 +350,7 @@ The portfolio currently uses a responsive stacked tile layout for screens <1024p
 ```
 ┌─────────────────────────────────┐
 │ [48px] > Projects               │
-│ [48px]   └─ DeFi Lending        │
+│ [48px]   └─ Project One         │
 │ [48px]   └─ Token Model         │
 │ [48px] > Blog                   │
 │ [48px]   └─ Latest Post         │

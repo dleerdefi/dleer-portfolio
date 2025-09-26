@@ -67,6 +67,13 @@ export const portfolioConfig: PortfolioConfig = {
       name: "awesome-project.ts",
       filename: "awesome-project.ts",
       description: "Full-stack web application",
+      overview: "This project demonstrates advanced development practices with focus on security, efficiency, and scalability. Implemented using modern development tools and following industry best practices.",
+      features: [
+        "Fully tested and documented codebase",
+        "Optimized implementations",
+        "Comprehensive documentation",
+        "Production-ready deployment"
+      ],
       techStack: ["TypeScript", "React", "Node.js", "PostgreSQL"],
       techStackDisplay: "TypeScript, React, Node.js, PostgreSQL",
       github: "https://github.com/example/defi-lending",
@@ -113,7 +120,25 @@ export const portfolioConfig: PortfolioConfig = {
       title: "Modern Web Development Best Practices",
       date: "2024-01-15",
       category: "Web Development",
-      excerpt: "Exploring current best practices and patterns in modern web development."
+      excerpt: "Exploring current best practices and patterns in modern web development.",
+      content: `Detailed explanation of the topic, with code examples and technical insights that demonstrate deep understanding of the subject matter.
+
+## Introduction
+Modern web development has evolved significantly over the past few years, with new frameworks, tools, and best practices emerging regularly.
+
+## Key Concepts
+Here we explore the fundamental concepts that drive modern web applications...
+
+## Example Implementation
+\`\`\`javascript
+// Example code snippet
+const Example = () => {
+  return <div>Modern Web Component</div>;
+};
+\`\`\`
+
+## Conclusion
+Summary of key points and takeaways from the article.`
     },
     {
       id: "post-two",
@@ -151,6 +176,52 @@ export const portfolioConfig: PortfolioConfig = {
     // Users can override theme colors if desired
     primaryColor: process.env.NEXT_PUBLIC_PRIMARY_COLOR,
     accentColor: process.env.NEXT_PUBLIC_ACCENT_COLOR
+  },
+
+  uiStrings: {
+    buttons: {
+      viewGithub: "View on GitHub",
+      liveDemo: "Live Demo",
+      sendMessage: "Send Message"
+    },
+    placeholders: {
+      name: "John Doe",
+      email: "john@example.com",
+      message: "Your message here..."
+    },
+    headers: {
+      about: "// About Me",
+      overview: "Overview",
+      techStack: "Technical Stack",
+      keyFeatures: "Key Features",
+      currentFocus: "Current Focus",
+      introduction: "Introduction",
+      conclusion: "Conclusion",
+      contact: "Contact"
+    },
+    labels: {
+      name: "Name:",
+      email: "Email:",
+      message: "Message:"
+    },
+    navigation: {
+      rootPath: "Contents",
+      tabHint: "Tab to navigate between tiles"
+    },
+    tips: {
+      title: "Quick Tips:",
+      items: [
+        "• Click navigation items to view content",
+        "• Projects contain detailed technical information",
+        "• Blog posts share insights and tutorials"
+      ]
+    },
+    welcomeAscii: ` ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗
+ ██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝
+ ██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗
+ ██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝
+ ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗
+  ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝`
   },
 
   features: {

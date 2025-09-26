@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { ContentType } from './LayoutManager';
-import { useProjects, useBlogPosts } from '@/lib/config';
+import { useProjects, useBlogPosts, useUIStrings } from '@/lib/config';
 
 interface NavigationTileProps {
   onContentSelect: (content: ContentType) => void;
@@ -11,8 +11,10 @@ interface NavigationTileProps {
 
 const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, activeContent }) => {
   const [expandedDirs, setExpandedDirs] = useState<Set<string>>(new Set());
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const projects = useProjects();
   const blogs = useBlogPosts();
+  const uiStrings = useUIStrings();
 
   const toggleDir = (dir: string) => {
     const newExpanded = new Set(expandedDirs);
@@ -24,18 +26,44 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
     setExpandedDirs(newExpanded);
   };
 
-  // Map configuration data to navigation format
+  const toggleItem = (itemId: string) => {
+    const newExpanded = new Set(expandedItems);
+    if (newExpanded.has(itemId)) {
+      newExpanded.delete(itemId);
+    } else {
+      newExpanded.add(itemId);
+    }
+    setExpandedItems(newExpanded);
+  };
+
+  // Map configuration data to navigation format with clean names
   const projectItems = projects.map(p => ({
     id: p.id,
-    name: p.filename,
-    description: p.description
+    name: p.name.replace(/\.(tsx?|jsx?|py|rs|go)$/i, ''), // Remove file extensions
+    displayName: p.name.split('.')[0].split('-').map(word =>
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' '),
+    description: p.description,
+    sections: [
+      'Overview',
+      ...(p.features ? ['Features'] : []),
+      'Tech Stack'
+    ]
   }));
 
   const blogItems = blogs.map(b => ({
     id: b.id,
-    name: b.filename,
-    title: b.title
+    name: b.filename.replace(/\.md$/i, ''), // Remove .md extension
+    displayName: b.title,
+    date: b.date,
+    sections: extractBlogSections(b.content || '')
   }));
+
+  // Extract sections from blog content
+  function extractBlogSections(content: string): string[] {
+    const sections = content.match(/^##\s+(.+)$/gm) || [];
+    return sections.map(s => s.replace(/^##\s+/, ''));
+  }
 
   const isActive = (type: string, data?: any) => {
     if (activeContent.type === type) {
@@ -52,7 +80,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
 
   return (
     <div className="font-mono text-sm text-[#a9b1d6]">
-      <div className="mb-3 text-[#7aa2f7] font-bold">~/portfolio</div>
+      <div className="mb-3 text-[#7aa2f7] font-bold">{uiStrings.navigation.rootPath}</div>
 
       <div className="touch-spacing">
         {/* About */}
@@ -62,20 +90,26 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
           }`}
           onClick={() => onContentSelect({ type: 'about' })}
         >
-          <span><span className="text-[#9ece6a]">├──</span> about.md</span>
+          <span><span className="text-[#9ece6a]">├──</span> About</span>
         </div>
 
         {/* Projects Directory */}
         <div>
-          <div
-            className="touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200"
-            onClick={() => toggleDir('projects')}
-          >
-            <span>
+          <div className="flex items-center">
+            <span
+              className="touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 flex-1"
+              onClick={() => onContentSelect({ type: 'projects-overview' })}
+            >
               <span className="text-[#9ece6a]">├──</span>{' '}
-              <span className="text-[#7aa2f7]">
-                {expandedDirs.has('projects') ? '▼' : '▶'} projects/
+              <span className={`text-[#7aa2f7] ${isActive('projects-overview') ? 'font-bold' : ''}`}>
+                Projects/
               </span>
+            </span>
+            <span
+              className="cursor-pointer px-1 text-[#7aa2f7] hover:text-[#7aa2f7]/80"
+              onClick={() => toggleDir('projects')}
+            >
+              {expandedDirs.has('projects') ? '▼' : '▶'}
             </span>
           </div>
           {expandedDirs.has('projects') && (
@@ -92,7 +126,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
                     <span className="text-[#9ece6a]">
                       {index === projectItems.length - 1 ? '└──' : '├──'}
                     </span>{' '}
-                    {project.name}
+                    {project.displayName}
                   </span>
                 </div>
               ))}
@@ -102,15 +136,21 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
 
         {/* Blog Directory */}
         <div>
-          <div
-            className="touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200"
-            onClick={() => toggleDir('blog')}
-          >
-            <span>
+          <div className="flex items-center">
+            <span
+              className="touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 flex-1"
+              onClick={() => onContentSelect({ type: 'blog-overview' })}
+            >
               <span className="text-[#9ece6a]">├──</span>{' '}
-              <span className="text-[#7aa2f7]">
-                {expandedDirs.has('blog') ? '▼' : '▶'} blog/
+              <span className={`text-[#7aa2f7] ${isActive('blog-overview') ? 'font-bold' : ''}`}>
+                Blog/
               </span>
+            </span>
+            <span
+              className="cursor-pointer px-1 text-[#7aa2f7] hover:text-[#7aa2f7]/80"
+              onClick={() => toggleDir('blog')}
+            >
+              {expandedDirs.has('blog') ? '▼' : '▶'}
             </span>
           </div>
           {expandedDirs.has('blog') && (
@@ -127,7 +167,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
                     <span className="text-[#9ece6a]">
                       {index === blogItems.length - 1 ? '└──' : '├──'}
                     </span>{' '}
-                    {blog.name}
+                    {blog.displayName}
                   </span>
                 </div>
               ))}
@@ -142,15 +182,15 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
           }`}
           onClick={() => onContentSelect({ type: 'contact' })}
         >
-          <span><span className="text-[#9ece6a]">└──</span> contact.sh</span>
+          <span><span className="text-[#9ece6a]">└──</span> Contact</span>
         </div>
       </div>
 
       <div className="mt-auto pt-4 text-xs text-[#565f89]">
         <div className="border-t border-[#565f89]/20 pt-3">
-          <div>4 directories, 8 files</div>
+          <div>{`${2} directories, ${2 + projectItems.length + blogItems.length} files`}</div>
           <div className="mt-2 text-[#565f89]/80">
-            Tab to navigate between tiles
+            {uiStrings.navigation.tabHint}
           </div>
         </div>
       </div>
