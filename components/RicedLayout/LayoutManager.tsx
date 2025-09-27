@@ -156,7 +156,7 @@ const LayoutManager: React.FC = () => {
 
     return (
       <>
-        <Background wallpaperUrl="/images/rice-wallpaper.jpg" />
+        <Background />
         <div className="min-h-screen flex flex-col">
           <div className="sticky top-0 z-50">
             <Polybar

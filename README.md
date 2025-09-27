@@ -27,6 +27,11 @@ A customizable portfolio template with a minimalist, terminal-inspired design. B
 - ✅ Framer Motion layout animations (FLIP technique)
 - ✅ Tab navigation with focus management
 - ✅ Uniform 12px spacing throughout
+- ✅ Dynamic theme system (Tokyo Night, Catppuccin Mocha, Catppuccin Latte)
+- ✅ Customizable accent colors (15 color options)
+- ✅ Focus context system for keyboard navigation
+- ✅ Theme-aware text colors using CSS variables
+- ✅ Responsive color picker with optimized touch targets
 
 ## 🛠️ Tech Stack
 
@@ -36,7 +41,7 @@ A customizable portfolio template with a minimalist, terminal-inspired design. B
 ├── Styling:       Tailwind CSS v4 (@tailwindcss/postcss)
 ├── Animations:    Framer Motion (layout transitions)
 ├── UI:            Custom tiled window manager components
-├── Theme:         Tokyo Night + Catppuccin Latte hybrid
+├── Theme:         Tokyo Night, Catppuccin Mocha, Catppuccin Latte
 ├── Fonts:         JetBrains Mono, Geist, Geist Mono
 └── Icons:         Custom ASCII art
 ```
@@ -55,36 +60,57 @@ portfolio/
 │       ├── NeofetchTile.tsx    # System info display
 │       ├── NavigationTile.tsx  # File tree navigation
 │       ├── ContentViewer.tsx   # Content display panel
+│       ├── ThemeTile.tsx       # Theme customization tile
 │       ├── Background.tsx      # Animated gradient background
 │       └── archAscii.tsx       # ASCII art collections
 └── content/                # Blog posts and project data (planned)
 ```
 
-## 🎨 Color Scheme (Tokyo Night + Catppuccin)
+## 🎨 Color Scheme (Dynamic Theme System)
 
+### Theme Presets
+
+#### Tokyo Night (Default)
 ```css
-/* Tokyo Night Deep Tones */
---tokyo-bg:        #1a1b26    /* Base background */
---tokyo-surface:   #24283b    /* Tile backgrounds */
---tokyo-border:    #414868    /* Default borders */
-
-/* Tokyo Night Vibrant Accents */
---tokyo-blue:      #7aa2f7    /* Primary accent */
---tokyo-cyan:      #7dcfff    /* Cyan highlights */
---tokyo-green:     #9ece6a    /* Success states */
---tokyo-magenta:   #bb9af7    /* Purple accents */
---tokyo-yellow:    #e0af68    /* Warning/special */
-
-/* Text Hierarchy */
---text-bright:     #c0caf5    /* Headers */
---text-primary:    #a9b1d6    /* Body text */
---text-dim:        #565f89    /* Muted text */
-
-/* Glass Morphism */
---tile-bg-solid:   rgba(30, 30, 46, 1)      /* Opaque tiles */
---tile-bg-glass:   rgba(30, 30, 46, 0.6)    /* Translucent tiles */
---tile-bg-semi:    rgba(30, 30, 46, 0.8)    /* Semi-transparent */
+--theme-bg:        #1a1b26    /* Base background */
+--theme-surface:   #24283b    /* Tile backgrounds */
+--theme-primary:   #7aa2f7    /* Primary accent */
+--theme-text:      #a9b1d6    /* Body text */
+--theme-success:   #9ece6a    /* Success states */
+--theme-info:      #7dcfff    /* Info highlights */
+--theme-warning:   #e0af68    /* Warning states */
+--theme-error:     #f7768e    /* Error states */
 ```
+
+#### Catppuccin Mocha
+```css
+--theme-bg:        #1e1e2e    /* Base background */
+--theme-surface:   #313244    /* Tile backgrounds */
+--theme-primary:   #89b4fa    /* Primary accent */
+--theme-text:      #cdd6f4    /* Body text */
+--theme-success:   #a6e3a1    /* Success states */
+--theme-info:      #89dceb    /* Info highlights */
+--theme-warning:   #f9e2af    /* Warning states */
+--theme-error:     #f38ba8    /* Error states */
+```
+
+#### Catppuccin Latte
+```css
+--theme-bg:        #eff1f5    /* Base background */
+--theme-surface:   #e6e9ef    /* Tile backgrounds */
+--theme-primary:   #1e66f5    /* Primary accent */
+--theme-text:      #4c4f69    /* Body text */
+--theme-success:   #40a02b    /* Success states */
+--theme-info:      #04a5e5    /* Info highlights */
+--theme-warning:   #df8e1d    /* Warning states */
+--theme-error:     #d20f39    /* Error states */
+```
+
+### Accent Colors
+15 customizable accent colors available:
+- Rose, Pink, Fuchsia, Purple, Violet
+- Indigo, Blue, Sky, Cyan, Teal
+- Emerald, Green, Lime, Amber, Orange
 
 ## 🚀 Getting Started
 
