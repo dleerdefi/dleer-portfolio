@@ -6,7 +6,7 @@ import { useProjects, useBlogPosts, useUIStrings } from '@/lib/config';
 
 interface NavigationTileProps {
   onContentSelect: (content: ContentType) => void;
-  activeContent: ContentType;
+  activeContent?: ContentType;
 }
 
 const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, activeContent }) => {
@@ -66,16 +66,16 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
   }
 
   const isActive = (type: string, data?: any) => {
-    if (activeContent.type === type) {
-      if (data && activeContent.type === 'project') {
-        return (activeContent as any).data?.id === data.id;
-      }
-      if (data && activeContent.type === 'blog') {
-        return (activeContent as any).data?.id === data.id;
-      }
-      return true;
+    if (!activeContent || activeContent.type !== type) {
+      return false;
     }
-    return false;
+    if (data && activeContent.type === 'project') {
+      return (activeContent as any).data?.id === data.id;
+    }
+    if (data && activeContent.type === 'blog') {
+      return (activeContent as any).data?.id === data.id;
+    }
+    return true;
   };
 
   return (

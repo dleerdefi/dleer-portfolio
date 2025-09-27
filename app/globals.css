@@ -1,5 +1,180 @@
 @import "tailwindcss";
 
+/* Theme System CSS Variables */
+/* Default: Tokyo Night */
+:root {
+  /* Theme colors - will be overridden by theme classes */
+  --theme-bg: #1a1b26;
+  --theme-bg-rgb: 26, 27, 38;
+  --theme-surface: #24283b;
+  --theme-surface-rgb: 36, 40, 59;
+
+  --theme-text: #a9b1d6;
+  --theme-text-rgb: 169, 177, 214;
+  --theme-text-dimmed: #565f89;
+  --theme-text-muted: #414868;
+
+  --theme-primary: #7aa2f7;
+  --theme-primary-rgb: 122, 162, 247;
+  --theme-border: #414868;
+  --theme-border-active: #7aa2f7;
+
+  --theme-success: #9ece6a;
+  --theme-warning: #e0af68;
+  --theme-error: #f7768e;
+  --theme-info: #7dcfff;
+
+  /* Default accent color */
+  --accent-color: #3b82f6;
+  --accent-color-rgb: 59, 130, 246;
+}
+
+/* Theme Presets */
+.theme-tokyo-night {
+  --theme-bg: #1a1b26;
+  --theme-bg-rgb: 26, 27, 38;
+  --theme-surface: #16161e;
+  --theme-surface-rgb: 22, 22, 30;
+  --theme-surface-alt: #2f3549;
+  --theme-text: #a9b1d6;
+  --theme-text-rgb: 169, 177, 214;
+  --theme-text-bright: #c0caf5;
+  --theme-text-dimmed: #565f89;
+  --theme-text-muted: #414868;
+  --theme-primary: #7aa2f7;
+  --theme-primary-rgb: 122, 162, 247;
+  --theme-secondary: #bb9af7;
+  --theme-secondary-rgb: 187, 154, 247;
+  --theme-border: #414868;
+  --theme-border-active: #7aa2f7;
+  --theme-selection: #28344a;
+  --theme-success: #9ece6a;
+  --theme-success-alt: #73daca;
+  --theme-warning: #e0af68;
+  --theme-warning-alt: #ff9e64;
+  --theme-error: #f7768e;
+  --theme-info: #7dcfff;
+  --theme-cyan-alt: #2ac3de;
+}
+
+.theme-catppuccin-mocha {
+  --theme-bg: #1e1e2e;
+  --theme-bg-rgb: 30, 30, 46;
+  --theme-crust: #11111b;
+  --theme-crust-rgb: 17, 17, 27;
+  --theme-mantle: #181825;
+  --theme-mantle-rgb: 24, 24, 37;
+  --theme-surface: #313244;
+  --theme-surface-rgb: 49, 50, 68;
+  --theme-surface-alt: #45475a;
+  --theme-surface-alt-rgb: 69, 71, 90;
+  --theme-surface-2: #585b70;
+  --theme-text: #cdd6f4;
+  --theme-text-rgb: 205, 214, 244;
+  --theme-text-bright: #bac2de;
+  --theme-text-dimmed: #9399b2;
+  --theme-text-muted: #6c7086;
+  --theme-primary: #89b4fa;
+  --theme-primary-rgb: 137, 180, 250;
+  --theme-secondary: #cba6f7;
+  --theme-secondary-rgb: 203, 166, 247;
+  --theme-lavender: #b4befe;
+  --theme-lavender-rgb: 180, 190, 254;
+  --theme-border: #6c7086;
+  --theme-border-active: #89b4fa;
+  --theme-success: #a6e3a1;
+  --theme-warning: #f9e2af;
+  --theme-error: #f38ba8;
+  --theme-info: #89dceb;
+  --theme-rosewater: #f5e0dc;
+  --theme-flamingo: #f2cdcd;
+  --theme-pink: #f5c2e7;
+  --theme-maroon: #eba0ac;
+  --theme-peach: #fab387;
+  --theme-teal: #94e2d5;
+  --theme-sapphire: #74c7ec;
+}
+
+.theme-catppuccin-latte {
+  --theme-bg: #eff1f5;
+  --theme-bg-rgb: 239, 241, 245;
+  --theme-surface: #e6e9ef;
+  --theme-surface-rgb: 230, 233, 239;
+  --theme-text: #4c4f69;
+  --theme-text-rgb: 76, 79, 105;
+  --theme-text-dimmed: #5c5f77;
+  --theme-text-muted: #6c6f85;
+  --theme-primary: #1e66f5;
+  --theme-primary-rgb: 30, 102, 245;
+  --theme-border: #acb0be;
+  --theme-border-active: #1e66f5;
+  --theme-success: #40a02b;
+  --theme-warning: #df8e1d;
+  --theme-error: #d20f39;
+  --theme-info: #04a5e5;
+}
+
+/* Accent Color Classes */
+.accent-rose { --accent-color: #f43f5e; --accent-color-rgb: 244, 63, 94; }
+.accent-pink { --accent-color: #ec4899; --accent-color-rgb: 236, 72, 153; }
+.accent-fuchsia { --accent-color: #d946ef; --accent-color-rgb: 217, 70, 239; }
+.accent-purple { --accent-color: #a855f7; --accent-color-rgb: 168, 85, 247; }
+.accent-violet { --accent-color: #8b5cf6; --accent-color-rgb: 139, 92, 246; }
+.accent-indigo { --accent-color: #6366f1; --accent-color-rgb: 99, 102, 241; }
+.accent-blue { --accent-color: #3b82f6; --accent-color-rgb: 59, 130, 246; }
+.accent-sky { --accent-color: #0ea5e9; --accent-color-rgb: 14, 165, 233; }
+.accent-cyan { --accent-color: #06b6d4; --accent-color-rgb: 6, 182, 212; }
+.accent-teal { --accent-color: #14b8a6; --accent-color-rgb: 20, 184, 166; }
+.accent-emerald { --accent-color: #10b981; --accent-color-rgb: 16, 185, 129; }
+.accent-green { --accent-color: #22c55e; --accent-color-rgb: 34, 197, 94; }
+.accent-lime { --accent-color: #84cc16; --accent-color-rgb: 132, 204, 22; }
+.accent-amber { --accent-color: #f59e0b; --accent-color-rgb: 245, 158, 11; }
+.accent-orange { --accent-color: #f97316; --accent-color-rgb: 249, 115, 22; }
+
+/* Theme-specific tile effects */
+.theme-tokyo-night .rounded-lg {
+  box-shadow: 0 0 0 1px rgba(122, 162, 247, 0.1);
+}
+
+.theme-tokyo-night .shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(122, 162, 247, 0.25),
+              0 0 20px -5px rgba(187, 154, 247, 0.1);
+}
+
+.theme-catppuccin-mocha .rounded-lg {
+  box-shadow: 0 0 0 1px rgba(203, 166, 247, 0.08);
+}
+
+.theme-catppuccin-mocha .shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(203, 166, 247, 0.2),
+              0 0 25px -5px rgba(245, 224, 220, 0.05);
+}
+
+.theme-catppuccin-latte .rounded-lg {
+  box-shadow: 0 0 0 1px rgba(30, 102, 245, 0.15);
+}
+
+.theme-catppuccin-latte .shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(30, 102, 245, 0.2),
+              0 0 15px -5px rgba(203, 166, 247, 0.1);
+}
+
+/* Theme transition animations */
+.theme-transitioning * {
+  transition: background-color 300ms ease,
+              color 300ms ease,
+              border-color 300ms ease !important;
+}
+
+/* Background effect control */
+.background-orbs {
+  display: block;
+}
+
+:not(.bg-effect-enabled) .background-orbs {
+  display: none;
+}
+
 /* JetBrains Mono Font */
 @font-face {
   font-family: "JetBrains Mono";
@@ -62,35 +237,35 @@
   --tokyo-yellow: #e0af68;
   --tokyo-orange: #ff9e64;
 
-  /* RGBA Values for Transparency */
-  --tile-bg-solid: rgba(30, 30, 46, 1);
-  --tile-bg-transparent: rgba(30, 30, 46, 0.6);
-  --tile-bg-semi: rgba(30, 30, 46, 0.8);
-  --tile-border-default: rgba(137, 180, 250, 0.3);
-  --tile-border-active: rgba(137, 180, 250, 0.8);
-  --text-on-dark: rgba(239, 241, 245, 0.95);
-  --text-on-dark-dim: rgba(239, 241, 245, 0.7);
+    /* RGBA Values for Transparency - Will use RGB values from theme */
+  --tile-bg-solid: rgba(var(--theme-bg-rgb), 1);
+  --tile-bg-transparent: rgba(var(--theme-bg-rgb), 0.6);
+  --tile-bg-semi: rgba(var(--theme-bg-rgb), 0.8);
+  --tile-border-default: rgba(var(--accent-color-rgb), 0.3);
+  --tile-border-active: rgba(var(--accent-color-rgb), 0.8);
+  --text-on-dark: rgba(var(--theme-text), 0.95);
+  --text-on-dark-dim: rgba(var(--theme-text), 0.7);
 
-  /* Applied Theme Variables */
-  --term-bg: var(--tokyo-bg);
-  --term-bg-alt: var(--tokyo-bg-dark);
-  --term-surface: var(--tokyo-bg-highlight);
-  --term-surface-alt: var(--tokyo-terminal-black);
-  --term-border: var(--tokyo-terminal-black);
-  --term-text: var(--tokyo-fg-dark);
-  --term-text-dim: var(--tokyo-comment);
-  --term-text-bright: var(--tokyo-fg);
-  --term-accent: var(--tokyo-blue);
-  --term-accent-alt: var(--tokyo-green);
+  /* Applied Theme Variables - Now using new theme system */
+  --term-bg: var(--theme-bg);
+  --term-bg-alt: var(--theme-bg);
+  --term-surface: var(--theme-surface);
+  --term-surface-alt: var(--theme-surface);
+  --term-border: var(--theme-border);
+  --term-text: var(--theme-text);
+  --term-text-dim: var(--theme-text-dimmed);
+  --term-text-bright: var(--theme-text);
+  --term-accent: var(--accent-color);
+  --term-accent-alt: var(--theme-success);
   --term-purple: var(--tokyo-magenta);
   --term-orange: var(--tokyo-orange);
-  --term-red: var(--tokyo-red);
-  --term-cyan: var(--tokyo-cyan);
-  --term-yellow: var(--tokyo-yellow);
+  --term-red: var(--theme-error);
+  --term-cyan: var(--theme-info);
+  --term-yellow: var(--theme-warning);
 
   /* UI elements */
-  --border: var(--tokyo-terminal-black);
-  --code-bg: var(--tokyo-bg-dark);
+  --border: var(--theme-border);
+  --code-bg: var(--theme-bg);
   --border-radius: 8px;
   --border-radius-lg: 12px;
 
@@ -125,26 +300,7 @@
   --font-mono: "JetBrains Mono", "Fira Code", "IBM Plex Mono", monospace;
 }
 
-/* Dark mode variant */
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Terminal dark theme */
-    --term-bg: #1a1b26;
-    --term-bg-alt: #16161e;
-    --term-surface: #24283b;
-    --term-surface-alt: #292e42;
-    --term-border: #414868;
-
-    /* Text colors */
-    --term-text: #a9b1d6;
-    --term-text-dim: #565f89;
-    --term-text-bright: #c0caf5;
-
-    /* Keep Tokyo Night accents */
-    --border: #414868;
-    --code-bg: #16161e;
-  }
-}
+/* Dark mode is now handled by theme classes */
 
 /* Base styles */
 * {
@@ -161,8 +317,8 @@ html {
 }
 
 body {
-  background: var(--term-bg);
-  color: var(--term-text);
+  background: var(--theme-bg);
+  color: var(--theme-text);
   font-family: "JetBrains Mono", "Fira Code", "IBM Plex Mono", monospace;
   font-weight: 400;
   min-height: 100vh;

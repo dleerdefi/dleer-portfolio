@@ -43,7 +43,15 @@ const LayoutManager: React.FC = () => {
         const tiles: Array<'neofetch' | 'navigation' | 'content'> = ['neofetch', 'navigation', 'content'];
         const currentIndex = tiles.indexOf(focusedTile);
         const nextIndex = (currentIndex + 1) % tiles.length;
-        setFocusedTile(tiles[nextIndex]);
+        const nextTile = tiles[nextIndex];
+
+        setFocusedTile(nextTile);
+
+        // Update activeContent to match tile focus for Polybar sync
+        if (nextTile === 'neofetch') {
+          setActiveContent({ type: 'about' });
+        }
+        // Navigation and content tiles don't change activeContent
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -272,7 +280,7 @@ const LayoutManager: React.FC = () => {
                   layout
                   layoutId="tile-neofetch"
                   transition={layoutTransition}
-                  className={`h-1/2 rounded-lg shadow-xl border overflow-auto ${
+                  className={`h-2/5 rounded-lg shadow-xl border overflow-auto ${
                     focusedTile === 'neofetch' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
                   }`}
             animate={{
@@ -296,7 +304,7 @@ const LayoutManager: React.FC = () => {
                   layout
                   layoutId="tile-navigation"
                   transition={layoutTransition}
-                  className={`h-1/2 rounded-lg shadow-xl border overflow-auto ${
+                  className={`h-3/5 rounded-lg shadow-xl border overflow-auto ${
                     focusedTile === 'navigation' ? 'border-[#89b4fa] shadow-[#89b4fa]/30 shadow-2xl' : 'border-[#89b4fa]/30'
                   }`}
             animate={{

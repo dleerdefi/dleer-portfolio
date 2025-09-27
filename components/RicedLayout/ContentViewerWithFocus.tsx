@@ -1,21 +1,23 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ContentType } from './LayoutManager';
+import { useFocusState, ContentType } from '@/contexts/FocusContext';
 import { usePersonalInfo, useProjects, useBlogPosts, useSkills, useUIStrings } from '@/lib/config';
 
 interface ContentViewerProps {
-  content: ContentType;
   onNavigate?: (content: ContentType) => void;
 }
 
-const ContentViewer: React.FC<ContentViewerProps> = ({ content, onNavigate }) => {
+const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const { activeContent } = useFocusState();
   const personal = usePersonalInfo();
   const projectsConfig = useProjects();
   const blogPostsConfig = useBlogPosts();
   const skills = useSkills();
   const uiStrings = useUIStrings();
+
+  const content = activeContent;
 
   const renderContent = () => {
     switch (content.type) {
@@ -63,11 +65,11 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content, onNavigate }) =>
 
             <div className="text-[#a9b1d6] space-y-4">
               <p className="leading-relaxed">
-                {personal.bio.long.split('\n\n')[0]}
+                {personal.bio.long.split('\\n\\n')[0]}
               </p>
 
               <p className="leading-relaxed">
-                {personal.bio.long.split('\n\n')[1]}
+                {personal.bio.long.split('\\n\\n')[1]}
               </p>
 
               <div className="grid grid-cols-2 gap-8 mt-6">
