@@ -139,7 +139,7 @@ const LayoutManagerWithFocus: React.FC = () => {
 
     return (
       <>
-        <Background wallpaperUrl="/images/rice-wallpaper.jpg" />
+        <Background />
         <div className="min-h-screen flex flex-col">
           <div className="sticky top-0 z-50">
             <Polybar onNavigate={handlePolybarNavigate} />
@@ -196,6 +196,7 @@ const LayoutManagerWithFocus: React.FC = () => {
                     style={{
                       backdropFilter: 'blur(4px)',
                       borderWidth: '1px',
+                      borderColor: focusedTile === 'navigation' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
                       padding: '24px',
                       willChange: 'background-color'
                     }}

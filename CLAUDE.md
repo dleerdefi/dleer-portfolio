@@ -24,19 +24,21 @@ This is a **Next.js 15.5.4** portfolio application with App Router, designed as 
 - **Framework**: Next.js 15+ with App Router and Turbopack
 - **Styling**: Tailwind CSS v4 (using @tailwindcss/postcss)
 - **TypeScript**: Strict mode enabled with path aliases (@/* mapped to root)
-- **Fonts**: Geist and Geist Mono from next/font/google
-- **Theme**: Tokyo Night color palette with glass morphism effects
+- **Fonts**: Geist and Geist Mono from next/font/google, JetBrains Mono
+- **Theme**: Dynamic theme system with Tokyo Night, Catppuccin Mocha, and Catppuccin Latte presets
+- **State Management**: React Context API for theme and focus management
 
 ### Current Implementation
 
 #### Tiled Layout System
-The portfolio features a fixed 3-tile layout system that mimics Hyprland window manager:
+The portfolio features a fixed tiled layout system that mimics Hyprland window manager:
 
-1. **LayoutManager** (`components/RicedLayout/LayoutManager.tsx`)
-   - Orchestrates the entire tiled interface
-   - Desktop: Fixed 3-tile layout (50% left column split into two tiles, 50% right column)
-   - Mobile: Tabbed interface with navigation buttons
-   - Manages focus state between tiles
+1. **LayoutManagerWithFocus** (`components/RicedLayout/LayoutManagerWithFocus.tsx`)
+   - Enhanced version with focus context integration
+   - Desktop: Fixed 4-tile layout (Neofetch, Navigation, Theme, Content)
+   - Mobile: Stacked layout with smooth scrolling
+   - Manages focus state through FocusContext
+   - Dynamic tile opacity based on focus and theme
    - Uniform 12px spacing throughout (uses inline styles for reliability)
 
 2. **Polybar** (`components/RicedLayout/Polybar.tsx`)
@@ -68,21 +70,54 @@ The portfolio features a fixed 3-tile layout system that mimics Hyprland window 
    - Animated gradient orbs
    - Creates glass morphism effect for tiles
    - Smooth, performant animations
+   - Toggleable via theme settings
+
+7. **ThemeTile** (`components/RicedLayout/ThemeTile.tsx`)
+   - Theme preset switcher (Tokyo Night, Catppuccin Mocha, Catppuccin Latte)
+   - 15 accent color options in responsive grid
+   - Background effect toggle
+   - Responsive touch targets (24-32px based on screen size)
 
 ### Design System
 
-#### Color Palette (Tokyo Night)
+#### Color System (Dynamic CSS Variables)
+
+The theme system uses CSS variables that update based on the selected preset:
+
 ```css
-#1a1b26 - Background dark
-#24283b - Tile backgrounds (with 75% opacity)
-#414868 - Default borders (50% opacity)
-#7aa2f7 - Active/accent color (blue)
-#a9b1d6 - Primary text
-#565f89 - Dimmed text
-#9ece6a - Success/green indicators
-#7dcfff - Cyan accents
-#bb9af7 - Purple accents
+/* Core Theme Variables */
+--theme-bg         /* Base background */
+--theme-surface    /* Tile backgrounds */
+--theme-primary    /* Primary accent */
+--theme-text       /* Body text */
+--theme-text-dimmed /* Muted text */
+--theme-success    /* Success states */
+--theme-info       /* Info highlights */
+--theme-warning    /* Warning states */
+--theme-error      /* Error states */
+
+/* Accent Color (User Selectable) */
+--accent-color     /* Dynamic accent from 15 options */
+--accent-color-rgb /* RGB values for opacity */
 ```
+
+##### Tokyo Night (Default)
+- Background: #1a1b26
+- Surface: #24283b
+- Primary: #7aa2f7
+- Text: #a9b1d6
+
+##### Catppuccin Mocha
+- Background: #1e1e2e
+- Surface: #313244
+- Primary: #89b4fa
+- Text: #cdd6f4
+
+##### Catppuccin Latte (Light)
+- Background: #eff1f5
+- Surface: #e6e9ef
+- Primary: #1e66f5
+- Text: #4c4f69
 
 #### Spacing System
 - Uniform 12px gaps between all elements
@@ -91,23 +126,57 @@ The portfolio features a fixed 3-tile layout system that mimics Hyprland window 
 - Internal tile padding: p-6 (24px)
 
 #### Responsive Breakpoints
-- Desktop: ≥768px (full 3-tile layout)
-- Mobile: <768px (tabbed interface)
+- Desktop: ≥1024px (full 4-tile layout)
+- Mobile/Tablet: <1024px (stacked layout with scrolling)
 
 ### Key Implementation Details
 
-1. **Focus Management**: Tiles have visual focus states with blue borders and shadows
-2. **Glass Morphism**: `backdrop-blur-md` with semi-transparent backgrounds
-3. **Animations**: Smooth transitions on focus changes and hover states
-4. **Mobile UX**: Tab-based navigation with clear active states
+1. **Focus Management**:
+   - FocusContext manages tile and content navigation
+   - Visual focus states with accent color borders and shadows
+   - Keyboard navigation with Tab and Arrow keys
+   - Auto-scroll to focused tiles in mobile view
+
+2. **Theme System**:
+   - CSS variables update dynamically on theme change
+   - All colors use theme variables for consistency
+   - Accent colors customizable independently
+   - Light/dark mode support via Catppuccin Latte
+
+3. **Glass Morphism**:
+   - `backdrop-blur` with semi-transparent backgrounds
+   - Dynamic opacity based on focus state and content type
+   - Theme-aware transparency levels
+
+4. **Mobile UX**:
+   - Stacked layout with smooth scrolling
+   - Touch-optimized targets (minimum 24x24px, 32x32px on touch screens)
+   - Auto-scroll to active content
+   - Responsive sizing for all interactive elements
 
 ### Common Tasks
 
 #### Adding New Content Types
-1. Update `ContentType` in `LayoutManager.tsx`
-2. Add handling in `ContentViewer.tsx`
-3. Update navigation items in `NavigationTile.tsx`
+1. Update `ContentType` in `FocusContext.tsx`
+2. Add handling in `ContentViewerWithFocus.tsx`
+3. Update navigation items in `NavigationTileWithFocus.tsx`
 4. Add polybar navigation if needed
+
+#### Working with Themes
+1. **Add new theme preset**:
+   - Update `ThemeContext.tsx` with new preset colors
+   - Add theme button in `ThemeTile.tsx`
+   - Ensure all CSS variables are defined
+
+2. **Modify accent colors**:
+   - Edit color array in `ThemeTile.tsx`
+   - Update `AccentColor` type in `ThemeContext.tsx`
+   - Colors automatically apply via CSS variables
+
+3. **Theme-aware components**:
+   - Use `var(--theme-*)` CSS variables
+   - Never hardcode colors directly
+   - Use `rgba(var(--theme-*-rgb), opacity)` for transparency
 
 #### Adjusting Spacing
 - All spacing uses inline styles with explicit pixel values
@@ -115,9 +184,10 @@ The portfolio features a fixed 3-tile layout system that mimics Hyprland window 
 - Test on both desktop and mobile layouts
 
 #### Color Modifications
-- Use Tokyo Night palette consistently
+- Always use CSS variables (`var(--theme-*)`) instead of hardcoded colors
 - Maintain opacity values for glass effect
 - Ensure sufficient contrast for readability
+- Test all themes (especially light theme) for visibility
 
 ### Development Tips
 
@@ -131,6 +201,9 @@ The portfolio features a fixed 3-tile layout system that mimics Hyprland window 
 - [ ] Project detail pages with live demos
 - [ ] Command palette for keyboard navigation
 - [ ] More terminal effects (typing animation, matrix rain)
-- [ ] Dark/light theme toggle (Catppuccin variants)
+- [x] Dark/light theme toggle (Catppuccin variants) - COMPLETED
 - [ ] GitHub activity integration
 - [ ] Live code editing in portfolio
+- [ ] Vim-style keyboard navigation
+- [ ] Custom theme creator
+- [ ] Settings persistence (localStorage)
