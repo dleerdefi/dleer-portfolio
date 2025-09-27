@@ -190,7 +190,7 @@ Summary of key points and takeaways from the article.`
       message: "Your message here..."
     },
     headers: {
-      about: "// About Me",
+      about: "About Me",
       overview: "Overview",
       techStack: "Technical Stack",
       keyFeatures: "Key Features",

@@ -121,7 +121,7 @@ export function useUIStrings(): UIStrings {
       message: "Your message here..."
     },
     headers: {
-      about: "// About Me",
+      about: "About Me",
       overview: "Overview",
       techStack: "Technical Stack",
       keyFeatures: "Key Features",

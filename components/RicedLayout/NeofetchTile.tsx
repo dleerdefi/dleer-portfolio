@@ -33,14 +33,16 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
   }
 
   return (
-    <div className={`flex gap-2 sm:gap-4 md:gap-6 font-mono text-sm transition-all duration-300 ${
-      isBlurred ? 'text-[#eff1f5]/70' : 'text-[#eff1f5]'
-    }`}>
+    <div className={`flex gap-2 sm:gap-4 md:gap-6 font-mono text-sm transition-all duration-300`}
+      style={{
+        color: isBlurred ? 'rgba(var(--theme-text-rgb), 0.7)' : 'var(--theme-text)'
+      }}>
       {/* ASCII Art Column */}
       <div className="flex-shrink-0 flex items-start overflow-hidden" style={{ width: logoType === 'dleer' ? 'auto' : '40%' }}>
         <pre
-          className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} leading-tight transition-all duration-300`}
+          className={`leading-tight transition-all duration-300`}
           style={{
+            color: isBlurred ? 'rgba(var(--accent-color-rgb), 0.6)' : 'var(--accent-color)',
             background: 'transparent',
             padding: 0,
             border: 'none',
@@ -57,41 +59,46 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
       {/* Info Column */}
       <div className="flex-1 flex flex-col justify-center">
         <div
-          className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold mb-2 transition-all duration-300`}
+          className={`font-bold mb-2 transition-all duration-300`}
+          style={{
+            color: isBlurred ? 'rgba(var(--accent-color-rgb), 0.6)' : 'var(--accent-color)'
+          }}
         >
-          <span className="text-[#a6e3a1]">{personal.username}</span>@<span className="text-[#cba6f7]">portfolio</span>
-          <div className={`${isBlurred ? 'text-[#565f89]/40' : 'text-[#565f89]/60'} transition-all duration-300`}>---------------</div>
+          <span style={{ color: 'var(--theme-success)' }}>{personal.username}</span>@<span style={{ color: 'var(--theme-info)' }}>portfolio</span>
+          <div style={{
+            color: isBlurred ? 'rgba(var(--theme-text-dimmed), 0.4)' : 'rgba(var(--theme-text-dimmed), 0.6)'
+          }}>---------------</div>
         </div>
 
         <div className="space-y-0.5" style={{ fontSize: 'clamp(0.65rem, 1.5vw, 0.813rem)' }}>
           <div>
-            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>OS</span>: {system.os}
+            <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>OS</span>: {system.os}
           </div>
           <div>
-            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Terminal</span>: {system.terminal}
+            <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>Terminal</span>: {system.terminal}
           </div>
           <div>
-            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Kernel</span>: {system.kernel}
+            <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>Kernel</span>: {system.kernel}
           </div>
           <div>
-            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Shell</span>: {system.shell}
+            <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>Shell</span>: {system.shell}
           </div>
           <div>
-            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>CPU</span>: {system.cpu}
+            <span className={`font-bold transition-all duration-300`} style={{ color: 'var(--accent-color)' }}>CPU</span>: {system.cpu}
           </div>
           <div>
-            <span className={`${isBlurred ? 'text-[#89b4fa]/60' : 'text-[#89b4fa]'} font-bold transition-all duration-300`}>Memory</span>: {system.memory}
+            <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>Memory</span>: {system.memory}
           </div>
 
           <div className="pt-2 flex gap-1">
-            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#1a1b26'}}></span>
-            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#f38ba8'}}></span>
-            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#a6e3a1'}}></span>
-            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#e0af68'}}></span>
-            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#89b4fa'}}></span>
-            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#cba6f7'}}></span>
-            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#89dceb'}}></span>
-            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: '#eff1f5'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--theme-bg)'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--theme-error)'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--theme-success)'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--theme-warning)'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--accent-color)'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--theme-info)'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--theme-primary)'}}></span>
+            <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--theme-text)'}}></span>
           </div>
         </div>
       </div>
