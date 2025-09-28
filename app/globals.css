@@ -1,52 +1,82 @@
 @import "tailwindcss";
 
-/* Theme System CSS Variables */
-/* Default: Tokyo Night */
+/* Theme System CSS Variables - Final Three-Tier System */
+/* Default: Tokyo Night (Dark) */
 :root {
-  /* Theme colors - will be overridden by theme classes */
-  --theme-bg: #1a1b26;
-  --theme-bg-rgb: 26, 27, 38;
-  --theme-surface: #24283b;
-  --theme-surface-rgb: 36, 40, 59;
+  /* Core theme colors - will be overridden by theme classes */
+  --color-bg: #1a1b26;           /* Main Background */
+  --color-bg-rgb: 26, 27, 38;
+  --color-surface: #1f2335;      /* Surface/Panel BG per spec */
+  --color-surface-rgb: 31, 35, 53;
 
-  --theme-text: #a9b1d6;
-  --theme-text-rgb: 169, 177, 214;
-  --theme-text-dimmed: #565f89;
-  --theme-text-muted: #414868;
+  --color-text-body: #c0caf5;    /* Body Text per spec */
+  --color-text-body-rgb: 192, 202, 245;
+  --color-text-header: #7aa2f7;  /* Header/Hero Text per spec */
+  --color-text-header-rgb: 122, 162, 247;
+  --color-text-dimmed: #565f89;
+  --color-text-muted: #414868;
+  --color-input-text: #c0caf5;   /* Input Field Text */
 
-  --theme-primary: #7aa2f7;
-  --theme-primary-rgb: 122, 162, 247;
+  --color-accent-1: #bb9af7;     /* Primary Accent per spec */
+  --color-accent-1-rgb: 187, 154, 247;
+
+  /* Legacy variables for backward compatibility */
+  --theme-bg: var(--color-bg);
+  --theme-bg-rgb: var(--color-bg-rgb);
+  --theme-surface: var(--color-surface);
+  --theme-surface-rgb: var(--color-surface-rgb);
+  --theme-text: var(--color-text-body);
+  --theme-text-rgb: var(--color-text-body-rgb);
+  --theme-text-dimmed: var(--color-text-dimmed);
+  --theme-text-muted: var(--color-text-muted);
+  --theme-primary: var(--color-text-header);
+  --theme-primary-rgb: var(--color-text-header-rgb);
   --theme-border: #414868;
-  --theme-border-active: #7aa2f7;
+  --theme-border-active: var(--color-accent-1);
 
+  /* Status colors */
   --theme-success: #9ece6a;
   --theme-warning: #e0af68;
   --theme-error: #f7768e;
   --theme-info: #7dcfff;
 
-  /* Default accent color */
-  --accent-color: #3b82f6;
-  --accent-color-rgb: 59, 130, 246;
+  /* User-selectable accent color (overrides accent-1 when custom) */
+  --accent-color: var(--color-accent-1);
+  --accent-color-rgb: var(--color-accent-1-rgb);
 }
 
-/* Theme Presets */
+/* Theme Presets - Per Specification */
 .theme-tokyo-night {
-  --theme-bg: #1a1b26;
-  --theme-bg-rgb: 26, 27, 38;
-  --theme-surface: #16161e;
-  --theme-surface-rgb: 22, 22, 30;
+  /* Tokyo Night Official Colors */
+  --color-bg: #1a1b26;            /* Main Background */
+  --color-bg-rgb: 26, 27, 38;
+  --color-surface: #16161e;       /* Surface/Panel BG (Official secondary background) */
+  --color-surface-rgb: 22, 22, 30;
+  --color-text-body: #c0caf5;     /* Body Text */
+  --color-text-body-rgb: 192, 202, 245;
+  --color-text-header: #7aa2f7;   /* Header/Hero Text */
+  --color-text-header-rgb: 122, 162, 247;
+  --color-input-text: #c0caf5;    /* Input Field Text */
+  --color-accent-1: #bb9af7;      /* Primary Accent */
+  --color-accent-1-rgb: 187, 154, 247;
+
+  /* Legacy mappings */
+  --theme-bg: var(--color-bg);
+  --theme-bg-rgb: var(--color-bg-rgb);
+  --theme-surface: var(--color-surface);
+  --theme-surface-rgb: var(--color-surface-rgb);
   --theme-surface-alt: #2f3549;
-  --theme-text: #a9b1d6;
-  --theme-text-rgb: 169, 177, 214;
-  --theme-text-bright: #c0caf5;
+  --theme-text: var(--color-text-body);
+  --theme-text-rgb: var(--color-text-body-rgb);
+  --theme-text-bright: var(--color-text-body);
   --theme-text-dimmed: #565f89;
   --theme-text-muted: #414868;
-  --theme-primary: #7aa2f7;
-  --theme-primary-rgb: 122, 162, 247;
-  --theme-secondary: #bb9af7;
-  --theme-secondary-rgb: 187, 154, 247;
+  --theme-primary: var(--color-text-header);
+  --theme-primary-rgb: var(--color-text-header-rgb);
+  --theme-secondary: var(--color-accent-1);
+  --theme-secondary-rgb: var(--color-accent-1-rgb);
   --theme-border: #414868;
-  --theme-border-active: #7aa2f7;
+  --theme-border-active: var(--color-accent-1);
   --theme-selection: #28344a;
   --theme-success: #9ece6a;
   --theme-success-alt: #73daca;
@@ -55,63 +85,87 @@
   --theme-error: #f7768e;
   --theme-info: #7dcfff;
   --theme-cyan-alt: #2ac3de;
+
+  /* Default accent for this theme */
+  --accent-color: var(--color-accent-1);
+  --accent-color-rgb: var(--color-accent-1-rgb);
 }
 
-.theme-catppuccin-mocha {
-  --theme-bg: #1e1e2e;
-  --theme-bg-rgb: 30, 30, 46;
-  --theme-crust: #11111b;
-  --theme-crust-rgb: 17, 17, 27;
-  --theme-mantle: #181825;
-  --theme-mantle-rgb: 24, 24, 37;
-  --theme-surface: #313244;
-  --theme-surface-rgb: 49, 50, 68;
-  --theme-surface-alt: #45475a;
-  --theme-surface-alt-rgb: 69, 71, 90;
-  --theme-surface-2: #585b70;
-  --theme-text: #cdd6f4;
-  --theme-text-rgb: 205, 214, 244;
-  --theme-text-bright: #bac2de;
-  --theme-text-dimmed: #9399b2;
-  --theme-text-muted: #6c7086;
-  --theme-primary: #89b4fa;
-  --theme-primary-rgb: 137, 180, 250;
-  --theme-secondary: #cba6f7;
-  --theme-secondary-rgb: 203, 166, 247;
-  --theme-lavender: #b4befe;
-  --theme-lavender-rgb: 180, 190, 254;
-  --theme-border: #6c7086;
-  --theme-border-active: #89b4fa;
-  --theme-success: #a6e3a1;
-  --theme-warning: #f9e2af;
-  --theme-error: #f38ba8;
-  --theme-info: #89dceb;
-  --theme-rosewater: #f5e0dc;
-  --theme-flamingo: #f2cdcd;
-  --theme-pink: #f5c2e7;
-  --theme-maroon: #eba0ac;
-  --theme-peach: #fab387;
-  --theme-teal: #94e2d5;
-  --theme-sapphire: #74c7ec;
+.theme-nord {
+  /* Nord Official Palette - Arctic-inspired theme */
+  --color-bg: #2E3440;             /* nord0 - Polar Night */
+  --color-bg-rgb: 46, 52, 64;
+  --color-surface: #3B4252;        /* nord1 - Polar Night */
+  --color-surface-rgb: 59, 66, 82;
+  --color-text-body: #D8DEE9;      /* nord4 - Snow Storm */
+  --color-text-body-rgb: 216, 222, 233;
+  --color-text-header: #88C0D0;    /* nord8 - Frost */
+  --color-text-header-rgb: 136, 192, 208;
+  --color-input-text: #ECEFF4;     /* nord6 - Snow Storm */
+  --color-accent-1: #81A1C1;       /* nord9 - Frost */
+  --color-accent-1-rgb: 129, 161, 193;
+
+  /* Legacy mappings for Nord */
+  --theme-bg: var(--color-bg);
+  --theme-bg-rgb: var(--color-bg-rgb);
+  --theme-surface: var(--color-surface);
+  --theme-surface-rgb: var(--color-surface-rgb);
+  --theme-surface-alt: #434C5E;    /* nord2 - Polar Night */
+  --theme-text: var(--color-text-body);
+  --theme-text-rgb: var(--color-text-body-rgb);
+  --theme-text-bright: #E5E9F0;    /* nord5 - Snow Storm */
+  --theme-text-dimmed: #4C566A;    /* nord3 - Polar Night */
+  --theme-text-muted: #4C566A;     /* nord3 - Polar Night */
+  --theme-primary: var(--color-accent-1);
+  --theme-primary-rgb: var(--color-accent-1-rgb);
+  --theme-secondary: #88C0D0;      /* nord8 - Frost */
+  --theme-border: #4C566A;          /* nord3 - Polar Night */
+  --theme-border-active: var(--color-accent-1);
+  --theme-success: #A3BE8C;        /* nord14 - Aurora (Green) */
+  --theme-warning: #EBCB8B;        /* nord13 - Aurora (Yellow) */
+  --theme-error: #BF616A;          /* nord11 - Aurora (Red) */
+  --theme-info: #5E81AC;           /* nord10 - Frost */
+
+  /* Default accent for this theme */
+  --accent-color: var(--color-accent-1);
+  --accent-color-rgb: var(--color-accent-1-rgb);
 }
 
-.theme-catppuccin-latte {
-  --theme-bg: #eff1f5;
-  --theme-bg-rgb: 239, 241, 245;
-  --theme-surface: #e6e9ef;
-  --theme-surface-rgb: 230, 233, 239;
-  --theme-text: #4c4f69;
-  --theme-text-rgb: 76, 79, 105;
-  --theme-text-dimmed: #5c5f77;
-  --theme-text-muted: #6c6f85;
-  --theme-primary: #1e66f5;
-  --theme-primary-rgb: 30, 102, 245;
-  --theme-border: #acb0be;
-  --theme-border-active: #1e66f5;
-  --theme-success: #40a02b;
-  --theme-warning: #df8e1d;
-  --theme-error: #d20f39;
-  --theme-info: #04a5e5;
+.theme-solarized-light {
+  /* Solarized Official Palette by Ethan Schoonover */
+  --color-bg: #fdf6e3;             /* base3 - Background */
+  --color-bg-rgb: 253, 246, 227;
+  --color-surface: #eee8d5;        /* base2 - Background highlights */
+  --color-surface-rgb: 238, 232, 213;
+  --color-text-body: #657b83;      /* base00 - Body text emphasis */
+  --color-text-body-rgb: 101, 123, 131;
+  --color-text-header: #268bd2;    /* blue - Accent */
+  --color-text-header-rgb: 38, 139, 210;
+  --color-input-text: #586e75;     /* base01 - Optional emphasized content */
+  --color-accent-1: #d33682;       /* magenta - Primary accent */
+  --color-accent-1-rgb: 211, 54, 130;
+
+  /* Legacy mappings for Solarized Light */
+  --theme-bg: var(--color-bg);
+  --theme-bg-rgb: var(--color-bg-rgb);
+  --theme-surface: var(--color-surface);
+  --theme-surface-rgb: var(--color-surface-rgb);
+  --theme-text: var(--color-text-body);
+  --theme-text-rgb: var(--color-text-body-rgb);
+  --theme-text-dimmed: #93a1a1;    /* base1 - Comments/secondary */
+  --theme-text-muted: #839496;     /* base0 - Primary content */
+  --theme-primary: var(--color-text-header);
+  --theme-primary-rgb: var(--color-text-header-rgb);
+  --theme-border: #93a1a1;          /* base1 */
+  --theme-border-active: var(--color-accent-1);
+  --theme-success: #859900;        /* green */
+  --theme-warning: #b58900;        /* yellow */
+  --theme-error: #dc322f;          /* red */
+  --theme-info: #2aa198;           /* cyan */
+
+  /* Default accent for this theme */
+  --accent-color: var(--color-accent-1);
+  --accent-color-rgb: var(--color-accent-1-rgb);
 }
 
 /* Accent Color Classes */
@@ -141,22 +195,22 @@
               0 0 20px -5px rgba(187, 154, 247, 0.1);
 }
 
-.theme-catppuccin-mocha .rounded-lg {
-  box-shadow: 0 0 0 1px rgba(203, 166, 247, 0.08);
+.theme-nord .rounded-lg {
+  box-shadow: 0 0 0 1px rgba(129, 161, 193, 0.12);
 }
 
-.theme-catppuccin-mocha .shadow-2xl {
-  box-shadow: 0 25px 50px -12px rgba(203, 166, 247, 0.2),
-              0 0 25px -5px rgba(245, 224, 220, 0.05);
+.theme-nord .shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(129, 161, 193, 0.2),
+              0 0 20px -5px rgba(136, 192, 208, 0.1);
 }
 
-.theme-catppuccin-latte .rounded-lg {
-  box-shadow: 0 0 0 1px rgba(30, 102, 245, 0.15);
+.theme-solarized-light .rounded-lg {
+  box-shadow: 0 0 0 1px rgba(211, 54, 130, 0.15);
 }
 
-.theme-catppuccin-latte .shadow-2xl {
-  box-shadow: 0 25px 50px -12px rgba(30, 102, 245, 0.2),
-              0 0 15px -5px rgba(203, 166, 247, 0.1);
+.theme-solarized-light .shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(211, 54, 130, 0.15),
+              0 0 15px -5px rgba(38, 139, 210, 0.1);
 }
 
 /* Theme transition animations */

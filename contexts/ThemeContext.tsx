@@ -2,8 +2,15 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-// Theme preset types
-export type ThemePreset = 'tokyo-night' | 'catppuccin-mocha' | 'catppuccin-latte';
+// Theme preset types - Final three-tier system
+export type ThemePreset = 'solarized-light' | 'nord' | 'tokyo-night';
+
+// Default accent colors for each theme preset (per spec)
+const themeDefaultAccents: Record<ThemePreset, AccentColor> = {
+  'solarized-light': 'pink',    // #d33682 maps closest to pink/magenta
+  'nord': 'blue',                // #81A1C1 maps to blue
+  'tokyo-night': 'purple'        // #bb9af7 maps to purple
+};
 
 // Accent color types
 export type AccentColor =
@@ -58,10 +65,10 @@ const STORAGE_KEYS = {
 };
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Initialize state with defaults
+  // Initialize state with defaults - start with dark theme
   const [theme, setTheme] = useState<ThemeState>({
     preset: 'tokyo-night',
-    accentColor: 'blue',
+    accentColor: themeDefaultAccents['tokyo-night'],  // Use theme default
     backgroundEffect: true,
     isTransitioning: false
   });
@@ -70,14 +77,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const loadedPreset = localStorage.getItem(STORAGE_KEYS.preset) as ThemePreset;
-    const loadedAccent = localStorage.getItem(STORAGE_KEYS.accent) as AccentColor;
+    const loadedPreset = (localStorage.getItem(STORAGE_KEYS.preset) as ThemePreset) || 'tokyo-night';
     const loadedBgEffect = localStorage.getItem(STORAGE_KEYS.backgroundEffect);
+
+    // Don't load accent from storage - always use theme default
+    const defaultAccent = themeDefaultAccents[loadedPreset];
 
     setTheme(prev => ({
       ...prev,
-      preset: loadedPreset || prev.preset,
-      accentColor: loadedAccent || prev.accentColor,
+      preset: loadedPreset,
+      accentColor: defaultAccent,  // Always use theme default
       backgroundEffect: loadedBgEffect === null ? prev.backgroundEffect : loadedBgEffect === 'true'
     }));
   }, []);
@@ -112,10 +121,18 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [theme]);
 
-  // Set theme preset
+  // Set theme preset - resets accent to theme default per spec
   const setThemePreset = useCallback((preset: ThemePreset) => {
-    setTheme(prev => ({ ...prev, preset, isTransitioning: true }));
+    const defaultAccent = themeDefaultAccents[preset];
+    setTheme(prev => ({
+      ...prev,
+      preset,
+      accentColor: defaultAccent,  // Reset to theme's default accent
+      isTransitioning: true
+    }));
     localStorage.setItem(STORAGE_KEYS.preset, preset);
+    // Remove saved accent color to prevent persistence across themes
+    localStorage.removeItem(STORAGE_KEYS.accent);
   }, []);
 
   // Set accent color
