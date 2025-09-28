@@ -107,7 +107,10 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
               <span
                 className="cursor-pointer transition-colors hover:opacity-80"
                 style={{ color: 'var(--accent-color)' }}
-                onClick={() => onNavigate?.({ type: 'projects-overview' })}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onNavigate?.({ type: 'projects-overview' });
+                }}
               >
                 Projects
               </span>
@@ -172,7 +175,10 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
               <span
                 className="cursor-pointer transition-colors hover:opacity-80"
                 style={{ color: 'var(--accent-color)' }}
-                onClick={() => onNavigate?.({ type: 'blog-overview' })}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onNavigate?.({ type: 'blog-overview' });
+                }}
               >
                 Blog
               </span>
@@ -360,7 +366,10 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                       e.currentTarget.style.backgroundColor = 'rgba(var(--theme-surface-rgb), 0.3)';
                       e.currentTarget.style.boxShadow = 'none';
                     }}
-                    onClick={() => onNavigate?.({ type: 'project', data: projectData })}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onNavigate?.({ type: 'project', data: projectData });
+                    }}
                   >
                     <h3 className="font-bold text-base" style={{ color: 'var(--theme-success)', marginBottom: '8px' }}>{project.name}</h3>
                     <p className="text-sm leading-relaxed" style={{ color: 'var(--theme-text)', opacity: 0.9, marginBottom: '12px' }}>{project.description}</p>
@@ -425,7 +434,10 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                       e.currentTarget.style.opacity = '0.3';
                       e.currentTarget.style.boxShadow = 'none';
                     }}
-                    onClick={() => onNavigate?.({ type: 'blog', data: blogData })}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onNavigate?.({ type: 'blog', data: blogData });
+                    }}
                   >
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-bold" style={{ color: 'var(--theme-success)' }}>{post.title}</h3>
