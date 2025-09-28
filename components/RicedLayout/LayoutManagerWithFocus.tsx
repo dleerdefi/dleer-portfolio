@@ -121,6 +121,24 @@ const LayoutManagerWithFocus: React.FC = () => {
 
   // Stacked Layout (Mobile/Tablet)
   if (isStacked) {
+    // Check for parallax mode preference
+    const useParallaxMode = typeof window !== 'undefined' &&
+      localStorage.getItem('mobile-mode') === 'parallax';
+
+    // Use parallax layout if preferred
+    if (useParallaxMode) {
+      const MobileParallaxLayout = React.lazy(() => import('./MobileParallaxLayout'));
+      return (
+        <React.Suspense fallback={
+          <div className="flex items-center justify-center h-screen">
+            <div className="animate-pulse">Loading...</div>
+          </div>
+        }>
+          <MobileParallaxLayout />
+        </React.Suspense>
+      );
+    }
+
     const handleContentSelectWithScroll = (content: ContentType) => {
       handleContentNavigation(content);
       setFocusedTile('content');
@@ -273,6 +291,25 @@ const LayoutManagerWithFocus: React.FC = () => {
           </div>
           </div>
         </BorderedContainer>
+
+        {/* Mode Toggle Button */}
+        <motion.button
+          className="fixed bottom-6 left-6 z-40 px-4 py-2 rounded-lg shadow-lg text-sm font-medium"
+          style={{
+            backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)',
+            color: 'var(--theme-text)',
+            border: '1px solid rgba(var(--accent-color-rgb), 0.3)',
+            backdropFilter: 'blur(10px)'
+          }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => {
+            localStorage.setItem('mobile-mode', 'parallax');
+            window.location.reload();
+          }}
+        >
+          Try Parallax View
+        </motion.button>
       </>
     );
   }
