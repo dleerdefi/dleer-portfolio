@@ -9,15 +9,15 @@ A customizable portfolio template with a minimalist, terminal-inspired design. B
 ## 🎨 Design Features
 
 ### Tiled Layout System
-- **Fixed 3-tile layout**: Neofetch system info, file navigation tree, and content viewer
+- **Fixed 4-tile layout**: Neofetch system info, file navigation tree, content viewer, and theme customization
 - **Polybar navigation**: Workspace-style navigation bar with active indicators
 - **Glass morphism effects**: Translucent tiles with backdrop blur
-- **Tokyo Night theme**: Dark color palette with vibrant accents
+- **Dynamic theme system**: Three themes with 15 customizable accent colors
 - **Smooth animations**: Framer Motion-powered layout transitions
 - **Responsive design**: Desktop tiled (≥1024px) and mobile stacked (<1024px) layouts
 
 ### Current Implementation
-- ✅ Fixed 3-tile desktop layout with proper spacing
+- ✅ Fixed 4-tile desktop layout with proper spacing
 - ✅ Polybar with workspace navigation
 - ✅ Neofetch-style system information tile with dynamic ASCII art
 - ✅ File tree navigation with expandable directories
@@ -27,11 +27,16 @@ A customizable portfolio template with a minimalist, terminal-inspired design. B
 - ✅ Framer Motion layout animations (FLIP technique)
 - ✅ Tab navigation with focus management
 - ✅ Uniform 12px spacing throughout
-- ✅ Dynamic theme system (Tokyo Night, Catppuccin Mocha, Catppuccin Latte)
+- ✅ Dynamic theme system (Tokyo Night, Nord, Solarized Light)
 - ✅ Customizable accent colors (15 color options)
 - ✅ Focus context system for keyboard navigation
 - ✅ Theme-aware text colors using CSS variables
 - ✅ Responsive color picker with optimized touch targets
+- ✅ Full accent color system affecting all interactive elements
+- ✅ Dynamic headers that change with accent color selection
+- ✅ Fixed hydration errors for seamless SSR
+- ✅ Single-click navigation with smooth auto-scroll
+- ✅ Event propagation fixes for better UX
 
 ## 🛠️ Tech Stack
 
@@ -41,7 +46,7 @@ A customizable portfolio template with a minimalist, terminal-inspired design. B
 ├── Styling:       Tailwind CSS v4 (@tailwindcss/postcss)
 ├── Animations:    Framer Motion (layout transitions)
 ├── UI:            Custom tiled window manager components
-├── Theme:         Tokyo Night, Catppuccin Mocha, Catppuccin Latte
+├── Theme:         Tokyo Night, Nord, Solarized Light
 ├── Fonts:         JetBrains Mono, Geist, Geist Mono
 └── Icons:         Custom ASCII art
 ```
@@ -51,59 +56,67 @@ A customizable portfolio template with a minimalist, terminal-inspired design. B
 ```
 portfolio/
 ├── app/
-│   ├── layout.tsx          # Root layout
-│   └── page.tsx            # Landing page with tiled layout
+│   ├── layout.tsx                    # Root layout
+│   ├── page.tsx                      # Landing page with tiled layout
+│   └── globals.css                   # Global styles and theme variables
 ├── components/
-│   └── RicedLayout/        # Tiled window manager components
-│       ├── LayoutManager.tsx    # Main layout orchestrator
-│       ├── Polybar.tsx         # Navigation bar
-│       ├── NeofetchTile.tsx    # System info display
-│       ├── NavigationTile.tsx  # File tree navigation
-│       ├── ContentViewer.tsx   # Content display panel
-│       ├── ThemeTile.tsx       # Theme customization tile
-│       ├── Background.tsx      # Animated gradient background
-│       └── archAscii.tsx       # ASCII art collections
-└── content/                # Blog posts and project data (planned)
+│   └── RicedLayout/                  # Tiled window manager components
+│       ├── LayoutManagerWithFocus.tsx    # Main layout with focus management
+│       ├── PolybarWithFocus.tsx         # Navigation bar with focus
+│       ├── NeofetchTile.tsx             # System info display
+│       ├── NavigationTileWithFocus.tsx  # File tree navigation with focus
+│       ├── ContentViewerWithFocus.tsx   # Content display with focus
+│       ├── ThemeTile.tsx                # Theme and accent color picker
+│       ├── Background.tsx               # Animated gradient background
+│       └── archAscii.tsx                # ASCII art collections
+├── contexts/
+│   ├── ThemeContext.tsx             # Theme state management
+│   └── FocusContext.tsx             # Focus and navigation state
+└── lib/
+    └── config.ts                     # Portfolio configuration
 ```
 
 ## 🎨 Color Scheme (Dynamic Theme System)
 
 ### Theme Presets
 
-#### Tokyo Night (Default)
+#### Tokyo Night (Default Dark)
 ```css
 --theme-bg:        #1a1b26    /* Base background */
---theme-surface:   #24283b    /* Tile backgrounds */
---theme-primary:   #7aa2f7    /* Primary accent */
---theme-text:      #a9b1d6    /* Body text */
+--theme-surface:   #16161e    /* Tile backgrounds */
+--theme-text:      #c0caf5    /* Body text */
+--theme-primary:   #7aa2f7    /* Headers (uses accent color) */
 --theme-success:   #9ece6a    /* Success states */
 --theme-info:      #7dcfff    /* Info highlights */
 --theme-warning:   #e0af68    /* Warning states */
 --theme-error:     #f7768e    /* Error states */
+--accent-color:    [user selectable] /* Default: #bb9af7 (purple) */
 ```
 
-#### Catppuccin Mocha
+#### Nord (Arctic Dark)
 ```css
---theme-bg:        #1e1e2e    /* Base background */
---theme-surface:   #313244    /* Tile backgrounds */
---theme-primary:   #89b4fa    /* Primary accent */
---theme-text:      #cdd6f4    /* Body text */
---theme-success:   #a6e3a1    /* Success states */
---theme-info:      #89dceb    /* Info highlights */
---theme-warning:   #f9e2af    /* Warning states */
---theme-error:     #f38ba8    /* Error states */
+--theme-bg:        #2E3440    /* Base background (Polar Night) */
+--theme-surface:   #3B4252    /* Tile backgrounds */
+--theme-text:      #D8DEE9    /* Body text (Snow Storm) */
+--theme-primary:   #88C0D0    /* Headers (uses accent color) */
+--theme-success:   #A3BE8C    /* Success states (Aurora Green) */
+--theme-info:      #5E81AC    /* Info highlights (Frost) */
+--theme-warning:   #EBCB8B    /* Warning states (Aurora Yellow) */
+--theme-error:     #BF616A    /* Error states (Aurora Red) */
+--accent-color:    [user selectable] /* Default: #81A1C1 (blue) */
 ```
 
-#### Catppuccin Latte
+#### Solarized Light
 ```css
---theme-bg:        #eff1f5    /* Base background */
---theme-surface:   #e6e9ef    /* Tile backgrounds */
---theme-primary:   #1e66f5    /* Primary accent */
---theme-text:      #4c4f69    /* Body text */
---theme-success:   #40a02b    /* Success states */
---theme-info:      #04a5e5    /* Info highlights */
---theme-warning:   #df8e1d    /* Warning states */
---theme-error:     #d20f39    /* Error states */
+--theme-bg:        #fdf6e3    /* Base background */
+--theme-surface:   #eee8d5    /* Tile backgrounds */
+--theme-text:      #657b83    /* Body text */
+--theme-primary:   #268bd2    /* Headers (uses accent color) */
+--theme-success:   #859900    /* Success states (green) */
+--theme-info:      #2aa198    /* Info highlights (cyan) */
+--theme-warning:   #b58900    /* Warning states (yellow) */
+--theme-error:     #dc322f    /* Error states (red) */
+--accent-color:    [user selectable] /* Default: #d33682 (magenta) */
 ```
 
 ### Accent Colors
@@ -166,22 +179,45 @@ npm run start
 ## 📱 Responsive Design
 
 ### Breakpoints
-- **Desktop (≥1024px)**: Full 3-tile layout with polybar
+- **Desktop (≥1024px)**: Full 4-tile layout with polybar
   - Fixed viewport height with no scrolling
-  - 50/50 column split (left column subdivided)
+  - 50/50 column split with subdivisions
+  - Left: Neofetch (top), Navigation + Theme (bottom)
+  - Right: Content viewer (full height)
   - Keyboard navigation with Tab key
 
 - **Mobile/Tablet (<1024px)**: Stacked layout
   - Natural scrolling with content-based heights
   - Full-width tiles in vertical stack
-  - Auto-scroll to focused tile (Tab navigation)
+  - Single-click navigation with smooth auto-scroll
   - Touch-optimized interactions
+  - Fixed event propagation for reliable clicks
 
 ### Animation Features
 - **Framer Motion Layout Animations**: Smooth transitions between desktop/mobile
 - **Spring Physics**: Natural motion with configurable stiffness/damping
 - **Auto-scroll**: Smart scrolling to active tiles (180ms delay)
 - **Focus Management**: Visual feedback with animated borders
+
+## ✨ Recent Improvements
+
+### Theming System
+- **Dynamic Accent Colors**: All interactive elements (buttons, links, borders) use the selected accent color
+- **Header Color Integration**: Main section headers now use accent colors for better personalization
+- **Theme Persistence**: Settings saved to localStorage for consistent experience
+- **Smooth Transitions**: 300ms CSS transitions when switching themes/colors
+
+### Mobile Experience
+- **Fixed Auto-Scroll**: Single-click navigation now works reliably
+- **Event Propagation Fixes**: No more double-click requirements
+- **Improved Touch Targets**: Minimum 24px touch targets, 32px on mobile
+- **Hydration Error Fixes**: Server-side rendering now works seamlessly
+
+### Performance & UX
+- **Optimized Scroll Behavior**: Using setTimeout instead of nested requestAnimationFrame
+- **Better Event Handling**: Proper stopPropagation throughout navigation
+- **Focus Management**: Visual feedback with accent color borders
+- **Accessibility**: Keyboard navigation with proper focus states
 
 ## 🔧 Development Notes
 
