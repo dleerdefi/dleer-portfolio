@@ -9,11 +9,14 @@ interface NeofetchTileProps {
 }
 
 const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
+  const [windowWidth, setWindowWidth] = useState(1024);
   const personal = usePersonalInfo();
   const system = useSystemInfo();
 
   useEffect(() => {
+    // Set initial width
+    setWindowWidth(window.innerWidth);
+
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);

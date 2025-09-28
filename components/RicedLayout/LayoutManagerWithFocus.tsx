@@ -8,6 +8,8 @@ import ContentViewer from './ContentViewerWithFocus';
 import ThemeTile from './ThemeTile';
 import Background from './Background';
 import Polybar from './PolybarWithFocus';
+import BorderedContainer from './BorderedContainer';
+import ScrollProgress from './ScrollProgress';
 import { useFocus, ContentType as FocusContentType } from '@/contexts/FocusContext';
 import { useScrollToFocus } from '@/hooks/useFocus';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -29,6 +31,7 @@ const LayoutManagerWithFocus: React.FC = () => {
   const { theme } = useTheme();
 
   const [isStacked, setIsStacked] = React.useState(false);
+  const [scrollPercent, setScrollPercent] = React.useState(0);
 
   // Create refs at top level
   const neofetchRef = useRef<HTMLDivElement>(null);
@@ -120,32 +123,30 @@ const LayoutManagerWithFocus: React.FC = () => {
   if (isStacked) {
     const handleContentSelectWithScroll = (content: ContentType) => {
       handleContentNavigation(content);
-
-      // All content navigation goes to content tile
       setFocusedTile('content');
 
-      // Improved scroll implementation with better timing and reliability
-      // Using setTimeout instead of nested requestAnimationFrame for more predictable behavior
+      // Scroll to content tile after navigation
       setTimeout(() => {
         if (contentRef.current) {
-          // Check if element exists before scrolling
           contentRef.current.scrollIntoView({
             behavior: 'smooth',
-            block: 'start', // 'start' is more predictable than 'center'
+            block: 'start',
             inline: 'nearest'
           });
         }
-      }, 50); // Small delay to ensure DOM updates are complete
+      }, 50);
     };
 
     return (
       <>
         <Background />
-        <div className="min-h-screen flex flex-col">
-          <div className="sticky top-0 z-50">
-            <Polybar onNavigate={handlePolybarNavigate} />
-          </div>
-          <div className="flex-1 overflow-y-auto" style={{ padding: '12px' }}>
+        <BorderedContainer onScroll={setScrollPercent}>
+          <ScrollProgress scrollPercent={scrollPercent} />
+          <div className="min-h-screen flex flex-col">
+            <div className="sticky top-0 z-30" style={{ backgroundColor: 'var(--theme-bg)' }}>
+              <Polybar onNavigate={handlePolybarNavigate} />
+            </div>
+            <div className="flex-1" style={{ padding: '12px' }}>
             <LayoutGroup>
               <motion.div className="flex flex-col" style={{ gap: '12px' }}>
                 {/* Neofetch Tile */}
@@ -154,8 +155,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                     layout
                     layoutId="tile-neofetch"
                     transition={layoutTransition}
-                    className={`rounded-lg shadow-xl border ${
-                      focusedTile === 'neofetch' ? 'shadow-2xl' : ''
+                    className={`rounded-lg ${
+                      focusedTile === 'neofetch' ? '' : ''
                     }`}
                     initial={{
                       backgroundColor: getTileOpacity('neofetch', false)
@@ -165,13 +166,11 @@ const LayoutManagerWithFocus: React.FC = () => {
                     }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     style={{
-                      backdropFilter: 'blur(12px)',
-                      borderRadius: '10px',
-                      borderWidth: '1px',
-                      borderColor: focusedTile === 'neofetch' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
+                      backdropFilter: 'blur(8px)',
+                      borderRadius: '8px',
                       padding: '24px',
-                      willChange: 'background-color',
-                      boxShadow: focusedTile === 'neofetch' ? '0 25px 50px -12px rgba(var(--accent-color-rgb), 0.3)' : undefined
+                      marginBottom: '8px',
+                      willChange: 'background-color'
                     }}
                     onClick={() => setFocusedTile('neofetch')}
                   >
@@ -185,8 +184,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                     layout
                     layoutId="tile-navigation"
                     transition={layoutTransition}
-                    className={`rounded-lg shadow-xl border ${
-                      focusedTile === 'navigation' ? 'shadow-2xl' : ''
+                    className={`rounded-lg ${
+                      focusedTile === 'navigation' ? '' : ''
                     }`}
                     initial={{
                       backgroundColor: getTileOpacity('navigation', false)
@@ -196,13 +195,11 @@ const LayoutManagerWithFocus: React.FC = () => {
                     }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     style={{
-                      backdropFilter: 'blur(12px)',
-                      borderRadius: '10px',
-                      borderWidth: '1px',
-                      borderColor: focusedTile === 'navigation' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
+                      backdropFilter: 'blur(8px)',
+                      borderRadius: '8px',
                       padding: '24px',
-                      willChange: 'background-color',
-                      boxShadow: focusedTile === 'navigation' ? '0 25px 50px -12px rgba(var(--accent-color-rgb), 0.3)' : undefined
+                      marginBottom: '8px',
+                      willChange: 'background-color'
                     }}
                     onClick={() => setFocusedTile('navigation')}
                   >
@@ -216,8 +213,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                     layout
                     layoutId="tile-content"
                     transition={layoutTransition}
-                    className={`rounded-lg shadow-xl border ${
-                      focusedTile === 'content' ? 'shadow-2xl' : ''
+                    className={`rounded-lg ${
+                      focusedTile === 'content' ? '' : ''
                     }`}
                     initial={{
                       backgroundColor: getContentTileOpacity().unfocused
@@ -229,14 +226,12 @@ const LayoutManagerWithFocus: React.FC = () => {
                     }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     style={{
-                      backdropFilter: 'blur(12px)',
-                      borderRadius: '10px',
-                      borderWidth: '1px',
-                      borderColor: focusedTile === 'content' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
+                      backdropFilter: 'blur(8px)',
+                      borderRadius: '8px',
                       padding: '24px',
+                      marginBottom: '8px',
                       minHeight: '400px',
-                      willChange: 'background-color',
-                      boxShadow: focusedTile === 'content' ? '0 25px 50px -12px rgba(var(--accent-color-rgb), 0.3)' : undefined
+                      willChange: 'background-color'
                     }}
                     onClick={() => setFocusedTile('content')}
                   >
@@ -250,8 +245,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                     layout
                     layoutId="tile-theme"
                     transition={layoutTransition}
-                    className={`rounded-lg shadow-xl border ${
-                      focusedTile === 'theme' ? 'shadow-2xl' : ''
+                    className={`rounded-lg ${
+                      focusedTile === 'theme' ? '' : ''
                     }`}
                     initial={{
                       backgroundColor: getTileOpacity('theme', false)
@@ -261,14 +256,12 @@ const LayoutManagerWithFocus: React.FC = () => {
                     }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     style={{
-                      backdropFilter: 'blur(12px)',
-                      borderRadius: '10px',
-                      borderWidth: '1px',
-                      borderColor: focusedTile === 'theme' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
+                      backdropFilter: 'blur(8px)',
+                      borderRadius: '8px',
                       padding: '24px',
+                      marginBottom: '8px',
                       minHeight: '300px',
-                      willChange: 'background-color',
-                      boxShadow: focusedTile === 'theme' ? '0 25px 50px -12px rgba(var(--accent-color-rgb), 0.3)' : undefined
+                      willChange: 'background-color'
                     }}
                     onClick={() => setFocusedTile('theme')}
                   >
@@ -278,7 +271,8 @@ const LayoutManagerWithFocus: React.FC = () => {
               </motion.div>
             </LayoutGroup>
           </div>
-        </div>
+          </div>
+        </BorderedContainer>
       </>
     );
   }
