@@ -1,9 +1,10 @@
 # Feature Specification: Mobile UX Single-Tile Viewport
 
-**Version:** 1.0
+**Version:** 1.1
 **Date:** January 2025
-**Status:** Draft
+**Status:** Draft (Updated for Dual-Mode Architecture)
 **Tech Stack:** Next.js 15.5.4, React 19.1.0, Framer Motion 12.23.22, Tailwind CSS v4
+**Related Specs:** Mobile UX Parallax Mode, Mobile Dual-Mode Architecture
 
 ---
 
@@ -601,19 +602,32 @@ if (!supportsTouch) {
 
 ## Migration Path
 
+### Dual-Mode Architecture Integration
+
+This single-tile viewport mode is now part of the broader dual-mode mobile architecture. See the [Mobile Dual-Mode Architecture](./Feature%20Specification%20-%20Mobile%20Dual-Mode%20Architecture.md) specification for complete integration details.
+
 ### Feature Flag Implementation
 ```typescript
 // lib/featureFlags.ts
 export const FEATURES = {
-  MOBILE_SINGLE_VIEWPORT: process.env.NEXT_PUBLIC_ENABLE_MOBILE_VIEWPORT === 'true'
+  MOBILE_DUAL_MODE: process.env.NEXT_PUBLIC_ENABLE_DUAL_MODE === 'true',
+  DEFAULT_MOBILE_MODE: process.env.NEXT_PUBLIC_DEFAULT_MODE || 'single-tile'
 };
 
 // LayoutManagerWithFocus.tsx
 const LayoutManager = () => {
   const { isMobile } = useMobileDetection();
+  const { mode } = useMobileMode(); // From dual-mode architecture
 
-  if (isMobile && FEATURES.MOBILE_SINGLE_VIEWPORT) {
-    return <MobileSingleViewportLayout />;
+  if (isMobile && FEATURES.MOBILE_DUAL_MODE) {
+    switch (mode) {
+      case 'single-tile':
+        return <MobileSingleViewportLayout />;
+      case 'parallax':
+        return <MobileParallaxLayout />;
+      default:
+        return <CurrentStackedLayout />;
+    }
   }
 
   return <CurrentStackedLayout />;
@@ -689,6 +703,10 @@ const preserveStateOnLayoutChange = () => {
 
 ### Version History
 - v1.0 (January 2025): Initial specification
+- v1.1 (January 2025): Updated for Dual-Mode Architecture integration
+  - Added mode selection logic
+  - Integrated shared component strategy
+  - Updated migration path for multi-mode support
 - Future: Add voice navigation support
 - Future: Implement offline capabilities
 
