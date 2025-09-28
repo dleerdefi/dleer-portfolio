@@ -15,17 +15,17 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
       isBlurred ? 'text-[#a9b1d6]/70' : 'text-[#a9b1d6]'
     }`}>
       {/* Header */}
-      <div className="mb-2">
+      <div className="mb-1">
         <h2 className="text-[#7aa2f7] font-bold flex items-center gap-1">
-          <span className="text-sm">🎨</span>
+          <span className="text-xs">🎨</span>
           <span className="text-xs">Theme</span>
         </h2>
       </div>
 
       {/* Color Palette */}
-      <div className="space-y-2">
+      <div className="space-y-1">
         <div className="text-[10px]" style={{ color: 'var(--theme-text-dimmed)' }}>Accent Color</div>
-        <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
+        <div className="grid grid-cols-5 gap-1">
           {/* All colors in optimized grid */}
           {([
             { name: 'rose' as AccentColor, hex: '#f43f5e' },
@@ -51,7 +51,7 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
                 theme.accentColor === color.name
                   ? 'border-white shadow-lg scale-110'
                   : 'border-[#414868]/30'
-              } w-6 h-6 sm:w-8 sm:h-8 md:w-7 md:h-7 lg:w-8 lg:h-8`}
+              } w-5 h-5 sm:w-6 sm:h-6 md:w-5 md:h-5 lg:w-6 lg:h-6`}
               style={{ backgroundColor: color.hex }}
               title={color.name}
               aria-label={`Select ${color.name} accent color`}
@@ -61,12 +61,36 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
       </div>
 
       {/* Theme Presets */}
-      <div className="mt-3 space-y-2">
+      <div className="mt-2 space-y-1">
         <div className="text-[10px]" style={{ color: 'var(--theme-text-dimmed)' }}>Theme</div>
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-1">
+          <button
+            onClick={() => setThemePreset('solarized-light')}
+            className="px-1.5 py-0.5 text-[10px] rounded transition-colors text-left"
+            style={{
+              backgroundColor: theme.preset === 'solarized-light' ? 'var(--theme-primary)' : 'rgba(var(--theme-surface-rgb), 0.5)',
+              color: theme.preset === 'solarized-light' ? 'var(--theme-bg)' : 'var(--theme-text)',
+              fontWeight: theme.preset === 'solarized-light' ? 'bold' : 'normal'
+            }}
+            aria-pressed={theme.preset === 'solarized-light'}
+          >
+            ☀️ Solarized
+          </button>
+          <button
+            onClick={() => setThemePreset('nord')}
+            className="px-1.5 py-0.5 text-[10px] rounded transition-colors text-left"
+            style={{
+              backgroundColor: theme.preset === 'nord' ? 'var(--theme-primary)' : 'rgba(var(--theme-surface-rgb), 0.5)',
+              color: theme.preset === 'nord' ? 'var(--theme-bg)' : 'var(--theme-text)',
+              fontWeight: theme.preset === 'nord' ? 'bold' : 'normal'
+            }}
+            aria-pressed={theme.preset === 'nord'}
+          >
+            ❄️ Nord
+          </button>
           <button
             onClick={() => setThemePreset('tokyo-night')}
-            className="px-2 py-1 text-xs sm:px-1 sm:py-0.5 sm:text-[10px] lg:px-2 lg:py-1 lg:text-xs rounded transition-colors text-left"
+            className="px-1.5 py-0.5 text-[10px] rounded transition-colors text-left"
             style={{
               backgroundColor: theme.preset === 'tokyo-night' ? 'var(--theme-primary)' : 'rgba(var(--theme-surface-rgb), 0.5)',
               color: theme.preset === 'tokyo-night' ? 'var(--theme-bg)' : 'var(--theme-text)',
@@ -74,43 +98,19 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
             }}
             aria-pressed={theme.preset === 'tokyo-night'}
           >
-            Tokyo Night
-          </button>
-          <button
-            onClick={() => setThemePreset('catppuccin-mocha')}
-            className="px-2 py-1 text-xs sm:px-1 sm:py-0.5 sm:text-[10px] lg:px-2 lg:py-1 lg:text-xs rounded transition-colors text-left"
-            style={{
-              backgroundColor: theme.preset === 'catppuccin-mocha' ? 'var(--theme-primary)' : 'rgba(var(--theme-surface-rgb), 0.5)',
-              color: theme.preset === 'catppuccin-mocha' ? 'var(--theme-bg)' : 'var(--theme-text)',
-              fontWeight: theme.preset === 'catppuccin-mocha' ? 'bold' : 'normal'
-            }}
-            aria-pressed={theme.preset === 'catppuccin-mocha'}
-          >
-            Catppuccin
-          </button>
-          <button
-            onClick={() => setThemePreset('catppuccin-latte')}
-            className="px-2 py-1 text-xs sm:px-1 sm:py-0.5 sm:text-[10px] lg:px-2 lg:py-1 lg:text-xs rounded transition-colors text-left"
-            style={{
-              backgroundColor: theme.preset === 'catppuccin-latte' ? 'var(--theme-primary)' : 'rgba(var(--theme-surface-rgb), 0.5)',
-              color: theme.preset === 'catppuccin-latte' ? 'var(--theme-bg)' : 'var(--theme-text)',
-              fontWeight: theme.preset === 'catppuccin-latte' ? 'bold' : 'normal'
-            }}
-            aria-pressed={theme.preset === 'catppuccin-latte'}
-          >
-            Latte
+            🌃 Tokyo Night
           </button>
         </div>
       </div>
 
       {/* Background Effect Toggle */}
       <div className="mt-auto">
-        <label className="flex items-center gap-1.5 cursor-pointer text-xs sm:text-[10px] lg:text-xs">
+        <label className="flex items-center gap-1 cursor-pointer text-[10px]">
           <input
             type="checkbox"
             checked={theme.backgroundEffect}
             onChange={toggleBackgroundEffect}
-            className="w-3.5 h-3.5 rounded border-[#414868] bg-transparent checked:bg-[#7aa2f7] focus:outline-none"
+            className="w-3 h-3 rounded border-[#414868] bg-transparent checked:bg-[#7aa2f7] focus:outline-none"
             aria-label="Toggle background effect"
           />
           <span style={{ color: 'var(--theme-text-dimmed)' }}>Background</span>

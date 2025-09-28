@@ -72,36 +72,36 @@ const LayoutManagerWithFocus: React.FC = () => {
     mass: 1
   };
 
-  // Theme-aware tile opacity for better differentiation
+  // Theme-aware tile opacity for better differentiation - using spec surface colors
   const getTileOpacity = (tileType: 'content' | 'navigation' | 'neofetch' | 'theme', focused: boolean) => {
     const isContentHeavy = tileType === 'content' && (activeContent.type === 'project' || activeContent.type === 'blog');
 
     // Tokyo Night - cooler, sharper contrasts
     if (theme.preset === 'tokyo-night') {
       if (isContentHeavy) {
-        return focused ? 'rgba(var(--theme-surface-rgb), 0.95)' : 'rgba(var(--theme-surface-rgb), 0.4)';
+        return focused ? 'rgba(var(--color-surface-rgb), 0.95)' : 'rgba(var(--color-surface-rgb), 0.4)';
       }
-      return focused ? 'rgba(var(--theme-surface-rgb), 0.9)' : 'rgba(var(--theme-surface-rgb), 0.25)';
+      return focused ? 'rgba(var(--color-surface-rgb), 0.9)' : 'rgba(var(--color-surface-rgb), 0.25)';
     }
 
     // Catppuccin Mocha - warmer, softer
     if (theme.preset === 'catppuccin-mocha') {
       if (isContentHeavy) {
-        return focused ? 'rgba(var(--theme-surface-rgb), 0.92)' : 'rgba(var(--theme-surface-rgb), 0.5)';
+        return focused ? 'rgba(var(--color-surface-rgb), 0.92)' : 'rgba(var(--color-surface-rgb), 0.5)';
       }
-      return focused ? 'rgba(var(--theme-surface-rgb), 0.85)' : 'rgba(var(--theme-surface-rgb), 0.4)';
+      return focused ? 'rgba(var(--color-surface-rgb), 0.85)' : 'rgba(var(--color-surface-rgb), 0.4)';
     }
 
     // Catppuccin Latte - light theme needs different approach
     if (theme.preset === 'catppuccin-latte') {
       if (isContentHeavy) {
-        return focused ? 'rgba(var(--theme-surface-rgb), 0.98)' : 'rgba(var(--theme-surface-rgb), 0.7)';
+        return focused ? 'rgba(var(--color-surface-rgb), 0.98)' : 'rgba(var(--color-surface-rgb), 0.7)';
       }
-      return focused ? 'rgba(var(--theme-surface-rgb), 0.95)' : 'rgba(var(--theme-surface-rgb), 0.6)';
+      return focused ? 'rgba(var(--color-surface-rgb), 0.95)' : 'rgba(var(--color-surface-rgb), 0.6)';
     }
 
     // Default fallback
-    return focused ? 'rgba(var(--theme-surface-rgb), 0.85)' : 'rgba(var(--theme-surface-rgb), 0.35)';
+    return focused ? 'rgba(var(--color-surface-rgb), 0.85)' : 'rgba(var(--color-surface-rgb), 0.35)';
   };
 
   // Content-aware transparency for better readability
@@ -164,7 +164,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                     }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     style={{
-                      backdropFilter: 'blur(8px)',
+                      backdropFilter: 'blur(12px)',
+                      borderRadius: '10px',
                       borderWidth: '1px',
                       borderColor: focusedTile === 'neofetch' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
                       padding: '24px',
@@ -194,11 +195,13 @@ const LayoutManagerWithFocus: React.FC = () => {
                     }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     style={{
-                      backdropFilter: 'blur(4px)',
+                      backdropFilter: 'blur(12px)',
+                      borderRadius: '10px',
                       borderWidth: '1px',
                       borderColor: focusedTile === 'navigation' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
                       padding: '24px',
-                      willChange: 'background-color'
+                      willChange: 'background-color',
+                      boxShadow: focusedTile === 'navigation' ? '0 25px 50px -12px rgba(var(--accent-color-rgb), 0.3)' : undefined
                     }}
                     onClick={() => setFocusedTile('navigation')}
                   >
@@ -225,6 +228,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                     }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     style={{
+                      backdropFilter: 'blur(12px)',
+                      borderRadius: '10px',
                       borderWidth: '1px',
                       borderColor: focusedTile === 'content' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
                       padding: '24px',
@@ -255,7 +260,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                     }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     style={{
-                      backdropFilter: 'blur(8px)',
+                      backdropFilter: 'blur(12px)',
+                      borderRadius: '10px',
                       borderWidth: '1px',
                       borderColor: focusedTile === 'theme' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
                       padding: '24px',
@@ -297,7 +303,7 @@ const LayoutManagerWithFocus: React.FC = () => {
                   layout
                   layoutId="tile-neofetch"
                   transition={layoutTransition}
-                  className={`h-2/5 rounded-lg shadow-xl border overflow-auto ${
+                  className={`h-2/5 rounded-lg shadow-xl border overflow-hidden ${
                     focusedTile === 'neofetch' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                   }`}
                   initial={{
@@ -308,7 +314,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                   }}
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
                   style={{
-                    backdropFilter: 'blur(8px)',
+                    backdropFilter: 'blur(12px)',
+                    borderRadius: '10px',
                     borderWidth: '1px',
                     padding: '24px',
                     willChange: 'background-color'
@@ -337,7 +344,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     style={{
                       flex: '0 0 calc(70% - 6px)',
-                      backdropFilter: 'blur(4px)',
+                      backdropFilter: 'blur(12px)',
+                      borderRadius: '10px',
                       borderWidth: '1px',
                       borderColor: focusedTile === 'navigation' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
                       padding: '24px',
@@ -354,7 +362,7 @@ const LayoutManagerWithFocus: React.FC = () => {
                     layout
                     layoutId="tile-theme"
                     transition={layoutTransition}
-                    className={`rounded-lg shadow-xl border overflow-auto ${
+                    className={`rounded-lg shadow-xl border overflow-hidden ${
                       focusedTile === 'theme' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                     }`}
                     initial={{
@@ -366,9 +374,10 @@ const LayoutManagerWithFocus: React.FC = () => {
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     style={{
                       flex: '0 0 calc(30% - 6px)',
-                      backdropFilter: 'blur(8px)',
+                      backdropFilter: 'blur(12px)',
+                      borderRadius: '10px',
                       borderWidth: '1px',
-                      padding: '16px',
+                      padding: '12px',
                       willChange: 'background-color'
                     }}
                     onClick={() => setFocusedTile('theme')}
@@ -396,6 +405,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                 }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
                 style={{
+                  backdropFilter: 'blur(12px)',
+                  borderRadius: '10px',
                   borderWidth: '1px',
                   padding: '24px',
                   willChange: 'background-color',

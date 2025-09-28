@@ -9,9 +9,11 @@ interface PolybarProps {
 }
 
 const Polybar: React.FC<PolybarProps> = ({ activeContent, onNavigate }) => {
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState<Date | null>(null);
 
   useEffect(() => {
+    // Set initial time after mount to avoid hydration mismatch
+    setTime(new Date());
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
@@ -64,11 +66,11 @@ const Polybar: React.FC<PolybarProps> = ({ activeContent, onNavigate }) => {
         {/* Right Section */}
         <div className="flex items-center gap-3">
           <span className="text-[#a9b1d6]">
-            {time.toLocaleTimeString('en-US', {
+            {time ? time.toLocaleTimeString('en-US', {
               hour: '2-digit',
               minute: '2-digit',
               hour12: false
-            })}
+            }) : '--:--'}
           </span>
         </div>
       </div>

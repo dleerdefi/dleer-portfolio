@@ -33,7 +33,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
   }
 
   return (
-    <div className={`flex gap-2 sm:gap-4 md:gap-6 font-mono text-sm transition-all duration-300`}
+    <div className={`flex gap-2 sm:gap-3 md:gap-4 font-mono text-xs transition-all duration-300`}
       style={{
         color: isBlurred ? 'rgba(var(--theme-text-rgb), 0.7)' : 'var(--theme-text)'
       }}>
@@ -47,7 +47,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
             padding: 0,
             border: 'none',
             margin: 0,
-            fontSize: logoType === 'dleer' ? 'clamp(0.5rem, 1.2vw, 0.65rem)' : 'clamp(0.4rem, 1.8vw, 0.75rem)',
+            fontSize: logoType === 'dleer' ? 'clamp(0.45rem, 1vw, 0.6rem)' : 'clamp(0.35rem, 1.5vw, 0.65rem)',
             overflow: 'auto',
             whiteSpace: 'pre'
           }}
@@ -59,7 +59,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
       {/* Info Column */}
       <div className="flex-1 flex flex-col justify-center">
         <div
-          className={`font-bold mb-2 transition-all duration-300`}
+          className={`font-bold mb-1 transition-all duration-300`}
           style={{
             color: isBlurred ? 'rgba(var(--accent-color-rgb), 0.6)' : 'var(--accent-color)'
           }}
@@ -70,7 +70,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
           }}>---------------</div>
         </div>
 
-        <div className="space-y-0.5" style={{ fontSize: 'clamp(0.65rem, 1.5vw, 0.813rem)' }}>
+        <div className="space-y-0" style={{ fontSize: 'clamp(0.6rem, 1.3vw, 0.75rem)' }}>
           <div>
             <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>OS</span>: {system.os}
           </div>
@@ -90,7 +90,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
             <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>Memory</span>: {system.memory}
           </div>
 
-          <div className="pt-2 flex gap-1">
+          <div className="pt-1 flex gap-1">
             <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--theme-bg)'}}></span>
             <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--theme-error)'}}></span>
             <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--theme-success)'}}></span>
