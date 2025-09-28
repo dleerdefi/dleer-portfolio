@@ -17,7 +17,10 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
   const blogs = useBlogPosts();
   const uiStrings = useUIStrings();
 
-  const handleSelect = (content: ContentType) => {
+  const handleSelect = (content: ContentType, e?: React.MouseEvent) => {
+    // Prevent event from bubbling up to tile container
+    e?.stopPropagation();
+
     if (onContentSelect) {
       onContentSelect(content);
     } else {
@@ -105,7 +108,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
               e.currentTarget.style.backgroundColor = 'transparent';
             }
           }}
-          onClick={() => handleSelect({ type: 'about' })}
+          onClick={(e) => handleSelect({ type: 'about' }, e)}
         >
           <span><span style={{ color: 'var(--accent-color)' }}>├──</span> About</span>
         </div>
@@ -127,7 +130,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                 e.currentTarget.style.backgroundColor = 'transparent';
               }
             }}
-            onClick={() => handleSelect({ type: 'projects-overview' })}
+            onClick={(e) => handleSelect({ type: 'projects-overview' }, e)}
           >
             <span>
               <span style={{ color: 'var(--accent-color)' }}>├──</span>{' '}
@@ -166,7 +169,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                       e.currentTarget.style.backgroundColor = 'transparent';
                     }
                   }}
-                  onClick={() => handleSelect({ type: 'project', data: project })}
+                  onClick={(e) => handleSelect({ type: 'project', data: project }, e)}
                 >
                   <span>
                     <span className="text-[#9ece6a]">
@@ -197,7 +200,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                 e.currentTarget.style.backgroundColor = 'transparent';
               }
             }}
-            onClick={() => handleSelect({ type: 'blog-overview' })}
+            onClick={(e) => handleSelect({ type: 'blog-overview' }, e)}
           >
             <span>
               <span style={{ color: 'var(--accent-color)' }}>├──</span>{' '}
@@ -236,7 +239,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                       e.currentTarget.style.backgroundColor = 'transparent';
                     }
                   }}
-                  onClick={() => handleSelect({ type: 'blog', data: blog })}
+                  onClick={(e) => handleSelect({ type: 'blog', data: blog }, e)}
                 >
                   <span>
                     <span className="text-[#9ece6a]">
@@ -267,7 +270,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
               e.currentTarget.style.backgroundColor = 'transparent';
             }
           }}
-          onClick={() => handleSelect({ type: 'contact' })}
+          onClick={(e) => handleSelect({ type: 'contact' }, e)}
         >
           <span><span style={{ color: 'var(--accent-color)' }}>└──</span> Contact</span>
         </div>

@@ -124,17 +124,18 @@ const LayoutManagerWithFocus: React.FC = () => {
       // All content navigation goes to content tile
       setFocusedTile('content');
 
-      // Force scroll to content tile
-      // This is crucial for content-to-content navigation (e.g., project to project)
-      // where the tile remains 'content' but we still need to scroll
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          contentRef.current?.scrollIntoView({
+      // Improved scroll implementation with better timing and reliability
+      // Using setTimeout instead of nested requestAnimationFrame for more predictable behavior
+      setTimeout(() => {
+        if (contentRef.current) {
+          // Check if element exists before scrolling
+          contentRef.current.scrollIntoView({
             behavior: 'smooth',
-            block: 'center'
+            block: 'start', // 'start' is more predictable than 'center'
+            inline: 'nearest'
           });
-        });
-      });
+        }
+      }, 50); // Small delay to ensure DOM updates are complete
     };
 
     return (
