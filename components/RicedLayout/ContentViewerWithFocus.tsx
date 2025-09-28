@@ -61,7 +61,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
       case 'about':
         return (
           <div className="space-y-6">
-            <h1 className="text-2xl font-bold" style={{ color: 'var(--theme-primary)' }}>{uiStrings.headers.about}</h1>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>{uiStrings.headers.about}</h1>
 
             <div className="space-y-4" style={{ color: 'var(--theme-text)' }}>
               <p className="leading-relaxed">
@@ -106,7 +106,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
             <div className="text-sm flex items-center gap-2" style={{ color: 'var(--theme-text-dimmed)' }}>
               <span
                 className="cursor-pointer transition-colors hover:opacity-80"
-                style={{ color: 'var(--theme-primary)' }}
+                style={{ color: 'var(--accent-color)' }}
                 onClick={() => onNavigate?.({ type: 'projects-overview' })}
               >
                 Projects
@@ -116,7 +116,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
             </div>
 
             <div className="border-b pb-4" style={{ borderColor: 'var(--theme-border)', opacity: 0.3 }}>
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--theme-primary)' }}>{project.name}</h1>
+              <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>{project.name}</h1>
               <p className="mt-1" style={{ color: 'var(--theme-text-dimmed)' }}>{project.description}</p>
             </div>
 
@@ -171,7 +171,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
             <div className="text-sm flex items-center gap-2" style={{ color: 'var(--theme-text-dimmed)' }}>
               <span
                 className="cursor-pointer transition-colors hover:opacity-80"
-                style={{ color: 'var(--theme-primary)' }}
+                style={{ color: 'var(--accent-color)' }}
                 onClick={() => onNavigate?.({ type: 'blog-overview' })}
               >
                 Blog
@@ -181,7 +181,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
             </div>
 
             <div className="border-b pb-4" style={{ borderColor: 'var(--theme-border)', opacity: 0.3 }}>
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--theme-primary)' }}>{blog.title}</h1>
+              <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>{blog.title}</h1>
               <p className="text-sm mt-1" style={{ color: 'var(--theme-text-dimmed)' }}>{blog.name}</p>
             </div>
 
@@ -211,7 +211,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
       case 'contact':
         return (
           <div className="space-y-4">
-            <h1 className="text-2xl font-bold" style={{ color: 'var(--theme-primary)' }}>{uiStrings.headers.contact}</h1>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>{uiStrings.headers.contact}</h1>
 
             <form className="space-y-4">
               <div>
@@ -315,7 +315,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
       case 'projects-overview':
         return (
           <div className="space-y-6">
-            <h1 className="text-2xl font-bold" style={{ color: 'var(--theme-primary)' }}>Projects</h1>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>Projects</h1>
             <p className="text-sm" style={{ color: 'var(--theme-text)' }}>
               A collection of my recent work and open-source contributions.
             </p>
@@ -391,7 +391,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
       case 'blog-overview':
         return (
           <div className="space-y-6">
-            <h1 className="text-2xl font-bold" style={{ color: 'var(--theme-primary)' }}>Blog</h1>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>Blog</h1>
             <p className="text-sm" style={{ color: 'var(--theme-text)' }}>
               Technical articles, tutorials, and insights from my development journey.
             </p>

@@ -253,7 +253,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content, onNavigate }) =>
       case 'projects-overview':
         return (
           <div className="space-y-6">
-            <h1 className="text-2xl font-bold text-[#7aa2f7]">Projects</h1>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>Projects</h1>
             <p className="text-[#a9b1d6] text-sm">
               A collection of my recent work and open-source contributions.
             </p>
@@ -301,7 +301,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ content, onNavigate }) =>
       case 'blog-overview':
         return (
           <div className="space-y-6">
-            <h1 className="text-2xl font-bold text-[#7aa2f7]">Blog</h1>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>Blog</h1>
             <p className="text-[#a9b1d6] text-sm">
               Technical articles, tutorials, and insights from my development journey.
             </p>
