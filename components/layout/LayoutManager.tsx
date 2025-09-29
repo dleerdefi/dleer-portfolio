@@ -2,14 +2,14 @@
 
 import React, { useEffect, useRef } from 'react';
 import { motion, LayoutGroup } from 'framer-motion';
-import NeofetchTile from './NeofetchTile';
-import NavigationTile from './NavigationTile';
-import ContentViewer from './ContentViewer';
-import ThemeTile from './ThemeTile';
-import Background from './Background';
-import Polybar from './Polybar';
-import BorderedContainer from './BorderedContainer';
-import ScrollProgress from './ScrollProgress';
+import NeofetchTile from '@/components/tiles/NeofetchTile';
+import NavigationTile from '@/components/tiles/NavigationTile';
+import ContentViewer from '@/components/tiles/ContentViewer';
+import ThemeTile from '@/components/tiles/ThemeTile';
+import Background from '@/components/layout/Background';
+import Polybar from '@/components/layout/Polybar';
+import BorderedContainer from '@/components/ui/BorderedContainer';
+import ScrollProgress from '@/components/ui/ScrollProgress';
 import { useFocus, ContentType as FocusContentType } from '@/contexts/FocusContext';
 import { useScrollToFocus } from '@/hooks/useFocus';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -136,7 +136,7 @@ const LayoutManager: React.FC = () => {
 
     // Use parallax layout if preferred
     if (useParallaxMode) {
-      const MobileParallaxLayout = React.lazy(() => import('./MobileParallaxLayout'));
+      const MobileParallaxLayout = React.lazy(() => import('@/components/layout/MobileParallaxLayout'));
       return (
         <React.Suspense fallback={
           <div className="flex items-center justify-center h-screen">

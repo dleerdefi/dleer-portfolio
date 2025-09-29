@@ -1,6 +1,6 @@
-import Section from '@/components/section';
-import ProjectCard from '@/components/project-card-clean';
-import Badge from '@/components/badge';
+import Section from '@/components/ui/Section';
+import ProjectCard from '@/components/ui/ProjectCard';
+import Badge from '@/components/ui/Badge';
 import type { ProjectsData } from '@/lib/types';
 
 const projectsData: ProjectsData = require('@/content/projects.json');

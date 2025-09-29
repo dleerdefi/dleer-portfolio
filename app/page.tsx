@@ -1,4 +1,4 @@
-import LayoutManager from '@/components/RicedLayout/LayoutManager';
+import LayoutManager from '@/components/layout/LayoutManager';
 import { FocusProvider } from '@/contexts/FocusContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 

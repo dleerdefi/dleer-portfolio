@@ -1,6 +1,6 @@
-import Section from '@/components/section';
-import Card from '@/components/card';
-import Badge from '@/components/badge';
+import Section from '@/components/ui/Section';
+import Card from '@/components/ui/Card';
+import Badge from '@/components/ui/Badge';
 
 export default function Contact() {
   const contactMethods = [
