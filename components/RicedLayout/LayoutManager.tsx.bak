@@ -3,11 +3,11 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, LayoutGroup } from 'framer-motion';
 import NeofetchTile from './NeofetchTile';
-import NavigationTile from './NavigationTileWithFocus';
-import ContentViewer from './ContentViewerWithFocus';
+import NavigationTile from './NavigationTile';
+import ContentViewer from './ContentViewer';
 import ThemeTile from './ThemeTile';
 import Background from './Background';
-import Polybar from './PolybarWithFocus';
+import Polybar from './Polybar';
 import BorderedContainer from './BorderedContainer';
 import ScrollProgress from './ScrollProgress';
 import { useFocus, ContentType as FocusContentType } from '@/contexts/FocusContext';
@@ -17,7 +17,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 // Bridge the content types
 type ContentType = FocusContentType;
 
-const LayoutManagerWithFocus: React.FC = () => {
+const LayoutManager: React.FC = () => {
   const {
     focusedTile,
     activeContent,
@@ -96,16 +96,16 @@ const LayoutManagerWithFocus: React.FC = () => {
       return focused ? 'rgba(var(--color-surface-rgb), 0.9)' : 'rgba(var(--color-surface-rgb), 0.25)';
     }
 
-    // Catppuccin Mocha - warmer, softer
-    if (theme.preset === 'catppuccin-mocha') {
+    // Nord - Arctic dark
+    if (theme.preset === 'nord') {
       if (isContentHeavy) {
         return focused ? 'rgba(var(--color-surface-rgb), 0.92)' : 'rgba(var(--color-surface-rgb), 0.5)';
       }
       return focused ? 'rgba(var(--color-surface-rgb), 0.85)' : 'rgba(var(--color-surface-rgb), 0.4)';
     }
 
-    // Catppuccin Latte - light theme needs different approach
-    if (theme.preset === 'catppuccin-latte') {
+    // Solarized Light - light theme needs different approach
+    if (theme.preset === 'solarized-light') {
       if (isContentHeavy) {
         return focused ? 'rgba(var(--color-surface-rgb), 0.98)' : 'rgba(var(--color-surface-rgb), 0.7)';
       }
@@ -168,10 +168,13 @@ const LayoutManagerWithFocus: React.FC = () => {
       <>
         <Background />
 
+        {/* Custom scrollbar positioned outside content */}
+        <ScrollProgress scrollPercent={scrollPercent} />
+
         {/* Fixed scrollable container similar to BorderedContainer but without border */}
         <div
           ref={scrollContainerRef}
-          className="fixed inset-0 overflow-y-auto"
+          className="fixed inset-0 overflow-y-auto hide-scrollbar"
           style={{
             scrollBehavior: 'smooth'
           }}
@@ -183,7 +186,6 @@ const LayoutManagerWithFocus: React.FC = () => {
             setScrollPercent(percent);
           }}
         >
-          <ScrollProgress scrollPercent={scrollPercent} />
           <div className="min-h-screen flex flex-col">
             <div className="sticky top-0 z-30" style={{ backgroundColor: 'var(--theme-bg)' }}>
               <Polybar onNavigate={handlePolybarNavigate} />
@@ -480,4 +482,4 @@ const LayoutManagerWithFocus: React.FC = () => {
   );
 };
 
-export default LayoutManagerWithFocus;
+export default LayoutManager;

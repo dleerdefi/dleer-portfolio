@@ -1,4 +1,4 @@
-import LayoutManagerWithFocus from '@/components/RicedLayout/LayoutManagerWithFocus';
+import LayoutManager from '@/components/RicedLayout/LayoutManager';
 import { FocusProvider } from '@/contexts/FocusContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 
@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <ThemeProvider>
       <FocusProvider>
-        <LayoutManagerWithFocus />
+        <LayoutManager />
       </FocusProvider>
     </ThemeProvider>
   );

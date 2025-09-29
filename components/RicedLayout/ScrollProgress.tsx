@@ -25,10 +25,10 @@ const ScrollProgress: React.FC<ScrollProgressProps> = ({
 
   return (
     <div
-      className="fixed top-0 bottom-0 pointer-events-none z-40"
+      className="fixed top-0 bottom-0 pointer-events-none z-50"
       style={{
-        [position]: '20px',
-        width: '4px',
+        [position]: '0px',
+        width: '6px',
         paddingTop: '20px',
         paddingBottom: '20px'
       }}

@@ -1,20 +1,32 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ContentType } from './LayoutManager';
+import { useFocusState, useFocusNavigation, ContentType } from '@/contexts/FocusContext';
 import { useProjects, useBlogPosts, useUIStrings } from '@/lib/config';
 
 interface NavigationTileProps {
-  onContentSelect: (content: ContentType) => void;
-  activeContent?: ContentType;
+  onContentSelect?: (content: ContentType) => void;
+  isBlurred?: boolean;
 }
 
-const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, activeContent }) => {
+const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlurred = false }) => {
   const [expandedDirs, setExpandedDirs] = useState<Set<string>>(new Set());
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const { activeContent } = useFocusState();
+  const { handleContentNavigation } = useFocusNavigation();
   const projects = useProjects();
   const blogs = useBlogPosts();
   const uiStrings = useUIStrings();
+
+  const handleSelect = (content: ContentType, e?: React.MouseEvent) => {
+    // Prevent event from bubbling up to tile container
+    e?.stopPropagation();
+
+    if (onContentSelect) {
+      onContentSelect(content);
+    } else {
+      handleContentNavigation(content);
+    }
+  };
 
   const toggleDir = (dir: string) => {
     const newExpanded = new Set(expandedDirs);
@@ -24,16 +36,6 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
       newExpanded.add(dir);
     }
     setExpandedDirs(newExpanded);
-  };
-
-  const toggleItem = (itemId: string) => {
-    const newExpanded = new Set(expandedItems);
-    if (newExpanded.has(itemId)) {
-      newExpanded.delete(itemId);
-    } else {
-      newExpanded.add(itemId);
-    }
-    setExpandedItems(newExpanded);
   };
 
   // Map configuration data to navigation format with clean names
@@ -66,49 +68,79 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
   }
 
   const isActive = (type: string, data?: any) => {
-    if (!activeContent || activeContent.type !== type) {
-      return false;
+    if (activeContent.type === type) {
+      if (data && activeContent.type === 'project') {
+        return (activeContent as any).data?.id === data.id;
+      }
+      if (data && activeContent.type === 'blog') {
+        return (activeContent as any).data?.id === data.id;
+      }
+      return true;
     }
-    if (data && activeContent.type === 'project') {
-      return (activeContent as any).data?.id === data.id;
-    }
-    if (data && activeContent.type === 'blog') {
-      return (activeContent as any).data?.id === data.id;
-    }
-    return true;
+    return false;
   };
 
   return (
-    <div className="font-mono text-sm text-[#a9b1d6]">
-      <div className="mb-3 text-[#7aa2f7] font-bold">{uiStrings.navigation.rootPath}</div>
+    <div className={`font-mono text-sm transition-all duration-300`}
+      style={{
+        color: isBlurred ? 'rgba(var(--theme-text-rgb), 0.7)' : 'var(--theme-text)'
+      }}>
+      <div className={`mb-3 font-bold transition-all duration-300`}
+        style={{
+          color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)'
+        }}>{uiStrings.navigation.rootPath}</div>
 
       <div className="touch-spacing">
         {/* About */}
         <div
-          className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 ${
-            isActive('about') ? 'bg-[#7aa2f7]/20 text-[#7aa2f7]' : ''
-          }`}
-          onClick={() => onContentSelect({ type: 'about' })}
+          className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200"
+          style={{
+            backgroundColor: isActive('about') ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
+            color: isActive('about') ? 'var(--accent-color)' : 'inherit'
+          }}
+          onMouseEnter={(e) => {
+            if (!isActive('about')) {
+              e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isActive('about')) {
+              e.currentTarget.style.backgroundColor = 'transparent';
+            }
+          }}
+          onClick={(e) => handleSelect({ type: 'about' }, e)}
         >
-          <span><span className="text-[#9ece6a]">├──</span> About</span>
+          <span><span style={{ color: 'var(--accent-color)' }}>├──</span> About</span>
         </div>
 
         {/* Projects Directory */}
         <div>
           <div
-            className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 flex items-center justify-between ${
-              isActive('projects-overview') ? 'bg-[#7aa2f7]/20' : ''
-            }`}
-            onClick={() => onContentSelect({ type: 'projects-overview' })}
+            className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200 flex items-center justify-between"
+            style={{
+              backgroundColor: isActive('projects-overview') ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent'
+            }}
+            onMouseEnter={(e) => {
+              if (!isActive('projects-overview')) {
+                e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive('projects-overview')) {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }
+            }}
+            onClick={(e) => handleSelect({ type: 'projects-overview' }, e)}
           >
             <span>
-              <span className="text-[#9ece6a]">├──</span>{' '}
-              <span className={`text-[#7aa2f7] ${isActive('projects-overview') ? 'font-bold' : ''}`}>
+              <span style={{ color: 'var(--accent-color)' }}>├──</span>{' '}
+              <span style={{ color: isActive('projects-overview') ? 'var(--accent-color)' : 'var(--theme-text)', fontWeight: isActive('projects-overview') ? 'bold' : 'normal' }}>
                 Projects/
               </span>
             </span>
             <span
-              className="text-[#7aa2f7] hover:text-[#7aa2f7]/80 px-2 -mr-1 rounded cursor-pointer"
+              className="hover:opacity-80 px-2 -mr-1 rounded cursor-pointer"
+              style={{ color: 'var(--accent-color)' }}
               onClick={(e) => {
                 e.stopPropagation();
                 toggleDir('projects');
@@ -122,14 +154,26 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
               {projectItems.map((project, index) => (
                 <div
                   key={project.id}
-                  className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 ${
-                    isActive('project', project) ? 'bg-[#7aa2f7]/20 text-[#7aa2f7]' : ''
-                  }`}
-                  onClick={() => onContentSelect({ type: 'project', data: project })}
+                  className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200"
+                  style={{
+                    backgroundColor: isActive('project', project) ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
+                    color: isActive('project', project) ? 'var(--accent-color)' : 'inherit'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive('project', project)) {
+                      e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive('project', project)) {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }
+                  }}
+                  onClick={(e) => handleSelect({ type: 'project', data: project }, e)}
                 >
                   <span>
                     <span className="text-[#9ece6a]">
-                      {index === projectItems.length - 1 ? '└──' : '├──'}
+                      <span style={{ color: 'var(--accent-color)' }}>{index === projectItems.length - 1 ? '└──' : '├──'}</span>
                     </span>{' '}
                     {project.displayName}
                   </span>
@@ -142,19 +186,31 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
         {/* Blog Directory */}
         <div>
           <div
-            className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 flex items-center justify-between ${
-              isActive('blog-overview') ? 'bg-[#7aa2f7]/20' : ''
-            }`}
-            onClick={() => onContentSelect({ type: 'blog-overview' })}
+            className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200 flex items-center justify-between"
+            style={{
+              backgroundColor: isActive('blog-overview') ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent'
+            }}
+            onMouseEnter={(e) => {
+              if (!isActive('blog-overview')) {
+                e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive('blog-overview')) {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }
+            }}
+            onClick={(e) => handleSelect({ type: 'blog-overview' }, e)}
           >
             <span>
-              <span className="text-[#9ece6a]">├──</span>{' '}
-              <span className={`text-[#7aa2f7] ${isActive('blog-overview') ? 'font-bold' : ''}`}>
+              <span style={{ color: 'var(--accent-color)' }}>├──</span>{' '}
+              <span style={{ color: isActive('blog-overview') ? 'var(--accent-color)' : 'var(--theme-text)', fontWeight: isActive('blog-overview') ? 'bold' : 'normal' }}>
                 Blog/
               </span>
             </span>
             <span
-              className="text-[#7aa2f7] hover:text-[#7aa2f7]/80 px-2 -mr-1 rounded cursor-pointer"
+              className="hover:opacity-80 px-2 -mr-1 rounded cursor-pointer"
+              style={{ color: 'var(--accent-color)' }}
               onClick={(e) => {
                 e.stopPropagation();
                 toggleDir('blog');
@@ -168,14 +224,26 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
               {blogItems.map((blog, index) => (
                 <div
                   key={blog.id}
-                  className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 ${
-                    isActive('blog', blog) ? 'bg-[#7aa2f7]/20 text-[#7aa2f7]' : ''
-                  }`}
-                  onClick={() => onContentSelect({ type: 'blog', data: blog })}
+                  className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200"
+                  style={{
+                    backgroundColor: isActive('blog', blog) ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
+                    color: isActive('blog', blog) ? 'var(--accent-color)' : 'inherit'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive('blog', blog)) {
+                      e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive('blog', blog)) {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }
+                  }}
+                  onClick={(e) => handleSelect({ type: 'blog', data: blog }, e)}
                 >
                   <span>
                     <span className="text-[#9ece6a]">
-                      {index === blogItems.length - 1 ? '└──' : '├──'}
+                      <span style={{ color: 'var(--accent-color)' }}>{index === blogItems.length - 1 ? '└──' : '├──'}</span>
                     </span>{' '}
                     {blog.displayName}
                   </span>
@@ -187,12 +255,24 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, active
 
         {/* Contact */}
         <div
-          className={`touch-target touch-feedback cursor-pointer hover:bg-[#7aa2f7]/10 px-2 py-1 rounded transition-all duration-200 ${
-            isActive('contact') ? 'bg-[#7aa2f7]/20 text-[#7aa2f7]' : ''
-          }`}
-          onClick={() => onContentSelect({ type: 'contact' })}
+          className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200"
+          style={{
+            backgroundColor: isActive('contact') ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
+            color: isActive('contact') ? 'var(--accent-color)' : 'inherit'
+          }}
+          onMouseEnter={(e) => {
+            if (!isActive('contact')) {
+              e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isActive('contact')) {
+              e.currentTarget.style.backgroundColor = 'transparent';
+            }
+          }}
+          onClick={(e) => handleSelect({ type: 'contact' }, e)}
         >
-          <span><span className="text-[#9ece6a]">└──</span> Contact</span>
+          <span><span style={{ color: 'var(--accent-color)' }}>└──</span> Contact</span>
         </div>
       </div>
 

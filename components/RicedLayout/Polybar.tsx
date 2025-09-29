@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ContentType } from './LayoutManager';
+import { useFocusState } from '@/contexts/FocusContext';
 
 interface PolybarProps {
-  activeContent: ContentType;
   onNavigate: (section: string) => void;
 }
 
-const Polybar: React.FC<PolybarProps> = ({ activeContent, onNavigate }) => {
+const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
   const [time, setTime] = useState<Date | null>(null);
+  const { activeContent } = useFocusState();
 
   useEffect(() => {
     // Set initial time after mount to avoid hydration mismatch
@@ -38,11 +38,16 @@ const Polybar: React.FC<PolybarProps> = ({ activeContent, onNavigate }) => {
 
   return (
     <>
-      <div className="h-9 bg-[#24283b]/80 backdrop-blur-md border-b-2 border-[#414868]/50 flex items-center justify-between px-3 font-mono text-xs text-[#a9b1d6] relative z-50">
+      <div className="h-9 backdrop-blur-md border-b-2 flex items-center justify-between px-3 font-mono text-xs relative z-50"
+        style={{
+          backgroundColor: 'rgba(var(--color-surface-rgb), 0.8)',
+          borderColor: 'rgba(var(--accent-color-rgb), 0.3)',
+          color: 'var(--color-text-body)'
+        }}>
         {/* Left Section */}
         <div className="flex items-center gap-2">
-          <span className="text-[#7aa2f7] font-bold">[DLEER]</span>
-          <span className="text-[#565f89] hidden sm:inline">portfolio</span>
+          <span className="font-bold" style={{ color: 'var(--accent-color)' }}>[DLEER]</span>
+          <span className="hidden sm:inline" style={{ color: 'var(--color-text-dimmed)' }}>portfolio</span>
         </div>
 
         {/* Center Section - Workspaces */}
@@ -51,11 +56,14 @@ const Polybar: React.FC<PolybarProps> = ({ activeContent, onNavigate }) => {
             <button
               key={ws.id}
               onClick={() => onNavigate(ws.id)}
-              className={`flex items-center gap-1 transition-colors ${
-                isActive(ws.id) ? 'text-[#7aa2f7]' : 'text-[#565f89] hover:text-[#a9b1d6]'
-              }`}
+              className="flex items-center gap-1 transition-colors hover:opacity-80"
+              style={{
+                color: isActive(ws.id) ? 'var(--accent-color)' : 'var(--color-text-dimmed)'
+              }}
             >
-              <span className={isActive(ws.id) ? 'text-[#7aa2f7]' : 'text-[#414868]'}>
+              <span style={{
+                color: isActive(ws.id) ? 'var(--accent-color)' : 'var(--color-text-muted)'
+              }}>
                 {ws.icon}
               </span>
               <span className="hidden lg:inline">{ws.label}</span>
@@ -65,7 +73,7 @@ const Polybar: React.FC<PolybarProps> = ({ activeContent, onNavigate }) => {
 
         {/* Right Section */}
         <div className="flex items-center gap-3">
-          <span className="text-[#a9b1d6]">
+          <span style={{ color: 'var(--color-text-body)' }}>
             {time ? time.toLocaleTimeString('en-US', {
               hour: '2-digit',
               minute: '2-digit',
