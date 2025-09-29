@@ -363,9 +363,9 @@ const MobileParallaxLayout: React.FC = () => {
       <motion.div
         className="fixed flex items-center justify-center pointer-events-none"
         style={{
-          top: '14px',
-          left: '14px',
-          right: '14px',
+          top: '28px',
+          left: '28px',
+          right: '28px',
           height: '60vh',
           opacity: backgroundOpacity,
           backgroundColor: 'rgba(var(--theme-bg-rgb), 0.9)',
@@ -373,7 +373,7 @@ const MobileParallaxLayout: React.FC = () => {
           zIndex: 0
         }}
       >
-        <div className="w-full max-w-4xl mx-auto px-12 sm:px-16 md:px-20">
+        <div className="w-full max-w-4xl mx-auto px-6 sm:px-8 md:px-12">
           <NeofetchTile isBlurred={false} />
         </div>
         <div
@@ -390,10 +390,10 @@ const MobileParallaxLayout: React.FC = () => {
         className="fixed overflow-y-auto"
         style={{
           scrollBehavior: 'smooth',
-          top: '14px',
-          left: '14px',
-          right: '14px',
-          bottom: '14px'
+          top: '28px',
+          left: '28px',
+          right: '28px',
+          bottom: '28px'
         }}
       >
         {/* Spacer for fixed background */}
@@ -404,7 +404,7 @@ const MobileParallaxLayout: React.FC = () => {
           <section
             key={section.id}
             id={`section-${section.id}`}
-            className="relative min-h-screen px-12 sm:px-16 md:px-20"
+            className="relative min-h-screen px-6 sm:px-8 md:px-12"
             style={{
               paddingTop: index === 0 ? '48px' : '48px',
               paddingBottom: '48px',
