@@ -18,7 +18,7 @@ const MobileParallaxLayout: React.FC = () => {
   const skills = useSkills();
   const socialLinks = useSocialLinks();
 
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState('about');
   const [showThemePanel, setShowThemePanel] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -67,22 +67,69 @@ const MobileParallaxLayout: React.FC = () => {
 
   // Keyboard navigation handlers
   const navigateToSection = useCallback((sectionId: string) => {
+    console.log('navigateToSection called for:', sectionId);
     const element = document.getElementById(`section-${sectionId}`);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const container = scrollRef.current;
+
+    console.log('Element found:', !!element);
+    console.log('Container found:', !!container);
+
+    if (element && container) {
+      // Get the section index to calculate position
+      const sectionIndex = sections.findIndex(s => s.id === sectionId);
+
+      // Calculate scroll position based on section structure
+      // Each section is min-h-screen, plus we have a 60vh spacer at the top
+      const viewportHeight = window.innerHeight;
+      const spacerHeight = viewportHeight * 0.6; // 60vh spacer
+
+      // For first section, scroll to just after the spacer
+      // For other sections, calculate based on index
+      let targetScroll = spacerHeight;
+
+      if (sectionIndex > 0) {
+        // Add the height of all previous sections
+        targetScroll = spacerHeight + (viewportHeight * sectionIndex);
+      }
+
+      console.log('Target scroll position:', targetScroll);
+      console.log('Current scroll:', container.scrollTop);
+
+      // Special case for About section - scroll to very top to show Neofetch
+      if (sectionId === 'about') {
+        container.scrollTo({
+          top: 0, // Scroll to absolute top to reveal Neofetch
+          behavior: 'smooth'
+        });
+      } else {
+        // Normal section navigation
+        container.scrollTo({
+          top: targetScroll,
+          behavior: 'smooth'
+        });
+      }
+
+      // Update active section state
       setActiveSection(sectionId);
+    } else {
+      console.error('Failed to find element or container');
     }
-  }, []);
+  }, [sections]);
 
   const navigateToNextSection = useCallback((reverse = false) => {
     const currentIndex = sections.findIndex(s => s.id === activeSection);
     const direction = reverse ? -1 : 1;
-    const nextIndex = Math.max(0, Math.min(sections.length - 1, currentIndex + direction));
+    let nextIndex = currentIndex + direction;
 
-    if (nextIndex !== currentIndex) {
-      navigateToSection(sections[nextIndex].id);
+    // Wrap around navigation
+    if (nextIndex >= sections.length) {
+      nextIndex = 0; // Wrap to first section (About)
+    } else if (nextIndex < 0) {
+      nextIndex = sections.length - 1; // Wrap to last section (Contact)
     }
-  }, [activeSection, navigateToSection, sections]);
+
+    navigateToSection(sections[nextIndex].id);
+  }, [activeSection, navigateToSection]);
 
   // Keyboard event handler
   useEffect(() => {
@@ -95,8 +142,22 @@ const MobileParallaxLayout: React.FC = () => {
 
       switch(e.key) {
         case 'Tab':
-          // Let Tab work naturally for form elements in contact section
-          if (activeSection !== 'contact') {
+          // Smart Tab handling: navigate sections unless we're actively in a form
+          const isInContactForm = activeSection === 'contact' &&
+            (target.tagName === 'INPUT' ||
+             target.tagName === 'TEXTAREA' ||
+             target.tagName === 'BUTTON' ||
+             target.tagName === 'A');
+
+          // Also check if any form element currently has focus
+          const activeElement = document.activeElement;
+          const isFormFocused = activeElement &&
+            (activeElement.tagName === 'INPUT' ||
+             activeElement.tagName === 'TEXTAREA' ||
+             activeElement.tagName === 'BUTTON');
+
+          // Only navigate sections if not interacting with form elements
+          if (!isInContactForm && !isFormFocused) {
             e.preventDefault();
             navigateToNextSection(e.shiftKey);
           }
@@ -474,7 +535,6 @@ const MobileParallaxLayout: React.FC = () => {
         ref={scrollRef}
         className="fixed overflow-y-auto"
         style={{
-          scrollBehavior: 'smooth',
           top: '28px',
           left: '28px',
           right: '28px',

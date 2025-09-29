@@ -50,17 +50,25 @@ const LayoutManagerWithFocus: React.FC = () => {
     return () => window.removeEventListener('resize', checkLayout);
   }, []);
 
-  // Handle Tab key navigation using context
+  // Handle Tab key navigation using context (only in tiled mode, not parallax)
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Tab') {
-        e.preventDefault();
-        handleTabNavigation(e.shiftKey);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleTabNavigation]);
+    // Check if we're in parallax mode
+    const isParallaxMode = isStacked &&
+      typeof window !== 'undefined' &&
+      localStorage.getItem('mobile-mode') === 'parallax';
+
+    // Only add Tab handler if NOT in parallax mode
+    if (!isParallaxMode) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          handleTabNavigation(e.shiftKey);
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [handleTabNavigation, isStacked]);
 
   // Use scroll hook for each tile in stacked mode
   useScrollToFocus<HTMLDivElement>(neofetchRef, 'neofetch', focusedTile, isStacked);
