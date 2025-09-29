@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import NeofetchTile from './NeofetchTile';
 import { useFocus } from '@/contexts/FocusContext';
@@ -64,6 +64,91 @@ const MobileParallaxLayout: React.FC = () => {
     container?.addEventListener('scroll', handleScroll, { passive: true });
     return () => container?.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Keyboard navigation handlers
+  const navigateToSection = useCallback((sectionId: string) => {
+    const element = document.getElementById(`section-${sectionId}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setActiveSection(sectionId);
+    }
+  }, []);
+
+  const navigateToNextSection = useCallback((reverse = false) => {
+    const currentIndex = sections.findIndex(s => s.id === activeSection);
+    const direction = reverse ? -1 : 1;
+    const nextIndex = Math.max(0, Math.min(sections.length - 1, currentIndex + direction));
+
+    if (nextIndex !== currentIndex) {
+      navigateToSection(sections[nextIndex].id);
+    }
+  }, [activeSection, navigateToSection, sections]);
+
+  // Keyboard event handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't interfere with form inputs
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        return;
+      }
+
+      switch(e.key) {
+        case 'Tab':
+          // Let Tab work naturally for form elements in contact section
+          if (activeSection !== 'contact') {
+            e.preventDefault();
+            navigateToNextSection(e.shiftKey);
+          }
+          break;
+
+        case 'ArrowDown':
+        case 'PageDown':
+          e.preventDefault();
+          navigateToNextSection();
+          break;
+
+        case 'ArrowUp':
+        case 'PageUp':
+          e.preventDefault();
+          navigateToNextSection(true);
+          break;
+
+        case 'Home':
+          e.preventDefault();
+          navigateToSection(sections[0].id);
+          break;
+
+        case 'End':
+          e.preventDefault();
+          navigateToSection(sections[sections.length - 1].id);
+          break;
+
+        case 'Escape':
+          if (showThemePanel) {
+            setShowThemePanel(false);
+          }
+          break;
+
+        // Number keys for quick section jump
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+          if (!e.ctrlKey && !e.altKey && !e.metaKey) {
+            const index = parseInt(e.key) - 1;
+            if (index < sections.length) {
+              e.preventDefault();
+              navigateToSection(sections[index].id);
+            }
+          }
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeSection, showThemePanel, navigateToNextSection, navigateToSection]);
 
   // Render content sections
   const renderSection = (sectionId: string) => {
@@ -395,6 +480,8 @@ const MobileParallaxLayout: React.FC = () => {
           right: '28px',
           bottom: '28px'
         }}
+        role="main"
+        aria-label="Main content"
       >
         {/* Spacer for fixed background */}
         <div style={{ height: '60vh' }} />
@@ -411,6 +498,8 @@ const MobileParallaxLayout: React.FC = () => {
               backgroundColor: 'var(--theme-bg)',
               zIndex: 10
             }}
+            role="region"
+            aria-label={`${section.title} section`}
           >
             {/* Separator line and dot gradient at top of first section */}
             {index === 0 && (
@@ -471,26 +560,30 @@ const MobileParallaxLayout: React.FC = () => {
       </div>
 
       {/* Scroll Progress Dots - Inside window */}
-      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3">
+      <nav
+        className="fixed right-8 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3"
+        role="navigation"
+        aria-label="Section navigation"
+      >
         {sections.map((section) => (
           <button
             key={section.id}
-            onClick={() => {
-              document.getElementById(`section-${section.id}`)?.scrollIntoView({
-                behavior: 'smooth'
-              });
-            }}
-            className="w-3 h-3 rounded-full transition-all"
+            onClick={() => navigateToSection(section.id)}
+            className="w-3 h-3 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-offset-2"
             style={{
               backgroundColor: activeSection === section.id
                 ? 'var(--accent-color)'
                 : 'rgba(var(--accent-color-rgb), 0.3)',
-              transform: activeSection === section.id ? 'scale(1.5)' : 'scale(1)'
+              transform: activeSection === section.id ? 'scale(1.5)' : 'scale(1)',
+              '--tw-ring-color': 'var(--accent-color)',
+              '--tw-ring-offset-color': 'var(--theme-bg)'
             }}
-            aria-label={`Go to ${section.title}`}
+            aria-label={`Go to ${section.title} section`}
+            aria-current={activeSection === section.id ? 'true' : undefined}
+            tabIndex={0}
           />
         ))}
-      </div>
+      </nav>
 
       {/* Floating Theme Toggle - Inside window */}
       <div className="fixed bottom-10 right-10 z-30">
@@ -515,12 +608,17 @@ const MobileParallaxLayout: React.FC = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setShowThemePanel(!showThemePanel)}
-          className="w-14 h-14 shadow-lg flex items-center justify-center text-2xl"
+          className="w-14 h-14 shadow-lg flex items-center justify-center text-2xl focus:outline-none focus:ring-2 focus:ring-offset-2"
           style={{
             backgroundColor: 'var(--accent-color)',
             color: 'var(--theme-bg)',
-            borderRadius: '0px' // Sharp corners to match window theme
+            borderRadius: '0px', // Sharp corners to match window theme
+            '--tw-ring-color': 'var(--accent-color)',
+            '--tw-ring-offset-color': 'var(--theme-bg)'
           }}
+          aria-label="Toggle theme selector"
+          aria-expanded={showThemePanel}
+          tabIndex={0}
         >
           🎨
         </motion.button>
@@ -528,12 +626,14 @@ const MobileParallaxLayout: React.FC = () => {
 
       {/* Mode Toggle Button - Inside window */}
       <motion.button
-        className="fixed bottom-10 left-10 z-30 px-4 py-2 shadow-lg text-sm font-medium"
+        className="fixed bottom-10 left-10 z-30 px-4 py-2 shadow-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
         style={{
           backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)',
           color: 'var(--theme-text)',
           border: '1px solid rgba(var(--accent-color-rgb), 0.3)',
-          borderRadius: '0px' // Sharp corners to match window theme
+          borderRadius: '0px', // Sharp corners to match window theme
+          '--tw-ring-color': 'var(--accent-color)',
+          '--tw-ring-offset-color': 'var(--theme-bg)'
         }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
@@ -541,6 +641,8 @@ const MobileParallaxLayout: React.FC = () => {
           localStorage.setItem('mobile-mode', 'stacked');
           window.location.reload();
         }}
+        aria-label="Switch to tiled view mode"
+        tabIndex={0}
       >
         Switch to Tiles
       </motion.button>
