@@ -2,13 +2,13 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import NeofetchTile from './NeofetchTile';
+import NeofetchTile from '@/components/tiles/NeofetchTile';
 import { useFocus } from '@/contexts/FocusContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { usePersonalInfo, useProjects, useBlogPosts, useSkills, useSocialLinks } from '@/lib/config';
-import Background from './Background';
-import ThemeTile from './ThemeTile';
-import ScrollProgress from './ScrollProgress';
+import Background from '@/components/layout/Background';
+import ThemeTile from '@/components/tiles/ThemeTile';
+import ScrollProgress from '@/components/ui/ScrollProgress';
 
 const MobileParallaxLayout: React.FC = () => {
   const { theme, setThemePreset, setAccentColor } = useTheme();

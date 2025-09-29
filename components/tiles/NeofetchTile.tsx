@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { archLogoASCII, archLogoCompact, dlLogoASCII, minimalLogo, dleerBlockLetters, dleerCompact } from './archAscii';
+import { archLogoASCII, archLogoCompact, dlLogoASCII, minimalLogo, dleerBlockLetters, dleerCompact } from '@/components/assets/archAscii';
 import { usePersonalInfo, useSystemInfo } from '@/lib/config';
 
 interface NeofetchTileProps {

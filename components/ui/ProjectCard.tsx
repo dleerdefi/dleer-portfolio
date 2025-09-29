@@ -1,5 +1,5 @@
-import Badge from './badge';
-import Card from './card';
+import Badge from '@/components/ui/Badge';
+import Card from '@/components/ui/Card';
 import type { Project } from '@/lib/types';
 
 export default function ProjectCard({ project }: { project: Project }) {
