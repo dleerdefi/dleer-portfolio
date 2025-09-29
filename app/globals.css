@@ -539,65 +539,7 @@ pre code {
   margin-right: 1ch;
 }
 
-/* Terminal window */
-.terminal-window {
-  background: var(--term-surface);
-  border: 1px solid var(--term-border);
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.terminal-header {
-  background: var(--term-surface-alt);
-  border-bottom: 1px solid var(--term-border);
-  padding: 0.5rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-}
-
-.terminal-controls {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.terminal-control {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--term-text-dim);
-  opacity: 0.5;
-}
-
-.terminal-control.close {
-  background: var(--term-red);
-  opacity: 0.8;
-}
-
-.terminal-control.minimize {
-  background: var(--term-yellow);
-  opacity: 0.8;
-}
-
-.terminal-control.maximize {
-  background: var(--term-accent-alt);
-  opacity: 0.8;
-}
-
-.terminal-title {
-  flex: 1;
-  text-align: center;
-  color: var(--term-text-dim);
-  font-family: "JetBrains Mono", monospace;
-}
-
-.terminal-content {
-  padding: 1.5rem;
-  font-family: "JetBrains Mono", monospace;
-  line-height: 1.6;
-}
+/* Terminal window styles removed - components deleted */
 
 /* Mobile-first responsive utilities */
 .mobile-only {
