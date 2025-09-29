@@ -7,7 +7,6 @@ import { useFocus } from '@/contexts/FocusContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { usePersonalInfo, useProjects, useBlogPosts, useSkills, useSocialLinks } from '@/lib/config';
 import Background from './Background';
-import Polybar from './PolybarWithFocus';
 import ThemeTile from './ThemeTile';
 
 const MobileParallaxLayout: React.FC = () => {
@@ -21,6 +20,7 @@ const MobileParallaxLayout: React.FC = () => {
 
   const [activeSection, setActiveSection] = useState('home');
   const [showThemePanel, setShowThemePanel] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -34,9 +34,8 @@ const MobileParallaxLayout: React.FC = () => {
     [0.7, 0.3]
   );
 
-  // Sections for scrolling
+  // Sections for scrolling (removed home, about is first)
   const sections = [
-    { id: 'home', title: 'Welcome' },
     { id: 'about', title: 'About' },
     { id: 'projects', title: 'Projects' },
     { id: 'blog', title: 'Blog' },
@@ -69,27 +68,28 @@ const MobileParallaxLayout: React.FC = () => {
   // Render content sections
   const renderSection = (sectionId: string) => {
     switch (sectionId) {
-      case 'home':
-        return (
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
-              {personal.title}
-            </h2>
-            <p className="text-lg" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
-              {personal.bio.short}
-            </p>
-          </div>
-        );
-
       case 'about':
         return (
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
-              About Me
-            </h2>
-            <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
-              {personal.bio.full}
-            </p>
+          <div className="space-y-8">
+            {/* Intro section that was previously "home" */}
+            <div className="space-y-4">
+              <h2 className="text-4xl font-bold" style={{ color: 'var(--accent-color)' }}>
+                {personal.title}
+              </h2>
+              <p className="text-xl" style={{ color: 'var(--theme-text)', opacity: 0.95 }}>
+                {personal.bio.short}
+              </p>
+            </div>
+
+            {/* Full about section */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>
+                About Me
+              </h3>
+              <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
+                {personal.bio.full}
+              </p>
+            </div>
             {skills && skills.length > 0 && (
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold" style={{ color: 'var(--theme-info)' }}>
@@ -206,45 +206,132 @@ const MobileParallaxLayout: React.FC = () => {
             <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
               Contact
             </h2>
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <span style={{ color: 'var(--theme-info)' }}>📧</span>
-                <a
-                  href={`mailto:${personal.email}`}
-                  style={{ color: 'var(--accent-color)' }}
-                  className="hover:underline"
-                >
-                  {personal.email}
-                </a>
+
+            {/* Contact Form */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log('Form submitted:', formData);
+                // Handle form submission here
+                alert('Message sent! (This is a demo)');
+                setFormData({ name: '', email: '', message: '' });
+              }}
+              className="space-y-4"
+            >
+              <div>
+                <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
+                  Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full rounded px-3 py-2 text-sm transition-colors"
+                  style={{
+                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
+                    color: 'var(--theme-text)',
+                    border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
+                  }}
+                  placeholder="Your name"
+                />
               </div>
-              {githubLink && (
+
+              <div>
+                <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
+                  Email
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full rounded px-3 py-2 text-sm transition-colors"
+                  style={{
+                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
+                    color: 'var(--theme-text)',
+                    border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
+                  }}
+                  placeholder="your.email@example.com"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
+                  Message
+                </label>
+                <textarea
+                  required
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  rows={5}
+                  className="w-full rounded px-3 py-2 text-sm resize-none transition-colors"
+                  style={{
+                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
+                    color: 'var(--theme-text)',
+                    border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
+                  }}
+                  placeholder="Your message..."
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="px-6 py-2 rounded font-medium transition-all"
+                style={{
+                  backgroundColor: 'var(--accent-color)',
+                  color: 'var(--theme-bg)'
+                }}
+              >
+                Send Message
+              </button>
+            </form>
+
+            {/* Social Links */}
+            <div className="pt-4 border-t" style={{ borderColor: 'rgba(var(--accent-color-rgb), 0.2)' }}>
+              <h3 className="text-lg font-semibold mb-3" style={{ color: 'var(--theme-info)' }}>
+                Connect
+              </h3>
+              <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <span style={{ color: 'var(--theme-info)' }}>🔗</span>
+                  <span style={{ color: 'var(--theme-info)' }}>📧</span>
                   <a
-                    href={githubLink.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={`mailto:${personal.email}`}
                     style={{ color: 'var(--accent-color)' }}
                     className="hover:underline"
                   >
-                    GitHub
+                    {personal.email}
                   </a>
                 </div>
-              )}
-              {linkedinLink && (
-                <div className="flex items-center gap-3">
-                  <span style={{ color: 'var(--theme-info)' }}>💼</span>
-                  <a
-                    href={linkedinLink.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: 'var(--accent-color)' }}
-                    className="hover:underline"
-                  >
-                    LinkedIn
-                  </a>
-                </div>
-              )}
+                {githubLink && (
+                  <div className="flex items-center gap-3">
+                    <span style={{ color: 'var(--theme-info)' }}>🔗</span>
+                    <a
+                      href={githubLink.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'var(--accent-color)' }}
+                      className="hover:underline"
+                    >
+                      GitHub
+                    </a>
+                  </div>
+                )}
+                {linkedinLink && (
+                  <div className="flex items-center gap-3">
+                    <span style={{ color: 'var(--theme-info)' }}>💼</span>
+                    <a
+                      href={linkedinLink.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'var(--accent-color)' }}
+                      className="hover:underline"
+                    >
+                      LinkedIn
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         );
@@ -258,64 +345,124 @@ const MobileParallaxLayout: React.FC = () => {
     <>
       <Background />
 
-      {/* Fixed Neofetch Background */}
-      <motion.div
-        className="fixed inset-x-0 top-0 z-0 pointer-events-none"
+      {/* Window Border Frame - Sharp 90-degree corners */}
+      <div
+        className="fixed pointer-events-none z-50"
         style={{
-          height: '40vh',
+          top: '12px',
+          left: '12px',
+          right: '12px',
+          bottom: '12px',
+          border: '2px solid rgba(var(--accent-color-rgb), 0.6)',
+          borderRadius: '0px', // Sharp 90-degree corners
+          boxShadow: '0 0 20px rgba(var(--accent-color-rgb), 0.2)'
+        }}
+      />
+
+      {/* Fixed Neofetch Background - Centered within window */}
+      <motion.div
+        className="fixed flex items-center justify-center pointer-events-none"
+        style={{
+          top: '14px',
+          left: '14px',
+          right: '14px',
+          height: '60vh',
           opacity: backgroundOpacity,
-          backgroundColor: 'rgba(var(--theme-bg-rgb), 0.8)',
-          backdropFilter: 'blur(8px)'
+          backgroundColor: 'rgba(var(--theme-bg-rgb), 0.9)',
+          backdropFilter: 'blur(10px)',
+          zIndex: 0
         }}
       >
-        <div className="h-full p-6 overflow-hidden">
+        <div className="w-full max-w-4xl mx-auto px-12 sm:px-16 md:px-20">
           <NeofetchTile isBlurred={false} />
         </div>
         <div
-          className="absolute inset-x-0 bottom-0 h-24"
+          className="absolute inset-x-0 bottom-0 h-32"
           style={{
             background: 'linear-gradient(to bottom, transparent, var(--theme-bg))'
           }}
         />
       </motion.div>
 
-      {/* Scrollable Content */}
+      {/* Scrollable Content - Constrained within window */}
       <div
         ref={scrollRef}
-        className="fixed inset-0 overflow-y-auto"
-        style={{ scrollBehavior: 'smooth' }}
+        className="fixed overflow-y-auto"
+        style={{
+          scrollBehavior: 'smooth',
+          top: '14px',
+          left: '14px',
+          right: '14px',
+          bottom: '14px'
+        }}
       >
-        {/* Sticky Header */}
-        <div className="sticky top-0 z-20" style={{ backgroundColor: 'var(--theme-bg)' }}>
-          <Polybar onNavigate={(section) => {
-            document.getElementById(`section-${section}`)?.scrollIntoView({ behavior: 'smooth' });
-          }} />
-        </div>
-
         {/* Spacer for fixed background */}
-        <div style={{ height: '40vh' }} />
+        <div style={{ height: '60vh' }} />
 
         {/* Content Sections */}
         {sections.map((section, index) => (
           <section
             key={section.id}
             id={`section-${section.id}`}
-            className="relative min-h-screen px-6 py-12"
+            className="relative min-h-screen px-12 sm:px-16 md:px-20"
             style={{
-              backgroundColor: index === 0
-                ? 'transparent'
-                : 'var(--theme-bg)',
+              paddingTop: index === 0 ? '48px' : '48px',
+              paddingBottom: '48px',
+              backgroundColor: 'var(--theme-bg)',
               zIndex: 10
             }}
           >
+            {/* Separator line and dot gradient at top of first section */}
+            {index === 0 && (
+              <>
+                <div
+                  className="absolute top-0 left-0 right-0"
+                  style={{
+                    height: '1px',
+                    background: 'linear-gradient(90deg, transparent 5%, rgba(var(--accent-color-rgb), 0.4) 50%, transparent 95%)',
+                    zIndex: 1
+                  }}
+                />
+                {/* Dot gradient transition from Neofetch to content */}
+                <div
+                  className="absolute left-0 right-0"
+                  style={{
+                    top: '-75px',
+                    height: '75px',
+                    background: `
+                      radial-gradient(circle at 1px 1px, rgba(var(--theme-bg-rgb), 0.5) 0.8px, transparent 0.8px)
+                    `,
+                    backgroundSize: '3px 3px',
+                    backgroundPosition: '0 0',
+                    maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)',
+                    WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)',
+                    zIndex: 2,
+                    pointerEvents: 'none'
+                  }}
+                />
+              </>
+            )}
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
               viewport={{ once: false, amount: 0.3 }}
+              className="max-w-4xl mx-auto"
             >
               {renderSection(section.id)}
             </motion.div>
+
+            {/* Section divider */}
+            {index < sections.length - 1 && (
+              <div
+                className="absolute bottom-0 left-12 right-12"
+                style={{
+                  height: '1px',
+                  background: 'linear-gradient(90deg, transparent, rgba(var(--accent-color-rgb), 0.3), transparent)'
+                }}
+              />
+            )}
           </section>
         ))}
 
@@ -323,8 +470,8 @@ const MobileParallaxLayout: React.FC = () => {
         <div style={{ height: '10vh' }} />
       </div>
 
-      {/* Scroll Progress Dots */}
-      <div className="fixed right-4 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3">
+      {/* Scroll Progress Dots - Inside window */}
+      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3">
         {sections.map((section) => (
           <button
             key={section.id}
@@ -345,18 +492,19 @@ const MobileParallaxLayout: React.FC = () => {
         ))}
       </div>
 
-      {/* Floating Theme Toggle */}
-      <div className="fixed bottom-6 right-6 z-30">
+      {/* Floating Theme Toggle - Inside window */}
+      <div className="fixed bottom-10 right-10 z-30">
         {showThemePanel && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
-            className="absolute bottom-16 right-0 w-72 p-4 rounded-lg shadow-xl"
+            className="absolute bottom-16 right-0 w-72 p-4 shadow-xl"
             style={{
               backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)',
               backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
+              border: '1px solid rgba(var(--accent-color-rgb), 0.3)',
+              borderRadius: '0px' // Sharp corners to match window theme
             }}
           >
             <ThemeTile isBlurred={false} />
@@ -367,23 +515,25 @@ const MobileParallaxLayout: React.FC = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setShowThemePanel(!showThemePanel)}
-          className="w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl"
+          className="w-14 h-14 shadow-lg flex items-center justify-center text-2xl"
           style={{
             backgroundColor: 'var(--accent-color)',
-            color: 'var(--theme-bg)'
+            color: 'var(--theme-bg)',
+            borderRadius: '0px' // Sharp corners to match window theme
           }}
         >
           🎨
         </motion.button>
       </div>
 
-      {/* Mode Toggle Button */}
+      {/* Mode Toggle Button - Inside window */}
       <motion.button
-        className="fixed bottom-6 left-6 z-30 px-4 py-2 rounded-lg shadow-lg text-sm font-medium"
+        className="fixed bottom-10 left-10 z-30 px-4 py-2 shadow-lg text-sm font-medium"
         style={{
           backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)',
           color: 'var(--theme-text)',
-          border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
+          border: '1px solid rgba(var(--accent-color-rgb), 0.3)',
+          borderRadius: '0px' // Sharp corners to match window theme
         }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}

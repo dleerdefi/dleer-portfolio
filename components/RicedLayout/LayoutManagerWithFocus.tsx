@@ -38,6 +38,7 @@ const LayoutManagerWithFocus: React.FC = () => {
   const navigationRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const themeRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Check for responsive layout
   useEffect(() => {
@@ -158,7 +159,22 @@ const LayoutManagerWithFocus: React.FC = () => {
     return (
       <>
         <Background />
-        <BorderedContainer onScroll={setScrollPercent}>
+
+        {/* Fixed scrollable container similar to BorderedContainer but without border */}
+        <div
+          ref={scrollContainerRef}
+          className="fixed inset-0 overflow-y-auto"
+          style={{
+            scrollBehavior: 'smooth'
+          }}
+          onScroll={(e) => {
+            const target = e.target as HTMLDivElement;
+            const scrollTop = target.scrollTop;
+            const scrollHeight = target.scrollHeight - target.clientHeight;
+            const percent = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+            setScrollPercent(percent);
+          }}
+        >
           <ScrollProgress scrollPercent={scrollPercent} />
           <div className="min-h-screen flex flex-col">
             <div className="sticky top-0 z-30" style={{ backgroundColor: 'var(--theme-bg)' }}>
@@ -173,8 +189,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                     layout
                     layoutId="tile-neofetch"
                     transition={layoutTransition}
-                    className={`rounded-lg ${
-                      focusedTile === 'neofetch' ? '' : ''
+                    className={`rounded-lg shadow-xl border ${
+                      focusedTile === 'neofetch' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                     }`}
                     initial={{
                       backgroundColor: getTileOpacity('neofetch', false)
@@ -202,8 +218,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                     layout
                     layoutId="tile-navigation"
                     transition={layoutTransition}
-                    className={`rounded-lg ${
-                      focusedTile === 'navigation' ? '' : ''
+                    className={`rounded-lg shadow-xl border ${
+                      focusedTile === 'navigation' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                     }`}
                     initial={{
                       backgroundColor: getTileOpacity('navigation', false)
@@ -231,8 +247,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                     layout
                     layoutId="tile-content"
                     transition={layoutTransition}
-                    className={`rounded-lg ${
-                      focusedTile === 'content' ? '' : ''
+                    className={`rounded-lg shadow-xl border ${
+                      focusedTile === 'content' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                     }`}
                     initial={{
                       backgroundColor: getContentTileOpacity().unfocused
@@ -263,8 +279,8 @@ const LayoutManagerWithFocus: React.FC = () => {
                     layout
                     layoutId="tile-theme"
                     transition={layoutTransition}
-                    className={`rounded-lg ${
-                      focusedTile === 'theme' ? '' : ''
+                    className={`rounded-lg shadow-xl border ${
+                      focusedTile === 'theme' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                     }`}
                     initial={{
                       backgroundColor: getTileOpacity('theme', false)
@@ -290,7 +306,7 @@ const LayoutManagerWithFocus: React.FC = () => {
             </LayoutGroup>
           </div>
           </div>
-        </BorderedContainer>
+        </div>
 
         {/* Mode Toggle Button */}
         <motion.button
