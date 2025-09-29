@@ -8,6 +8,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { usePersonalInfo, useProjects, useBlogPosts, useSkills, useSocialLinks } from '@/lib/config';
 import Background from './Background';
 import ThemeTile from './ThemeTile';
+import ScrollProgress from './ScrollProgress';
 
 const MobileParallaxLayout: React.FC = () => {
   const { theme, setThemePreset, setAccentColor } = useTheme();
@@ -21,6 +22,7 @@ const MobileParallaxLayout: React.FC = () => {
   const [activeSection, setActiveSection] = useState('about');
   const [showThemePanel, setShowThemePanel] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [scrollPercent, setScrollPercent] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -95,19 +97,13 @@ const MobileParallaxLayout: React.FC = () => {
       console.log('Target scroll position:', targetScroll);
       console.log('Current scroll:', container.scrollTop);
 
-      // Special case for About section - scroll to very top to show Neofetch
-      if (sectionId === 'about') {
-        container.scrollTo({
-          top: 0, // Scroll to absolute top to reveal Neofetch
-          behavior: 'smooth'
-        });
-      } else {
-        // Normal section navigation
-        container.scrollTo({
-          top: targetScroll,
-          behavior: 'smooth'
-        });
-      }
+      // Scroll to the calculated position
+      // For About section, this will scroll to where the content starts (after spacer)
+      // For other sections, it calculates based on their position
+      container.scrollTo({
+        top: targetScroll,
+        behavior: 'smooth'
+      });
 
       // Update active section state
       setActiveSection(sectionId);
@@ -233,7 +229,7 @@ const MobileParallaxLayout: React.FC = () => {
                 About Me
               </h3>
               <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
-                {personal.bio.full}
+                {personal.bio.long}
               </p>
             </div>
             {skills && skills.length > 0 && (
@@ -274,38 +270,22 @@ const MobileParallaxLayout: React.FC = () => {
             <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
               Projects
             </h2>
-            <div className="grid gap-4">
+            <div className="grid gap-3">
               {projects.map(project => (
                 <div
                   key={project.id}
-                  className="p-4 rounded-lg"
+                  className="p-3 rounded-lg"
                   style={{
-                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
-                    border: '1px solid rgba(var(--accent-color-rgb), 0.2)'
+                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)',
+                    border: '1px solid rgba(var(--accent-color-rgb), 0.15)'
                   }}
                 >
-                  <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--theme-primary)' }}>
+                  <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--theme-primary)' }}>
                     {project.name}
                   </h3>
-                  <p style={{ color: 'var(--theme-text)', opacity: 0.8 }}>
+                  <p className="text-sm" style={{ color: 'var(--theme-text)', opacity: 0.75 }}>
                     {project.description}
                   </p>
-                  {project.techStack && project.techStack.length > 0 && (
-                    <div className="flex gap-2 mt-3">
-                      {project.techStack.slice(0, 3).map(tech => (
-                        <span
-                          key={tech}
-                          className="text-xs px-2 py-1 rounded"
-                          style={{
-                            backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
-                            color: 'var(--accent-color)'
-                          }}
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
@@ -318,23 +298,20 @@ const MobileParallaxLayout: React.FC = () => {
             <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
               Blog
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {blogPosts.map(post => (
                 <article
                   key={post.id}
-                  className="p-4 rounded-lg"
+                  className="p-3 rounded-lg"
                   style={{
-                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
-                    border: '1px solid rgba(var(--accent-color-rgb), 0.2)'
+                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)',
+                    border: '1px solid rgba(var(--accent-color-rgb), 0.15)'
                   }}
                 >
-                  <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--theme-primary)' }}>
+                  <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--theme-primary)' }}>
                     {post.title}
                   </h3>
-                  <p className="text-sm mb-2" style={{ color: 'var(--theme-text)', opacity: 0.6 }}>
-                    {post.date} • {post.readTime}
-                  </p>
-                  <p style={{ color: 'var(--theme-text)', opacity: 0.8 }}>
+                  <p className="text-sm" style={{ color: 'var(--theme-text)', opacity: 0.75 }}>
                     {post.excerpt}
                   </p>
                 </article>
@@ -491,6 +468,9 @@ const MobileParallaxLayout: React.FC = () => {
     <>
       <Background />
 
+      {/* Custom scrollbar positioned outside window frame */}
+      <ScrollProgress scrollPercent={scrollPercent} />
+
       {/* Window Border Frame - Sharp 90-degree corners */}
       <div
         className="fixed pointer-events-none z-50"
@@ -533,12 +513,19 @@ const MobileParallaxLayout: React.FC = () => {
       {/* Scrollable Content - Constrained within window */}
       <div
         ref={scrollRef}
-        className="fixed overflow-y-auto"
+        className="fixed overflow-y-auto hide-scrollbar"
         style={{
           top: '28px',
           left: '28px',
           right: '28px',
           bottom: '28px'
+        }}
+        onScroll={(e) => {
+          const target = e.target as HTMLDivElement;
+          const scrollTop = target.scrollTop;
+          const scrollHeight = target.scrollHeight - target.clientHeight;
+          const percent = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+          setScrollPercent(percent);
         }}
         role="main"
         aria-label="Main content"
@@ -605,10 +592,11 @@ const MobileParallaxLayout: React.FC = () => {
             {/* Section divider */}
             {index < sections.length - 1 && (
               <div
-                className="absolute bottom-0 left-12 right-12"
+                className="absolute bottom-0 left-0 right-0"
                 style={{
-                  height: '1px',
-                  background: 'linear-gradient(90deg, transparent, rgba(var(--accent-color-rgb), 0.3), transparent)'
+                  height: '2px',
+                  background: 'linear-gradient(90deg, transparent 10%, rgba(var(--accent-color-rgb), 0.5) 50%, transparent 90%)',
+                  boxShadow: '0 0 10px rgba(var(--accent-color-rgb), 0.2)'
                 }}
               />
             )}
@@ -635,8 +623,8 @@ const MobileParallaxLayout: React.FC = () => {
                 ? 'var(--accent-color)'
                 : 'rgba(var(--accent-color-rgb), 0.3)',
               transform: activeSection === section.id ? 'scale(1.5)' : 'scale(1)',
-              '--tw-ring-color': 'var(--accent-color)',
-              '--tw-ring-offset-color': 'var(--theme-bg)'
+              ['--tw-ring-color' as any]: 'var(--accent-color)',
+              ['--tw-ring-offset-color' as any]: 'var(--theme-bg)'
             }}
             aria-label={`Go to ${section.title} section`}
             aria-current={activeSection === section.id ? 'true' : undefined}
@@ -645,14 +633,14 @@ const MobileParallaxLayout: React.FC = () => {
         ))}
       </nav>
 
-      {/* Floating Theme Toggle - Inside window */}
-      <div className="fixed bottom-10 right-10 z-30">
+      {/* Floating Theme Toggle - Upper right corner */}
+      <div className="fixed top-16 right-10 z-30">
         {showThemePanel && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            className="absolute bottom-16 right-0 w-72 p-4 shadow-xl"
+            exit={{ opacity: 0, y: -10 }}
+            className="absolute top-16 right-0 w-72 p-4 shadow-xl"
             style={{
               backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)',
               backdropFilter: 'blur(10px)',
@@ -660,6 +648,9 @@ const MobileParallaxLayout: React.FC = () => {
               borderRadius: '0px' // Sharp corners to match window theme
             }}
           >
+            <div className="flex items-center gap-2 mb-3">
+              <span style={{ color: 'var(--theme-text)', fontSize: '14px', fontWeight: '500' }}>Switch to:</span>
+            </div>
             <ThemeTile isBlurred={false} />
           </motion.div>
         )}
@@ -673,8 +664,8 @@ const MobileParallaxLayout: React.FC = () => {
             backgroundColor: 'var(--accent-color)',
             color: 'var(--theme-bg)',
             borderRadius: '0px', // Sharp corners to match window theme
-            '--tw-ring-color': 'var(--accent-color)',
-            '--tw-ring-offset-color': 'var(--theme-bg)'
+            ['--tw-ring-color' as any]: 'var(--accent-color)',
+            ['--tw-ring-offset-color' as any]: 'var(--theme-bg)'
           }}
           aria-label="Toggle theme selector"
           aria-expanded={showThemePanel}
@@ -692,8 +683,8 @@ const MobileParallaxLayout: React.FC = () => {
           color: 'var(--theme-text)',
           border: '1px solid rgba(var(--accent-color-rgb), 0.3)',
           borderRadius: '0px', // Sharp corners to match window theme
-          '--tw-ring-color': 'var(--accent-color)',
-          '--tw-ring-offset-color': 'var(--theme-bg)'
+          ['--tw-ring-color' as any]: 'var(--accent-color)',
+          ['--tw-ring-offset-color' as any]: 'var(--theme-bg)'
         }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
