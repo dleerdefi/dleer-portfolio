@@ -306,7 +306,7 @@ const backgroundOpacity = useTransform(
 ### 3.1 Critical Issues
 
 #### **P1: Snap Scrolling Behavior**
-**Location**: Lines 738, 757-759, 775-777
+**Location**: Lines 738, 757-759, 775-777, 267-271
 **Severity**: High - Degrades user experience
 
 **Current Implementation**:
@@ -332,6 +332,11 @@ scrollMarginTop: index === 0 ? '-60vh' : '0px'
 2. **Negative scroll margin**: First section has `-60vh` margin, causing positioning issues
 3. **Competing scroll behaviors**: Both container and individual sections set snap points
 4. **Inconsistent snapping**: Sometimes lands on spacer, sometimes on content
+5. **Snap lands on "Technical Stack" instead of main header** (Newly Discovered):
+   - About section has internal padding/border creating visual separation (lines 267-271)
+   - `pt-4 border-t` styling creates unintended snap target within section
+   - Users see "Technical Stack" subsection instead of "Full Stack Developer" main title
+   - Root cause: 939-line monolithic file makes spacing interactions impossible to debug
 
 **Expected Behavior**:
 - Sections (About, Projects, Blog, Contact) should be snap targets
@@ -377,6 +382,24 @@ console.log('Element found:', !!element);                 // Line 111
 #### **Issue: Mixed Concerns in Effects**
 - Lines 50-99: Single effect handles scroll listening, section detection, and debouncing
 - Could be split into separate concerns
+
+### 3.3 Attempted Fixes Log
+
+#### **Attempt 1: Remove Snap from Spacer Div (FAILED)**
+**Date**: 2025-09-30
+**Change**: Set `scrollSnapAlign: 'none'` on spacer div (line 757)
+**Result**: Created multiple scrolling issues, made experience worse
+**Reason for Failure**: Spacer is required for Neofetch positioning
+**Lesson Learned**: The 60vh spacer serves dual purpose - cannot simply remove snap behavior
+
+#### **Key Insight**
+The 939-line monolithic component makes it impossible to:
+- Understand all component interactions
+- Trace spacing and padding cascades
+- Identify unintended side effects of changes
+- Test fixes in isolation
+
+**Conclusion**: Must modularize first before attempting any fixes. The file size itself is the root cause preventing proper debugging.
 
 ---
 
@@ -1477,6 +1500,22 @@ describe('useParallaxScroll', () => {
   - JSDoc for all public interfaces
 
 ### 9.3 Rollback Plan
+
+**Backup Tags Created**:
+- `pre-parallax-refactor-v1` - Complete snapshot before refactoring (created 2025-09-30)
+- Additional tags to be created after each successful phase
+
+**Quick Recovery Commands**:
+```bash
+# Option 1: View backup state without changing branches
+git checkout pre-parallax-refactor-v1
+
+# Option 2: Create recovery branch from backup
+git checkout -b recovery-branch pre-parallax-refactor-v1
+
+# Option 3: Reset current branch to backup (destructive)
+git reset --hard pre-parallax-refactor-v1
+```
 
 **If Snap Fix Fails**:
 1. `git revert <commit-hash>` - Snap fix commit
