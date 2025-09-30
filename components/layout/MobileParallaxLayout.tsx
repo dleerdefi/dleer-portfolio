@@ -512,7 +512,14 @@ const MobileParallaxLayout: React.FC = () => {
       <Background />
 
       {/* Custom scrollbar positioned outside window frame */}
-      <ScrollProgress scrollPercent={scrollPercent} />
+      <ScrollProgress
+        scrollPercent={scrollPercent}
+        sectionCount={5}  // Neofetch spacer + 4 content sections
+        currentSection={activeSection === 'about' ? 1 :
+                       activeSection === 'projects' ? 2 :
+                       activeSection === 'blog' ? 3 :
+                       activeSection === 'contact' ? 4 : 0}
+      />
 
       {/* Window Border Frame - Sharp 90-degree corners */}
       <div
