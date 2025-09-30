@@ -6,20 +6,35 @@ export const portfolioConfig: PortfolioConfig = {
   personal: {
     name: process.env.NEXT_PUBLIC_NAME || "Your Name",
     username: process.env.NEXT_PUBLIC_USERNAME || "username",
-    title: process.env.NEXT_PUBLIC_TITLE || "Full Stack Developer",
-    subtitle: process.env.NEXT_PUBLIC_SUBTITLE || "Building modern web applications",
+    title: process.env.NEXT_PUBLIC_TITLE || "Founder & Software Engineer",
+    subtitle: process.env.NEXT_PUBLIC_SUBTITLE || "Building next-generation AI memory systems",
     email: process.env.NEXT_PUBLIC_EMAIL || "your.email@example.com",
     location: process.env.NEXT_PUBLIC_LOCATION || "Your Location",
     bio: {
-      short: "Full Stack Developer with expertise in modern web technologies and a passion for creating exceptional user experiences.",
-      long: `Welcome! I'm a passionate developer with a deep enthusiasm for building modern,
-      performant, and aesthetically pleasing applications. I specialize in crafting clean,
-      minimalist interfaces that embody the power and elegance of modern development environments.
+      // Structured bio for parallax sections
+      intro: process.env.NEXT_PUBLIC_BIO_INTRO ||
+        "I'm David Leer, a founder and software engineer building the next generation of AI memory. My work connects Large Language Models with knowledge graphs, creating systems capable of context-aware reasoning.",
 
-      This site serves as a portfolio showcasing my work and experiments. Feel free to explore
-      my projects and articles via the navigation panel.`,
+      experience: process.env.NEXT_PUBLIC_BIO_EXPERIENCE ||
+        "As Chief Product Officer of ConsumerFi, I architected the protocol's core three-layer system. I also developed proprietary agent-based simulators that modeled token economies over $300M, directly guiding strategy for foundations and market makers.",
+
+      leadership: process.env.NEXT_PUBLIC_BIO_LEADERSHIP ||
+        "My technical leadership is built on a foundation of shipping complex systems at scale. I previously managed $63M in scope and led teams of 50+ engineers to deliver a $500M hospital campus. Today, my focus is on advanced LLM memory and scalable, user-owned data infrastructure.",
+
+      // Personal tagline
+      tagline: process.env.NEXT_PUBLIC_BIO_TAGLINE ||
+        "Outside of work, I experiment in my homelab, fly drones, and travel.",
+
+      // Legacy fields for compatibility
+      short: process.env.NEXT_PUBLIC_BIO_SHORT ||
+        "I'm David Leer, a founder and software engineer building the next generation of AI memory. My work connects Large Language Models with knowledge graphs, creating systems capable of context-aware reasoning.",
+
+      long: process.env.NEXT_PUBLIC_BIO_LONG ||
+        "As Chief Product Officer of ConsumerFi, I architected the protocol's core three-layer system. I also developed proprietary agent-based simulators that modeled token economies over $300M, directly guiding strategy for foundations and market makers.",
+
+      // Keep existing fields for other sections
       homeDescription: "Navigate through the file tree on the left to explore my portfolio. Each project showcases my expertise in modern web development, system design, and creative problem solving.",
-      currentFocus: "Currently exploring the intersection of terminal aesthetics and modern web development, creating experiences that blur the line between desktop environments and web applications. Always seeking new challenges that push the boundaries of what's possible in the browser."
+      currentFocus: "Currently exploring the intersection of terminal aesthetics and modern web development, creating experiences that blur the line between desktop environments and web applications."
     }
   },
 
@@ -48,16 +63,20 @@ export const portfolioConfig: PortfolioConfig = {
 
   skills: [
     {
-      category: "Technical Skills",
-      skills: ["React & Next.js", "TypeScript & JavaScript", "Tailwind CSS", "Node.js & Python", "PostgreSQL & Neo4j"]
+      category: "Frontend",
+      skills: ["React & Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Responsive Design"]
+    },
+    {
+      category: "Backend",
+      skills: ["Node.js", "Python", "PostgreSQL", "Neo4j", "REST APIs"]
     },
     {
       category: "Blockchain",
       skills: ["Solidity", "Hardhat", "Foundry", "OpenZeppelin", "Chainlink"]
     },
     {
-      category: "Interests",
-      skills: ["Linux Ricing & Hyprland", "Terminal UIs", "Open Source Development", "System Architecture", "Performance Optimization"]
+      category: "AI & Data",
+      skills: ["LangChain", "Knowledge Graphs", "Vector DBs", "RAG Systems", "Token Simulators"]
     }
   ],
 

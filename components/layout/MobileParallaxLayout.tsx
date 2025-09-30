@@ -16,7 +16,8 @@ import { useSectionNavigation } from './parallax/hooks/useSectionNavigation';
 import { useParallaxKeyboard } from './parallax/hooks/useParallaxKeyboard';
 
 // Import section components
-import { ParallaxAboutSection } from './parallax/sections/ParallaxAboutSection';
+import { ParallaxBioSection } from './parallax/sections/ParallaxBioSection';
+import { ParallaxTechSection } from './parallax/sections/ParallaxTechSection';
 import { ParallaxProjectsSection } from './parallax/sections/ParallaxProjectsSection';
 import { ParallaxBlogSection } from './parallax/sections/ParallaxBlogSection';
 import { ParallaxContactSection } from './parallax/sections/ParallaxContactSection';
@@ -36,9 +37,10 @@ const MobileParallaxLayout: React.FC = () => {
   const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Sections for scrolling (removed home, about is first)
+  // Sections for scrolling - split About into Bio and Technologies
   const sections = [
-    { id: 'about', title: 'About' },
+    { id: 'bio', title: 'Bio' },
+    { id: 'technologies', title: 'Technologies' },
     { id: 'projects', title: 'Projects' },
     { id: 'blog', title: 'Blog' },
     { id: 'contact', title: 'Contact' }
@@ -90,8 +92,11 @@ const MobileParallaxLayout: React.FC = () => {
   // Render content sections using extracted components
   const renderSection = (sectionId: string) => {
     switch (sectionId) {
-      case 'about':
-        return <ParallaxAboutSection personal={personal} skills={skills} />;
+      case 'bio':
+        return <ParallaxBioSection personal={personal} />;
+
+      case 'technologies':
+        return <ParallaxTechSection skills={skills} />;
 
       case 'projects':
         return (
@@ -133,12 +138,13 @@ const MobileParallaxLayout: React.FC = () => {
       {/* Custom scrollbar positioned outside window frame */}
       <ScrollProgress
         scrollPercent={scrollPercent}
-        sectionCount={5}  // Neofetch spacer + 4 content sections
+        sectionCount={6}  // Neofetch spacer + 5 content sections
         currentSection={activeSection === 'neofetch' ? 0 :
-                       activeSection === 'about' ? 1 :
-                       activeSection === 'projects' ? 2 :
-                       activeSection === 'blog' ? 3 :
-                       activeSection === 'contact' ? 4 : 0}
+                       activeSection === 'bio' ? 1 :
+                       activeSection === 'technologies' ? 2 :
+                       activeSection === 'projects' ? 3 :
+                       activeSection === 'blog' ? 4 :
+                       activeSection === 'contact' ? 5 : 0}
       />
 
       {/* Window Border Frame - Sharp 90-degree corners */}
@@ -211,15 +217,15 @@ const MobileParallaxLayout: React.FC = () => {
           <section
             key={section.id}
             id={`section-${section.id}`}
-            className={`relative px-6 sm:px-8 md:px-12 min-h-[85vh]`}
+            className={`relative px-6 sm:px-8 md:px-12 min-h-screen flex flex-col`}
             style={{
-              paddingTop: index === 0 ? '48px' : '48px',
+              paddingTop: '48px',
               paddingBottom: '48px',
               backgroundColor: 'var(--theme-bg)',
               zIndex: 10,
               scrollSnapAlign: 'start',
               scrollSnapStop: 'always',
-              scrollMarginTop: index === 0 ? '-55vh' : '0px' // Fine-tuned for About section visibility
+              scrollMarginTop: '0px' // Remove negative margin for proper snap alignment
             }}
             role="region"
             aria-label={`${section.title} section`}
@@ -260,7 +266,7 @@ const MobileParallaxLayout: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
               viewport={{ once: false, amount: 0.3 }}
-              className="max-w-4xl mx-auto"
+              className="flex-1 flex flex-col justify-center max-w-4xl mx-auto w-full"
             >
               {renderSection(section.id)}
             </motion.div>

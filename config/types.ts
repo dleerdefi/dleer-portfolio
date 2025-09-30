@@ -8,6 +8,12 @@ export interface PersonalInfo {
   email: string;
   location: string;
   bio: {
+    // Structured bio fields for parallax mode
+    intro?: string;
+    experience?: string;
+    leadership?: string;
+    tagline?: string;
+    // Legacy fields
     short: string;
     long: string;
     homeDescription?: string;
