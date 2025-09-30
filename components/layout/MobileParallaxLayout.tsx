@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import NeofetchTile from '@/components/tiles/NeofetchTile';
 import { useFocus } from '@/contexts/FocusContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -9,6 +9,11 @@ import { usePersonalInfo, useProjects, useBlogPosts, useSkills, useSocialLinks }
 import Background from '@/components/layout/Background';
 import ThemeTile from '@/components/tiles/ThemeTile';
 import ScrollProgress from '@/components/ui/ScrollProgress';
+
+// Import custom hooks
+import { useParallaxScroll } from './parallax/hooks/useParallaxScroll';
+import { useSectionNavigation } from './parallax/hooks/useSectionNavigation';
+import { useParallaxKeyboard } from './parallax/hooks/useParallaxKeyboard';
 
 const MobileParallaxLayout: React.FC = () => {
   const { theme, setThemePreset, setAccentColor } = useTheme();
@@ -19,24 +24,11 @@ const MobileParallaxLayout: React.FC = () => {
   const skills = useSkills();
   const socialLinks = useSocialLinks();
 
-  const [activeSection, setActiveSection] = useState('about');
   const [showThemePanel, setShowThemePanel] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [scrollPercent, setScrollPercent] = useState(0);
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    container: scrollRef
-  });
-
-  // Transform scroll progress to background opacity
-  const backgroundOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.2],
-    [0.7, 0.3]
-  );
 
   // Sections for scrolling (removed home, about is first)
   const sections = [
@@ -46,201 +38,48 @@ const MobileParallaxLayout: React.FC = () => {
     { id: 'contact', title: 'Contact' }
   ];
 
-  // Track active section based on scroll with debouncing for snap detection
-  useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout;
+  // Use custom hooks for scroll management
+  const {
+    activeSection,
+    scrollPercent,
+    scrollYProgress,
+    backgroundOpacity
+  } = useParallaxScroll(scrollRef, sections);
 
-    const handleScroll = () => {
-      const scrollPosition = scrollRef.current?.scrollTop || 0;
-      const windowHeight = window.innerHeight;
+  // Use custom hooks for navigation
+  const {
+    navigateToSection: baseNavigateToSection,
+    navigateToNextSection: baseNavigateToNextSection
+  } = useSectionNavigation(scrollRef, sections);
 
-      // Clear existing timeout
-      clearTimeout(scrollTimeout);
-
-      // Check if we're at the top (Neofetch section)
-      if (scrollPosition < windowHeight * 0.4) {  // Less than 40% of viewport height
-        setActiveSection('neofetch');  // Special case for top
-        return;
-      }
-
-      // Determine which section is most visible
-      sections.forEach((section, index) => {
-        const sectionElement = document.getElementById(`section-${section.id}`);
-        if (sectionElement) {
-          const rect = sectionElement.getBoundingClientRect();
-          if (rect.top < windowHeight / 2 && rect.bottom > windowHeight / 2) {
-            setActiveSection(section.id);
-          }
-        }
-      });
-
-      // Debounce to detect when scrolling has stopped (for snap completion)
-      scrollTimeout = setTimeout(() => {
-        // Final check after scroll snap completes
-        sections.forEach((section, index) => {
-          const sectionElement = document.getElementById(`section-${section.id}`);
-          if (sectionElement) {
-            const rect = sectionElement.getBoundingClientRect();
-            // More precise check for snapped position
-            if (Math.abs(rect.top) < 50 || (index === 0 && rect.top < 100 && rect.top > -100)) {
-              setActiveSection(section.id);
-            }
-          }
-        });
-      }, 150);
-    };
-
-    const container = scrollRef.current;
-    container?.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      container?.removeEventListener('scroll', handleScroll);
-      clearTimeout(scrollTimeout);
-    };
-  }, []);
-
-  // Keyboard navigation handlers
+  // Wrap navigation functions to handle local state updates
   const navigateToSection = useCallback((sectionId: string) => {
     // Reset selections when navigating away from their sections
     if (sectionId !== 'projects') setSelectedProject(null);
     if (sectionId !== 'blog') setSelectedBlog(null);
 
-    console.log('navigateToSection called for:', sectionId);
-    const element = document.getElementById(`section-${sectionId}`);
-    const container = scrollRef.current;
-
-    console.log('Element found:', !!element);
-    console.log('Container found:', !!container);
-
-    if (element && container) {
-      // Get the section index to calculate position
-      const sectionIndex = sections.findIndex(s => s.id === sectionId);
-
-      // Calculate scroll position based on section structure
-      // Each section is min-h-screen, plus we have a 60vh spacer at the top
-      const viewportHeight = window.innerHeight;
-      const spacerHeight = viewportHeight * 0.6; // 60vh spacer
-
-      // For first section, scroll to just after the spacer
-      // For other sections, calculate based on index
-      let targetScroll = spacerHeight;
-
-      if (sectionIndex > 0) {
-        // Add the height of all previous sections
-        targetScroll = spacerHeight + (viewportHeight * sectionIndex);
-      }
-
-      console.log('Target scroll position:', targetScroll);
-      console.log('Current scroll:', container.scrollTop);
-
-      // Scroll to the calculated position
-      // For About section, this will scroll to where the content starts (after spacer)
-      // For other sections, it calculates based on their position
-      container.scrollTo({
-        top: targetScroll,
-        behavior: 'smooth'
-      });
-
-      // Update active section state
-      setActiveSection(sectionId);
-    } else {
-      console.error('Failed to find element or container');
-    }
-  }, [sections]);
+    // Call the base navigation function
+    baseNavigateToSection(sectionId, {
+      onProjectsLeave: () => setSelectedProject(null),
+      onBlogLeave: () => setSelectedBlog(null)
+    });
+  }, [baseNavigateToSection]);
 
   const navigateToNextSection = useCallback((reverse = false) => {
-    const currentIndex = sections.findIndex(s => s.id === activeSection);
-    const direction = reverse ? -1 : 1;
-    let nextIndex = currentIndex + direction;
+    baseNavigateToNextSection(activeSection, reverse);
+  }, [activeSection, baseNavigateToNextSection]);
 
-    // Wrap around navigation
-    if (nextIndex >= sections.length) {
-      nextIndex = 0; // Wrap to first section (About)
-    } else if (nextIndex < 0) {
-      nextIndex = sections.length - 1; // Wrap to last section (Contact)
+  // Use keyboard navigation hook
+  useParallaxKeyboard(
+    sections,
+    activeSection,
+    navigateToSection,
+    navigateToNextSection,
+    {
+      onEscape: () => setShowThemePanel(false),
+      onPanelToggle: () => setShowThemePanel(prev => !prev)
     }
-
-    navigateToSection(sections[nextIndex].id);
-  }, [activeSection, navigateToSection]);
-
-  // Keyboard event handler
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't interfere with form inputs
-      const target = e.target as HTMLElement;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-        return;
-      }
-
-      switch(e.key) {
-        case 'Tab':
-          // Smart Tab handling: navigate sections unless we're actively in a form
-          const isInContactForm = activeSection === 'contact' &&
-            (target.tagName === 'INPUT' ||
-             target.tagName === 'TEXTAREA' ||
-             target.tagName === 'BUTTON' ||
-             target.tagName === 'A');
-
-          // Also check if any form element currently has focus
-          const activeElement = document.activeElement;
-          const isFormFocused = activeElement &&
-            (activeElement.tagName === 'INPUT' ||
-             activeElement.tagName === 'TEXTAREA' ||
-             activeElement.tagName === 'BUTTON');
-
-          // Only navigate sections if not interacting with form elements
-          if (!isInContactForm && !isFormFocused) {
-            e.preventDefault();
-            navigateToNextSection(e.shiftKey);
-          }
-          break;
-
-        case 'ArrowDown':
-        case 'PageDown':
-          e.preventDefault();
-          navigateToNextSection();
-          break;
-
-        case 'ArrowUp':
-        case 'PageUp':
-          e.preventDefault();
-          navigateToNextSection(true);
-          break;
-
-        case 'Home':
-          e.preventDefault();
-          navigateToSection(sections[0].id);
-          break;
-
-        case 'End':
-          e.preventDefault();
-          navigateToSection(sections[sections.length - 1].id);
-          break;
-
-        case 'Escape':
-          if (showThemePanel) {
-            setShowThemePanel(false);
-          }
-          break;
-
-        // Number keys for quick section jump
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-          if (!e.ctrlKey && !e.altKey && !e.metaKey) {
-            const index = parseInt(e.key) - 1;
-            if (index < sections.length) {
-              e.preventDefault();
-              navigateToSection(sections[index].id);
-            }
-          }
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeSection, showThemePanel, navigateToNextSection, navigateToSection]);
+  );
 
   // Render content sections
   const renderSection = (sectionId: string) => {
@@ -739,13 +578,6 @@ const MobileParallaxLayout: React.FC = () => {
           scrollBehavior: 'smooth',
           overscrollBehavior: 'contain',
           WebkitOverflowScrolling: 'touch' as any
-        }}
-        onScroll={(e) => {
-          const target = e.target as HTMLDivElement;
-          const scrollTop = target.scrollTop;
-          const scrollHeight = target.scrollHeight - target.clientHeight;
-          const percent = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-          setScrollPercent(percent);
         }}
         role="main"
         aria-label="Main content"
