@@ -176,7 +176,10 @@ const LayoutManager: React.FC = () => {
           ref={scrollContainerRef}
           className="fixed inset-0 overflow-y-auto hide-scrollbar"
           style={{
-            scrollBehavior: 'smooth'
+            scrollBehavior: 'smooth',
+            scrollSnapType: 'y mandatory',
+            overscrollBehavior: 'contain',
+            WebkitOverflowScrolling: 'touch' as any
           }}
           onScroll={(e) => {
             const target = e.target as HTMLDivElement;
@@ -194,7 +197,14 @@ const LayoutManager: React.FC = () => {
             <LayoutGroup>
               <motion.div className="flex flex-col" style={{ gap: '12px' }}>
                 {/* Neofetch Tile */}
-                <div ref={neofetchRef}>
+                <div
+                  ref={neofetchRef}
+                  style={{
+                    scrollSnapAlign: 'start',
+                    scrollSnapStop: 'always',
+                    scrollMarginTop: '36px' // Account for sticky Polybar height
+                  }}
+                >
                   <motion.div
                     layout
                     layoutId="tile-neofetch"
@@ -220,7 +230,14 @@ const LayoutManager: React.FC = () => {
                 </div>
 
                 {/* Navigation Tile */}
-                <div ref={navigationRef}>
+                <div
+                  ref={navigationRef}
+                  style={{
+                    scrollSnapAlign: 'start',
+                    scrollSnapStop: 'always',
+                    scrollMarginTop: '36px' // Account for sticky Polybar height
+                  }}
+                >
                   <motion.div
                     layout
                     layoutId="tile-navigation"
@@ -246,7 +263,14 @@ const LayoutManager: React.FC = () => {
                 </div>
 
                 {/* Content Viewer */}
-                <div ref={contentRef}>
+                <div
+                  ref={contentRef}
+                  style={{
+                    scrollSnapAlign: 'start',
+                    scrollSnapStop: 'always',
+                    scrollMarginTop: '36px' // Account for sticky Polybar height
+                  }}
+                >
                   <motion.div
                     layout
                     layoutId="tile-content"
@@ -275,7 +299,14 @@ const LayoutManager: React.FC = () => {
                 </div>
 
                 {/* Theme Tile */}
-                <div ref={themeRef}>
+                <div
+                  ref={themeRef}
+                  style={{
+                    scrollSnapAlign: 'start',
+                    scrollSnapStop: 'always',
+                    scrollMarginTop: '36px' // Account for sticky Polybar height
+                  }}
+                >
                   <motion.div
                     layout
                     layoutId="tile-theme"
