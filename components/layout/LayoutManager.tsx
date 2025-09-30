@@ -169,7 +169,14 @@ const LayoutManager: React.FC = () => {
         <Background />
 
         {/* Custom scrollbar positioned outside content */}
-        <ScrollProgress scrollPercent={scrollPercent} />
+        <ScrollProgress
+          scrollPercent={scrollPercent}
+          sectionCount={4}  // 4 tiles in stacked mode
+          currentSection={focusedTile === 'neofetch' ? 0 :
+                         focusedTile === 'navigation' ? 1 :
+                         focusedTile === 'content' ? 2 :
+                         focusedTile === 'theme' ? 3 : 0}
+        />
 
         {/* Fixed scrollable container similar to BorderedContainer but without border */}
         <div

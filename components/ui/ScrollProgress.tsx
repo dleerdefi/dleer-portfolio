@@ -6,11 +6,15 @@ import { motion } from 'framer-motion';
 interface ScrollProgressProps {
   scrollPercent: number;
   position?: 'left' | 'right';
+  sectionCount?: number;  // Total number of snap sections
+  currentSection?: number; // Current section index (0-based)
 }
 
 const ScrollProgress: React.FC<ScrollProgressProps> = ({
   scrollPercent,
-  position = 'right'
+  position = 'right',
+  sectionCount,
+  currentSection
 }) => {
   const [windowHeight, setWindowHeight] = React.useState(800);
 
@@ -35,7 +39,7 @@ const ScrollProgress: React.FC<ScrollProgressProps> = ({
     >
       {/* Background track */}
       <div
-        className="absolute inset-0 opacity-20"
+        className="absolute inset-0 opacity-10"  // Reduced from opacity-20
         style={{
           background: `linear-gradient(
             to bottom,
@@ -49,30 +53,50 @@ const ScrollProgress: React.FC<ScrollProgressProps> = ({
       />
 
       {/* Progress indicator */}
-      <motion.div
-        className="absolute left-0 right-0"
-        style={{
-          background: `linear-gradient(
-            to bottom,
-            transparent,
-            var(--accent-color),
-            var(--accent-color),
-            transparent
-          )`,
-          height: '60px',
-          top: `${20 + (scrollPercent * 0.01 * (windowHeight - 100))}px`,
-          filter: 'blur(0.5px)',
-          opacity: 0.8
-        }}
-        animate={{
-          top: `${20 + (scrollPercent * 0.01 * (windowHeight - 100))}px`
-        }}
-        transition={{
-          type: 'spring',
-          damping: 30,
-          stiffness: 200
-        }}
-      />
+      {(() => {
+        // Calculate position and size based on whether we have section info
+        let indicatorTop: number;
+        let indicatorHeight: number;
+
+        if (sectionCount && currentSection !== undefined) {
+          // Section-based positioning for snap scrolling
+          const availableHeight = windowHeight - 60; // Account for padding
+          const sectionHeight = availableHeight / sectionCount;
+          indicatorTop = 20 + (currentSection * sectionHeight);
+          indicatorHeight = sectionHeight;
+        } else {
+          // Continuous positioning for regular scrolling
+          indicatorTop = 20 + (scrollPercent * 0.01 * (windowHeight - 100));
+          indicatorHeight = 60;
+        }
+
+        return (
+          <motion.div
+            className="absolute left-0 right-0"
+            style={{
+              background: `linear-gradient(
+                to bottom,
+                transparent,
+                var(--accent-color),
+                var(--accent-color),
+                transparent
+              )`,
+              filter: 'blur(0.5px)',
+              opacity: 0.4  // Reduced from 0.8 for less prominence
+            }}
+            animate={{
+              top: indicatorTop,
+              height: indicatorHeight
+            }}
+            transition={{
+              type: 'spring',
+              damping: 25,  // Smoother movement
+              stiffness: 150,
+              mass: 0.5
+            }}
+          />
+        );
+      })()}
 
       {/* Pixelated effect dots */}
       <div className="absolute inset-0" style={{ margin: '20px 0' }}>
@@ -85,7 +109,7 @@ const ScrollProgress: React.FC<ScrollProgressProps> = ({
               width: '2px',
               height: '2px',
               backgroundColor: 'var(--accent-color)',
-              opacity: scrollPercent > i * 5 && scrollPercent < (i + 1) * 5 ? 0.6 : 0.1,
+              opacity: scrollPercent > i * 5 && scrollPercent < (i + 1) * 5 ? 0.3 : 0.05,  // Reduced opacity
               transition: 'opacity 0.3s ease'
             }}
           />
