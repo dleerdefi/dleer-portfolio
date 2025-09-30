@@ -44,11 +44,16 @@ const MobileParallaxLayout: React.FC = () => {
     { id: 'contact', title: 'Contact' }
   ];
 
-  // Track active section based on scroll
+  // Track active section based on scroll with debouncing for snap detection
   useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout;
+
     const handleScroll = () => {
       const scrollPosition = scrollRef.current?.scrollTop || 0;
       const windowHeight = window.innerHeight;
+
+      // Clear existing timeout
+      clearTimeout(scrollTimeout);
 
       // Determine which section is most visible
       sections.forEach((section, index) => {
@@ -60,11 +65,29 @@ const MobileParallaxLayout: React.FC = () => {
           }
         }
       });
+
+      // Debounce to detect when scrolling has stopped (for snap completion)
+      scrollTimeout = setTimeout(() => {
+        // Final check after scroll snap completes
+        sections.forEach((section, index) => {
+          const sectionElement = document.getElementById(`section-${section.id}`);
+          if (sectionElement) {
+            const rect = sectionElement.getBoundingClientRect();
+            // More precise check for snapped position
+            if (Math.abs(rect.top) < 50 || (index === 0 && rect.top < 100 && rect.top > -100)) {
+              setActiveSection(section.id);
+            }
+          }
+        });
+      }, 150);
     };
 
     const container = scrollRef.current;
     container?.addEventListener('scroll', handleScroll, { passive: true });
-    return () => container?.removeEventListener('scroll', handleScroll);
+    return () => {
+      container?.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
   }, []);
 
   // Keyboard navigation handlers
@@ -266,26 +289,36 @@ const MobileParallaxLayout: React.FC = () => {
 
       case 'projects':
         return (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
               Projects
             </h2>
-            <div className="grid gap-3">
-              {projects.map(project => (
+            <div className="space-y-3">
+              {projects.map((project, index) => (
                 <div
                   key={project.id}
-                  className="p-3 rounded-lg"
-                  style={{
-                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)',
-                    border: '1px solid rgba(var(--accent-color-rgb), 0.15)'
-                  }}
+                  className="group cursor-pointer"
                 >
-                  <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--theme-primary)' }}>
+                  <h3
+                    className="text-lg font-semibold mb-1 transition-colors group-hover:brightness-110"
+                    style={{ color: 'var(--theme-primary)' }}
+                  >
                     {project.name}
                   </h3>
-                  <p className="text-sm" style={{ color: 'var(--theme-text)', opacity: 0.75 }}>
+                  <p
+                    className="text-sm transition-opacity group-hover:opacity-100"
+                    style={{ color: 'var(--theme-text)', opacity: 0.8 }}
+                  >
                     {project.description}
                   </p>
+                  {index < projects.length - 1 && (
+                    <div
+                      className="mt-3 h-px"
+                      style={{
+                        background: 'linear-gradient(90deg, rgba(var(--accent-color-rgb), 0.1) 0%, rgba(var(--accent-color-rgb), 0.05) 100%)'
+                      }}
+                    />
+                  )}
                 </div>
               ))}
             </div>
@@ -294,26 +327,36 @@ const MobileParallaxLayout: React.FC = () => {
 
       case 'blog':
         return (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
               Blog
             </h2>
-            <div className="space-y-3">
-              {blogPosts.map(post => (
+            <div className="space-y-2">
+              {blogPosts.map((post, index) => (
                 <article
                   key={post.id}
-                  className="p-3 rounded-lg"
-                  style={{
-                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)',
-                    border: '1px solid rgba(var(--accent-color-rgb), 0.15)'
-                  }}
+                  className="group cursor-pointer py-2"
                 >
-                  <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--theme-primary)' }}>
+                  <h3
+                    className="text-lg font-semibold mb-1 transition-colors group-hover:brightness-110"
+                    style={{ color: 'var(--theme-primary)' }}
+                  >
                     {post.title}
                   </h3>
-                  <p className="text-sm" style={{ color: 'var(--theme-text)', opacity: 0.75 }}>
+                  <p
+                    className="text-sm transition-opacity group-hover:opacity-100"
+                    style={{ color: 'var(--theme-text)', opacity: 0.8 }}
+                  >
                     {post.excerpt}
                   </p>
+                  {index < blogPosts.length - 1 && (
+                    <div
+                      className="mt-2 h-px"
+                      style={{
+                        background: 'linear-gradient(90deg, rgba(var(--accent-color-rgb), 0.1) 0%, rgba(var(--accent-color-rgb), 0.05) 100%)'
+                      }}
+                    />
+                  )}
                 </article>
               ))}
             </div>
@@ -518,7 +561,11 @@ const MobileParallaxLayout: React.FC = () => {
           top: '28px',
           left: '28px',
           right: '28px',
-          bottom: '28px'
+          bottom: '28px',
+          scrollSnapType: 'y mandatory',
+          scrollBehavior: 'smooth',
+          overscrollBehavior: 'contain',
+          WebkitOverflowScrolling: 'touch' as any
         }}
         onScroll={(e) => {
           const target = e.target as HTMLDivElement;
@@ -530,20 +577,31 @@ const MobileParallaxLayout: React.FC = () => {
         role="main"
         aria-label="Main content"
       >
-        {/* Spacer for fixed background */}
-        <div style={{ height: '60vh' }} />
+        {/* Spacer for fixed background - also acts as snap point for Neofetch */}
+        <div
+          style={{
+            height: '60vh',
+            scrollSnapAlign: 'start',
+            scrollSnapStop: 'always'
+          }}
+        />
 
         {/* Content Sections */}
         {sections.map((section, index) => (
           <section
             key={section.id}
             id={`section-${section.id}`}
-            className="relative min-h-screen px-6 sm:px-8 md:px-12"
+            className={`relative px-6 sm:px-8 md:px-12 ${
+              section.id === 'about' ? 'min-h-screen' : 'min-h-[70vh]'
+            }`}
             style={{
               paddingTop: index === 0 ? '48px' : '48px',
               paddingBottom: '48px',
               backgroundColor: 'var(--theme-bg)',
-              zIndex: 10
+              zIndex: 10,
+              scrollSnapAlign: 'start',
+              scrollSnapStop: 'always',
+              scrollMarginTop: index === 0 ? '-60vh' : '0px' // Compensate for spacer on first section
             }}
             role="region"
             aria-label={`${section.title} section`}
