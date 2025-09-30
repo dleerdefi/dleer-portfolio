@@ -32,6 +32,7 @@ const LayoutManager: React.FC = () => {
 
   const [isStacked, setIsStacked] = React.useState(false);
   const [scrollPercent, setScrollPercent] = React.useState(0);
+  const [visibleTile, setVisibleTile] = React.useState<string>('neofetch');
 
   // Create refs at top level
   const neofetchRef = useRef<HTMLDivElement>(null);
@@ -75,6 +76,73 @@ const LayoutManager: React.FC = () => {
   useScrollToFocus<HTMLDivElement>(navigationRef, 'navigation', focusedTile, isStacked);
   useScrollToFocus<HTMLDivElement>(contentRef, 'content', focusedTile, isStacked);
   useScrollToFocus<HTMLDivElement>(themeRef, 'theme', focusedTile, isStacked);
+
+  // Track which tile is visible based on scroll position (for scroll indicator)
+  useEffect(() => {
+    if (!isStacked) return;
+
+    const handleScroll = () => {
+      const container = scrollContainerRef.current;
+      if (!container) return;
+
+      // Special check for top position (Neofetch)
+      const scrollTop = container.scrollTop;
+      if (scrollTop < 50) {  // Near the very top
+        setVisibleTile('neofetch');
+        return;
+      }
+
+      const tiles = [
+        { ref: neofetchRef, name: 'neofetch' },
+        { ref: navigationRef, name: 'navigation' },
+        { ref: contentRef, name: 'content' },
+        { ref: themeRef, name: 'theme' }
+      ];
+
+      const viewportHeight = window.innerHeight;
+      const viewportCenter = viewportHeight / 2;
+      let mostVisibleTile = null;
+      let maxVisibility = 0;
+
+      // Find the tile with the most visibility in viewport
+      for (const tile of tiles) {
+        if (tile.ref.current) {
+          const rect = tile.ref.current.getBoundingClientRect();
+
+          // Calculate how much of the tile is visible
+          const tileTop = Math.max(36, rect.top); // Account for Polybar height
+          const tileBottom = Math.min(viewportHeight, rect.bottom);
+          const visibleHeight = Math.max(0, tileBottom - tileTop);
+
+          // Calculate visibility score based on:
+          // 1. How much of tile is visible
+          // 2. How close tile center is to viewport center
+          const tileCenter = (rect.top + rect.bottom) / 2;
+          const centerDistance = Math.abs(tileCenter - viewportCenter);
+          const visibilityScore = visibleHeight - (centerDistance * 0.5);
+
+          if (visibilityScore > maxVisibility) {
+            maxVisibility = visibilityScore;
+            mostVisibleTile = tile.name;
+          }
+        }
+      }
+
+      if (mostVisibleTile) {
+        setVisibleTile(mostVisibleTile);
+      }
+    };
+
+    const container = scrollContainerRef.current;
+    container?.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Initial check
+    handleScroll();
+
+    return () => {
+      container?.removeEventListener('scroll', handleScroll);
+    };
+  }, [isStacked]);
 
   // Framer Motion animation settings
   const layoutTransition = {
@@ -172,10 +240,10 @@ const LayoutManager: React.FC = () => {
         <ScrollProgress
           scrollPercent={scrollPercent}
           sectionCount={4}  // 4 tiles in stacked mode
-          currentSection={focusedTile === 'neofetch' ? 0 :
-                         focusedTile === 'navigation' ? 1 :
-                         focusedTile === 'content' ? 2 :
-                         focusedTile === 'theme' ? 3 : 0}
+          currentSection={visibleTile === 'neofetch' ? 0 :
+                         visibleTile === 'navigation' ? 1 :
+                         visibleTile === 'content' ? 2 :
+                         visibleTile === 'theme' ? 3 : 0}
         />
 
         {/* Fixed scrollable container similar to BorderedContainer but without border */}
