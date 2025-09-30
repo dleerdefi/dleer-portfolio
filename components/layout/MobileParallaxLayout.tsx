@@ -247,53 +247,46 @@ const MobileParallaxLayout: React.FC = () => {
     switch (sectionId) {
       case 'about':
         return (
-          <div className="space-y-8">
-            {/* Intro section that was previously "home" */}
-            <div className="space-y-4">
-              <h2 className="text-4xl font-bold" style={{ color: 'var(--accent-color)' }}>
+          <div className="space-y-6">
+            {/* Combined intro and about - Most Important Content First */}
+            <div>
+              <h2 className="text-3xl font-bold mb-3" style={{ color: 'var(--accent-color)' }}>
                 {personal.title}
               </h2>
-              <p className="text-xl" style={{ color: 'var(--theme-text)', opacity: 0.95 }}>
+              <p className="text-lg mb-4" style={{ color: 'var(--theme-text)', opacity: 0.95 }}>
                 {personal.bio.short}
               </p>
-            </div>
-
-            {/* Full about section */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>
-                About Me
-              </h3>
-              <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
+              <p style={{ color: 'var(--theme-text)', opacity: 0.9, lineHeight: '1.6' }}>
                 {personal.bio.long}
               </p>
             </div>
+
+            {/* Compact Skills Display - Secondary Content */}
             {skills && skills.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold" style={{ color: 'var(--theme-info)' }}>
-                  Skills
-                </h3>
-                {skills.map((category, idx) => (
-                  <div key={idx} className="space-y-2">
-                    <h4 className="text-sm font-medium" style={{ color: 'var(--theme-text)', opacity: 0.7 }}>
-                      {category.category}
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {category.skills.map(skill => (
-                        <span
-                          key={skill}
-                          className="px-3 py-1 rounded-lg text-sm"
-                          style={{
-                            backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
-                            color: 'var(--accent-color)',
-                            border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
-                          }}
-                        >
-                          {skill}
-                        </span>
-                      ))}
+              <div
+                className="pt-4 border-t"
+                style={{ borderColor: 'rgba(var(--accent-color-rgb), 0.1)' }}
+              >
+                <h4 className="text-sm font-medium mb-3" style={{ color: 'var(--theme-info)' }}>
+                  Technical Stack
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                  {skills.map((category, idx) => (
+                    <div key={idx} className="flex flex-wrap items-baseline gap-1">
+                      <span
+                        className="font-medium"
+                        style={{ color: 'var(--theme-text-dimmed)', fontSize: '11px' }}
+                      >
+                        {category.category}:
+                      </span>
+                      <span style={{ color: 'var(--theme-text)', opacity: 0.75, fontSize: '11px' }}>
+                        {category.skills.length > 4
+                          ? `${category.skills.slice(0, 4).join(', ')} +${category.skills.length - 4}`
+                          : category.skills.join(', ')}
+                      </span>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -458,10 +451,6 @@ const MobileParallaxLayout: React.FC = () => {
                 <span style={{ color: 'var(--theme-text-dimmed)' }}>
                   {post.date}
                 </span>
-                <span style={{ color: 'var(--theme-text-dimmed)' }}>•</span>
-                <span style={{ color: 'var(--theme-text-dimmed)' }}>
-                  {post.readTime}
-                </span>
                 {post.category && (
                   <>
                     <span style={{ color: 'var(--theme-text-dimmed)' }}>•</span>
@@ -495,24 +484,6 @@ const MobileParallaxLayout: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Tags if available */}
-                {post.tags && post.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 pt-4">
-                    {post.tags.map(tag => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 rounded-full text-sm"
-                        style={{
-                          backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
-                          color: 'var(--accent-color)',
-                          border: '1px solid rgba(var(--accent-color-rgb), 0.2)'
-                        }}
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
               </div>
             </div>
           );
@@ -863,8 +834,13 @@ const MobileParallaxLayout: React.FC = () => {
           </section>
         ))}
 
-        {/* Extra padding at bottom */}
-        <div style={{ height: '10vh' }} />
+        {/* Extra padding at bottom - prevent snap */}
+        <div
+          style={{
+            height: '10vh',
+            scrollSnapAlign: 'none'  // Prevent this element from being a snap point
+          }}
+        />
       </div>
 
       {/* Scroll Progress Dots - Inside window */}
