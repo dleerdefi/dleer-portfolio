@@ -15,6 +15,12 @@ import { useParallaxScroll } from './parallax/hooks/useParallaxScroll';
 import { useSectionNavigation } from './parallax/hooks/useSectionNavigation';
 import { useParallaxKeyboard } from './parallax/hooks/useParallaxKeyboard';
 
+// Import section components
+import { ParallaxAboutSection } from './parallax/sections/ParallaxAboutSection';
+import { ParallaxProjectsSection } from './parallax/sections/ParallaxProjectsSection';
+import { ParallaxBlogSection } from './parallax/sections/ParallaxBlogSection';
+import { ParallaxContactSection } from './parallax/sections/ParallaxContactSection';
+
 const MobileParallaxLayout: React.FC = () => {
   const { theme, setThemePreset, setAccentColor } = useTheme();
   const { activeContent, setActiveContent } = useFocus();
@@ -81,429 +87,38 @@ const MobileParallaxLayout: React.FC = () => {
     }
   );
 
-  // Render content sections
+  // Render content sections using extracted components
   const renderSection = (sectionId: string) => {
     switch (sectionId) {
       case 'about':
-        return (
-          <div className="space-y-6">
-            {/* Combined intro and about - Most Important Content First */}
-            <div>
-              <h2 className="text-3xl font-bold mb-3" style={{ color: 'var(--accent-color)' }}>
-                {personal.title}
-              </h2>
-              <p className="text-lg mb-4" style={{ color: 'var(--theme-text)', opacity: 0.95 }}>
-                {personal.bio.short}
-              </p>
-              <p style={{ color: 'var(--theme-text)', opacity: 0.9, lineHeight: '1.6' }}>
-                {personal.bio.long}
-              </p>
-            </div>
-
-            {/* Compact Skills Display - Secondary Content */}
-            {skills && skills.length > 0 && (
-              <div
-                className="pt-4 border-t"
-                style={{ borderColor: 'rgba(var(--accent-color-rgb), 0.1)' }}
-              >
-                <h4 className="text-sm font-medium mb-3" style={{ color: 'var(--theme-info)' }}>
-                  Technical Stack
-                </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs">
-                  {skills.map((category, idx) => (
-                    <div key={idx} className="flex flex-wrap items-baseline gap-1">
-                      <span
-                        className="font-medium"
-                        style={{ color: 'var(--theme-text-dimmed)', fontSize: '11px' }}
-                      >
-                        {category.category}:
-                      </span>
-                      <span style={{ color: 'var(--theme-text)', opacity: 0.75, fontSize: '11px' }}>
-                        {category.skills.length > 4
-                          ? `${category.skills.slice(0, 4).join(', ')} +${category.skills.length - 4}`
-                          : category.skills.join(', ')}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        );
+        return <ParallaxAboutSection personal={personal} skills={skills} />;
 
       case 'projects':
-        // If a project is selected, show its details
-        if (selectedProject) {
-          const project = projects.find(p => p.id === selectedProject);
-          if (!project) {
-            setSelectedProject(null);
-            return null;
-          }
-
-          return (
-            <div className="space-y-4">
-              {/* Back button */}
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="flex items-center gap-2 text-sm transition-colors hover:brightness-110"
-                style={{ color: 'var(--accent-color)' }}
-              >
-                ← Back to projects
-              </button>
-
-              {/* Project details */}
-              <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
-                {project.name}
-              </h2>
-
-              <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
-                {project.description}
-              </p>
-
-              <div className="space-y-2">
-                <p>
-                  <span style={{ color: 'var(--theme-info)' }}>Tech Stack:</span>{' '}
-                  <span style={{ color: 'var(--theme-text)', opacity: 0.8 }}>
-                    {project.techStackDisplay}
-                  </span>
-                </p>
-                <p>
-                  <span style={{ color: 'var(--theme-info)' }}>Status:</span>{' '}
-                  <span
-                    className="px-2 py-1 rounded text-xs uppercase"
-                    style={{
-                      backgroundColor: project.status === 'production'
-                        ? 'rgba(var(--theme-success-rgb), 0.1)'
-                        : 'rgba(var(--theme-warning-rgb), 0.1)',
-                      color: project.status === 'production'
-                        ? 'var(--theme-success)'
-                        : 'var(--theme-warning)'
-                    }}
-                  >
-                    {project.status}
-                  </span>
-                </p>
-              </div>
-
-              {/* Links */}
-              <div className="flex gap-3 pt-2">
-                {project.github && (
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 rounded transition-all hover:brightness-110"
-                    style={{
-                      backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
-                      color: 'var(--accent-color)',
-                      border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
-                    }}
-                  >
-                    View on GitHub →
-                  </a>
-                )}
-                {project.demo && (
-                  <a
-                    href={project.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 rounded transition-all hover:brightness-110"
-                    style={{
-                      backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
-                      color: 'var(--accent-color)',
-                      border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
-                    }}
-                  >
-                    Live Demo →
-                  </a>
-                )}
-              </div>
-            </div>
-          );
-        }
-
-        // Otherwise show the project list
         return (
-          <div className="space-y-4">
-            <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
-              Projects
-            </h2>
-            <div className="space-y-3">
-              {projects.map((project, index) => (
-                <div
-                  key={project.id}
-                  className="group cursor-pointer"
-                  onClick={() => setSelectedProject(project.id)}
-                >
-                  <h3
-                    className="text-lg font-semibold mb-1 transition-colors group-hover:brightness-110"
-                    style={{ color: 'var(--theme-primary)' }}
-                  >
-                    {project.name}
-                  </h3>
-                  <p
-                    className="text-sm transition-opacity group-hover:opacity-100"
-                    style={{ color: 'var(--theme-text)', opacity: 0.8 }}
-                  >
-                    {project.description}
-                  </p>
-                  {index < projects.length - 1 && (
-                    <div
-                      className="mt-3 h-px"
-                      style={{
-                        background: 'linear-gradient(90deg, rgba(var(--accent-color-rgb), 0.1) 0%, rgba(var(--accent-color-rgb), 0.05) 100%)'
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+          <ParallaxProjectsSection
+            projects={projects}
+            selectedProject={selectedProject}
+            setSelectedProject={setSelectedProject}
+          />
         );
 
       case 'blog':
-        // If a blog post is selected, show its details
-        if (selectedBlog) {
-          const post = blogPosts.find(p => p.id === selectedBlog);
-          if (!post) {
-            setSelectedBlog(null);
-            return null;
-          }
-
-          return (
-            <div className="space-y-4">
-              {/* Back button */}
-              <button
-                onClick={() => setSelectedBlog(null)}
-                className="flex items-center gap-2 text-sm transition-colors hover:brightness-110"
-                style={{ color: 'var(--accent-color)' }}
-              >
-                ← Back to blog
-              </button>
-
-              {/* Blog post details */}
-              <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
-                {post.title}
-              </h2>
-
-              <div className="flex items-center gap-3 text-sm">
-                <span style={{ color: 'var(--theme-text-dimmed)' }}>
-                  {post.date}
-                </span>
-                {post.category && (
-                  <>
-                    <span style={{ color: 'var(--theme-text-dimmed)' }}>•</span>
-                    <span
-                      className="px-2 py-1 rounded text-xs"
-                      style={{
-                        backgroundColor: 'rgba(var(--theme-info-rgb), 0.1)',
-                        color: 'var(--theme-info)'
-                      }}
-                    >
-                      {post.category}
-                    </span>
-                  </>
-                )}
-              </div>
-
-              <div className="space-y-4" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
-                <p>{post.excerpt}</p>
-
-                {/* Placeholder for full content */}
-                <div
-                  className="p-4 rounded"
-                  style={{
-                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)',
-                    border: '1px solid rgba(var(--accent-color-rgb), 0.1)'
-                  }}
-                >
-                  <p className="text-sm italic" style={{ opacity: 0.7 }}>
-                    [Full blog content would appear here. This could be markdown content
-                    rendered with proper styling, code blocks, and other rich content.]
-                  </p>
-                </div>
-
-              </div>
-            </div>
-          );
-        }
-
-        // Otherwise show the blog list
         return (
-          <div className="space-y-4">
-            <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
-              Blog
-            </h2>
-            <div className="space-y-2">
-              {blogPosts.map((post, index) => (
-                <article
-                  key={post.id}
-                  className="group cursor-pointer py-2"
-                  onClick={() => setSelectedBlog(post.id)}
-                >
-                  <h3
-                    className="text-lg font-semibold mb-1 transition-colors group-hover:brightness-110"
-                    style={{ color: 'var(--theme-primary)' }}
-                  >
-                    {post.title}
-                  </h3>
-                  <p
-                    className="text-sm transition-opacity group-hover:opacity-100"
-                    style={{ color: 'var(--theme-text)', opacity: 0.8 }}
-                  >
-                    {post.excerpt}
-                  </p>
-                  {index < blogPosts.length - 1 && (
-                    <div
-                      className="mt-2 h-px"
-                      style={{
-                        background: 'linear-gradient(90deg, rgba(var(--accent-color-rgb), 0.1) 0%, rgba(var(--accent-color-rgb), 0.05) 100%)'
-                      }}
-                    />
-                  )}
-                </article>
-              ))}
-            </div>
-          </div>
+          <ParallaxBlogSection
+            blogPosts={blogPosts}
+            selectedBlog={selectedBlog}
+            setSelectedBlog={setSelectedBlog}
+          />
         );
 
       case 'contact':
-        const githubLink = socialLinks.find(link => link.platform === 'GitHub');
-        const linkedinLink = socialLinks.find(link => link.platform === 'LinkedIn');
-
         return (
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
-              Contact
-            </h2>
-
-            {/* Contact Form */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                console.log('Form submitted:', formData);
-                // Handle form submission here
-                alert('Message sent! (This is a demo)');
-                setFormData({ name: '', email: '', message: '' });
-              }}
-              className="space-y-4"
-            >
-              <div>
-                <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
-                  Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full rounded px-3 py-2 text-sm transition-colors"
-                  style={{
-                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
-                    color: 'var(--theme-text)',
-                    border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
-                  }}
-                  placeholder="Your name"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
-                  Email
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full rounded px-3 py-2 text-sm transition-colors"
-                  style={{
-                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
-                    color: 'var(--theme-text)',
-                    border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
-                  }}
-                  placeholder="your.email@example.com"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
-                  Message
-                </label>
-                <textarea
-                  required
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  rows={5}
-                  className="w-full rounded px-3 py-2 text-sm resize-none transition-colors"
-                  style={{
-                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
-                    color: 'var(--theme-text)',
-                    border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
-                  }}
-                  placeholder="Your message..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="px-6 py-2 rounded font-medium transition-all"
-                style={{
-                  backgroundColor: 'var(--accent-color)',
-                  color: 'var(--theme-bg)'
-                }}
-              >
-                Send Message
-              </button>
-            </form>
-
-            {/* Social Links */}
-            <div className="pt-4 border-t" style={{ borderColor: 'rgba(var(--accent-color-rgb), 0.2)' }}>
-              <h3 className="text-lg font-semibold mb-3" style={{ color: 'var(--theme-info)' }}>
-                Connect
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <span style={{ color: 'var(--theme-info)' }}>📧</span>
-                  <a
-                    href={`mailto:${personal.email}`}
-                    style={{ color: 'var(--accent-color)' }}
-                    className="hover:underline"
-                  >
-                    {personal.email}
-                  </a>
-                </div>
-                {githubLink && (
-                  <div className="flex items-center gap-3">
-                    <span style={{ color: 'var(--theme-info)' }}>🔗</span>
-                    <a
-                      href={githubLink.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: 'var(--accent-color)' }}
-                      className="hover:underline"
-                    >
-                      GitHub
-                    </a>
-                  </div>
-                )}
-                {linkedinLink && (
-                  <div className="flex items-center gap-3">
-                    <span style={{ color: 'var(--theme-info)' }}>💼</span>
-                    <a
-                      href={linkedinLink.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: 'var(--accent-color)' }}
-                      className="hover:underline"
-                    >
-                      LinkedIn
-                    </a>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          <ParallaxContactSection
+            formData={formData}
+            setFormData={setFormData}
+            socialLinks={socialLinks}
+            personal={personal}
+          />
         );
 
       default:
