@@ -28,9 +28,9 @@ export const ParallaxAboutSection: React.FC<ParallaxAboutSectionProps> = ({
   skills
 }) => {
   return (
-    <div className="space-y-6">
+    <div>
       {/* Combined intro and about - Most Important Content First */}
-      <div>
+      <div className="mb-4">
         <h2 className="text-3xl font-bold mb-3" style={{ color: 'var(--accent-color)' }}>
           {personal.title}
         </h2>

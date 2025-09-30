@@ -211,9 +211,7 @@ const MobileParallaxLayout: React.FC = () => {
           <section
             key={section.id}
             id={`section-${section.id}`}
-            className={`relative px-6 sm:px-8 md:px-12 ${
-              section.id === 'about' ? 'min-h-screen' : 'min-h-[70vh]'
-            }`}
+            className={`relative px-6 sm:px-8 md:px-12 min-h-[85vh]`}
             style={{
               paddingTop: index === 0 ? '48px' : '48px',
               paddingBottom: '48px',
@@ -221,7 +219,7 @@ const MobileParallaxLayout: React.FC = () => {
               zIndex: 10,
               scrollSnapAlign: 'start',
               scrollSnapStop: 'always',
-              scrollMarginTop: index === 0 ? '-60vh' : '0px' // Compensate for spacer on first section
+              scrollMarginTop: index === 0 ? '-55vh' : '0px' // Fine-tuned for About section visibility
             }}
             role="region"
             aria-label={`${section.title} section`}
