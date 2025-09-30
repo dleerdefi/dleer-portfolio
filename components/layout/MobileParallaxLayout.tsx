@@ -23,6 +23,8 @@ const MobileParallaxLayout: React.FC = () => {
   const [showThemePanel, setShowThemePanel] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [scrollPercent, setScrollPercent] = useState(0);
+  const [selectedProject, setSelectedProject] = useState<string | null>(null);
+  const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -98,6 +100,10 @@ const MobileParallaxLayout: React.FC = () => {
 
   // Keyboard navigation handlers
   const navigateToSection = useCallback((sectionId: string) => {
+    // Reset selections when navigating away from their sections
+    if (sectionId !== 'projects') setSelectedProject(null);
+    if (sectionId !== 'blog') setSelectedBlog(null);
+
     console.log('navigateToSection called for:', sectionId);
     const element = document.getElementById(`section-${sectionId}`);
     const container = scrollRef.current;
@@ -294,6 +300,97 @@ const MobileParallaxLayout: React.FC = () => {
         );
 
       case 'projects':
+        // If a project is selected, show its details
+        if (selectedProject) {
+          const project = projects.find(p => p.id === selectedProject);
+          if (!project) {
+            setSelectedProject(null);
+            return null;
+          }
+
+          return (
+            <div className="space-y-4">
+              {/* Back button */}
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="flex items-center gap-2 text-sm transition-colors hover:brightness-110"
+                style={{ color: 'var(--accent-color)' }}
+              >
+                ← Back to projects
+              </button>
+
+              {/* Project details */}
+              <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
+                {project.name}
+              </h2>
+
+              <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
+                {project.description}
+              </p>
+
+              <div className="space-y-2">
+                <p>
+                  <span style={{ color: 'var(--theme-info)' }}>Tech Stack:</span>{' '}
+                  <span style={{ color: 'var(--theme-text)', opacity: 0.8 }}>
+                    {project.techStackDisplay}
+                  </span>
+                </p>
+                <p>
+                  <span style={{ color: 'var(--theme-info)' }}>Status:</span>{' '}
+                  <span
+                    className="px-2 py-1 rounded text-xs uppercase"
+                    style={{
+                      backgroundColor: project.status === 'production'
+                        ? 'rgba(var(--theme-success-rgb), 0.1)'
+                        : 'rgba(var(--theme-warning-rgb), 0.1)',
+                      color: project.status === 'production'
+                        ? 'var(--theme-success)'
+                        : 'var(--theme-warning)'
+                    }}
+                  >
+                    {project.status}
+                  </span>
+                </p>
+              </div>
+
+              {/* Links */}
+              <div className="flex gap-3 pt-2">
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 rounded transition-all hover:brightness-110"
+                    style={{
+                      backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
+                      color: 'var(--accent-color)',
+                      border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
+                    }}
+                  >
+                    View on GitHub →
+                  </a>
+                )}
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 rounded transition-all hover:brightness-110"
+                    style={{
+                      backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
+                      color: 'var(--accent-color)',
+                      border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
+                    }}
+                  >
+                    Live Demo →
+                  </a>
+                )}
+              </div>
+            </div>
+          );
+        }
+
+        // Otherwise show the project list
         return (
           <div className="space-y-4">
             <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
@@ -304,6 +401,7 @@ const MobileParallaxLayout: React.FC = () => {
                 <div
                   key={project.id}
                   className="group cursor-pointer"
+                  onClick={() => setSelectedProject(project.id)}
                 >
                   <h3
                     className="text-lg font-semibold mb-1 transition-colors group-hover:brightness-110"
@@ -332,6 +430,95 @@ const MobileParallaxLayout: React.FC = () => {
         );
 
       case 'blog':
+        // If a blog post is selected, show its details
+        if (selectedBlog) {
+          const post = blogPosts.find(p => p.id === selectedBlog);
+          if (!post) {
+            setSelectedBlog(null);
+            return null;
+          }
+
+          return (
+            <div className="space-y-4">
+              {/* Back button */}
+              <button
+                onClick={() => setSelectedBlog(null)}
+                className="flex items-center gap-2 text-sm transition-colors hover:brightness-110"
+                style={{ color: 'var(--accent-color)' }}
+              >
+                ← Back to blog
+              </button>
+
+              {/* Blog post details */}
+              <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
+                {post.title}
+              </h2>
+
+              <div className="flex items-center gap-3 text-sm">
+                <span style={{ color: 'var(--theme-text-dimmed)' }}>
+                  {post.date}
+                </span>
+                <span style={{ color: 'var(--theme-text-dimmed)' }}>•</span>
+                <span style={{ color: 'var(--theme-text-dimmed)' }}>
+                  {post.readTime}
+                </span>
+                {post.category && (
+                  <>
+                    <span style={{ color: 'var(--theme-text-dimmed)' }}>•</span>
+                    <span
+                      className="px-2 py-1 rounded text-xs"
+                      style={{
+                        backgroundColor: 'rgba(var(--theme-info-rgb), 0.1)',
+                        color: 'var(--theme-info)'
+                      }}
+                    >
+                      {post.category}
+                    </span>
+                  </>
+                )}
+              </div>
+
+              <div className="space-y-4" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
+                <p>{post.excerpt}</p>
+
+                {/* Placeholder for full content */}
+                <div
+                  className="p-4 rounded"
+                  style={{
+                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)',
+                    border: '1px solid rgba(var(--accent-color-rgb), 0.1)'
+                  }}
+                >
+                  <p className="text-sm italic" style={{ opacity: 0.7 }}>
+                    [Full blog content would appear here. This could be markdown content
+                    rendered with proper styling, code blocks, and other rich content.]
+                  </p>
+                </div>
+
+                {/* Tags if available */}
+                {post.tags && post.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-4">
+                    {post.tags.map(tag => (
+                      <span
+                        key={tag}
+                        className="px-3 py-1 rounded-full text-sm"
+                        style={{
+                          backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
+                          color: 'var(--accent-color)',
+                          border: '1px solid rgba(var(--accent-color-rgb), 0.2)'
+                        }}
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        }
+
+        // Otherwise show the blog list
         return (
           <div className="space-y-4">
             <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
@@ -342,6 +529,7 @@ const MobileParallaxLayout: React.FC = () => {
                 <article
                   key={post.id}
                   className="group cursor-pointer py-2"
+                  onClick={() => setSelectedBlog(post.id)}
                 >
                   <h3
                     className="text-lg font-semibold mb-1 transition-colors group-hover:brightness-110"
