@@ -18,8 +18,7 @@ export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
 
   return (
     <div
-      className="pt-4 border-t"
-      style={{ borderColor: 'rgba(var(--accent-color-rgb), 0.1)' }}
+      className="mt-4"
     >
       <h4 className="text-sm font-medium mb-3" style={{ color: 'var(--theme-info)' }}>
         Technical Stack
