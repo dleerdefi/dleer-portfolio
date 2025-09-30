@@ -55,6 +55,12 @@ const MobileParallaxLayout: React.FC = () => {
       // Clear existing timeout
       clearTimeout(scrollTimeout);
 
+      // Check if we're at the top (Neofetch section)
+      if (scrollPosition < windowHeight * 0.4) {  // Less than 40% of viewport height
+        setActiveSection('neofetch');  // Special case for top
+        return;
+      }
+
       // Determine which section is most visible
       sections.forEach((section, index) => {
         const sectionElement = document.getElementById(`section-${section.id}`);
@@ -515,7 +521,8 @@ const MobileParallaxLayout: React.FC = () => {
       <ScrollProgress
         scrollPercent={scrollPercent}
         sectionCount={5}  // Neofetch spacer + 4 content sections
-        currentSection={activeSection === 'about' ? 1 :
+        currentSection={activeSection === 'neofetch' ? 0 :
+                       activeSection === 'about' ? 1 :
                        activeSection === 'projects' ? 2 :
                        activeSection === 'blog' ? 3 :
                        activeSection === 'contact' ? 4 : 0}
