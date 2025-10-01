@@ -3,6 +3,7 @@
 export interface PersonalInfo {
   name: string;
   username: string;
+  greeting?: string;  // Personalized greeting (e.g., "Hi, I'm David Leer")
   title: string;
   subtitle: string;
   email: string;
