@@ -1,11 +1,9 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import NeofetchTile from '@/components/tiles/NeofetchTile';
-import { useFocus } from '@/contexts/FocusContext';
-import { useTheme } from '@/contexts/ThemeContext';
-import { usePersonalInfo, useProjects, useBlogPosts, useSkills, useSocialLinks } from '@/lib/config';
+import { usePersonalInfo, useProjects, useBlogPosts, useSocialLinks } from '@/lib/config';
 import Background from '@/components/layout/Background';
 import ThemeTile from '@/components/tiles/ThemeTile';
 import ScrollProgress from '@/components/ui/ScrollProgress';
@@ -23,19 +21,16 @@ import { ParallaxBlogSection } from './parallax/sections/ParallaxBlogSection';
 import { ParallaxContactSection } from './parallax/sections/ParallaxContactSection';
 
 const MobileParallaxLayout: React.FC = () => {
-  const { theme, setThemePreset, setAccentColor } = useTheme();
-  const { activeContent, setActiveContent } = useFocus();
   const personal = usePersonalInfo();
   const projects = useProjects();
   const blogPosts = useBlogPosts();
-  const skills = useSkills();
   const socialLinks = useSocialLinks();
 
   const [showThemePanel, setShowThemePanel] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null!);
 
   // Sections for scrolling - split About into Bio and Technologies
   const sections = [
@@ -50,7 +45,6 @@ const MobileParallaxLayout: React.FC = () => {
   const {
     activeSection,
     scrollPercent,
-    scrollYProgress,
     backgroundOpacity
   } = useParallaxScroll(scrollRef, sections);
 
@@ -217,7 +211,7 @@ const MobileParallaxLayout: React.FC = () => {
           <section
             key={section.id}
             id={`section-${section.id}`}
-            className={`relative px-6 sm:px-8 md:px-12 min-h-screen flex flex-col`}
+            className={`relative min-h-screen flex flex-col`}
             style={{
               paddingTop: '48px',
               paddingBottom: '48px',
@@ -266,7 +260,7 @@ const MobileParallaxLayout: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
               viewport={{ once: false, amount: 0.3 }}
-              className="flex-1 flex flex-col justify-start max-w-4xl mx-auto w-full"
+              className="flex-1 flex flex-col justify-start max-w-4xl mx-auto w-full px-6 sm:px-8 md:px-12"
             >
               {renderSection(section.id)}
             </motion.div>
@@ -284,14 +278,6 @@ const MobileParallaxLayout: React.FC = () => {
             )}
           </section>
         ))}
-
-        {/* Extra padding at bottom - prevent snap */}
-        <div
-          style={{
-            height: '10vh',
-            scrollSnapAlign: 'none'  // Prevent this element from being a snap point
-          }}
-        />
       </div>
 
       {/* Scroll Progress Dots - Inside window */}
