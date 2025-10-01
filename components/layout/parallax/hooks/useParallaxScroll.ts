@@ -18,7 +18,7 @@ interface UseParallaxScrollReturn {
  * Handles scroll tracking, active section detection, and scroll-based animations
  */
 export function useParallaxScroll(
-  scrollRef: RefObject<HTMLDivElement | null>,
+  scrollRef: RefObject<HTMLDivElement>,
   sections: Section[]
 ): UseParallaxScrollReturn {
   const [activeSection, setActiveSection] = useState('about');

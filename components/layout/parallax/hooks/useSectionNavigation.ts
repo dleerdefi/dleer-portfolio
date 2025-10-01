@@ -21,7 +21,7 @@ interface NavigationCallbacks {
  * Handles programmatic scrolling to sections and wraparound navigation
  */
 export function useSectionNavigation(
-  scrollRef: RefObject<HTMLDivElement | null>,
+  scrollRef: RefObject<HTMLDivElement>,
   sections: Section[]
 ): UseSectionNavigationReturn {
 

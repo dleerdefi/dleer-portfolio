@@ -153,10 +153,10 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
               </div>
 
               <div className="flex gap-3" style={{ paddingTop: '32px' }}>
-                <button className="touch-target touch-feedback px-4 py-2 text-sm rounded hover:opacity-90 transition-all duration-200" style={{ backgroundColor: 'var(--accent-color)', color: 'var(--theme-bg)' }}>
+                <button className="touch-target touch-feedback px-4 py-2 text-sm rounded hover:opacity-90 transition-all duration-200 block w-auto" style={{ backgroundColor: 'var(--accent-color)', color: 'var(--theme-bg)' }}>
                   {uiStrings.buttons.viewGithub}
                 </button>
-                <button className="touch-target touch-feedback px-4 py-2 border text-sm rounded transition-all duration-200" style={{ borderColor: 'var(--accent-color)', color: 'var(--accent-color)', backgroundColor: 'transparent' }}
+                <button className="touch-target touch-feedback px-4 py-2 border text-sm rounded transition-all duration-200 block w-auto" style={{ borderColor: 'var(--accent-color)', color: 'var(--accent-color)', backgroundColor: 'transparent' }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
                   {uiStrings.buttons.liveDemo}
@@ -298,7 +298,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
               <div style={{ marginTop: '24px' }}>
                 <button
                   type="submit"
-                  className="touch-target touch-feedback px-4 py-2 text-sm rounded transition-all duration-200"
+                  className="touch-target touch-feedback px-4 py-2 text-sm rounded transition-all duration-200 block w-auto"
                   style={{
                     backgroundColor: 'var(--accent-color)',
                     color: 'var(--theme-bg)',
