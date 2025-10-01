@@ -80,6 +80,20 @@ export const portfolioConfig: PortfolioConfig = {
     }
   ],
 
+  technologies: {
+    items: [
+      { name: "Python", icon: "SiPython" },
+      { name: "TypeScript", icon: "SiTypescript" },
+      { name: "React", icon: "SiReact" },
+      { name: "Tailwind CSS", icon: "SiTailwindcss" },
+      { name: "PostgreSQL", icon: "SiPostgresql" },
+      { name: "Neo4j", icon: "SiNeo4J" },  // Fixed: capital J
+      { name: "Redis", icon: "SiRedis" },
+      { name: "Kafka", icon: "SiApachekafka" },
+      { name: "Docker", icon: "SiDocker" }
+    ]
+  },
+
   projects: [
     {
       id: "project-one",

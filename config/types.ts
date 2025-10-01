@@ -33,6 +33,16 @@ export interface SkillCategory {
   skills: string[];
 }
 
+export interface Technology {
+  name: string;
+  icon: string;         // Icon identifier from react-icons (e.g., "SiPython")
+  category?: string;    // Optional category for grouping
+}
+
+export interface TechnologiesConfig {
+  items: Technology[];
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -148,6 +158,7 @@ export interface PortfolioConfig {
   personal: PersonalInfo;
   social: SocialLink[];
   skills: SkillCategory[];
+  technologies?: TechnologiesConfig;
   projects: Project[];
   blog: BlogPost[];
   system: SystemInfo;
