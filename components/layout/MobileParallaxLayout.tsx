@@ -96,7 +96,7 @@ const MobileParallaxLayout: React.FC = () => {
         return <ParallaxBioSection personal={personal} />;
 
       case 'technologies':
-        return <ParallaxTechSection skills={skills} />;
+        return <ParallaxTechSection />;
 
       case 'projects':
         return (

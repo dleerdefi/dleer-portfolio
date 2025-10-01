@@ -1,55 +1,51 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-
-interface Skill {
-  category: string;
-  skills: string[];
-}
-
-interface ParallaxTechSectionProps {
-  skills: Skill[];
-}
+import { useTechnologies } from '@/lib/config';
+import { TechIcon } from '@/components/ui/TechIcon';
 
 /**
  * Technologies section component for parallax layout
- * Displays technical stack in a visually organized grid
+ * Displays technology logos in a clean, uniform grid
  */
-export const ParallaxTechSection: React.FC<ParallaxTechSectionProps> = ({
-  skills
-}) => {
-  // Define colors for each category
-  const categoryColors: { [key: string]: string } = {
-    'Frontend': 'var(--theme-info)',
-    'Backend': 'var(--theme-success)',
-    'Blockchain': 'var(--accent-color)',
-    'AI & Data': 'var(--theme-warning)'
-  };
+export const ParallaxTechSection: React.FC = () => {
+  const technologies = useTechnologies();
+
+  // Fallback if no technologies configured
+  if (!technologies || !technologies.items || technologies.items.length === 0) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <p style={{ color: 'var(--theme-text-dimmed)' }}>
+          Technologies section not configured
+        </p>
+      </div>
+    );
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
+        staggerChildren: 0.05
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, scale: 0.8 },
     visible: {
       opacity: 1,
-      y: 0,
+      scale: 1,
       transition: {
-        duration: 0.5,
+        duration: 0.4,
         ease: 'easeOut' as const
       }
     }
   };
 
   return (
-    <div className="h-full flex flex-col justify-center py-12">
-      <div className="max-w-4xl mx-auto w-full">
+    <div className="h-full flex flex-col justify-center py-8">
+      <div className="max-w-6xl mx-auto w-full">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -58,117 +54,47 @@ export const ParallaxTechSection: React.FC<ParallaxTechSectionProps> = ({
           className="text-center mb-12"
         >
           <h2
-            className="text-3xl sm:text-4xl font-bold mb-3"
+            className="text-3xl sm:text-4xl font-bold"
             style={{ color: 'var(--accent-color)' }}
           >
             Technologies
           </h2>
-          <p
-            className="text-sm sm:text-base"
-            style={{
-              color: 'var(--theme-text-dimmed)',
-              opacity: 0.8
-            }}
-          >
-            Technical Stack & Expertise
-          </p>
         </motion.div>
 
-        {/* Skills Grid */}
+        {/* Technology Grid - Fixed 3x3 */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.3 }}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-10"
+          viewport={{ once: false, amount: 0.2 }}
+          className="grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 justify-items-center"
         >
-          {skills.map((category, idx) => (
+          {technologies.items.map((tech, idx) => (
             <motion.div
               key={idx}
               variants={itemVariants}
-              className="relative"
             >
-              {/* Category Header */}
-              <div className="mb-4">
-                <h3
-                  className="text-lg sm:text-xl font-semibold flex items-center gap-2"
-                  style={{
-                    color: categoryColors[category.category] || 'var(--theme-primary)'
-                  }}
-                >
-                  <span
-                    className="inline-block w-2 h-2 rounded-full"
-                    style={{
-                      backgroundColor: categoryColors[category.category] || 'var(--theme-primary)',
-                      boxShadow: `0 0 8px ${categoryColors[category.category] || 'var(--theme-primary)'}`
-                    }}
-                  />
-                  {category.category}
-                </h3>
-              </div>
-
-              {/* Skills List */}
-              <div className="space-y-2 pl-4">
-                {category.skills.map((skill, skillIdx) => (
-                  <motion.div
-                    key={skillIdx}
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{
-                      duration: 0.4,
-                      delay: idx * 0.1 + skillIdx * 0.05
-                    }}
-                    className="flex items-center gap-2 text-sm sm:text-base"
-                    style={{
-                      color: 'var(--theme-text)',
-                      opacity: 0.9
-                    }}
-                  >
-                    <span
-                      style={{
-                        color: 'var(--theme-text-dimmed)',
-                        opacity: 0.5
-                      }}
-                    >
-                      ›
-                    </span>
-                    {skill}
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Decorative Line */}
-              <div
-                className="absolute -left-2 top-0 bottom-0 w-0.5"
-                style={{
-                  background: `linear-gradient(180deg,
-                    ${categoryColors[category.category] || 'var(--theme-primary)'} 0%,
-                    transparent 100%)`,
-                  opacity: 0.3
-                }}
+              <TechIcon
+                iconName={tech.icon}
+                name={tech.name}
+                size={48}
               />
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Bottom Accent */}
+        {/* Bottom Accent Line */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="mt-12 flex justify-center gap-2"
-        >
-          {skills.map((category, idx) => (
-            <div
-              key={idx}
-              className="w-12 h-1"
-              style={{
-                backgroundColor: categoryColors[category.category] || 'var(--theme-primary)',
-                opacity: 0.5
-              }}
-            />
-          ))}
-        </motion.div>
+          initial={{ opacity: 0, scaleX: 0 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="mt-12 mx-auto h-1 max-w-md"
+          style={{
+            background: 'linear-gradient(90deg, transparent, var(--accent-color), transparent)',
+            opacity: 0.4,
+            borderRadius: '2px'
+          }}
+        />
       </div>
     </div>
   );
