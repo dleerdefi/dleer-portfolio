@@ -51,7 +51,7 @@ export const ParallaxTechSection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="mb-12"
         >
           <h2
             className="text-3xl sm:text-4xl font-bold"
@@ -82,19 +82,6 @@ export const ParallaxTechSection: React.FC = () => {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Bottom Accent Line */}
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-12 mx-auto h-1 max-w-md"
-          style={{
-            background: 'linear-gradient(90deg, transparent, var(--accent-color), transparent)',
-            opacity: 0.4,
-            borderRadius: '2px'
-          }}
-        />
       </div>
     </div>
   );

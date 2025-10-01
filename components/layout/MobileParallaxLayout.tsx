@@ -266,7 +266,7 @@ const MobileParallaxLayout: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
               viewport={{ once: false, amount: 0.3 }}
-              className="flex-1 flex flex-col justify-center max-w-4xl mx-auto w-full"
+              className="flex-1 flex flex-col justify-start max-w-4xl mx-auto w-full"
             >
               {renderSection(section.id)}
             </motion.div>

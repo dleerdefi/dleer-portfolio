@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 interface PersonalInfo {
+  name: string;
+  greeting?: string;
   title: string;
   bio: {
     intro?: string;
@@ -32,9 +34,9 @@ export const ParallaxBioSection: React.FC<ParallaxBioSectionProps> = ({
   const tagline = personal.bio.tagline || '';
 
   return (
-    <div className="h-full flex flex-col justify-center py-12">
+    <div className="h-full flex flex-col justify-start pt-0 pb-12">
       <div className="max-w-3xl mx-auto w-full">
-        {/* Title */}
+        {/* Greeting Header */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -42,7 +44,7 @@ export const ParallaxBioSection: React.FC<ParallaxBioSectionProps> = ({
           className="text-3xl sm:text-4xl font-bold mb-8"
           style={{ color: 'var(--accent-color)' }}
         >
-          {personal.title}
+          {personal.greeting || `Hi, I'm ${personal.name}`}
         </motion.h2>
 
         {/* Bio Content */}

@@ -6,6 +6,7 @@ export const portfolioConfig: PortfolioConfig = {
   personal: {
     name: process.env.NEXT_PUBLIC_NAME || "Your Name",
     username: process.env.NEXT_PUBLIC_USERNAME || "username",
+    greeting: process.env.NEXT_PUBLIC_GREETING || `Hi, I'm ${process.env.NEXT_PUBLIC_NAME || "Your Name"}`,
     title: process.env.NEXT_PUBLIC_TITLE || "Founder & Software Engineer",
     subtitle: process.env.NEXT_PUBLIC_SUBTITLE || "Building next-generation AI memory systems",
     email: process.env.NEXT_PUBLIC_EMAIL || "your.email@example.com",
