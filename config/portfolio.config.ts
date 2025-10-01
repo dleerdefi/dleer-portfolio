@@ -4,9 +4,9 @@ import { PortfolioConfig } from './types';
 // Replace values with your own information
 export const portfolioConfig: PortfolioConfig = {
   personal: {
-    name: process.env.NEXT_PUBLIC_NAME || "Your Name",
-    username: process.env.NEXT_PUBLIC_USERNAME || "username",
-    greeting: process.env.NEXT_PUBLIC_GREETING || `Hi, I'm ${process.env.NEXT_PUBLIC_NAME || "Your Name"}`,
+    name: process.env.NEXT_PUBLIC_NAME || "David Leer",
+    username: process.env.NEXT_PUBLIC_USERNAME || "dleer",
+    greeting: process.env.NEXT_PUBLIC_GREETING || "Hi, I'm David Leer",
     title: process.env.NEXT_PUBLIC_TITLE || "Founder & Software Engineer",
     subtitle: process.env.NEXT_PUBLIC_SUBTITLE || "Building next-generation AI memory systems",
     email: process.env.NEXT_PUBLIC_EMAIL || "your.email@example.com",
@@ -14,7 +14,7 @@ export const portfolioConfig: PortfolioConfig = {
     bio: {
       // Structured bio for parallax sections
       intro: process.env.NEXT_PUBLIC_BIO_INTRO ||
-        "I'm David Leer, a founder and software engineer building the next generation of AI memory. My work connects Large Language Models with knowledge graphs, creating systems capable of context-aware reasoning.",
+        "A founder and software engineer building the next generation of AI memory. My work connects Large Language Models with knowledge graphs, creating systems capable of context-aware reasoning.",
 
       experience: process.env.NEXT_PUBLIC_BIO_EXPERIENCE ||
         "As Chief Product Officer of ConsumerFi, I architected the protocol's core three-layer system. I also developed proprietary agent-based simulators that modeled token economies over $300M, directly guiding strategy for foundations and market makers.",
@@ -28,7 +28,7 @@ export const portfolioConfig: PortfolioConfig = {
 
       // Legacy fields for compatibility
       short: process.env.NEXT_PUBLIC_BIO_SHORT ||
-        "I'm David Leer, a founder and software engineer building the next generation of AI memory. My work connects Large Language Models with knowledge graphs, creating systems capable of context-aware reasoning.",
+        "A founder and software engineer building the next generation of AI memory. My work connects Large Language Models with knowledge graphs, creating systems capable of context-aware reasoning.",
 
       long: process.env.NEXT_PUBLIC_BIO_LONG ||
         "As Chief Product Officer of ConsumerFi, I architected the protocol's core three-layer system. I also developed proprietary agent-based simulators that modeled token economies over $300M, directly guiding strategy for foundations and market makers.",
