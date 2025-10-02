@@ -35,6 +35,7 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
 }) => {
   const githubLink = socialLinks.find(link => link.platform === 'GitHub');
   const linkedinLink = socialLinks.find(link => link.platform === 'LinkedIn');
+  const twitterLink = socialLinks.find(link => link.platform === 'Twitter');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -181,29 +182,28 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
         className="mt-8"
       >
         <div className="flex gap-6 justify-center items-center">
-          {/* Email Icon */}
-          <a
-            href={`mailto:${personal.email}`}
-            className="transition-all hover:scale-110"
-            style={{ color: 'var(--accent-color)' }}
-            aria-label="Email"
-            title={personal.email}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          {/* Twitter/X Icon */}
+          {twitterLink && (
+            <a
+              href={twitterLink.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-all hover:scale-110"
+              style={{ color: 'var(--accent-color)' }}
+              aria-label="Twitter/X"
+              title="Twitter/X"
             >
-              <rect x="2" y="4" width="20" height="16" rx="2" />
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-            </svg>
-          </a>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+          )}
 
           {/* GitHub Icon */}
           {githubLink && (
