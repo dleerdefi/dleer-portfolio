@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { BackButton } from '../components/BackButton';
 
 interface Project {
@@ -36,21 +37,43 @@ export const ParallaxProjectsSection: React.FC<ParallaxProjectsSectionProps> = (
 
     return (
       <div className="space-y-4">
-        <BackButton
-          onClick={() => setSelectedProject(null)}
-          text="Back to projects"
-        />
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <BackButton
+            onClick={() => setSelectedProject(null)}
+            text="Back to projects"
+          />
+        </motion.div>
 
         {/* Project details */}
-        <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="text-3xl font-bold"
+          style={{ color: 'var(--accent-color)' }}
+        >
           {project.name}
-        </h2>
+        </motion.h2>
 
-        <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          style={{ color: 'var(--theme-text)', opacity: 0.9 }}
+        >
           {project.description}
-        </p>
+        </motion.p>
 
-        <div className="space-y-2">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="space-y-2"
+        >
           <p>
             <span style={{ color: 'var(--theme-info)' }}>Tech Stack:</span>{' '}
             <span style={{ color: 'var(--theme-text)', opacity: 0.8 }}>
@@ -75,10 +98,15 @@ export const ParallaxProjectsSection: React.FC<ParallaxProjectsSectionProps> = (
               </span>
             </p>
           )}
-        </div>
+        </motion.div>
 
         {/* Links */}
-        <div className="flex gap-3 pt-2">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="flex gap-3 pt-2"
+        >
           {project.github && (
             <a
               href={project.github}
@@ -109,7 +137,7 @@ export const ParallaxProjectsSection: React.FC<ParallaxProjectsSectionProps> = (
               Live Demo →
             </a>
           )}
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -117,13 +145,23 @@ export const ParallaxProjectsSection: React.FC<ParallaxProjectsSectionProps> = (
   // Otherwise show the project list
   return (
     <div className="space-y-4">
-      <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-3xl font-bold"
+        style={{ color: 'var(--accent-color)' }}
+      >
         Projects
-      </h2>
+      </motion.h2>
       <div className="space-y-3">
         {projects.map((project, index) => (
-          <div
+          <motion.div
             key={project.id}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            viewport={{ once: false, amount: 0.3 }}
             className="group cursor-pointer"
             onClick={() => setSelectedProject(project.id)}
           >
@@ -147,7 +185,7 @@ export const ParallaxProjectsSection: React.FC<ParallaxProjectsSectionProps> = (
                 }}
               />
             )}
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

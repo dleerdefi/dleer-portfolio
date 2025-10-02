@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { BackButton } from '../components/BackButton';
 
 interface BlogPost {
@@ -34,17 +35,34 @@ export const ParallaxBlogSection: React.FC<ParallaxBlogSectionProps> = ({
 
     return (
       <div className="space-y-4">
-        <BackButton
-          onClick={() => setSelectedBlog(null)}
-          text="Back to blog"
-        />
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <BackButton
+            onClick={() => setSelectedBlog(null)}
+            text="Back to blog"
+          />
+        </motion.div>
 
         {/* Blog post details */}
-        <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="text-3xl font-bold"
+          style={{ color: 'var(--accent-color)' }}
+        >
           {post.title}
-        </h2>
+        </motion.h2>
 
-        <div className="flex items-center gap-3 text-sm">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="flex items-center gap-3 text-sm"
+        >
           <span style={{ color: 'var(--theme-text-dimmed)' }}>
             {post.date}
           </span>
@@ -62,9 +80,15 @@ export const ParallaxBlogSection: React.FC<ParallaxBlogSectionProps> = ({
               </span>
             </>
           )}
-        </div>
+        </motion.div>
 
-        <div className="space-y-4" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="space-y-4"
+          style={{ color: 'var(--theme-text)', opacity: 0.9 }}
+        >
           {post.excerpt && <p>{post.excerpt}</p>}
 
           {/* Placeholder for full content */}
@@ -80,7 +104,7 @@ export const ParallaxBlogSection: React.FC<ParallaxBlogSectionProps> = ({
               rendered with proper styling, code blocks, and other rich content.]
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -88,13 +112,23 @@ export const ParallaxBlogSection: React.FC<ParallaxBlogSectionProps> = ({
   // Otherwise show the blog list
   return (
     <div className="space-y-4">
-      <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-3xl font-bold"
+        style={{ color: 'var(--accent-color)' }}
+      >
         Blog
-      </h2>
+      </motion.h2>
       <div className="space-y-2">
         {blogPosts.map((post, index) => (
-          <article
+          <motion.article
             key={post.id}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            viewport={{ once: false, amount: 0.3 }}
             className="group cursor-pointer py-2"
             onClick={() => setSelectedBlog(post.id)}
           >
@@ -120,7 +154,7 @@ export const ParallaxBlogSection: React.FC<ParallaxBlogSectionProps> = ({
                 }}
               />
             )}
-          </article>
+          </motion.article>
         ))}
       </div>
     </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 interface FormData {
   name: string;
@@ -45,13 +46,23 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)' }}>
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-3xl font-bold"
+        style={{ color: 'var(--accent-color)' }}
+      >
         Contact
-      </h2>
+      </motion.h2>
 
       {/* Contact Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
           <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
             Name
           </label>
@@ -68,9 +79,13 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
             }}
             placeholder="Your name"
           />
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
             Email
           </label>
@@ -87,9 +102,13 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
             }}
             placeholder="your.email@example.com"
           />
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
           <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
             Message
           </label>
@@ -106,33 +125,61 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
             }}
             placeholder="Your message..."
           />
-        </div>
+        </motion.div>
       </form>
 
       {/* Submit Button - Outside form to control spacing */}
-      <button
-        type="submit"
-        form="contact-form"
-        className="px-6 py-2 rounded font-medium transition-all"
-        style={{
-          backgroundColor: 'var(--accent-color)',
-          color: 'var(--theme-bg)',
-          marginTop: '24px'
-        }}
-        onClick={(e) => {
-          e.preventDefault();
-          const form = e.currentTarget.closest('div')?.querySelector('form');
-          if (form) {
-            const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-            form.dispatchEvent(submitEvent);
-          }
-        }}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        style={{ display: 'inline-block', minWidth: '150px' }}
       >
-        Send Message
-      </button>
+        <button
+          type="submit"
+          className="px-6 py-2 rounded font-medium text-sm"
+          style={{
+            backgroundColor: 'var(--accent-color)',
+            color: 'var(--theme-bg)',
+            marginTop: '24px',
+            fontWeight: '600',
+            width: '100%',
+            cursor: 'pointer',
+            border: 'none',
+            transition: 'transform 0.1s ease, opacity 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.02)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
+          onMouseDown={(e) => {
+            e.currentTarget.style.transform = 'scale(0.98)';
+          }}
+          onMouseUp={(e) => {
+            e.currentTarget.style.transform = 'scale(1.02)';
+          }}
+          onClick={(e) => {
+            e.preventDefault();
+            const form = e.currentTarget.closest('div')?.querySelector('form');
+            if (form) {
+              const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+              form.dispatchEvent(submitEvent);
+            }
+          }}
+        >
+          Send Message
+        </button>
+      </motion.div>
 
       {/* Social Links - Horizontal SVG Icons */}
-      <div className="mt-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+        className="mt-8"
+      >
         <div className="flex gap-6 justify-center items-center">
           {/* Email Icon */}
           <a
@@ -204,7 +251,7 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
             </a>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
