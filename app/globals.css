@@ -898,10 +898,10 @@ pre code {
 .gradient-dots {
   background-image: radial-gradient(transparent 1px, var(--theme-bg) 1px);
   background-size: 4px 4px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  mask: linear-gradient(0deg, black, transparent 80%);
-  -webkit-mask: linear-gradient(0deg, black, transparent 80%);
+  backdrop-filter: blur(20px) saturate(80%);
+  -webkit-backdrop-filter: blur(20px) saturate(80%);
+  mask: linear-gradient(180deg, black 0%, transparent 100%);
+  -webkit-mask: linear-gradient(180deg, black 0%, transparent 100%);
 }
 
 /* Z-index utility for content layering */
@@ -917,7 +917,7 @@ pre code {
   }
 
   .gradient-dots {
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(15px) saturate(80%);
+    -webkit-backdrop-filter: blur(15px) saturate(80%);
   }
 }
