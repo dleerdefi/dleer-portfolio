@@ -881,3 +881,43 @@ pre code {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* ================================ */
+/* Glass Elevator Effect Styles     */
+/* ================================ */
+
+/* Dotted Border Pattern */
+.dotted-border {
+  background-image: radial-gradient(transparent 1px, var(--theme-bg) 1px);
+  background-size: 4px 4px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Gradient Transition with Dots */
+.gradient-dots {
+  background-image: radial-gradient(transparent 1px, var(--theme-bg) 1px);
+  background-size: 4px 4px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  mask: linear-gradient(0deg, black, transparent 80%);
+  -webkit-mask: linear-gradient(0deg, black, transparent 80%);
+}
+
+/* Z-index utility for content layering */
+.z-2 {
+  z-index: 2;
+}
+
+/* Mobile performance optimization */
+@media (max-width: 1023px) {
+  .dotted-border {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .gradient-dots {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+}

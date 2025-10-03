@@ -32,6 +32,10 @@ const MobileParallaxLayout: React.FC = () => {
   const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null!);
 
+  // Border padding for glass elevator effect (constant 16px for mobile-only parallax)
+  // Future: When desktop parallax is added, use responsive logic (32px for ≥1024px)
+  const [borderPadding] = useState(16);
+
   // Sections for scrolling - split About into Bio and Technologies
   const sections = [
     { id: 'bio', title: 'Bio' },
@@ -141,28 +145,53 @@ const MobileParallaxLayout: React.FC = () => {
                        activeSection === 'contact' ? 5 : 0}
       />
 
-      {/* Window Border Frame - Sharp 90-degree corners */}
+      {/* Border Frame - Solid outline with accent color */}
       <div
-        className="fixed pointer-events-none z-50"
+        className="fixed pointer-events-none"
         style={{
-          top: '12px',
-          left: '12px',
-          right: '12px',
-          bottom: '12px',
+          top: `${borderPadding}px`,
+          left: `${borderPadding}px`,
+          right: `${borderPadding}px`,
+          bottom: `${borderPadding}px`,
           border: '2px solid rgba(var(--accent-color-rgb), 0.6)',
-          borderRadius: '0px', // Sharp 90-degree corners
-          boxShadow: '0 0 20px rgba(var(--accent-color-rgb), 0.2)'
+          borderRadius: '0px',
+          zIndex: 40
         }}
       />
 
-      {/* Interior Window Background - Single unified solid layer inside border */}
+      {/* Top Gradient Dots - In border frame zone for content emergence */}
+      <div
+        className="fixed gradient-dots pointer-events-none"
+        style={{
+          top: '0',
+          left: '0',
+          right: '0',
+          height: `${borderPadding}px`,
+          zIndex: 41
+        }}
+      />
+
+      {/* Bottom Gradient Dots - In border frame zone for content exit */}
+      <div
+        className="fixed gradient-dots pointer-events-none"
+        style={{
+          bottom: '0',
+          left: '0',
+          right: '0',
+          height: `${borderPadding}px`,
+          zIndex: 41,
+          transform: 'rotate(180deg)'
+        }}
+      />
+
+      {/* Interior Window Background - Provides solid backdrop */}
       <div
         className="fixed"
         style={{
-          top: '14px',     // 12px border + 2px border width
-          left: '14px',
-          right: '14px',
-          bottom: '14px',
+          top: `${borderPadding}px`,
+          left: `${borderPadding}px`,
+          right: `${borderPadding}px`,
+          bottom: `${borderPadding}px`,
           backgroundColor: 'var(--theme-bg)',
           zIndex: -1
         }}
@@ -172,17 +201,17 @@ const MobileParallaxLayout: React.FC = () => {
       <motion.div
         className="fixed flex items-center justify-center pointer-events-none"
         style={{
-          top: '14px',
-          left: '14px',
-          right: '14px',
+          top: `${borderPadding}px`,
+          left: `${borderPadding}px`,
+          right: `${borderPadding}px`,
           height: '60vh',
           opacity: backgroundOpacity,
           backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
           backdropFilter: 'blur(10px)',
-          zIndex: 0
+          zIndex: 2
         }}
       >
-        <div className="w-full max-w-4xl mx-auto px-6 sm:px-8 md:px-12" style={{ marginTop: '14px' }}>
+        <div className="w-full max-w-4xl mx-auto px-6 sm:px-8 md:px-12" style={{ marginTop: `${borderPadding}px` }}>
           <NeofetchTile isBlurred={false} />
         </div>
         <div
@@ -193,15 +222,17 @@ const MobileParallaxLayout: React.FC = () => {
         />
       </motion.div>
 
-      {/* Scrollable Content - Clips at border edge for "infinity pool" effect */}
+      {/* Scrollable Content - Container extends to viewport, padding creates border zone */}
       <div
         ref={scrollRef}
         className="fixed overflow-y-auto hide-scrollbar"
         style={{
-          top: '14px',
-          left: '14px',
-          right: '14px',
-          bottom: '14px',
+          top: '0',
+          left: '0',
+          right: '0',
+          bottom: '0',
+          padding: `${borderPadding}px`,
+          zIndex: 2,
           scrollSnapType: 'y mandatory',
           scrollBehavior: 'smooth',
           overscrollBehavior: 'contain',
@@ -213,7 +244,7 @@ const MobileParallaxLayout: React.FC = () => {
         {/* Spacer for fixed background - also acts as snap point for Neofetch */}
         <div
           style={{
-            height: 'calc(60vh + 14px)',
+            height: `calc(60vh + ${borderPadding}px)`,
             scrollSnapAlign: 'start',
             scrollSnapStop: 'always'
           }}
@@ -228,10 +259,10 @@ const MobileParallaxLayout: React.FC = () => {
             style={{
               paddingTop: '48px',
               paddingBottom: '48px',
-              paddingLeft: '14px',
-              paddingRight: '14px',
+              paddingLeft: '16px',
+              paddingRight: '16px',
               backgroundColor: 'var(--theme-bg)',
-              zIndex: 10,
+              zIndex: 2,
               scrollSnapAlign: 'start',
               scrollSnapStop: 'always',
               scrollMarginTop: '0px' // Remove negative margin for proper snap alignment
@@ -277,8 +308,8 @@ const MobileParallaxLayout: React.FC = () => {
               viewport={{ once: false, amount: 0.3 }}
               className="flex-1 flex flex-col justify-start max-w-4xl mx-auto w-full"
               style={{
-                paddingLeft: '14px',
-                paddingRight: '14px'
+                paddingLeft: `${borderPadding}px`,
+                paddingRight: `${borderPadding}px`
               }}
             >
               {renderSection(section.id)}
