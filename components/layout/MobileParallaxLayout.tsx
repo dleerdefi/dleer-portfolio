@@ -155,21 +155,34 @@ const MobileParallaxLayout: React.FC = () => {
         }}
       />
 
-      {/* Fixed Neofetch Background - Centered within window */}
+      {/* Interior Window Background - Single unified solid layer inside border */}
+      <div
+        className="fixed"
+        style={{
+          top: '14px',     // 12px border + 2px border width
+          left: '14px',
+          right: '14px',
+          bottom: '14px',
+          backgroundColor: 'var(--theme-bg)',
+          zIndex: -1
+        }}
+      />
+
+      {/* Fixed Neofetch Background - Extends to border edge */}
       <motion.div
         className="fixed flex items-center justify-center pointer-events-none"
         style={{
-          top: '28px',
-          left: '28px',
-          right: '28px',
+          top: '14px',
+          left: '14px',
+          right: '14px',
           height: '60vh',
           opacity: backgroundOpacity,
-          backgroundColor: 'rgba(var(--theme-bg-rgb), 0.9)',
+          backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
           backdropFilter: 'blur(10px)',
           zIndex: 0
         }}
       >
-        <div className="w-full max-w-4xl mx-auto px-6 sm:px-8 md:px-12">
+        <div className="w-full max-w-4xl mx-auto px-6 sm:px-8 md:px-12" style={{ marginTop: '14px' }}>
           <NeofetchTile isBlurred={false} />
         </div>
         <div
@@ -180,15 +193,15 @@ const MobileParallaxLayout: React.FC = () => {
         />
       </motion.div>
 
-      {/* Scrollable Content - Constrained within window */}
+      {/* Scrollable Content - Clips at border edge for "infinity pool" effect */}
       <div
         ref={scrollRef}
         className="fixed overflow-y-auto hide-scrollbar"
         style={{
-          top: '28px',
-          left: '28px',
-          right: '28px',
-          bottom: '28px',
+          top: '14px',
+          left: '14px',
+          right: '14px',
+          bottom: '14px',
           scrollSnapType: 'y mandatory',
           scrollBehavior: 'smooth',
           overscrollBehavior: 'contain',
@@ -200,7 +213,7 @@ const MobileParallaxLayout: React.FC = () => {
         {/* Spacer for fixed background - also acts as snap point for Neofetch */}
         <div
           style={{
-            height: '60vh',
+            height: 'calc(60vh + 14px)',
             scrollSnapAlign: 'start',
             scrollSnapStop: 'always'
           }}
@@ -215,6 +228,8 @@ const MobileParallaxLayout: React.FC = () => {
             style={{
               paddingTop: '48px',
               paddingBottom: '48px',
+              paddingLeft: '14px',
+              paddingRight: '14px',
               backgroundColor: 'var(--theme-bg)',
               zIndex: 10,
               scrollSnapAlign: 'start',
@@ -260,7 +275,11 @@ const MobileParallaxLayout: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
               viewport={{ once: false, amount: 0.3 }}
-              className="flex-1 flex flex-col justify-start max-w-4xl mx-auto w-full px-6 sm:px-8 md:px-12"
+              className="flex-1 flex flex-col justify-start max-w-4xl mx-auto w-full"
+              style={{
+                paddingLeft: '14px',
+                paddingRight: '14px'
+              }}
             >
               {renderSection(section.id)}
             </motion.div>

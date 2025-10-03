@@ -1,12 +1,71 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface BackgroundProps {
   wallpaperUrl?: string;
 }
 
+// Theme-specific background configurations
+const themeBackgrounds: Record<string, {
+  url: string;
+  overlay: string;
+  blur: string;
+  brightness: number;
+  contrast: number;
+  scale: number;
+}> = {
+  'theme-tokyo-night': {
+    url: '/images/purple-girl.webp',
+    overlay: 'rgba(26, 27, 38, 0.5)',
+    blur: '8px',
+    brightness: 0.6,
+    contrast: 1.1,
+    scale: 1.1
+  },
+  'theme-nord': {
+    url: '/images/cool_rocks.webp',
+    overlay: 'rgba(46, 52, 64, 0.5)',
+    blur: '6px',
+    brightness: 0.7,
+    contrast: 1.05,
+    scale: 1.1
+  },
+  'theme-solarized-light': {
+    url: '/images/pastel-window.webp',
+    overlay: 'rgba(253, 246, 227, 0.65)',
+    blur: '4px',
+    brightness: 0.95,
+    contrast: 0.95,
+    scale: 1.1
+  }
+};
+
 const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
+  const [currentTheme, setCurrentTheme] = useState<string>('theme-tokyo-night');
+
+  useEffect(() => {
+    // Detect current theme from document root class
+    const detectTheme = () => {
+      const root = document.documentElement;
+      const themeClass = Array.from(root.classList).find(cls => cls.startsWith('theme-'));
+      if (themeClass && themeBackgrounds[themeClass]) {
+        setCurrentTheme(themeClass);
+      }
+    };
+
+    detectTheme();
+
+    // Watch for theme changes
+    const observer = new MutationObserver(detectTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const bgConfig = themeBackgrounds[currentTheme] || themeBackgrounds['theme-tokyo-night'];
+  const activeWallpaper = wallpaperUrl || bgConfig.url;
+
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
       {/* Base gradient background - uses theme colors */}
@@ -15,19 +74,26 @@ const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
         style={{
           backgroundImage: 'linear-gradient(to bottom right, var(--theme-bg), var(--theme-surface), var(--theme-bg))'
         }}>
-        {/* Custom wallpaper layer */}
-        {wallpaperUrl && (
-          <div
-            className="absolute inset-0 opacity-40"
-            style={{
-              backgroundImage: `url(${wallpaperUrl})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              filter: 'brightness(0.7) contrast(1.1)',
-            }}
-          />
-        )}
+        {/* Theme-aware wallpaper layer with enhancements */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500"
+          style={{
+            backgroundImage: `url(${activeWallpaper})`,
+            filter: `blur(${bgConfig.blur}) brightness(${bgConfig.brightness}) contrast(${bgConfig.contrast})`,
+            transform: `scale(${bgConfig.scale})`,
+            transformOrigin: 'center',
+            opacity: 0.85
+          }}
+        />
+
+        {/* Theme-specific overlay for color integration */}
+        <div
+          className="absolute inset-0 transition-colors duration-500"
+          style={{
+            backgroundColor: bgConfig.overlay,
+            mixBlendMode: currentTheme === 'theme-solarized-light' ? 'multiply' : 'overlay'
+          }}
+        />
 
         {/* Vibrant animated gradient orbs - matching the mockup's pink/blue aesthetic */}
         <div className="background-orbs">
