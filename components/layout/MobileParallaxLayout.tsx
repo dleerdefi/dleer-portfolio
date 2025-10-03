@@ -159,7 +159,7 @@ const MobileParallaxLayout: React.FC = () => {
         }}
       />
 
-      {/* Top Gradient Dots - In border frame zone for content emergence */}
+      {/* Top Gradient Dots - In border frame only */}
       <div
         className="fixed gradient-dots pointer-events-none"
         style={{
@@ -171,7 +171,7 @@ const MobileParallaxLayout: React.FC = () => {
         }}
       />
 
-      {/* Bottom Gradient Dots - In border frame zone for content exit */}
+      {/* Bottom Gradient Dots - In border frame only */}
       <div
         className="fixed gradient-dots pointer-events-none"
         style={{
@@ -181,6 +181,19 @@ const MobileParallaxLayout: React.FC = () => {
           height: `${borderPadding}px`,
           zIndex: 41,
           transform: 'rotate(180deg)'
+        }}
+      />
+
+      {/* Solid background layer - matches interior to hide wallpaper behind dots */}
+      <div
+        className="fixed"
+        style={{
+          top: '0',
+          left: '0',
+          right: '0',
+          bottom: '0',
+          backgroundColor: 'var(--theme-bg)',
+          zIndex: -5
         }}
       />
 
@@ -301,11 +314,7 @@ const MobileParallaxLayout: React.FC = () => {
               </>
             )}
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-              viewport={{ once: false, amount: 0.3 }}
+            <div
               className="flex-1 flex flex-col justify-start max-w-4xl mx-auto w-full"
               style={{
                 paddingLeft: `${borderPadding}px`,
@@ -313,7 +322,7 @@ const MobileParallaxLayout: React.FC = () => {
               }}
             >
               {renderSection(section.id)}
-            </motion.div>
+            </div>
 
             {/* Section divider */}
             {index < sections.length - 1 && (
