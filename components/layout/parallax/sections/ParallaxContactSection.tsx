@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 
 interface FormData {
   name: string;
@@ -47,23 +46,18 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
 
   return (
     <div className="space-y-6">
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-3xl font-bold"
-        style={{ color: 'var(--accent-color)' }}
-      >
-        Contact
-      </motion.h2>
-
-      {/* Contact Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+      {/* Contact section wrapper - no glass morphism */}
+      <div className="p-8 space-y-6">
+        <h2
+          className="text-3xl font-bold"
+          style={{ color: 'var(--accent-color)' }}
         >
+          Contact
+        </h2>
+
+        {/* Contact Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
           <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
             Name
           </label>
@@ -80,13 +74,9 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
             }}
             placeholder="Your name"
           />
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
+        <div>
           <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
             Email
           </label>
@@ -103,13 +93,9 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
             }}
             placeholder="your.email@example.com"
           />
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
+        <div>
           <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
             Message
           </label>
@@ -126,16 +112,11 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
             }}
             placeholder="Your message..."
           />
-        </motion.div>
+        </div>
       </form>
 
       {/* Submit Button - Outside form to control spacing */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-        style={{ display: 'inline-block', minWidth: '150px' }}
-      >
+      <div style={{ display: 'inline-block', minWidth: '150px' }}>
         <button
           type="submit"
           className="px-6 py-2 rounded font-medium text-sm"
@@ -172,15 +153,10 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
         >
           Send Message
         </button>
-      </motion.div>
+      </div>
 
       {/* Social Links - Horizontal SVG Icons */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="mt-8"
-      >
+      <div className="mt-8">
         <div className="flex gap-6 justify-center items-center">
           {/* Twitter/X Icon */}
           {twitterLink && (
@@ -251,7 +227,8 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
             </a>
           )}
         </div>
-      </motion.div>
+      </div>
+      </div>
     </div>
   );
 };

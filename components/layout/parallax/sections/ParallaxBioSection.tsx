@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 
 interface PersonalInfo {
   name: string;
@@ -35,26 +34,21 @@ export const ParallaxBioSection: React.FC<ParallaxBioSectionProps> = ({
 
   return (
     <div className="h-full flex flex-col justify-start pt-0 pb-12">
-      <div className="max-w-3xl mx-auto w-full">
+      {/* Plain content wrapper - no glass morphism */}
+      <div className="max-w-3xl mx-auto w-full p-8 sm:p-10">
         {/* Greeting Header */}
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+        <h2
           className="text-3xl sm:text-4xl font-bold mb-8"
           style={{ color: 'var(--accent-color)' }}
         >
           {personal.greeting || `Hi, I'm ${personal.name}`}
-        </motion.h2>
+        </h2>
 
         {/* Bio Content */}
         <div className="space-y-6">
           {/* Introduction */}
           {intro && (
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+            <p
               className="text-base sm:text-lg leading-relaxed"
               style={{
                 color: 'var(--theme-text)',
@@ -62,15 +56,12 @@ export const ParallaxBioSection: React.FC<ParallaxBioSectionProps> = ({
               }}
             >
               {intro}
-            </motion.p>
+            </p>
           )}
 
           {/* Experience */}
           {experience && (
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+            <p
               className="text-sm sm:text-base leading-relaxed"
               style={{
                 color: 'var(--theme-text)',
@@ -79,15 +70,12 @@ export const ParallaxBioSection: React.FC<ParallaxBioSectionProps> = ({
               }}
             >
               {experience}
-            </motion.p>
+            </p>
           )}
 
           {/* Leadership */}
           {leadership && experience && ( // Only show if we have experience (to avoid duplication with fallback)
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+            <p
               className="text-sm sm:text-base leading-relaxed"
               style={{
                 color: 'var(--theme-text)',
@@ -96,15 +84,12 @@ export const ParallaxBioSection: React.FC<ParallaxBioSectionProps> = ({
               }}
             >
               {leadership}
-            </motion.p>
+            </p>
           )}
 
           {/* Tagline */}
           {tagline && (
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+            <p
               className="text-sm italic pt-4 border-t"
               style={{
                 color: 'var(--theme-text-dimmed)',
@@ -113,16 +98,13 @@ export const ParallaxBioSection: React.FC<ParallaxBioSectionProps> = ({
               }}
             >
               {tagline}
-            </motion.p>
+            </p>
           )}
         </div>
 
         {/* Visual accent element */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-8 h-1 origin-left"
+        <div
+          className="mt-8 h-1"
           style={{
             background: 'linear-gradient(90deg, var(--accent-color), transparent)',
             opacity: 0.4
