@@ -1,0 +1,106 @@
+/* ================================================= */
+/* Terminal Color System                            */
+/* ================================================= */
+/* Catppuccin Latte and Tokyo Night color palettes  */
+/* Terminal-specific color mappings and @theme      */
+/* ================================================= */
+
+/* Terminal Theme - Catppuccin Latte + Tokyo Night Hybrid */
+:root {
+  /* Catppuccin Latte Base (for light/warm elements) */
+  --latte-base: #eff1f5;
+  --latte-mantle: #e6e9ef;
+  --latte-crust: #dce0e8;
+  --latte-surface0: #ccd0da;
+  --latte-surface1: #bcc0cc;
+  --latte-surface2: #acb0be;
+  --latte-text: #4c4f69;
+  --latte-subtext: #6c6f85;
+  --latte-overlay: #9ca0b0;
+
+  /* Tokyo Night Deep Tones (for tile backgrounds) */
+  --tokyo-bg: #1a1b26;
+  --tokyo-bg-dark: #16161e;
+  --tokyo-bg-highlight: #292e42;
+  --tokyo-terminal-black: #414868;
+  --tokyo-fg: #c0caf5;
+  --tokyo-fg-dark: #a9b1d6;
+  --tokyo-fg-gutter: #3b4261;
+  --tokyo-comment: #565f89;
+
+  /* Tokyo Night Vibrant Accents */
+  --tokyo-blue: #7aa2f7;
+  --tokyo-blue-bright: #89b4fa;
+  --tokyo-cyan: #7dcfff;
+  --tokyo-cyan-bright: #89dceb;
+  --tokyo-green: #9ece6a;
+  --tokyo-green-bright: #a6e3a1;
+  --tokyo-magenta: #bb9af7;
+  --tokyo-magenta-bright: #cba6f7;
+  --tokyo-red: #f7768e;
+  --tokyo-red-bright: #f38ba8;
+  --tokyo-yellow: #e0af68;
+  --tokyo-orange: #ff9e64;
+
+    /* RGBA Values for Transparency - Will use RGB values from theme */
+  --tile-bg-solid: rgba(var(--theme-bg-rgb), 1);
+  --tile-bg-transparent: rgba(var(--theme-bg-rgb), 0.6);
+  --tile-bg-semi: rgba(var(--theme-bg-rgb), 0.8);
+  --tile-border-default: rgba(var(--accent-color-rgb), 0.3);
+  --tile-border-active: rgba(var(--accent-color-rgb), 0.8);
+  --text-on-dark: rgba(var(--theme-text), 0.95);
+  --text-on-dark-dim: rgba(var(--theme-text), 0.7);
+
+  /* Applied Theme Variables - Now using new theme system */
+  --term-bg: var(--theme-bg);
+  --term-bg-alt: var(--theme-bg);
+  --term-surface: var(--theme-surface);
+  --term-surface-alt: var(--theme-surface);
+  --term-border: var(--theme-border);
+  --term-text: var(--theme-text);
+  --term-text-dim: var(--theme-text-dimmed);
+  --term-text-bright: var(--theme-text);
+  --term-accent: var(--accent-color);
+  --term-accent-alt: var(--theme-success);
+  --term-purple: var(--tokyo-magenta);
+  --term-orange: var(--tokyo-orange);
+  --term-red: var(--theme-error);
+  --term-cyan: var(--theme-info);
+  --term-yellow: var(--theme-warning);
+
+  /* UI elements */
+  --border: var(--theme-border);
+  --code-bg: var(--theme-bg);
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+
+  /* Typography */
+  --font-size-base: 14px;
+  --line-height-base: 1.6;
+  --letter-spacing: 0.025em;
+}
+
+@theme inline {
+  --color-term-bg: var(--term-bg);
+  --color-term-bg-alt: var(--term-bg-alt);
+  --color-term-surface: var(--term-surface);
+  --color-term-surface-alt: var(--term-surface-alt);
+  --color-term-border: var(--term-border);
+
+  --color-term-text: var(--term-text);
+  --color-term-text-dim: var(--term-text-dim);
+  --color-term-text-bright: var(--term-text-bright);
+
+  --color-term-accent: var(--term-accent);
+  --color-term-accent-alt: var(--term-accent-alt);
+  --color-term-purple: var(--term-purple);
+  --color-term-orange: var(--term-orange);
+  --color-term-red: var(--term-red);
+  --color-term-cyan: var(--term-cyan);
+  --color-term-yellow: var(--term-yellow);
+
+  --color-border: var(--border);
+  --color-code-bg: var(--code-bg);
+
+  --font-mono: "JetBrains Mono", "Fira Code", "IBM Plex Mono", monospace;
+}
