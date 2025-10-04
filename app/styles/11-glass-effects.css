@@ -1,0 +1,74 @@
+/* ================================================= */
+/* Glass Effects & Visual Enhancements              */
+/* ================================================= */
+/* Glass morphism, gradient dots, scrollbar hiding, */
+/* and visual layer effects                         */
+/* ================================================= */
+
+/* Glass Morphism Effects */
+.glass-tile {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.glass-tile-clear {
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+}
+
+/* ================================ */
+/* No Scrollbar Utility */
+/* ================================ */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar,
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar,
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* ================================ */
+/* Glass Elevator Effect Styles     */
+/* ================================ */
+
+/* Dotted Border Pattern */
+.dotted-border {
+  background-image: radial-gradient(transparent 1px, var(--theme-bg) 1px);
+  background-size: 4px 4px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Gradient Transition with Dots */
+.gradient-dots {
+  background-image: radial-gradient(transparent 1px, var(--theme-bg) 1px);
+  background-size: 4px 4px;
+  backdrop-filter: blur(20px) saturate(80%);
+  -webkit-backdrop-filter: blur(20px) saturate(80%);
+  mask: linear-gradient(180deg, black 0%, transparent 100%);
+  -webkit-mask: linear-gradient(180deg, black 0%, transparent 100%);
+}
+
+/* Z-index utility for content layering */
+.z-2 {
+  z-index: 2;
+}
+
+/* Mobile performance optimization */
+@media (max-width: 1023px) {
+  .dotted-border {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .gradient-dots {
+    backdrop-filter: blur(15px) saturate(80%);
+    -webkit-backdrop-filter: blur(15px) saturate(80%);
+  }
+}

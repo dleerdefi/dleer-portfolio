@@ -1,0 +1,78 @@
+/* ================================================= */
+/* Terminal UI Components                           */
+/* ================================================= */
+/* Terminal cursor, prompt styles, file listings,   */
+/* and ASCII box drawing utilities                  */
+/* ================================================= */
+
+/* Terminal-style cursor */
+.cursor {
+  display: inline-block;
+  width: 0.5ch;
+  height: 1.2em;
+  background: var(--term-accent);
+  animation: blink 1s ease-in-out infinite;
+}
+
+/* Terminal prompt */
+.prompt::before {
+  content: "$ ";
+  color: var(--term-accent);
+  font-weight: bold;
+}
+
+.prompt-alt::before {
+  content: "❯ ";
+  color: var(--term-accent-alt);
+  font-weight: bold;
+}
+
+/* File listing styles */
+.file-list {
+  font-family: "JetBrains Mono", monospace;
+  line-height: 1.8;
+}
+
+.file-list-item {
+  display: block;
+  padding: 0.25rem 0;
+  transition: all 150ms ease;
+}
+
+.file-list-item:hover {
+  background: var(--term-surface);
+  padding-left: 1ch;
+}
+
+.file-list-number {
+  color: var(--term-text-dim);
+  margin-right: 1ch;
+}
+
+.file-list-icon {
+  color: var(--term-accent-alt);
+  margin-right: 1ch;
+}
+
+/* Terminal window styles removed - components deleted */
+
+/* ASCII box drawing */
+.box-top {
+  border-top: 1px solid var(--term-text-dim);
+  border-top-style: dashed;
+}
+
+.box-bottom {
+  border-bottom: 1px solid var(--term-text-dim);
+  border-bottom-style: dashed;
+}
+
+.box-left {
+  border-left: 1px solid var(--term-text-dim);
+  border-left-style: dashed;
+}
+
+.box-right {
+  border-right: 1px solid var(--term-text-dim);
+  border-right-style: dashed;
+}
