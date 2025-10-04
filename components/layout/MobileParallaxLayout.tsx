@@ -159,7 +159,7 @@ const MobileParallaxLayout: React.FC = () => {
         }}
       />
 
-      {/* Top Gradient Dots - In border frame only */}
+      {/* Top Border Glass Effect - Single Layer (kyrre.dev style) */}
       <div
         className="fixed gradient-dots pointer-events-none"
         style={{
@@ -167,11 +167,11 @@ const MobileParallaxLayout: React.FC = () => {
           left: '0',
           right: '0',
           height: `${borderPadding}px`,
-          zIndex: 41
+          zIndex: 40
         }}
       />
 
-      {/* Bottom Gradient Dots - In border frame only */}
+      {/* Bottom Border Glass Effect - Single Layer (kyrre.dev style) */}
       <div
         className="fixed gradient-dots pointer-events-none"
         style={{
@@ -179,8 +179,8 @@ const MobileParallaxLayout: React.FC = () => {
           left: '0',
           right: '0',
           height: `${borderPadding}px`,
-          zIndex: 41,
-          transform: 'rotate(180deg)'
+          transform: 'rotate(180deg)',
+          zIndex: 40
         }}
       />
 
