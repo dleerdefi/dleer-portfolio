@@ -14,6 +14,12 @@ npm run build
 
 # Start production server
 npm run start
+
+# Clean up dev server processes (useful after crashes)
+npm run cleanup
+
+# Auto-cleanup before dev (configured in package.json)
+npm run dev  # automatically runs cleanup first
 ```
 
 **Note**: No lint or typecheck scripts are currently configured in package.json. Consider adding:
@@ -27,10 +33,31 @@ This is a **Next.js 15.5.4** portfolio application with App Router, designed as 
 ### Core Structure
 - **Framework**: Next.js 15+ with App Router and Turbopack
 - **Styling**: Tailwind CSS v4 (using @tailwindcss/postcss)
+  - **CSS Architecture**: Modular CSS with 11 focused stylesheets
+  - **Organization**: Each module under 200 LOC for maintainability
 - **TypeScript**: Strict mode enabled with path aliases (@/* mapped to root)
 - **Fonts**: Geist and Geist Mono from next/font/google, JetBrains Mono
 - **Theme**: Dynamic theme system with Tokyo Night, Nord, and Solarized Light presets
 - **State Management**: React Context API for theme and focus management
+
+### CSS Architecture
+
+The application uses a modular CSS architecture with styles split into 11 focused modules:
+
+#### Module Structure (`app/styles/`)
+1. **01-theme-variables.css** (182 lines) - Theme presets & CSS custom properties
+2. **02-theme-effects.css** (49 lines) - Theme-specific visual effects & transitions
+3. **03-fonts.css** (29 lines) - JetBrains Mono @font-face declarations
+4. **04-terminal-theme.css** (103 lines) - Terminal color system & mappings
+5. **05-base.css** (70 lines) - CSS reset, base styles & container utilities
+6. **06-typography.css** (72 lines) - Links, headings, code blocks
+7. **07-terminal-ui.css** (75 lines) - Terminal UI components & ASCII box drawing
+8. **08-animations.css** (72 lines) - Keyframes & animation utilities
+9. **09-utilities.css** (102 lines) - Responsive, spacing & touch utilities
+10. **10-mobile.css** (133 lines) - Mobile-specific optimizations & safe areas
+11. **11-glass-effects.css** (71 lines) - Glass morphism & visual effects
+
+The main `app/globals.css` file imports all modules in the correct cascade order.
 
 ### Current Implementation
 
@@ -225,6 +252,8 @@ The theme system uses CSS variables that update based on the selected preset:
 2. **Spacing Debugging**: Use browser inspector to verify padding/margin application
 3. **Mobile Testing**: Use responsive mode to test tabbed interface
 4. **Performance**: Keep animations smooth with transform/opacity only
+5. **CSS Changes**: When modifying styles, identify the correct module in `app/styles/`
+6. **Module Size**: Keep individual CSS modules under 200 LOC for maintainability
 
 ### Recent Improvements
 
@@ -246,6 +275,20 @@ As part of preparing the codebase for open source release, major technical debt 
    - Single component implementation instead of dual variants
    - Cleaner import structure
    - Better maintainability for contributors
+
+#### CSS Modularization (Completed)
+Successfully refactored the monolithic 923 LOC globals.css:
+
+1. **Improved Organization**:
+   - Split into 11 focused modules by concern
+   - Average module size: ~87 lines
+   - Largest module: 182 lines (well under 300 LOC target)
+
+2. **Benefits Achieved**:
+   - Easier to locate and modify specific styles
+   - Better git diffs and merge conflict resolution
+   - Improved collaboration with clear module boundaries
+   - No functional changes - identical styling output
 
 ### Future Enhancements (Planned)
 - [ ] MDX blog system integration

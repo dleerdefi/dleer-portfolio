@@ -246,7 +246,6 @@ const MobileParallaxLayout: React.FC = () => {
           bottom: '0',
           padding: `${borderPadding}px`,
           zIndex: 2,
-          scrollSnapType: 'y mandatory',
           scrollBehavior: 'smooth',
           overscrollBehavior: 'contain',
           WebkitOverflowScrolling: 'touch' as any
@@ -254,12 +253,10 @@ const MobileParallaxLayout: React.FC = () => {
         role="main"
         aria-label="Main content"
       >
-        {/* Spacer for fixed background - also acts as snap point for Neofetch */}
+        {/* Spacer for fixed background */}
         <div
           style={{
-            height: `calc(60vh + ${borderPadding}px)`,
-            scrollSnapAlign: 'start',
-            scrollSnapStop: 'always'
+            height: `calc(60vh + ${borderPadding}px)`
           }}
         />
 
@@ -276,9 +273,7 @@ const MobileParallaxLayout: React.FC = () => {
               paddingRight: '16px',
               backgroundColor: 'var(--theme-bg)',
               zIndex: 2,
-              scrollSnapAlign: 'start',
-              scrollSnapStop: 'always',
-              scrollMarginTop: '0px' // Remove negative margin for proper snap alignment
+              scrollMarginTop: '0px'
             }}
             role="region"
             aria-label={`${section.title} section`}
