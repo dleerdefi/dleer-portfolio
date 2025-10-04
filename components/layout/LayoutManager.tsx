@@ -252,7 +252,6 @@ const LayoutManager: React.FC = () => {
           className="fixed inset-0 overflow-y-auto hide-scrollbar"
           style={{
             scrollBehavior: 'smooth',
-            scrollSnapType: 'y mandatory',
             overscrollBehavior: 'contain',
             WebkitOverflowScrolling: 'touch' as any
           }}
@@ -275,8 +274,6 @@ const LayoutManager: React.FC = () => {
                 <div
                   ref={neofetchRef}
                   style={{
-                    scrollSnapAlign: 'start',
-                    scrollSnapStop: 'always',
                     scrollMarginTop: '36px' // Account for sticky Polybar height
                   }}
                 >
@@ -308,8 +305,6 @@ const LayoutManager: React.FC = () => {
                 <div
                   ref={navigationRef}
                   style={{
-                    scrollSnapAlign: 'start',
-                    scrollSnapStop: 'always',
                     scrollMarginTop: '36px' // Account for sticky Polybar height
                   }}
                 >
@@ -341,8 +336,6 @@ const LayoutManager: React.FC = () => {
                 <div
                   ref={contentRef}
                   style={{
-                    scrollSnapAlign: 'start',
-                    scrollSnapStop: 'always',
                     scrollMarginTop: '36px' // Account for sticky Polybar height
                   }}
                 >
@@ -377,8 +370,6 @@ const LayoutManager: React.FC = () => {
                 <div
                   ref={themeRef}
                   style={{
-                    scrollSnapAlign: 'start',
-                    scrollSnapStop: 'always',
                     scrollMarginTop: '36px' // Account for sticky Polybar height
                   }}
                 >
