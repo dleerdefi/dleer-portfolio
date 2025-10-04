@@ -63,10 +63,7 @@ export const TechIcon: React.FC<TechIconProps> = ({
           width: `${size + 48}px`,
           height: `${size + 48}px`,
           padding: '24px',
-          border: '1px solid rgba(var(--theme-text-rgb), 0.1)',
-          borderRadius: '12px',
-          backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)',
-          backdropFilter: 'blur(8px)'
+          borderRadius: '12px'
         }}
       >
         {/* Icon */}

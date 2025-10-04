@@ -289,22 +289,28 @@ const MobileParallaxLayout: React.FC = () => {
                 <div
                   className="absolute top-0 left-0 right-0"
                   style={{
-                    height: '1px',
-                    background: 'linear-gradient(90deg, transparent 5%, rgba(var(--accent-color-rgb), 0.4) 50%, transparent 95%)',
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent 5%, rgba(var(--accent-color-rgb), 0.6) 50%, transparent 95%)',
+                    boxShadow: `
+                      0 0 20px rgba(var(--accent-color-rgb), 0.4),
+                      0 0 40px rgba(var(--accent-color-rgb), 0.2)
+                    `,
                     zIndex: 1
                   }}
                 />
-                {/* Dot gradient transition from Neofetch to content */}
+                {/* Dot gradient transition from Neofetch to content with backdrop blur */}
                 <div
                   className="absolute left-0 right-0"
                   style={{
                     top: '-75px',
                     height: '75px',
                     background: `
-                      radial-gradient(circle at 1px 1px, rgba(var(--theme-bg-rgb), 0.5) 0.8px, transparent 0.8px)
+                      radial-gradient(circle at 1px 1px, rgba(var(--accent-color-rgb), 0.3) 0.8px, transparent 0.8px)
                     `,
                     backgroundSize: '3px 3px',
                     backgroundPosition: '0 0',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
                     maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)',
                     WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)',
                     zIndex: 2,
@@ -329,9 +335,12 @@ const MobileParallaxLayout: React.FC = () => {
               <div
                 className="absolute bottom-0 left-0 right-0"
                 style={{
-                  height: '2px',
-                  background: 'linear-gradient(90deg, transparent 10%, rgba(var(--accent-color-rgb), 0.5) 50%, transparent 90%)',
-                  boxShadow: '0 0 10px rgba(var(--accent-color-rgb), 0.2)'
+                  height: '1px',
+                  background: 'linear-gradient(90deg, transparent 10%, rgba(var(--accent-color-rgb), 0.3) 50%, transparent 90%)',
+                  boxShadow: `
+                    0 0 10px rgba(var(--accent-color-rgb), 0.2),
+                    0 0 20px rgba(var(--accent-color-rgb), 0.1)
+                  `
                 }}
               />
             )}
