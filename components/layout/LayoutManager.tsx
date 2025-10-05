@@ -292,7 +292,7 @@ const LayoutManager: React.FC = () => {
                     }}
                     onClick={() => setFocusedTile('neofetch')}
                   >
-                    <NeofetchTile isBlurred={focusedTile !== 'neofetch'} />
+                    <NeofetchTile isBlurred={focusedTile !== 'neofetch'} layout="tile" />
                   </motion.div>
                 </div>
 
@@ -457,7 +457,7 @@ const LayoutManager: React.FC = () => {
                   }}
                   onClick={() => setFocusedTile('neofetch')}
                 >
-                  <NeofetchTile isBlurred={focusedTile !== 'neofetch'} />
+                  <NeofetchTile isBlurred={focusedTile !== 'neofetch'} layout="tile" />
                 </motion.div>
 
                 {/* Bottom Section - Split Navigation and Theme */}

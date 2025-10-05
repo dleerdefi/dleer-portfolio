@@ -185,14 +185,39 @@ Summary of key points and takeaways from the article.`
   ],
 
   system: {
-    os: "Arch Linux",
-    kernel: "6.16.7-arch1-1",
-    uptime: "2 days, 4 hours",
-    shell: "zsh 5.9",
-    terminal: "alacritty",
-    cpu: "AMD Ryzen 9 5900X (24) @ 3.7GHz",
-    gpu: "NVIDIA GeForce RTX 3080",
-    memory: "32GB DDR4 @ 3600MHz"
+    github: {
+      platform: "GitHub",
+      username: process.env.NEXT_PUBLIC_GITHUB_HANDLE || "dleerdefi",
+      url: process.env.NEXT_PUBLIC_GITHUB_URL || "https://github.com/dleerdefi"
+    },
+    twitter: {
+      platform: "X",
+      username: process.env.NEXT_PUBLIC_TWITTER_HANDLE || "@dleer_defi",
+      url: process.env.NEXT_PUBLIC_TWITTER_URL || "https://x.com/dleer_defi",
+      followers: process.env.NEXT_PUBLIC_TWITTER_FOLLOWERS || "22,000 Followers"
+    },
+    linkedin: {
+      platform: "LinkedIn",
+      username: process.env.NEXT_PUBLIC_LINKEDIN_HANDLE || "dleer",
+      url: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://linkedin.com/in/dleer"
+    },
+    youtube: {
+      platform: "YouTube",
+      username: process.env.NEXT_PUBLIC_YOUTUBE_HANDLE || "@dleer_defi",
+      url: process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://youtube.com/@dleer_defi"
+    },
+    instagram: {
+      platform: "Instagram",
+      username: process.env.NEXT_PUBLIC_INSTAGRAM_HANDLE || "feralchef5",
+      url: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://instagram.com/feralchef5",
+      followers: process.env.NEXT_PUBLIC_INSTAGRAM_STATS || "5M views"
+    },
+    tiktok: {
+      platform: "TikTok",
+      username: process.env.NEXT_PUBLIC_TIKTOK_HANDLE || "feralchef5",
+      url: process.env.NEXT_PUBLIC_TIKTOK_URL || "https://tiktok.com/@feralchef5",
+      followers: process.env.NEXT_PUBLIC_TIKTOK_STATS || "3M views"
+    }
   },
 
   seo: {
