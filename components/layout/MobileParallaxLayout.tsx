@@ -217,8 +217,12 @@ const MobileParallaxLayout: React.FC = () => {
           zIndex: 2
         }}
       >
-        <div className="w-full max-w-4xl mx-auto px-6 sm:px-8 md:px-12" style={{ marginTop: `${borderPadding}px` }}>
-          <NeofetchTile isBlurred={false} />
+        <div className="w-full max-w-4xl mx-auto" style={{
+          marginTop: `${borderPadding}px`,
+          paddingLeft: '48px',
+          paddingRight: '48px'
+        }}>
+          <NeofetchTile isBlurred={false} layout="parallax" />
         </div>
         <div
           className="absolute inset-x-0 bottom-0 h-32"
@@ -286,19 +290,17 @@ const MobileParallaxLayout: React.FC = () => {
                     zIndex: 1
                   }}
                 />
-                {/* Dot gradient transition from Neofetch to content with backdrop blur */}
+                {/* Dot gradient transition from Neofetch to content */}
                 <div
                   className="absolute left-0 right-0"
                   style={{
                     top: '-75px',
                     height: '75px',
-                    background: `
-                      radial-gradient(circle at 1px 1px, rgba(var(--accent-color-rgb), 0.3) 0.8px, transparent 0.8px)
-                    `,
+                    backgroundImage: `radial-gradient(circle at 1px 1px, rgba(var(--accent-color-rgb), 0.3) 0.8px, transparent 0.8px)`,
                     backgroundSize: '3px 3px',
                     backgroundPosition: '0 0',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
+                    backdropFilter: 'blur(4px)',
+                    WebkitBackdropFilter: 'blur(4px)',
                     maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)',
                     WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)',
                     zIndex: 2,

@@ -69,15 +69,31 @@ export interface BlogPost {
   content?: string;
 }
 
+export interface SocialInfo {
+  platform: string;
+  username: string;
+  url: string;
+  followers?: string;  // Optional follower count or stats
+}
+
 export interface SystemInfo {
-  os: string;
-  kernel: string;
-  shell: string;
-  terminal: string;
-  cpu: string;
-  gpu: string;
-  memory: string;
-  [key: string]: string; // Allow custom fields
+  // Social links as objects
+  github?: SocialInfo;
+  twitter?: SocialInfo;
+  linkedin?: SocialInfo;
+  youtube?: SocialInfo;
+  instagram?: SocialInfo;
+  tiktok?: SocialInfo;
+
+  // Legacy support (for backward compatibility)
+  os?: string | SocialInfo;
+  terminal?: string | SocialInfo;
+  kernel?: string | SocialInfo;
+  cpu?: string | SocialInfo;
+  memory?: string | SocialInfo;
+  gpu?: string | SocialInfo;
+  shell?: string;
+  [key: string]: string | SocialInfo | undefined; // Allow custom fields
 }
 
 export interface NavigationSection {

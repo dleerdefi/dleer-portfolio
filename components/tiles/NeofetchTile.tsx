@@ -6,9 +6,10 @@ import { usePersonalInfo, useSystemInfo } from '@/lib/config';
 
 interface NeofetchTileProps {
   isBlurred?: boolean;
+  layout?: 'tile' | 'parallax';
 }
 
-const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
+const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout = 'tile' }) => {
   const [windowWidth, setWindowWidth] = useState(1024);
   const personal = usePersonalInfo();
   const system = useSystemInfo();
@@ -35,13 +36,25 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
     asciiArt = minimalLogo;
   }
 
+  // Determine gap and font sizes based on layout
+  const gapClass = layout === 'parallax' ? 'gap-6 sm:gap-8 md:gap-10' : 'gap-4 sm:gap-6 md:gap-8';
+  const asciiFontSize = layout === 'parallax' ?
+    (logoType === 'dleer' ? 'clamp(0.55rem, 1.2vw, 0.85rem)' : 'clamp(0.5rem, 1.7vw, 0.8rem)') :
+    (logoType === 'dleer' ? 'clamp(0.45rem, 1vw, 0.65rem)' : 'clamp(0.4rem, 1.5vw, 0.7rem)');
+  const infoFontSize = layout === 'parallax' ? 'clamp(0.75rem, 1.7vw, 0.95rem)' : 'clamp(0.65rem, 1.5vw, 0.85rem)';
+
   return (
-    <div className={`flex gap-2 sm:gap-3 md:gap-4 font-mono text-xs transition-all duration-300`}
+    <div className={`flex ${gapClass} font-mono text-xs transition-all duration-300 w-full`}
       style={{
         color: isBlurred ? 'rgba(var(--theme-text-rgb), 0.7)' : 'var(--theme-text)'
       }}>
       {/* ASCII Art Column */}
-      <div className="flex-shrink-0 flex items-start overflow-hidden" style={{ width: logoType === 'dleer' ? 'auto' : '40%' }}>
+      <div className="flex-shrink-0"
+        style={{
+          width: logoType === 'dleer' ? 'auto' : (layout === 'parallax' ? '40%' : '35%'),
+          minWidth: logoType === 'dleer' ? 'auto' : '120px',
+          maxWidth: logoType === 'dleer' ? 'auto' : '200px'
+        }}>
         <pre
           className={`leading-tight transition-all duration-300`}
           style={{
@@ -50,8 +63,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
             padding: 0,
             border: 'none',
             margin: 0,
-            fontSize: logoType === 'dleer' ? 'clamp(0.45rem, 1vw, 0.6rem)' : 'clamp(0.35rem, 1.5vw, 0.65rem)',
-            overflow: 'auto',
+            fontSize: asciiFontSize,
             whiteSpace: 'pre'
           }}
         >
@@ -73,25 +85,105 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false }) => {
           }}>---------------</div>
         </div>
 
-        <div className="space-y-0" style={{ fontSize: 'clamp(0.6rem, 1.3vw, 0.75rem)' }}>
-          <div>
-            <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>OS</span>: {system.os}
-          </div>
-          <div>
-            <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>Terminal</span>: {system.terminal}
-          </div>
-          <div>
-            <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>Kernel</span>: {system.kernel}
-          </div>
-          <div>
-            <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>Shell</span>: {system.shell}
-          </div>
-          <div>
-            <span className={`font-bold transition-all duration-300`} style={{ color: 'var(--accent-color)' }}>CPU</span>: {system.cpu}
-          </div>
-          <div>
-            <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>Memory</span>: {system.memory}
-          </div>
+        <div className="space-y-1" style={{ fontSize: infoFontSize }}>
+          {/* GitHub */}
+          {system.github && (
+            <div>
+              <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>{system.github.platform}</span>:{' '}
+              <a
+                href={system.github.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline transition-colors duration-200"
+                style={{ color: 'var(--theme-text)' }}
+              >
+                {system.github.username}
+              </a>
+            </div>
+          )}
+
+          {/* Twitter/X */}
+          {system.twitter && (
+            <div>
+              <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>{system.twitter.platform}</span>:{' '}
+              <a
+                href={system.twitter.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline transition-colors duration-200"
+                style={{ color: 'var(--theme-text)' }}
+              >
+                {system.twitter.username}
+              </a>
+              {system.twitter.followers && <span style={{ color: 'rgba(var(--theme-text-dimmed), 0.8)' }}> ({system.twitter.followers})</span>}
+            </div>
+          )}
+
+          {/* LinkedIn */}
+          {system.linkedin && (
+            <div>
+              <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>{system.linkedin.platform}</span>:{' '}
+              <a
+                href={system.linkedin.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline transition-colors duration-200"
+                style={{ color: 'var(--theme-text)' }}
+              >
+                {system.linkedin.username}
+              </a>
+            </div>
+          )}
+
+          {/* YouTube */}
+          {system.youtube && (
+            <div>
+              <span className={`font-bold transition-all duration-300`} style={{ color: 'var(--accent-color)' }}>{system.youtube.platform}</span>:{' '}
+              <a
+                href={system.youtube.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline transition-colors duration-200"
+                style={{ color: 'var(--theme-text)' }}
+              >
+                {system.youtube.username}
+              </a>
+            </div>
+          )}
+
+          {/* Instagram */}
+          {system.instagram && (
+            <div>
+              <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>{system.instagram.platform}</span>:{' '}
+              <a
+                href={system.instagram.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline transition-colors duration-200"
+                style={{ color: 'var(--theme-text)' }}
+              >
+                {system.instagram.username}
+              </a>
+              {system.instagram.followers && <span style={{ color: 'rgba(var(--theme-text-dimmed), 0.8)' }}> ({system.instagram.followers})</span>}
+            </div>
+          )}
+
+          {/* TikTok */}
+          {system.tiktok && (
+            <div>
+              <span className={`font-bold transition-all duration-300`} style={{ color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' }}>{system.tiktok.platform}</span>:{' '}
+              <a
+                href={system.tiktok.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline transition-colors duration-200"
+                style={{ color: 'var(--theme-text)' }}
+              >
+                {system.tiktok.username}
+              </a>
+              {system.tiktok.followers && <span style={{ color: 'rgba(var(--theme-text-dimmed), 0.8)' }}> ({system.tiktok.followers})</span>}
+            </div>
+          )}
 
           <div className="pt-1 flex gap-1">
             <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--theme-bg)'}}></span>
