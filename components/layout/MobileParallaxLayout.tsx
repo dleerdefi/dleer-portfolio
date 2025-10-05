@@ -136,13 +136,6 @@ const MobileParallaxLayout: React.FC = () => {
       {/* Custom scrollbar positioned outside window frame */}
       <ScrollProgress
         scrollPercent={scrollPercent}
-        sectionCount={6}  // Neofetch spacer + 5 content sections
-        currentSection={activeSection === 'neofetch' ? 0 :
-                       activeSection === 'bio' ? 1 :
-                       activeSection === 'technologies' ? 2 :
-                       activeSection === 'projects' ? 3 :
-                       activeSection === 'blog' ? 4 :
-                       activeSection === 'contact' ? 5 : 0}
       />
 
       {/* Border Frame - Solid outline with accent color */}
@@ -153,7 +146,7 @@ const MobileParallaxLayout: React.FC = () => {
           left: `${borderPadding}px`,
           right: `${borderPadding}px`,
           bottom: `${borderPadding}px`,
-          border: '2px solid rgba(var(--accent-color-rgb), 0.6)',
+          border: '2px solid var(--accent-color)',
           borderRadius: '0px',
           zIndex: 40
         }}
