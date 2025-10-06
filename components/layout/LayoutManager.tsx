@@ -13,6 +13,8 @@ import ScrollProgress from '@/components/ui/ScrollProgress';
 import { useFocus, ContentType as FocusContentType } from '@/contexts/FocusContext';
 import { useScrollToFocus } from '@/hooks/useFocus';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useView } from '@/contexts/ViewContext';
+import FocusedView from '@/components/layout/FocusedView';
 
 // Bridge the content types
 type ContentType = FocusContentType;
@@ -29,6 +31,7 @@ const LayoutManager: React.FC = () => {
   } = useFocus();
 
   const { theme } = useTheme();
+  const { mode, enterFullscreen } = useView();
 
   const [isStacked, setIsStacked] = React.useState(false);
   const [scrollPercent, setScrollPercent] = React.useState(0);
@@ -276,7 +279,7 @@ const LayoutManager: React.FC = () => {
                     layout
                     layoutId="tile-neofetch"
                     transition={layoutTransition}
-                    className={`rounded-lg shadow-xl border ${
+                    className={`shadow-xl border ${
                       focusedTile === 'neofetch' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                     }`}
                     initial={{
@@ -285,7 +288,7 @@ const LayoutManager: React.FC = () => {
                     animate={{
                       backgroundColor: getTileOpacity('neofetch', focusedTile === 'neofetch'),
                       backdropFilter: 'blur(8px)',
-                      borderRadius: '8px',
+                      borderRadius: '0px',
                       padding: '24px',
                       marginBottom: '8px',
                       willChange: 'background-color'
@@ -307,7 +310,7 @@ const LayoutManager: React.FC = () => {
                     layout
                     layoutId="tile-navigation"
                     transition={layoutTransition}
-                    className={`rounded-lg shadow-xl border ${
+                    className={`shadow-xl border ${
                       focusedTile === 'navigation' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                     }`}
                     initial={{
@@ -316,7 +319,7 @@ const LayoutManager: React.FC = () => {
                     animate={{
                       backgroundColor: getTileOpacity('navigation', focusedTile === 'navigation'),
                       backdropFilter: 'blur(8px)',
-                      borderRadius: '8px',
+                      borderRadius: '0px',
                       padding: '24px',
                       marginBottom: '8px',
                       willChange: 'background-color'
@@ -338,7 +341,7 @@ const LayoutManager: React.FC = () => {
                     layout
                     layoutId="tile-content"
                     transition={layoutTransition}
-                    className={`rounded-lg shadow-xl border ${
+                    className={`shadow-xl border ${
                       focusedTile === 'content' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                     }`}
                     initial={{
@@ -349,7 +352,7 @@ const LayoutManager: React.FC = () => {
                         ? getContentTileOpacity().focused
                         : getContentTileOpacity().unfocused,
                       backdropFilter: 'blur(8px)',
-                      borderRadius: '8px',
+                      borderRadius: '0px',
                       padding: '24px',
                       marginBottom: '8px',
                       minHeight: '400px',
@@ -372,7 +375,7 @@ const LayoutManager: React.FC = () => {
                     layout
                     layoutId="tile-theme"
                     transition={layoutTransition}
-                    className={`rounded-lg shadow-xl border ${
+                    className={`shadow-xl border ${
                       focusedTile === 'theme' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                     }`}
                     initial={{
@@ -381,7 +384,7 @@ const LayoutManager: React.FC = () => {
                     animate={{
                       backgroundColor: getTileOpacity('theme', focusedTile === 'theme'),
                       backdropFilter: 'blur(8px)',
-                      borderRadius: '8px',
+                      borderRadius: '0px',
                       padding: '24px',
                       marginBottom: '8px',
                       minHeight: '300px',
@@ -429,8 +432,20 @@ const LayoutManager: React.FC = () => {
   return (
     <>
       <Background />
-      <div className="h-screen overflow-hidden relative flex flex-col">
-        <Polybar onNavigate={handlePolybarNavigate} />
+      <motion.div
+        className="h-screen overflow-hidden relative flex flex-col"
+        animate={{
+          opacity: mode !== 'tiled' ? 0.25 : 1,
+          filter: mode !== 'tiled' ? 'blur(6px)' : 'blur(0px)'
+        }}
+        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <motion.div
+          animate={{ opacity: mode === 'zen' ? 0 : mode === 'fullscreen' ? 0.6 : 1 }}
+          transition={{ duration: 0.16 }}
+        >
+          <Polybar onNavigate={handlePolybarNavigate} />
+        </motion.div>
         <div className="flex-1 overflow-hidden" style={{ padding: '12px' }}>
           <LayoutGroup>
             <motion.div className="h-full flex" style={{ gap: '12px' }}>
@@ -441,7 +456,7 @@ const LayoutManager: React.FC = () => {
                   layout
                   layoutId="tile-neofetch"
                   transition={layoutTransition}
-                  className={`h-2/5 rounded-lg shadow-xl border overflow-hidden ${
+                  className={`h-2/5 shadow-xl border overflow-hidden ${
                     focusedTile === 'neofetch' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                   }`}
                   initial={{
@@ -450,7 +465,7 @@ const LayoutManager: React.FC = () => {
                   animate={{
                     backgroundColor: getTileOpacity('neofetch', focusedTile === 'neofetch'),
                     backdropFilter: 'blur(12px)',
-                    borderRadius: '10px',
+                    borderRadius: '0px',
                     borderWidth: '1px',
                     padding: '24px',
                     willChange: 'background-color'
@@ -467,7 +482,7 @@ const LayoutManager: React.FC = () => {
                     layout
                     layoutId="tile-navigation"
                     transition={layoutTransition}
-                    className={`rounded-lg shadow-xl border overflow-auto ${
+                    className={`shadow-xl border overflow-auto ${
                       focusedTile === 'navigation' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                     }`}
                     initial={{
@@ -477,7 +492,7 @@ const LayoutManager: React.FC = () => {
                       backgroundColor: getTileOpacity('navigation', focusedTile === 'navigation'),
                       flex: '0 0 calc(70% - 6px)',
                       backdropFilter: 'blur(12px)',
-                      borderRadius: '10px',
+                      borderRadius: '0px',
                       borderWidth: '1px',
                       borderColor: focusedTile === 'navigation' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
                       padding: '24px',
@@ -494,7 +509,7 @@ const LayoutManager: React.FC = () => {
                     layout
                     layoutId="tile-theme"
                     transition={layoutTransition}
-                    className={`rounded-lg shadow-xl border overflow-hidden ${
+                    className={`shadow-xl border overflow-hidden ${
                       focusedTile === 'theme' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                     }`}
                     initial={{
@@ -504,7 +519,7 @@ const LayoutManager: React.FC = () => {
                       backgroundColor: getTileOpacity('theme', focusedTile === 'theme'),
                       flex: '0 0 calc(30% - 6px)',
                       backdropFilter: 'blur(12px)',
-                      borderRadius: '10px',
+                      borderRadius: '0px',
                       borderWidth: '1px',
                       padding: '12px',
                       willChange: 'background-color'
@@ -521,7 +536,7 @@ const LayoutManager: React.FC = () => {
                 layout
                 layoutId="tile-content"
                 transition={layoutTransition}
-                className={`rounded-lg shadow-xl border overflow-auto ${
+                className={`shadow-xl border overflow-auto ${
                   focusedTile === 'content' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                 }`}
                 initial={{
@@ -532,7 +547,7 @@ const LayoutManager: React.FC = () => {
                     ? getContentTileOpacity().focused
                     : getContentTileOpacity().unfocused,
                   backdropFilter: 'blur(12px)',
-                  borderRadius: '10px',
+                  borderRadius: '0px',
                   borderWidth: '1px',
                   padding: '24px',
                   willChange: 'background-color',
@@ -545,7 +560,10 @@ const LayoutManager: React.FC = () => {
             </motion.div>
           </LayoutGroup>
         </div>
-      </div>
+      </motion.div>
+
+      {/* Focused View for fullscreen and zen modes */}
+      <FocusedView />
     </>
   );
 };

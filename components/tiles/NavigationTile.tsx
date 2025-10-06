@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useFocusState, useFocusNavigation, ContentType } from '@/contexts/FocusContext';
 import { useProjects, useBlogPosts, useUIStrings } from '@/lib/config';
+import { useView } from '@/contexts/ViewContext';
 
 interface NavigationTileProps {
   onContentSelect?: (content: ContentType) => void;
@@ -13,6 +14,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
   const [expandedDirs, setExpandedDirs] = useState<Set<string>>(new Set());
   const { activeContent } = useFocusState();
   const { handleContentNavigation } = useFocusNavigation();
+  const { enterFullscreen } = useView();
   const projects = useProjects();
   const blogs = useBlogPosts();
   const uiStrings = useUIStrings();
@@ -21,11 +23,28 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
     // Prevent event from bubbling up to tile container
     e?.stopPropagation();
 
+    // First update the content in FocusContext
     if (onContentSelect) {
       onContentSelect(content);
     } else {
       handleContentNavigation(content);
     }
+
+    // Then trigger fullscreen for immersive sections (per spec)
+    if (content.type === 'project') {
+      // Projects open directly to fullscreen
+      enterFullscreen('projects', content.data);
+    } else if (content.type === 'blog') {
+      // Blog posts open directly to fullscreen
+      enterFullscreen('blog', content.data);
+    } else if (content.type === 'projects-overview') {
+      // Projects overview also opens to fullscreen
+      enterFullscreen('projects');
+    } else if (content.type === 'blog-overview') {
+      // Blog overview also opens to fullscreen
+      enterFullscreen('blog');
+    }
+    // About stays in tiled mode (no fullscreen trigger)
   };
 
   const toggleDir = (dir: string) => {

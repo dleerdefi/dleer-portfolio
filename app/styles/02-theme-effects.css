@@ -6,7 +6,8 @@
 /* ================================================= */
 
 /* Theme-specific tile effects */
-.theme-tokyo-night .rounded-lg {
+/* Sharp tile borders for authentic tiling WM aesthetic */
+.theme-tokyo-night .border {
   box-shadow: 0 0 0 1px rgba(122, 162, 247, 0.1);
 }
 
@@ -15,7 +16,7 @@
               0 0 20px -5px rgba(187, 154, 247, 0.1);
 }
 
-.theme-nord .rounded-lg {
+.theme-nord .border {
   box-shadow: 0 0 0 1px rgba(129, 161, 193, 0.12);
 }
 
@@ -24,7 +25,7 @@
               0 0 20px -5px rgba(136, 192, 208, 0.1);
 }
 
-.theme-solarized-light .rounded-lg {
+.theme-solarized-light .border {
   box-shadow: 0 0 0 1px rgba(211, 54, 130, 0.15);
 }
 

@@ -40,7 +40,7 @@ const BorderedContainer: React.FC<BorderedContainerProps> = ({ children, onScrol
           right: '8px',
           bottom: '8px',
           border: '2px solid var(--accent-color)',
-          borderRadius: '8px',
+          borderRadius: '0px',
           opacity: 0.8
         }}
       />

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useFocusState } from '@/contexts/FocusContext';
+import { useWindowManager } from '@/contexts/WindowManagerContext';
 
 interface PolybarProps {
   onNavigate: (section: string) => void;
@@ -10,6 +11,7 @@ interface PolybarProps {
 const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
   const [time, setTime] = useState<Date | null>(null);
   const { activeContent } = useFocusState();
+  const { state: wmState, setLayoutMode } = useWindowManager();
 
   useEffect(() => {
     // Set initial time after mount to avoid hydration mismatch
@@ -73,6 +75,62 @@ const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
 
         {/* Right Section */}
         <div className="flex items-center gap-3">
+          {/* Layout Mode Indicator */}
+          <div className="hidden md:flex items-center gap-1">
+            <button
+              onClick={() => setLayoutMode('tiled')}
+              className="px-2 py-0.5 text-xs transition-all"
+              style={{
+                backgroundColor: wmState.layoutMode === 'tiled' ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
+                color: wmState.layoutMode === 'tiled' ? 'var(--accent-color)' : 'var(--color-text-dimmed)',
+                border: '1px solid',
+                borderColor: wmState.layoutMode === 'tiled' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)'
+              }}
+              title="Tiled Layout (Ctrl+1)"
+            >
+              ◫◫
+            </button>
+            <button
+              onClick={() => setLayoutMode('monocle')}
+              className="px-2 py-0.5 text-xs transition-all"
+              style={{
+                backgroundColor: wmState.layoutMode === 'monocle' ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
+                color: wmState.layoutMode === 'monocle' ? 'var(--accent-color)' : 'var(--color-text-dimmed)',
+                border: '1px solid',
+                borderColor: wmState.layoutMode === 'monocle' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)'
+              }}
+              title="Monocle Layout (Ctrl+2)"
+            >
+              ◻
+            </button>
+            <button
+              onClick={() => setLayoutMode('focus')}
+              className="px-2 py-0.5 text-xs transition-all"
+              style={{
+                backgroundColor: wmState.layoutMode === 'focus' ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
+                color: wmState.layoutMode === 'focus' ? 'var(--accent-color)' : 'var(--color-text-dimmed)',
+                border: '1px solid',
+                borderColor: wmState.layoutMode === 'focus' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)'
+              }}
+              title="Focus Layout (Ctrl+3)"
+            >
+              ◉
+            </button>
+            <button
+              onClick={() => setLayoutMode('zen')}
+              className="px-2 py-0.5 text-xs transition-all"
+              style={{
+                backgroundColor: wmState.layoutMode === 'zen' ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
+                color: wmState.layoutMode === 'zen' ? 'var(--accent-color)' : 'var(--color-text-dimmed)',
+                border: '1px solid',
+                borderColor: wmState.layoutMode === 'zen' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)'
+              }}
+              title="Zen Mode (Ctrl+4)"
+            >
+              ☰
+            </button>
+          </div>
+          <span className="hidden md:inline" style={{ color: 'var(--color-text-dimmed)' }}>|</span>
           <span style={{ color: 'var(--color-text-body)' }}>
             {time ? time.toLocaleTimeString('en-US', {
               hour: '2-digit',

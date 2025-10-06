@@ -71,8 +71,8 @@
   /* UI elements */
   --border: var(--theme-border);
   --code-bg: var(--theme-bg);
-  --border-radius: 8px;
-  --border-radius-lg: 12px;
+  --border-radius: 0px;
+  --border-radius-lg: 0px;
 
   /* Typography */
   --font-size-base: 14px;

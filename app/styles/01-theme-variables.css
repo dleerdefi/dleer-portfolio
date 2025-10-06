@@ -49,6 +49,11 @@
   /* User-selectable accent color (overrides accent-1 when custom) */
   --accent-color: var(--color-accent-1);
   --accent-color-rgb: var(--color-accent-1-rgb);
+
+  /* Fullscreen/Zen mode border radius (parallax-style: sharp corners) */
+  --r-tiled: 0px;
+  --r-fs: 0px;
+  --r-zen: 0px;
 }
 
 /* Theme Presets - Per Specification */
