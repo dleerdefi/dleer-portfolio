@@ -325,7 +325,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
             <p className="text-sm" style={{ color: 'var(--theme-text)' }}>
               A collection of my recent work and open-source contributions.
             </p>
-            <div className="grid gap-4">
+            <div className="space-y-4">
               {projectsConfig.map((project) => {
                 // Transform project to match navigation format
                 const projectData = {
@@ -347,23 +347,16 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                 return (
                   <div
                     key={project.id}
-                    className="border rounded-lg transition-all duration-200 cursor-pointer hover:shadow-lg"
-                    style={{
-                      padding: '24px',
-                      borderColor: 'var(--theme-border)',
-                      backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '12px'
-                    }}
+                    className="border-b pb-4 transition-colors cursor-pointer"
+                    style={{ borderColor: 'var(--theme-border)', opacity: 0.3 }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.borderColor = 'var(--accent-color)';
-                      e.currentTarget.style.backgroundColor = 'rgba(var(--theme-surface-rgb), 0.5)';
-                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(var(--accent-color-rgb), 0.15)';
+                      e.currentTarget.style.opacity = '0.8';
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(var(--accent-color-rgb), 0.15)';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.borderColor = 'var(--theme-border)';
-                      e.currentTarget.style.backgroundColor = 'rgba(var(--theme-surface-rgb), 0.3)';
+                      e.currentTarget.style.opacity = '0.3';
                       e.currentTarget.style.boxShadow = 'none';
                     }}
                     onClick={(e) => {
@@ -371,22 +364,18 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                       onNavigate?.({ type: 'project', data: projectData });
                     }}
                   >
-                    <h3 className="font-bold text-base" style={{ color: 'var(--theme-success)', marginBottom: '8px' }}>{project.name}</h3>
-                    <p className="text-sm leading-relaxed" style={{ color: 'var(--theme-text)', opacity: 0.9, marginBottom: '12px' }}>{project.description}</p>
-                    <div className="flex gap-2 flex-wrap" style={{ marginTop: 'auto' }}>
+                    <h3 className="font-bold text-base mb-2" style={{ color: 'var(--theme-success)' }}>{project.name}</h3>
+                    <p className="text-sm mb-3" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>{project.description}</p>
+                    <div className="flex gap-2 flex-wrap">
                       {project.techStack.slice(0, 3).map((tech, idx) => (
                         <span
                           key={idx}
-                          className="text-xs rounded border"
+                          className="text-xs"
                           style={{
-                            padding: '4px 8px',
-                            color: 'var(--theme-info)',
-                            backgroundColor: 'var(--theme-surface)',
-                            borderColor: 'var(--theme-border)',
-                            opacity: 0.8
+                            color: 'var(--accent-color)'
                           }}
                         >
-                          {tech}
+                          {tech}{idx < Math.min(2, project.techStack.length - 1) ? ' •' : ''}
                         </span>
                       ))}
                     </div>
