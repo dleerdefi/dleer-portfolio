@@ -22,7 +22,7 @@ export const ParallaxTechSection: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col justify-between py-12">
-      <div className="max-w-6xl mx-auto w-full space-y-24">
+      <div className="max-w-6xl mx-auto w-full" style={{ display: 'flex', flexDirection: 'column', gap: '6rem' }}>
         {/* Plain text header - no container */}
         <h2
           className="text-3xl sm:text-4xl font-bold"

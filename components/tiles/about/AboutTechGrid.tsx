@@ -15,9 +15,9 @@ export const AboutTechGrid: React.FC = () => {
 
   return (
     <div
-      className="mt-32 pt-16 border-t"
       style={{
-        borderColor: 'rgba(var(--accent-color-rgb), 0.2)',
+        marginTop: '2rem',
+        paddingTop: '1rem',
         opacity: 1
       }}
     >
