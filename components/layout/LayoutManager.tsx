@@ -43,6 +43,21 @@ const LayoutManager: React.FC = () => {
     return () => window.removeEventListener('resize', checkLayout);
   }, []);
 
+  // Handle Tab key navigation for desktop tiled layout
+  useEffect(() => {
+    // Only add Tab handler for desktop (not mobile parallax)
+    if (!isStacked) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          handleTabNavigation(e.shiftKey);
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [handleTabNavigation, isStacked]);
+
   // Framer Motion animation settings
   const layoutTransition = {
     type: "spring" as const,
