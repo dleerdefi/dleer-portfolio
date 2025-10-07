@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useFocusState, ContentType } from '@/contexts/FocusContext';
 import { usePersonalInfo, useProjects, useBlogPosts, useSkills, useUIStrings } from '@/lib/config';
+import { AboutTechGrid } from './about/AboutTechGrid';
 
 interface ContentViewerProps {
   onNavigate?: (content: ContentType) => void;
@@ -64,36 +65,43 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
             <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>{uiStrings.headers.about}</h1>
 
             <div className="space-y-4" style={{ color: 'var(--theme-text)' }}>
-              <p className="leading-relaxed">
-                {personal.bio.long.split('\\n\\n')[0]}
-              </p>
-
-              <p className="leading-relaxed">
-                {personal.bio.long.split('\\n\\n')[1]}
-              </p>
-
-              <div className="grid grid-cols-2 gap-8 mt-6">
-                {skills.slice(0, 2).map((skillCategory, index) => (
-                  <div key={skillCategory.category}>
-                    <h2 className="font-bold mb-3" style={{ color: index === 0 ? 'var(--theme-success)' : 'var(--accent-color)' }}>
-                      {skillCategory.category}
-                    </h2>
-                    <ul className="space-y-1 text-sm" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
-                      {skillCategory.skills.map(skill => (
-                        <li key={skill}>• {skill}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-6 pt-6 border-t" style={{ borderColor: 'var(--theme-border)', opacity: 0.3 }}>
-                <h2 className="font-bold mb-3" style={{ color: 'var(--theme-warning)' }}>{uiStrings.headers.currentFocus}</h2>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
-                  {personal.bio.currentFocus ||
-                    "Continuously learning and exploring new technologies to build better software and create exceptional user experiences."}
+              {/* Introduction */}
+              {personal.bio.intro && (
+                <p className="leading-relaxed">
+                  {personal.bio.intro}
                 </p>
-              </div>
+              )}
+
+              {/* Experience */}
+              {personal.bio.experience && (
+                <p className="leading-relaxed" style={{ opacity: 0.95 }}>
+                  {personal.bio.experience}
+                </p>
+              )}
+
+              {/* Leadership */}
+              {personal.bio.leadership && (
+                <p className="leading-relaxed" style={{ opacity: 0.9 }}>
+                  {personal.bio.leadership}
+                </p>
+              )}
+
+              {/* Tagline */}
+              {personal.bio.tagline && (
+                <p
+                  className="text-sm italic pt-4 border-t"
+                  style={{
+                    color: 'var(--theme-text-dimmed)',
+                    borderColor: 'rgba(var(--accent-color-rgb), 0.2)',
+                    opacity: 0.8
+                  }}
+                >
+                  {personal.bio.tagline}
+                </p>
+              )}
+
+              {/* Technology Icons Grid */}
+              <AboutTechGrid />
             </div>
           </div>
         );
