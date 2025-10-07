@@ -47,18 +47,22 @@
 
 /* kyrre.dev-style glass diffusion for top/bottom borders */
 .gradient-dots {
-  /* Dense dot pattern with SOLID color (like kyrre.dev) */
+  /* Inverted: dots are TRANSPARENT, background matches page */
+  /* Only visible when content scrolls through */
   background-image: radial-gradient(
-    transparent 1px,
-    var(--theme-bg) 1px
+    var(--theme-bg) 1px,
+    transparent 1px
   );
   background-size: 4px 4px;
 
-  /* Minimal blur - just 4px like kyrre.dev uses */
+  /* Minimal blur for glass effect */
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 
-  /* Simple approach without complex masks */
+  /* Mask gradient for smooth fade (top/bottom borders) */
+  mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
+
   pointer-events: none;
   z-index: 40;
 }

@@ -245,7 +245,8 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
               backgroundColor: 'var(--theme-surface)',
               boxShadow: mode === 'zen'
                 ? '0 20px 40px rgba(0,0,0,0.25)'
-                : 'none'
+                : 'none',
+              zIndex: 2  // Content at z-2, borders at z-40 for elevator effect
             }}
             onMouseMove={(e) => {
               // Detect edge hover for exit affordance
