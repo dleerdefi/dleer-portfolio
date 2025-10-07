@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useTheme } from '@/contexts/ThemeContext';
 
 interface BackgroundProps {
@@ -45,6 +46,7 @@ const themeBackgrounds: Record<string, {
 const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
   const { theme } = useTheme();
   const [currentTheme, setCurrentTheme] = useState<string>('theme-tokyo-night');
+  const [displayedWallpaper, setDisplayedWallpaper] = useState<string | null>(null);
 
   useEffect(() => {
     // Detect current theme from document root class
@@ -71,6 +73,24 @@ const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
   const activeWallpaper = wallpaperUrl || theme.backgroundImage || bgConfig.url;
   const showWallpaper = theme.backgroundImage !== null || wallpaperUrl !== undefined;
 
+  // Smooth View Transitions API for background changes (desktop only)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const isDesktop = window.innerWidth >= 1024;
+    const hasViewTransitions = 'startViewTransition' in document;
+
+    if (isDesktop && hasViewTransitions && displayedWallpaper !== activeWallpaper) {
+      // Use View Transitions API for buttery smooth crossfade
+      (document as any).startViewTransition(() => {
+        setDisplayedWallpaper(activeWallpaper);
+      });
+    } else {
+      // Fallback for mobile or unsupported browsers
+      setDisplayedWallpaper(activeWallpaper);
+    }
+  }, [activeWallpaper, displayedWallpaper]);
+
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
       {/* Base gradient background - uses theme colors */}
@@ -80,17 +100,29 @@ const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
           backgroundImage: 'linear-gradient(to bottom right, var(--theme-bg), var(--theme-surface), var(--theme-bg))'
         }}>
         {/* Theme-aware wallpaper layer with enhancements - only shown if not NONE */}
-        {showWallpaper && (
+        {showWallpaper && displayedWallpaper && (
           <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500"
+            className="absolute inset-0 transition-opacity duration-500"
             style={{
-              backgroundImage: `url(${activeWallpaper})`,
-              filter: `blur(${bgConfig.blur}) brightness(${bgConfig.brightness}) contrast(${bgConfig.contrast})`,
-              transform: `scale(${bgConfig.scale})`,
-              transformOrigin: 'center',
-              opacity: 0.85
-            }}
-          />
+              opacity: 0.85,
+              viewTransitionName: 'background-wallpaper'
+            } as React.CSSProperties}
+          >
+            <Image
+              src={displayedWallpaper}
+              alt="Background wallpaper"
+              fill
+              priority
+              quality={85}
+              sizes="100vw"
+              style={{
+                objectFit: 'cover',
+                filter: `blur(${bgConfig.blur}) brightness(${bgConfig.brightness}) contrast(${bgConfig.contrast})`,
+                transform: `scale(${bgConfig.scale})`,
+                transformOrigin: 'center'
+              }}
+            />
+          </div>
         )}
 
         {/* Theme-specific overlay for color integration - only shown with wallpaper */}

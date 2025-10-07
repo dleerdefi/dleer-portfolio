@@ -49,3 +49,31 @@
 :not(.bg-effect-enabled) .background-orbs {
   display: none;
 }
+
+/* View Transitions API - Desktop only (smooth background crossfades) */
+@media (min-width: 1024px) {
+  ::view-transition-old(background-wallpaper),
+  ::view-transition-new(background-wallpaper) {
+    animation-duration: 350ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Smooth crossfade effect */
+  ::view-transition-old(background-wallpaper) {
+    animation-name: fade-out-view-transition;
+  }
+
+  ::view-transition-new(background-wallpaper) {
+    animation-name: fade-in-view-transition;
+  }
+}
+
+@keyframes fade-out-view-transition {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fade-in-view-transition {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

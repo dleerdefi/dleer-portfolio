@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import Image from 'next/image';
 import { useTheme, themeBackgrounds } from '@/contexts/ThemeContext';
 
 interface BackgroundTileProps {
@@ -15,6 +16,11 @@ const BackgroundTile: React.FC<BackgroundTileProps> = ({ isBlurred = false }) =>
   const currentIndex = theme.backgroundImage === null
     ? -1 // "NONE" option
     : currentBackgrounds.indexOf(theme.backgroundImage);
+
+  // Helper function to convert full image path to thumbnail path
+  const getThumbnailPath = (imagePath: string): string => {
+    return imagePath.replace('/images/', '/images/thumbs/').replace('.webp', '_thumb.webp');
+  };
 
   const handlePrevBackground = () => {
     if (currentIndex <= -1) {
@@ -42,6 +48,26 @@ const BackgroundTile: React.FC<BackgroundTileProps> = ({ isBlurred = false }) =>
     }
   };
 
+  // Preload adjacent images for instant carousel navigation
+  useEffect(() => {
+    if (currentIndex === -1) return; // Don't preload when NONE is selected
+
+    const preloadImage = (src: string) => {
+      const img = new window.Image();
+      img.src = src;
+    };
+
+    // Preload previous image
+    if (currentIndex > 0) {
+      preloadImage(currentBackgrounds[currentIndex - 1]);
+    }
+
+    // Preload next image
+    if (currentIndex < currentBackgrounds.length - 1) {
+      preloadImage(currentBackgrounds[currentIndex + 1]);
+    }
+  }, [currentIndex, currentBackgrounds]);
+
   return (
     <div className={`h-full flex flex-col items-center justify-center font-mono text-sm transition-all duration-300 px-3 ${
       isBlurred ? 'text-[#a9b1d6]/70' : 'text-[#a9b1d6]'
@@ -64,7 +90,7 @@ const BackgroundTile: React.FC<BackgroundTileProps> = ({ isBlurred = false }) =>
 
           {/* Preview */}
           <div
-            className="h-16 rounded border-2 flex items-center justify-center text-xs overflow-hidden"
+            className="h-16 rounded border-2 flex items-center justify-center text-xs overflow-hidden relative"
             style={{
               borderColor: 'rgba(var(--accent-color-rgb), 0.5)',
               backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)',
@@ -77,10 +103,13 @@ const BackgroundTile: React.FC<BackgroundTileProps> = ({ isBlurred = false }) =>
             {theme.backgroundImage === null ? (
               <span style={{ color: 'var(--theme-text-dimmed)' }}>NONE</span>
             ) : (
-              <img
-                src={theme.backgroundImage}
+              <Image
+                src={getThumbnailPath(theme.backgroundImage)}
                 alt="Background preview"
-                className="w-full h-full object-cover"
+                fill
+                quality={70}
+                sizes="150px"
+                style={{ objectFit: 'cover' }}
               />
             )}
           </div>
