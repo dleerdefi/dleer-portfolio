@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
 
 // Type definitions for the focus management system
-export type TileType = 'neofetch' | 'navigation' | 'content' | 'theme';
+export type TileType = 'neofetch' | 'navigation' | 'content' | 'themePreset' | 'accentColor' | 'background';
 
 export type ContentType =
   | { type: 'home' }
@@ -75,8 +75,10 @@ const transitionRules = {
     validContent: ['home', 'about', 'projects-overview', 'blog-overview', 'contact', 'project', 'blog']
   },
 
-  // Theme tile doesn't change content
-  theme: { maintainContent: true }
+  // Theme control tiles don't change content
+  themePreset: { maintainContent: true },
+  accentColor: { maintainContent: true },
+  background: { maintainContent: true }
 };
 
 export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -167,7 +169,7 @@ export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Tab navigation handler
   const handleTabNavigation = useCallback((reverse = false) => {
-    const tiles: TileType[] = ['neofetch', 'navigation', 'content', 'theme'];
+    const tiles: TileType[] = ['neofetch', 'navigation', 'content', 'themePreset', 'accentColor', 'background'];
     const currentIndex = tiles.indexOf(focusState.tile);
     const direction = reverse ? -1 : 1;
     const nextIndex = (currentIndex + direction + tiles.length) % tiles.length;

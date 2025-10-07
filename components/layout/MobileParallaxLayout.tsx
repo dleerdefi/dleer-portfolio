@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import NeofetchTile from '@/components/tiles/NeofetchTile';
 import { usePersonalInfo, useProjects, useBlogPosts, useSocialLinks } from '@/lib/config';
 import Background from '@/components/layout/Background';
-import ThemeTile from '@/components/tiles/ThemeTile';
+import ParallaxThemeControls from '@/components/layout/parallax/ParallaxThemeControls';
 import ScrollProgress from '@/components/ui/ScrollProgress';
 
 // Import custom hooks
@@ -371,7 +371,7 @@ const MobileParallaxLayout: React.FC = () => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute top-16 right-0 w-72 p-4 shadow-xl"
+            className="absolute top-16 right-0 w-64 p-6 shadow-xl"
             style={{
               backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)',
               backdropFilter: 'blur(10px)',
@@ -379,10 +379,7 @@ const MobileParallaxLayout: React.FC = () => {
               borderRadius: '0px' // Sharp corners to match window theme
             }}
           >
-            <div className="flex items-center gap-2 mb-3">
-              <span style={{ color: 'var(--theme-text)', fontSize: '14px', fontWeight: '500' }}>Switch to:</span>
-            </div>
-            <ThemeTile isBlurred={false} />
+            <ParallaxThemeControls />
           </motion.div>
         )}
 
