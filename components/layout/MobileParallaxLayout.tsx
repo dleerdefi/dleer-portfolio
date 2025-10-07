@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import NeofetchTile from '@/components/tiles/NeofetchTile';
 import { usePersonalInfo, useProjects, useBlogPosts, useSocialLinks } from '@/lib/config';
 import Background from '@/components/layout/Background';
-import ParallaxThemeControls from '@/components/layout/parallax/ParallaxThemeControls';
 import ScrollProgress from '@/components/ui/ScrollProgress';
 
 // Import custom hooks
@@ -26,7 +25,6 @@ const MobileParallaxLayout: React.FC = () => {
   const blogPosts = useBlogPosts();
   const socialLinks = useSocialLinks();
 
-  const [showThemePanel, setShowThemePanel] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
@@ -82,10 +80,32 @@ const MobileParallaxLayout: React.FC = () => {
     navigateToSection,
     navigateToNextSection,
     {
-      onEscape: () => setShowThemePanel(false),
-      onPanelToggle: () => setShowThemePanel(prev => !prev)
+      onEscape: () => {},
+      onPanelToggle: () => {}
     }
   );
+
+  // Force Tokyo Night theme with cyan accent ONLY for mobile parallax mode
+  useEffect(() => {
+    const enforceParallaxTheme = () => {
+      // Only enforce theme when actually in mobile view
+      if (window.innerWidth < 1024) {
+        document.documentElement.className = 'tokyo-night';
+        document.documentElement.style.setProperty('--accent-color', '#7dcfff');
+        document.documentElement.style.setProperty('--accent-color-rgb', '125, 207, 255');
+      }
+    };
+
+    // Enforce on mount
+    enforceParallaxTheme();
+
+    // Re-enforce on resize (handles rotation, window resize, etc.)
+    window.addEventListener('resize', enforceParallaxTheme);
+
+    return () => {
+      window.removeEventListener('resize', enforceParallaxTheme);
+    };
+  }, []);
 
   // Render content sections using extracted components
   const renderSection = (sectionId: string) => {
@@ -338,70 +358,6 @@ const MobileParallaxLayout: React.FC = () => {
         ))}
       </div>
 
-      {/* Scroll Progress Dots - Inside window */}
-      <nav
-        className="fixed right-8 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3"
-        role="navigation"
-        aria-label="Section navigation"
-      >
-        {sections.map((section) => (
-          <button
-            key={section.id}
-            onClick={() => navigateToSection(section.id)}
-            className="w-3 h-3 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-offset-2"
-            style={{
-              backgroundColor: activeSection === section.id
-                ? 'var(--accent-color)'
-                : 'rgba(var(--accent-color-rgb), 0.3)',
-              transform: activeSection === section.id ? 'scale(1.5)' : 'scale(1)',
-              ['--tw-ring-color' as any]: 'var(--accent-color)',
-              ['--tw-ring-offset-color' as any]: 'var(--theme-bg)'
-            }}
-            aria-label={`Go to ${section.title} section`}
-            aria-current={activeSection === section.id ? 'true' : undefined}
-            tabIndex={0}
-          />
-        ))}
-      </nav>
-
-      {/* Floating Theme Toggle - Upper right corner */}
-      <div className="fixed top-16 right-10 z-30">
-        {showThemePanel && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="absolute top-16 right-0 w-64 p-6 shadow-xl"
-            style={{
-              backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(var(--accent-color-rgb), 0.3)',
-              borderRadius: '0px' // Sharp corners to match window theme
-            }}
-          >
-            <ParallaxThemeControls />
-          </motion.div>
-        )}
-
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setShowThemePanel(!showThemePanel)}
-          className="w-14 h-14 shadow-lg flex items-center justify-center text-2xl focus:outline-none focus:ring-2 focus:ring-offset-2"
-          style={{
-            backgroundColor: 'var(--accent-color)',
-            color: 'var(--theme-bg)',
-            borderRadius: '0px', // Sharp corners to match window theme
-            ['--tw-ring-color' as any]: 'var(--accent-color)',
-            ['--tw-ring-offset-color' as any]: 'var(--theme-bg)'
-          }}
-          aria-label="Toggle theme selector"
-          aria-expanded={showThemePanel}
-          tabIndex={0}
-        >
-          🎨
-        </motion.button>
-      </div>
     </>
   );
 };
