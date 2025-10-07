@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface BackgroundProps {
   wallpaperUrl?: string;
@@ -42,6 +43,7 @@ const themeBackgrounds: Record<string, {
 };
 
 const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
+  const { theme } = useTheme();
   const [currentTheme, setCurrentTheme] = useState<string>('theme-tokyo-night');
 
   useEffect(() => {
@@ -64,7 +66,10 @@ const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
   }, []);
 
   const bgConfig = themeBackgrounds[currentTheme] || themeBackgrounds['theme-tokyo-night'];
-  const activeWallpaper = wallpaperUrl || bgConfig.url;
+
+  // Use backgroundImage from theme context, fallback to wallpaperUrl prop, then bgConfig.url
+  const activeWallpaper = wallpaperUrl || theme.backgroundImage || bgConfig.url;
+  const showWallpaper = theme.backgroundImage !== null || wallpaperUrl !== undefined;
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
@@ -74,26 +79,30 @@ const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
         style={{
           backgroundImage: 'linear-gradient(to bottom right, var(--theme-bg), var(--theme-surface), var(--theme-bg))'
         }}>
-        {/* Theme-aware wallpaper layer with enhancements */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500"
-          style={{
-            backgroundImage: `url(${activeWallpaper})`,
-            filter: `blur(${bgConfig.blur}) brightness(${bgConfig.brightness}) contrast(${bgConfig.contrast})`,
-            transform: `scale(${bgConfig.scale})`,
-            transformOrigin: 'center',
-            opacity: 0.85
-          }}
-        />
+        {/* Theme-aware wallpaper layer with enhancements - only shown if not NONE */}
+        {showWallpaper && (
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500"
+            style={{
+              backgroundImage: `url(${activeWallpaper})`,
+              filter: `blur(${bgConfig.blur}) brightness(${bgConfig.brightness}) contrast(${bgConfig.contrast})`,
+              transform: `scale(${bgConfig.scale})`,
+              transformOrigin: 'center',
+              opacity: 0.85
+            }}
+          />
+        )}
 
-        {/* Theme-specific overlay for color integration */}
-        <div
-          className="absolute inset-0 transition-colors duration-500"
-          style={{
-            backgroundColor: bgConfig.overlay,
-            mixBlendMode: currentTheme === 'theme-solarized-light' ? 'multiply' : 'overlay'
-          }}
-        />
+        {/* Theme-specific overlay for color integration - only shown with wallpaper */}
+        {showWallpaper && (
+          <div
+            className="absolute inset-0 transition-colors duration-500"
+            style={{
+              backgroundColor: bgConfig.overlay,
+              mixBlendMode: currentTheme === 'theme-solarized-light' ? 'multiply' : 'overlay'
+            }}
+          />
+        )}
 
         {/* Vibrant animated gradient orbs - matching the mockup's pink/blue aesthetic */}
         <div className="background-orbs">
