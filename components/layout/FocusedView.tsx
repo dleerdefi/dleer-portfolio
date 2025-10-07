@@ -30,10 +30,9 @@ interface FocusedViewProps {
 }
 
 const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
-  const { mode, section, contentData, exitToTiled, toggleZen, canZen, enterFullscreen } = useView();
+  const { mode, section, contentData, exitToTiled, enterZen } = useView();
   const { setActiveContent } = useFocus();
   const [showHUD, setShowHUD] = useState(false);
-  const [hoveredEdge, setHoveredEdge] = useState(false);
 
   // Detect prefers-reduced-motion (spec §9)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -50,16 +49,16 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
-  // Handle navigation from ContentViewer when in fullscreen/zen
+  // Handle navigation from ContentViewer when in zen
   const handleContentNavigation = (content: ContentType) => {
     // Update FocusContext
     setActiveContent(content);
 
     // If clicking on individual project/blog, update ViewContext with data
     if (content.type === 'project') {
-      enterFullscreen('projects', content.data);
+      enterZen('projects', content.data);
     } else if (content.type === 'blog') {
-      enterFullscreen('blog', content.data);
+      enterZen('blog', content.data);
     }
   };
 
@@ -87,9 +86,9 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
     }
   };
 
-  // Sync FocusContext with ViewContext when in fullscreen/zen
+  // Sync FocusContext with ViewContext when in zen
   useEffect(() => {
-    if (mode === 'fullscreen' || mode === 'zen') {
+    if (mode === 'zen') {
       const contentType = getContentType();
       setActiveContent(contentType);
     }
@@ -104,25 +103,13 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
     }
   }, [mode]);
 
-  // Don't render if not in fullscreen or zen mode
+  // Don't render if not in zen mode
   if (mode === 'tiled') {
     return null;
   }
 
-  // Border radius based on mode (using CSS variables from spec §5)
-  const getBorderRadius = () => {
-    switch (mode) {
-      case 'fullscreen':
-        return 'var(--r-fs)';
-      case 'zen':
-        return 'var(--r-zen)';
-      default:
-        return 'var(--r-tiled)';
-    }
-  };
-
-  // Calculate perimeter padding (parallax-inspired border treatment)
-  const perimeterPadding = mode === 'fullscreen' ? '2vw' : '0';
+  // Zen mode always uses rounded corners
+  const borderRadius = 'var(--r-zen)';
 
   // Animation config - respect prefers-reduced-motion (spec §9)
   const fadeTransition = prefersReducedMotion
@@ -131,11 +118,11 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
 
   const expandTransition = prefersReducedMotion
     ? { duration: 0 }
-    : fxExpand.transition;
+    : { type: 'spring' as const, stiffness: 420, damping: 32, mass: 0.7 };
 
   return (
     <AnimatePresence>
-      {(mode === 'fullscreen' || mode === 'zen') && (
+      {mode === 'zen' && (
         <motion.div
           className={`fixed inset-0 z-50 ${className}`}
           initial={{ opacity: 0 }}
@@ -149,20 +136,18 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
           </div>
 
           {/* Vignette gradient for Zen mode */}
-          {mode === 'zen' && (
-            <motion.div
-              className="absolute inset-0 pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.3 }}
-              style={{
-                background: 'radial-gradient(circle at center, transparent 0%, rgba(var(--theme-bg-rgb), 0.1) 100%)',
-                zIndex: 1
-              }}
-            />
-          )}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.3 }}
+            style={{
+              background: 'radial-gradient(circle at center, transparent 0%, rgba(var(--theme-bg-rgb), 0.1) 100%)',
+              zIndex: 1
+            }}
+          />
 
-          {/* Paper frame wrapper - centered container for border + content */}
+          {/* Zen content wrapper - centered container */}
           <div
             className="fixed flex items-center justify-center"
             style={{
@@ -173,95 +158,36 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
               zIndex: 1
             }}
           >
-            {/* Paper document container - 900px centered */}
+            {/* Zen container - full width */}
             <div
               className="relative"
               style={{
-                width: mode === 'fullscreen' ? '900px' : '100%',
-                height: '100%',
-                maxWidth: mode === 'fullscreen' ? '900px' : 'none'
+                width: '100%',
+                height: '100%'
               }}
             >
-              {/* Accent border frame (paper-sized) */}
-              {mode === 'fullscreen' && (
-                <div
-                  className="absolute pointer-events-none"
-                  style={{
-                    top: perimeterPadding,
-                    left: perimeterPadding,
-                    right: perimeterPadding,
-                    bottom: perimeterPadding,
-                    border: '2px solid var(--accent-color)',
-                    borderRadius: getBorderRadius(),
-                    zIndex: 40
-                  }}
-                />
-              )}
 
-              {/* Gradient dots glass effect - Top border */}
-              {mode === 'fullscreen' && (
-                <div
-                  className="absolute gradient-dots pointer-events-none"
-                  style={{
-                    top: '0',
-                    left: '0',
-                    right: '0',
-                    height: perimeterPadding,
-                    zIndex: 40
-                  }}
-                />
-              )}
-
-              {/* Gradient dots glass effect - Bottom border */}
-              {mode === 'fullscreen' && (
-                <div
-                  className="absolute gradient-dots pointer-events-none"
-                  style={{
-                    bottom: '0',
-                    left: '0',
-                    right: '0',
-                    height: perimeterPadding,
-                    transform: 'rotate(180deg)',
-                    zIndex: 40
-                  }}
-                />
-              )}
-
-              {/* Main content container */}
+              {/* Zen content container */}
               <motion.div
                 className="relative h-full overflow-hidden"
                 initial={prefersReducedMotion ? {} : fxExpand.initial}
                 animate={prefersReducedMotion ? {} : fxExpand.animate}
                 transition={expandTransition}
                 style={{
-                  margin: mode === 'fullscreen' ? perimeterPadding : '0',
-                  borderRadius: getBorderRadius(),
-                  border: mode === 'zen' ? 'none' : 'none',
+                  margin: '0',
+                  borderRadius: borderRadius,
+                  border: 'none',
                   backgroundColor: 'var(--theme-surface)',
-                  boxShadow: mode === 'zen'
-                    ? '0 20px 40px rgba(0,0,0,0.25)'
-                    : 'none',
-                  zIndex: 2  // Content at z-2, borders at z-40 for elevator effect
+                  boxShadow: '0 20px 40px rgba(0,0,0,0.25)',
+                  zIndex: 2
                 }}
-            onMouseMove={(e) => {
-              // Detect edge hover for exit affordance
-              const rect = e.currentTarget.getBoundingClientRect();
-              const edgeThreshold = 40;
-              const nearEdge =
-                e.clientX - rect.left < edgeThreshold ||
-                rect.right - e.clientX < edgeThreshold ||
-                e.clientY - rect.top < edgeThreshold ||
-                rect.bottom - e.clientY < edgeThreshold;
-              setHoveredEdge(nearEdge);
-            }}
-            onMouseLeave={() => setHoveredEdge(false)}
           >
-            {/* Floating Exit Button - Top Left (relative to paper frame) */}
+            {/* Floating Exit Button - Top Left */}
             <motion.button
               className="absolute z-50 shadow-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2"
               style={{
-                top: mode === 'fullscreen' ? 'calc(2vw + 16px)' : '16px',
-                left: mode === 'fullscreen' ? 'calc(2vw + 16px)' : '16px',
+                top: '16px',
+                left: '16px',
                 width: '48px',
                 height: '48px',
                 backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)',
@@ -273,38 +199,12 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={exitToTiled}
-              title="Exit fullscreen (Esc)"
+              title="Exit zen mode (Esc)"
             >
               <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor">
                 <path d="M2 2L14 14M14 2L2 14" strokeWidth="1.5" />
               </svg>
             </motion.button>
-
-            {/* Floating Zen Toggle Button - Top Right (relative to paper frame) */}
-            {canZen && (
-              <motion.button
-                className="absolute z-50 shadow-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2"
-                style={{
-                  top: mode === 'fullscreen' ? 'calc(2vw + 16px)' : '16px',
-                  right: mode === 'fullscreen' ? 'calc(2vw + 16px)' : '16px',
-                  width: '56px',
-                  height: '48px',
-                  backgroundColor: mode === 'zen' ? 'var(--accent-color)' : 'rgba(var(--theme-surface-rgb), 0.95)',
-                  border: '1px solid rgba(var(--accent-color-rgb), 0.3)',
-                  borderRadius: '0px',
-                  backdropFilter: 'blur(10px)',
-                  color: mode === 'zen' ? 'var(--theme-bg)' : 'var(--accent-color)',
-                  fontSize: '14px',
-                  fontWeight: '500'
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={toggleZen}
-                title="Toggle zen mode (Z)"
-              >
-                ZEN
-              </motion.button>
-            )}
 
             {/* Content area */}
             <div
@@ -312,40 +212,27 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
               data-scroll-container
               style={{
                 paddingTop: '60px',
-                paddingRight: mode === 'zen' ? '80px' : '40px',
-                paddingBottom: mode === 'zen' ? '80px' : '40px',
-                paddingLeft: mode === 'zen' ? '80px' : '40px'
+                paddingRight: '80px',
+                paddingBottom: '80px',
+                paddingLeft: '80px'
               }}
             >
               {/* Zen mode typography adjustments (spec §3) */}
               <div
                 style={{
-                  maxWidth: mode === 'zen' ? '70ch' : '100%', // 68-72ch range
-                  margin: mode === 'zen' ? '0 auto' : '0',
-                  fontSize: mode === 'zen' ? '1.05em' : '1em', // +5% increase
-                  lineHeight: mode === 'zen' ? '1.7' : '1.6' // 1.65-1.75 range
+                  maxWidth: '70ch', // 68-72ch range
+                  margin: '0 auto',
+                  fontSize: '1.05em', // +5% increase
+                  lineHeight: '1.7' // 1.65-1.75 range
                 }}
               >
                 <ContentViewer onNavigate={handleContentNavigation} />
               </div>
             </div>
 
-            {/* Edge glow affordance (FS only) */}
-            {mode === 'fullscreen' && (
-              <motion.div
-                className="absolute inset-0 pointer-events-none"
-                animate={{
-                  boxShadow: hoveredEdge
-                    ? 'inset 0 0 20px rgba(var(--accent-color-rgb), 0.2)'
-                    : 'inset 0 0 0px rgba(var(--accent-color-rgb), 0)'
-                }}
-                transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.12 }}
-              />
-            )}
-
             {/* Zen mode HUD */}
             <AnimatePresence>
-              {mode === 'zen' && showHUD && (
+              {showHUD && (
                 <motion.div
                   className="absolute bottom-8 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded text-xs"
                   initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
@@ -358,7 +245,7 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
                     color: 'var(--theme-text-dimmed)'
                   }}
                 >
-                  Zen Mode — Esc to exit · Z to toggle
+                  Zen Mode — Esc to exit
                 </motion.div>
               )}
             </AnimatePresence>

@@ -21,18 +21,18 @@ export const ParallaxTechSection: React.FC = () => {
   }
 
   return (
-    <div className="h-full flex flex-col justify-center py-8">
-      <div className="max-w-6xl mx-auto w-full">
+    <div className="h-full flex flex-col justify-between py-12">
+      <div className="max-w-6xl mx-auto w-full space-y-24">
         {/* Plain text header - no container */}
         <h2
-          className="text-3xl sm:text-4xl font-bold mb-12"
+          className="text-3xl sm:text-4xl font-bold"
           style={{ color: 'var(--accent-color)' }}
         >
           Technologies
         </h2>
 
-        {/* Technology Grid - Icons have their own glass morphism containers */}
-        <div className="grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 justify-items-center">
+        {/* Technology Grid - Proportionally spaced in available height */}
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6 justify-items-center">
           {technologies.items.map((tech, idx) => (
             <div key={idx}>
               <TechIcon

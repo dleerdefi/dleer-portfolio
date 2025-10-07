@@ -80,10 +80,10 @@ const transitionRules = {
 };
 
 export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Initialize with sensible defaults
+  // Initialize with About section as default
   const [focusState, setFocusState] = useState<FocusState>({
     tile: 'content',
-    content: { type: 'home' },
+    content: { type: 'about' },
     timestamp: Date.now()
   });
 

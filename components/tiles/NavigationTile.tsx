@@ -14,7 +14,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
   const [expandedDirs, setExpandedDirs] = useState<Set<string>>(new Set());
   const { activeContent } = useFocusState();
   const { handleContentNavigation } = useFocusNavigation();
-  const { enterFullscreen } = useView();
+  const { enterZen } = useView();
   const projects = useProjects();
   const blogs = useBlogPosts();
   const uiStrings = useUIStrings();
@@ -30,21 +30,21 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
       handleContentNavigation(content);
     }
 
-    // Then trigger fullscreen for immersive sections (per spec)
+    // Then trigger zen mode for immersive sections (per spec)
     if (content.type === 'project') {
-      // Projects open directly to fullscreen
-      enterFullscreen('projects', content.data);
+      // Projects open directly to zen
+      enterZen('projects', content.data);
     } else if (content.type === 'blog') {
-      // Blog posts open directly to fullscreen
-      enterFullscreen('blog', content.data);
+      // Blog posts open directly to zen
+      enterZen('blog', content.data);
     } else if (content.type === 'projects-overview') {
-      // Projects overview also opens to fullscreen
-      enterFullscreen('projects');
+      // Projects overview also opens to zen
+      enterZen('projects');
     } else if (content.type === 'blog-overview') {
-      // Blog overview also opens to fullscreen
-      enterFullscreen('blog');
+      // Blog overview also opens to zen
+      enterZen('blog');
     }
-    // About stays in tiled mode (no fullscreen trigger)
+    // About stays in tiled mode (no zen trigger)
   };
 
   const toggleDir = (dir: string) => {
