@@ -22,47 +22,12 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
 
   const renderContent = () => {
     switch (content.type) {
-      case 'home':
-        return (
-          <div className="space-y-6">
-            <div className="text-center overflow-x-auto">
-              <pre
-                className="opacity-90 inline-block"
-                style={{
-                  color: 'var(--accent-color)',
-                  background: 'transparent',
-                  padding: 0,
-                  border: 'none',
-                  margin: '0 auto',
-                  fontSize: 'clamp(0.5rem, 2.5vw, 0.75rem)',
-                  whiteSpace: 'pre'
-                }}
-              >
-{uiStrings.welcomeAscii || `WELCOME`}
-              </pre>
-            </div>
-            <div style={{ color: 'var(--theme-text)' }}>
-              <p className="text-lg mb-4 font-bold" style={{ color: 'var(--theme-text)' }}>
-                {personal.title}
-              </p>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
-                {personal.bio.homeDescription ||
-                  "Navigate through the file tree on the left to explore my portfolio. Each project showcases my expertise and passion for building exceptional software."}
-              </p>
-            </div>
-            <div className="text-xs mt-8" style={{ color: 'var(--theme-text-dimmed)' }}>
-              <p className="font-bold" style={{ color: 'var(--accent-color)' }}>{uiStrings.tips.title}</p>
-              {uiStrings.tips.items.map((tip, index) => (
-                <p key={index} className="mt-2">{tip}</p>
-              ))}
-            </div>
-          </div>
-        );
-
       case 'about':
         return (
           <div className="space-y-6">
-            <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>{uiStrings.headers.about}</h1>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>
+              {personal.greeting || `Hi, I'm ${personal.name}`}
+            </h1>
 
             <div className="space-y-4" style={{ color: 'var(--theme-text)' }}>
               {/* Introduction */}

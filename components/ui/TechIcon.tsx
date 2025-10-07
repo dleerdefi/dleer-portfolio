@@ -55,47 +55,24 @@ export const TechIcon: React.FC<TechIconProps> = ({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-3 group">
-      {/* Icon Container */}
-      <div
-        className="relative flex items-center justify-center transition-all duration-300 ease-out"
+    <div className="flex flex-col items-center justify-center gap-3 group cursor-pointer">
+      {/* Icon with white color and accent glow on hover */}
+      <IconComponent
+        size={size}
         style={{
-          width: `${size + 48}px`,
-          height: `${size + 48}px`,
-          padding: '24px',
-          borderRadius: '12px'
+          color: 'var(--theme-text)',
+          opacity: 0.9,
+          filter: 'drop-shadow(0 0 0px rgba(var(--accent-color-rgb), 0))',
+          transition: 'all 0.3s ease'
         }}
-      >
-        {/* Icon */}
-        <IconComponent
-          size={size}
-          style={{
-            color: 'var(--theme-text)',
-            opacity: 0.9,
-            transition: 'all 0.3s ease'
-          }}
-          className="group-hover:scale-110 group-hover:opacity-100"
-        />
-
-        {/* Hover Effect Border */}
-        <div
-          className="absolute inset-0 rounded-[12px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{
-            border: '2px solid var(--accent-color)',
-            pointerEvents: 'none'
-          }}
-        />
-
-        {/* Hover Glow Effect */}
-        <div
-          className="absolute inset-0 rounded-[12px] opacity-0 group-hover:opacity-30 transition-opacity duration-300 blur-md"
-          style={{
-            backgroundColor: 'var(--accent-color)',
-            pointerEvents: 'none',
-            zIndex: -1
-          }}
-        />
-      </div>
+        className="group-hover:opacity-100 group-hover:scale-110"
+        onMouseEnter={(e) => {
+          e.currentTarget.style.filter = 'drop-shadow(0 0 12px rgba(var(--accent-color-rgb), 0.6))';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.filter = 'drop-shadow(0 0 0px rgba(var(--accent-color-rgb), 0))';
+        }}
+      />
 
       {/* Technology Name */}
       <span

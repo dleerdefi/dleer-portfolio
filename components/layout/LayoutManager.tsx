@@ -31,7 +31,7 @@ const LayoutManager: React.FC = () => {
   } = useFocus();
 
   const { theme } = useTheme();
-  const { mode, enterFullscreen } = useView();
+  const { mode } = useView();
 
   const [isStacked, setIsStacked] = React.useState(false);
   const [scrollPercent, setScrollPercent] = React.useState(0);
@@ -435,13 +435,13 @@ const LayoutManager: React.FC = () => {
       <motion.div
         className="h-screen overflow-hidden relative flex flex-col"
         animate={{
-          opacity: mode !== 'tiled' ? 0.25 : 1,
-          filter: mode !== 'tiled' ? 'blur(6px)' : 'blur(0px)'
+          opacity: mode === 'zen' ? 0.25 : 1,
+          filter: mode === 'zen' ? 'blur(6px)' : 'blur(0px)'
         }}
         transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
       >
         <motion.div
-          animate={{ opacity: mode === 'zen' ? 0 : mode === 'fullscreen' ? 0.6 : 1 }}
+          animate={{ opacity: mode === 'zen' ? 0 : 1 }}
           transition={{ duration: 0.16 }}
         >
           <Polybar onNavigate={handlePolybarNavigate} />
@@ -562,7 +562,7 @@ const LayoutManager: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* Focused View for fullscreen and zen modes */}
+      {/* Focused View for zen mode */}
       <FocusedView />
     </>
   );
