@@ -143,35 +143,10 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
           exit={{ opacity: 0 }}
           transition={fadeTransition}
         >
-          {/* Background component - full viewport (z-index: -10) */}
+          {/* Background component - full viewport (animated wallpaper) */}
           <div className="absolute inset-0" style={{ zIndex: -10 }}>
             <Background />
           </div>
-
-          {/* Full viewport background layer (z-index: -5) */}
-          <motion.div
-            className="fixed inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={fadeTransition}
-            style={{
-              backgroundColor: 'var(--theme-bg)',
-              zIndex: -5
-            }}
-          />
-
-          {/* Interior window background (z-index: -1) */}
-          <div
-            className="fixed"
-            style={{
-              top: mode === 'fullscreen' ? perimeterPadding : '0',
-              left: mode === 'fullscreen' ? perimeterPadding : '0',
-              right: mode === 'fullscreen' ? perimeterPadding : '0',
-              bottom: mode === 'fullscreen' ? perimeterPadding : '0',
-              backgroundColor: 'var(--theme-bg)',
-              zIndex: -1
-            }}
-          />
 
           {/* Vignette gradient for Zen mode */}
           {mode === 'zen' && (
@@ -187,67 +162,87 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
             />
           )}
 
-          {/* Accent border frame (parallax-style) */}
-          {mode === 'fullscreen' && (
-            <div
-              className="fixed pointer-events-none"
-              style={{
-                top: perimeterPadding,
-                left: perimeterPadding,
-                right: perimeterPadding,
-                bottom: perimeterPadding,
-                border: '2px solid var(--accent-color)',
-                borderRadius: getBorderRadius(),
-                zIndex: 40
-              }}
-            />
-          )}
-
-          {/* Gradient dots glass effect - Top border */}
-          {mode === 'fullscreen' && (
-            <div
-              className="fixed gradient-dots pointer-events-none"
-              style={{
-                top: '0',
-                left: '0',
-                right: '0',
-                height: perimeterPadding,
-                zIndex: 40
-              }}
-            />
-          )}
-
-          {/* Gradient dots glass effect - Bottom border */}
-          {mode === 'fullscreen' && (
-            <div
-              className="fixed gradient-dots pointer-events-none"
-              style={{
-                bottom: '0',
-                left: '0',
-                right: '0',
-                height: perimeterPadding,
-                transform: 'rotate(180deg)',
-                zIndex: 40
-              }}
-            />
-          )}
-
-          {/* Main content container */}
-          <motion.div
-            className="relative h-full overflow-hidden"
-            initial={prefersReducedMotion ? {} : fxExpand.initial}
-            animate={prefersReducedMotion ? {} : fxExpand.animate}
-            transition={expandTransition}
+          {/* Paper frame wrapper - centered container for border + content */}
+          <div
+            className="fixed flex items-center justify-center"
             style={{
-              margin: mode === 'fullscreen' ? perimeterPadding : '0',
-              borderRadius: getBorderRadius(),
-              border: mode === 'zen' ? 'none' : 'none',
-              backgroundColor: 'var(--theme-surface)',
-              boxShadow: mode === 'zen'
-                ? '0 20px 40px rgba(0,0,0,0.25)'
-                : 'none',
-              zIndex: 2  // Content at z-2, borders at z-40 for elevator effect
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 1
             }}
+          >
+            {/* Paper document container - 900px centered */}
+            <div
+              className="relative"
+              style={{
+                width: mode === 'fullscreen' ? '900px' : '100%',
+                height: '100%',
+                maxWidth: mode === 'fullscreen' ? '900px' : 'none'
+              }}
+            >
+              {/* Accent border frame (paper-sized) */}
+              {mode === 'fullscreen' && (
+                <div
+                  className="absolute pointer-events-none"
+                  style={{
+                    top: perimeterPadding,
+                    left: perimeterPadding,
+                    right: perimeterPadding,
+                    bottom: perimeterPadding,
+                    border: '2px solid var(--accent-color)',
+                    borderRadius: getBorderRadius(),
+                    zIndex: 40
+                  }}
+                />
+              )}
+
+              {/* Gradient dots glass effect - Top border */}
+              {mode === 'fullscreen' && (
+                <div
+                  className="absolute gradient-dots pointer-events-none"
+                  style={{
+                    top: '0',
+                    left: '0',
+                    right: '0',
+                    height: perimeterPadding,
+                    zIndex: 40
+                  }}
+                />
+              )}
+
+              {/* Gradient dots glass effect - Bottom border */}
+              {mode === 'fullscreen' && (
+                <div
+                  className="absolute gradient-dots pointer-events-none"
+                  style={{
+                    bottom: '0',
+                    left: '0',
+                    right: '0',
+                    height: perimeterPadding,
+                    transform: 'rotate(180deg)',
+                    zIndex: 40
+                  }}
+                />
+              )}
+
+              {/* Main content container */}
+              <motion.div
+                className="relative h-full overflow-hidden"
+                initial={prefersReducedMotion ? {} : fxExpand.initial}
+                animate={prefersReducedMotion ? {} : fxExpand.animate}
+                transition={expandTransition}
+                style={{
+                  margin: mode === 'fullscreen' ? perimeterPadding : '0',
+                  borderRadius: getBorderRadius(),
+                  border: mode === 'zen' ? 'none' : 'none',
+                  backgroundColor: 'var(--theme-surface)',
+                  boxShadow: mode === 'zen'
+                    ? '0 20px 40px rgba(0,0,0,0.25)'
+                    : 'none',
+                  zIndex: 2  // Content at z-2, borders at z-40 for elevator effect
+                }}
             onMouseMove={(e) => {
               // Detect edge hover for exit affordance
               const rect = e.currentTarget.getBoundingClientRect();
@@ -261,9 +256,9 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
             }}
             onMouseLeave={() => setHoveredEdge(false)}
           >
-            {/* Floating Exit Button - Top Left */}
+            {/* Floating Exit Button - Top Left (relative to paper frame) */}
             <motion.button
-              className="fixed z-50 shadow-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2"
+              className="absolute z-50 shadow-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2"
               style={{
                 top: mode === 'fullscreen' ? 'calc(2vw + 16px)' : '16px',
                 left: mode === 'fullscreen' ? 'calc(2vw + 16px)' : '16px',
@@ -285,10 +280,10 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
               </svg>
             </motion.button>
 
-            {/* Floating Zen Toggle Button - Top Right */}
+            {/* Floating Zen Toggle Button - Top Right (relative to paper frame) */}
             {canZen && (
               <motion.button
-                className="fixed z-50 shadow-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2"
+                className="absolute z-50 shadow-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2"
                 style={{
                   top: mode === 'fullscreen' ? 'calc(2vw + 16px)' : '16px',
                   right: mode === 'fullscreen' ? 'calc(2vw + 16px)' : '16px',
@@ -367,7 +362,9 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
+              </motion.div>
+            </div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
