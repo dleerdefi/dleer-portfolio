@@ -9,9 +9,7 @@ import ThemeTile from '@/components/tiles/ThemeTile';
 import Background from '@/components/layout/Background';
 import Polybar from '@/components/layout/Polybar';
 import BorderedContainer from '@/components/ui/BorderedContainer';
-import ScrollProgress from '@/components/ui/ScrollProgress';
 import { useFocus, ContentType as FocusContentType } from '@/contexts/FocusContext';
-import { useScrollToFocus } from '@/hooks/useFocus';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useView } from '@/contexts/ViewContext';
 import FocusedView from '@/components/layout/FocusedView';
@@ -34,15 +32,6 @@ const LayoutManager: React.FC = () => {
   const { mode } = useView();
 
   const [isStacked, setIsStacked] = React.useState(false);
-  const [scrollPercent, setScrollPercent] = React.useState(0);
-  const [visibleTile, setVisibleTile] = React.useState<string>('neofetch');
-
-  // Create refs at top level
-  const neofetchRef = useRef<HTMLDivElement>(null);
-  const navigationRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const themeRef = useRef<HTMLDivElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Check for responsive layout
   useEffect(() => {
@@ -53,99 +42,6 @@ const LayoutManager: React.FC = () => {
     window.addEventListener('resize', checkLayout);
     return () => window.removeEventListener('resize', checkLayout);
   }, []);
-
-  // Handle Tab key navigation using context (only in tiled mode, not parallax)
-  useEffect(() => {
-    // Check if we're in parallax mode
-    const isParallaxMode = isStacked &&
-      typeof window !== 'undefined' &&
-      localStorage.getItem('mobile-mode') === 'parallax';
-
-    // Only add Tab handler if NOT in parallax mode
-    if (!isParallaxMode) {
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Tab') {
-          e.preventDefault();
-          handleTabNavigation(e.shiftKey);
-        }
-      };
-      window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [handleTabNavigation, isStacked]);
-
-  // Use scroll hook for each tile in stacked mode
-  useScrollToFocus<HTMLDivElement>(neofetchRef, 'neofetch', focusedTile, isStacked);
-  useScrollToFocus<HTMLDivElement>(navigationRef, 'navigation', focusedTile, isStacked);
-  useScrollToFocus<HTMLDivElement>(contentRef, 'content', focusedTile, isStacked);
-  useScrollToFocus<HTMLDivElement>(themeRef, 'theme', focusedTile, isStacked);
-
-  // Track which tile is visible based on scroll position (for scroll indicator)
-  useEffect(() => {
-    if (!isStacked) return;
-
-    const handleScroll = () => {
-      const container = scrollContainerRef.current;
-      if (!container) return;
-
-      // Special check for top position (Neofetch)
-      const scrollTop = container.scrollTop;
-      if (scrollTop < 50) {  // Near the very top
-        setVisibleTile('neofetch');
-        return;
-      }
-
-      const tiles = [
-        { ref: neofetchRef, name: 'neofetch' },
-        { ref: navigationRef, name: 'navigation' },
-        { ref: contentRef, name: 'content' },
-        { ref: themeRef, name: 'theme' }
-      ];
-
-      const viewportHeight = window.innerHeight;
-      const viewportCenter = viewportHeight / 2;
-      let mostVisibleTile = null;
-      let maxVisibility = 0;
-
-      // Find the tile with the most visibility in viewport
-      for (const tile of tiles) {
-        if (tile.ref.current) {
-          const rect = tile.ref.current.getBoundingClientRect();
-
-          // Calculate how much of the tile is visible
-          const tileTop = Math.max(36, rect.top); // Account for Polybar height
-          const tileBottom = Math.min(viewportHeight, rect.bottom);
-          const visibleHeight = Math.max(0, tileBottom - tileTop);
-
-          // Calculate visibility score based on:
-          // 1. How much of tile is visible
-          // 2. How close tile center is to viewport center
-          const tileCenter = (rect.top + rect.bottom) / 2;
-          const centerDistance = Math.abs(tileCenter - viewportCenter);
-          const visibilityScore = visibleHeight - (centerDistance * 0.5);
-
-          if (visibilityScore > maxVisibility) {
-            maxVisibility = visibilityScore;
-            mostVisibleTile = tile.name;
-          }
-        }
-      }
-
-      if (mostVisibleTile) {
-        setVisibleTile(mostVisibleTile);
-      }
-    };
-
-    const container = scrollContainerRef.current;
-    container?.addEventListener('scroll', handleScroll, { passive: true });
-
-    // Initial check
-    handleScroll();
-
-    return () => {
-      container?.removeEventListener('scroll', handleScroll);
-    };
-  }, [isStacked]);
 
   // Framer Motion animation settings
   const layoutTransition = {
@@ -199,227 +95,17 @@ const LayoutManager: React.FC = () => {
     handlePolybarNavigation(section);
   };
 
-  // Stacked Layout (Mobile/Tablet)
+  // Mobile Layout - Always use Parallax
   if (isStacked) {
-    // Check for parallax mode preference
-    const useParallaxMode = typeof window !== 'undefined' &&
-      localStorage.getItem('mobile-mode') === 'parallax';
-
-    // Use parallax layout if preferred
-    if (useParallaxMode) {
-      const MobileParallaxLayout = React.lazy(() => import('@/components/layout/MobileParallaxLayout'));
-      return (
-        <React.Suspense fallback={
-          <div className="flex items-center justify-center h-screen">
-            <div className="animate-pulse">Loading...</div>
-          </div>
-        }>
-          <MobileParallaxLayout />
-        </React.Suspense>
-      );
-    }
-
-    const handleContentSelectWithScroll = (content: ContentType) => {
-      handleContentNavigation(content);
-      setFocusedTile('content');
-
-      // Scroll to content tile after navigation
-      setTimeout(() => {
-        if (contentRef.current) {
-          contentRef.current.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-            inline: 'nearest'
-          });
-        }
-      }, 50);
-    };
-
+    const MobileParallaxLayout = React.lazy(() => import('@/components/layout/MobileParallaxLayout'));
     return (
-      <>
-        <Background />
-
-        {/* Custom scrollbar positioned outside content */}
-        <ScrollProgress
-          scrollPercent={scrollPercent}
-        />
-
-        {/* Fixed scrollable container similar to BorderedContainer but without border */}
-        <div
-          ref={scrollContainerRef}
-          className="fixed inset-0 overflow-y-auto hide-scrollbar"
-          style={{
-            scrollBehavior: 'smooth',
-            overscrollBehavior: 'contain',
-            WebkitOverflowScrolling: 'touch' as any
-          }}
-          onScroll={(e) => {
-            const target = e.target as HTMLDivElement;
-            const scrollTop = target.scrollTop;
-            const scrollHeight = target.scrollHeight - target.clientHeight;
-            const percent = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-            setScrollPercent(percent);
-          }}
-        >
-          <div className="min-h-screen flex flex-col">
-            <div className="sticky top-0 z-30" style={{ backgroundColor: 'var(--theme-bg)' }}>
-              <Polybar onNavigate={handlePolybarNavigate} />
-            </div>
-            <div className="flex-1" style={{ padding: '12px' }}>
-            <LayoutGroup>
-              <motion.div className="flex flex-col" style={{ gap: '12px' }}>
-                {/* Neofetch Tile */}
-                <div
-                  ref={neofetchRef}
-                  style={{
-                    scrollMarginTop: '36px' // Account for sticky Polybar height
-                  }}
-                >
-                  <motion.div
-                    layout
-                    layoutId="tile-neofetch"
-                    transition={layoutTransition}
-                    className={`shadow-xl border ${
-                      focusedTile === 'neofetch' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
-                    }`}
-                    initial={{
-                      backgroundColor: getTileOpacity('neofetch', false)
-                    }}
-                    animate={{
-                      backgroundColor: getTileOpacity('neofetch', focusedTile === 'neofetch'),
-                      backdropFilter: 'blur(8px)',
-                      borderRadius: '0px',
-                      padding: '24px',
-                      marginBottom: '8px',
-                      willChange: 'background-color'
-                    }}
-                    onClick={() => setFocusedTile('neofetch')}
-                  >
-                    <NeofetchTile isBlurred={focusedTile !== 'neofetch'} layout="tile" />
-                  </motion.div>
-                </div>
-
-                {/* Navigation Tile */}
-                <div
-                  ref={navigationRef}
-                  style={{
-                    scrollMarginTop: '36px' // Account for sticky Polybar height
-                  }}
-                >
-                  <motion.div
-                    layout
-                    layoutId="tile-navigation"
-                    transition={layoutTransition}
-                    className={`shadow-xl border ${
-                      focusedTile === 'navigation' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
-                    }`}
-                    initial={{
-                      backgroundColor: getTileOpacity('navigation', false)
-                    }}
-                    animate={{
-                      backgroundColor: getTileOpacity('navigation', focusedTile === 'navigation'),
-                      backdropFilter: 'blur(8px)',
-                      borderRadius: '0px',
-                      padding: '24px',
-                      marginBottom: '8px',
-                      willChange: 'background-color'
-                    }}
-                    onClick={() => setFocusedTile('navigation')}
-                  >
-                    <NavigationTile onContentSelect={handleContentSelectWithScroll} isBlurred={focusedTile !== 'navigation'} />
-                  </motion.div>
-                </div>
-
-                {/* Content Viewer */}
-                <div
-                  ref={contentRef}
-                  style={{
-                    scrollMarginTop: '36px' // Account for sticky Polybar height
-                  }}
-                >
-                  <motion.div
-                    layout
-                    layoutId="tile-content"
-                    transition={layoutTransition}
-                    className={`shadow-xl border ${
-                      focusedTile === 'content' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
-                    }`}
-                    initial={{
-                      backgroundColor: getContentTileOpacity().unfocused
-                    }}
-                    animate={{
-                      backgroundColor: focusedTile === 'content'
-                        ? getContentTileOpacity().focused
-                        : getContentTileOpacity().unfocused,
-                      backdropFilter: 'blur(8px)',
-                      borderRadius: '0px',
-                      padding: '24px',
-                      marginBottom: '8px',
-                      minHeight: '400px',
-                      willChange: 'background-color'
-                    }}
-                    onClick={() => setFocusedTile('content')}
-                  >
-                    <ContentViewer onNavigate={handleContentSelectWithScroll} />
-                  </motion.div>
-                </div>
-
-                {/* Theme Tile */}
-                <div
-                  ref={themeRef}
-                  style={{
-                    scrollMarginTop: '36px' // Account for sticky Polybar height
-                  }}
-                >
-                  <motion.div
-                    layout
-                    layoutId="tile-theme"
-                    transition={layoutTransition}
-                    className={`shadow-xl border ${
-                      focusedTile === 'theme' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
-                    }`}
-                    initial={{
-                      backgroundColor: getTileOpacity('theme', false)
-                    }}
-                    animate={{
-                      backgroundColor: getTileOpacity('theme', focusedTile === 'theme'),
-                      backdropFilter: 'blur(8px)',
-                      borderRadius: '0px',
-                      padding: '24px',
-                      marginBottom: '8px',
-                      minHeight: '300px',
-                      willChange: 'background-color'
-                    }}
-                    onClick={() => setFocusedTile('theme')}
-                  >
-                    <ThemeTile isBlurred={focusedTile !== 'theme'} />
-                  </motion.div>
-                </div>
-              </motion.div>
-            </LayoutGroup>
-          </div>
-          </div>
+      <React.Suspense fallback={
+        <div className="flex items-center justify-center h-screen">
+          <div className="animate-pulse">Loading...</div>
         </div>
-
-        {/* Mode Toggle Button */}
-        <motion.button
-          className="fixed bottom-6 left-6 z-40 px-4 py-2 rounded-lg shadow-lg text-sm font-medium"
-          style={{
-            backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)',
-            color: 'var(--theme-text)',
-            border: '1px solid rgba(var(--accent-color-rgb), 0.3)',
-            backdropFilter: 'blur(10px)'
-          }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => {
-            localStorage.setItem('mobile-mode', 'parallax');
-            window.location.reload();
-          }}
-        >
-          Try Parallax View
-        </motion.button>
-      </>
+      }>
+        <MobileParallaxLayout />
+      </React.Suspense>
     );
   }
 

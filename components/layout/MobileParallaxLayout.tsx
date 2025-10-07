@@ -405,29 +405,6 @@ const MobileParallaxLayout: React.FC = () => {
           🎨
         </motion.button>
       </div>
-
-      {/* Mode Toggle Button - Inside window */}
-      <motion.button
-        className="fixed bottom-10 left-10 z-30 px-4 py-2 shadow-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
-        style={{
-          backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)',
-          color: 'var(--theme-text)',
-          border: '1px solid rgba(var(--accent-color-rgb), 0.3)',
-          borderRadius: '0px', // Sharp corners to match window theme
-          ['--tw-ring-color' as any]: 'var(--accent-color)',
-          ['--tw-ring-offset-color' as any]: 'var(--theme-bg)'
-        }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => {
-          localStorage.setItem('mobile-mode', 'stacked');
-          window.location.reload();
-        }}
-        aria-label="Switch to tiled view mode"
-        tabIndex={0}
-      >
-        Switch to Tiles
-      </motion.button>
     </>
   );
 };
