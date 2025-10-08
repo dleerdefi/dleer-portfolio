@@ -14,17 +14,17 @@ export const portfolioConfig: PortfolioConfig = {
     bio: {
       // Structured bio for parallax sections
       intro: process.env.NEXT_PUBLIC_BIO_INTRO ||
-        "A founder and software engineer building the next generation of AI memory. My work connects Large Language Models with knowledge graphs, creating systems capable of context-aware reasoning.",
+        "Founder–engineer building AI memory. I wire LLMs to knowledge graphs so products think with context and take action.",
 
       experience: process.env.NEXT_PUBLIC_BIO_EXPERIENCE ||
-        "As Chief Product Officer of ConsumerFi, I architected the protocol's core three-layer system. I also developed proprietary agent-based simulators that modeled token economies over $300M, directly guiding strategy for foundations and market makers.",
+        "At ConsumerFi, I designed a three-layer architecture: ConsumerGraph, Graph Intelligence, and an Agentic Layer with non-custodial execution. I built hybrid agent and event simulators that modeled >$300M token economies for market makers and foundations.",
 
       leadership: process.env.NEXT_PUBLIC_BIO_LEADERSHIP ||
-        "My technical leadership is built on a foundation of shipping complex systems at scale. I previously managed $63M in scope and led teams of 50+ engineers to deliver a $500M hospital campus. Today, my focus is on advanced LLM memory and scalable, user-owned data infrastructure.",
+        "My edge is shipping complex systems. Previously I managed $63M in scope and led 12+ engineers on a $500M hospital campus build. Today I focus on LLM memory, scoring and ranking and agent-routing algorithms, and privacy-first data infrastructure.",
 
       // Personal tagline
       tagline: process.env.NEXT_PUBLIC_BIO_TAGLINE ||
-        "Outside of work, I experiment in my homelab, fly drones, and travel.",
+        "Outside work: homelab, drones, travel.",
 
       // Legacy fields for compatibility
       short: process.env.NEXT_PUBLIC_BIO_SHORT ||
