@@ -172,7 +172,7 @@ const MobileParallaxLayout: React.FC = () => {
         }}
       />
 
-      {/* Top Border Glass Effect - Single Layer (kyrre.dev style) */}
+      {/* Top Border Glass Effect - Privacy glass (kyrre.dev style) */}
       <div
         className="fixed gradient-dots pointer-events-none"
         style={{
@@ -184,7 +184,7 @@ const MobileParallaxLayout: React.FC = () => {
         }}
       />
 
-      {/* Bottom Border Glass Effect - Single Layer (kyrre.dev style) */}
+      {/* Bottom Border Glass Effect - Privacy glass (kyrre.dev style) */}
       <div
         className="fixed gradient-dots pointer-events-none"
         style={{
