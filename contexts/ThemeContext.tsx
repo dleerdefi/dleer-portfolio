@@ -124,8 +124,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const root = document.documentElement;
 
-    // Remove old theme classes
-    root.className = root.className.replace(/theme-[\w-]+/g, '').replace(/accent-[\w-]+/g, '').trim();
+    // Remove old theme and accent classes using classList API
+    const classesToRemove: string[] = [];
+    root.classList.forEach((cls) => {
+      if (cls.startsWith('theme-') || cls.startsWith('accent-')) {
+        classesToRemove.push(cls);
+      }
+    });
+    classesToRemove.forEach((cls) => root.classList.remove(cls));
 
     // Add new theme classes
     root.classList.add(`theme-${theme.preset}`);
@@ -139,6 +145,37 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
 
   }, [theme]);
+
+  // Force theme class re-application when transitioning from mobile to desktop
+  // This recovers from MobileParallaxLayout's className override
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window === 'undefined') return;
+
+      // Only act when in desktop view (where ThemeContext should be in control)
+      if (window.innerWidth >= 1024) {
+        const root = document.documentElement;
+
+        // CRITICAL: Remove inline styles set by MobileParallaxLayout
+        // Inline styles have higher CSS specificity than classes, so they override all theme changes
+        // Without this, accent color stays stuck at #7dcfff even when user changes theme/accent
+        root.style.removeProperty('--accent-color');
+        root.style.removeProperty('--accent-color-rgb');
+
+        const hasThemeClass = Array.from(root.classList).some(cls => cls.startsWith('theme-'));
+
+        // If theme classes are missing, mobile parallax left DOM in broken state
+        // Re-apply classes from current theme state
+        if (!hasThemeClass) {
+          root.classList.add(`theme-${theme.preset}`);
+          root.classList.add(`accent-${theme.accentColor}`);
+        }
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [theme.preset, theme.accentColor]);
 
   // Set theme preset - resets accent to theme default per spec
   const setThemePreset = useCallback((preset: ThemePreset) => {

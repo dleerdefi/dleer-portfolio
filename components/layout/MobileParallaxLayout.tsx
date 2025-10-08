@@ -104,6 +104,19 @@ const MobileParallaxLayout: React.FC = () => {
 
     return () => {
       window.removeEventListener('resize', enforceParallaxTheme);
+
+      // CRITICAL: Restore proper theme classes for ThemeContext when unmounting (transitioning to desktop)
+      // This ensures desktop tile layout can properly update theme/accent colors
+      if (window.innerWidth >= 1024) {
+        // Remove the className override and restore ThemeContext control
+        document.documentElement.className = '';
+
+        // CRITICAL: Remove inline styles that override class-based theme (CSS specificity issue)
+        // Without this, accent color stays stuck at #7dcfff even when theme/accent changes
+        document.documentElement.style.removeProperty('--accent-color');
+        document.documentElement.style.removeProperty('--accent-color-rgb');
+        // ThemeContext will re-apply proper classes on next render
+      }
     };
   }, []);
 
