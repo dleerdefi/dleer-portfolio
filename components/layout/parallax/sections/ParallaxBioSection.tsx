@@ -33,19 +33,19 @@ export const ParallaxBioSection: React.FC<ParallaxBioSectionProps> = ({
   const tagline = personal.bio.tagline || '';
 
   return (
-    <div className="h-full flex flex-col justify-start pt-0 pb-12">
+    <div className="flex flex-col justify-start">
       {/* Plain content wrapper - no glass morphism */}
-      <div className="max-w-3xl mx-auto w-full p-8 sm:p-10">
+      <div className="max-w-3xl mx-auto w-full p-6 sm:p-8">
         {/* Greeting Header */}
         <h2
-          className="text-3xl sm:text-4xl font-bold mb-8"
+          className="text-3xl sm:text-4xl font-bold mb-10"
           style={{ color: 'var(--accent-color)' }}
         >
           {personal.greeting || `Hi, I'm ${personal.name}`}
         </h2>
 
         {/* Bio Content */}
-        <div className="space-y-6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {/* Introduction */}
           {intro && (
             <p

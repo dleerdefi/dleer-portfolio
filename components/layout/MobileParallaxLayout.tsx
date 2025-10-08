@@ -230,7 +230,7 @@ const MobileParallaxLayout: React.FC = () => {
           top: `${borderPadding}px`,
           left: `${borderPadding}px`,
           right: `${borderPadding}px`,
-          height: '60vh',
+          height: '65vh',
           opacity: backgroundOpacity,
           backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
           backdropFilter: 'blur(10px)',
@@ -273,7 +273,7 @@ const MobileParallaxLayout: React.FC = () => {
         {/* Spacer for fixed background */}
         <div
           style={{
-            height: `calc(60vh + ${borderPadding}px)`
+            height: `calc(65vh + ${borderPadding}px)`
           }}
         />
 
@@ -282,10 +282,10 @@ const MobileParallaxLayout: React.FC = () => {
           <section
             key={section.id}
             id={`section-${section.id}`}
-            className={`relative min-h-screen flex flex-col`}
+            className={`relative flex flex-col`}
             style={{
-              paddingTop: '48px',
-              paddingBottom: '48px',
+              paddingTop: index === 0 ? '24px' : '32px',
+              paddingBottom: '32px',
               paddingLeft: '16px',
               paddingRight: '16px',
               backgroundColor: 'var(--theme-bg)',

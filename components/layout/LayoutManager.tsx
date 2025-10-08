@@ -33,14 +33,19 @@ const LayoutManager: React.FC = () => {
   const { theme } = useTheme();
   const { mode } = useView();
 
+  // Hydration-safe mobile detection (prevents SSR/client mismatch)
   const [isStacked, setIsStacked] = React.useState(false);
+  const [hasChecked, setHasChecked] = React.useState(false);
 
-  // Check for responsive layout
+  // Detect screen size on client only (after hydration)
   useEffect(() => {
     const checkLayout = () => {
       setIsStacked(window.innerWidth < 1024);
     };
+
     checkLayout();
+    setHasChecked(true); // Mark as client-side checked
+
     window.addEventListener('resize', checkLayout);
     return () => window.removeEventListener('resize', checkLayout);
   }, []);
@@ -112,13 +117,22 @@ const LayoutManager: React.FC = () => {
     handlePolybarNavigation(section);
   };
 
+  // Prevent hydration mismatch - show neutral state during SSR/hydration
+  if (!hasChecked) {
+    return (
+      <div className="fixed inset-0 bg-[var(--theme-bg)]">
+        {/* Neutral state during SSR and hydration - prevents mismatch */}
+      </div>
+    );
+  }
+
   // Mobile Layout - Always use Parallax
   if (isStacked) {
     const MobileParallaxLayout = React.lazy(() => import('@/components/layout/MobileParallaxLayout'));
     return (
       <React.Suspense fallback={
-        <div className="flex items-center justify-center h-screen">
-          <div className="animate-pulse">Loading...</div>
+        <div className="fixed inset-0 bg-[var(--theme-bg)]">
+          {/* Minimal invisible fallback - parallax loads almost instantly */}
         </div>
       }>
         <MobileParallaxLayout />
