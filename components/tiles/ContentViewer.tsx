@@ -24,12 +24,12 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
     switch (content.type) {
       case 'about':
         return (
-          <div className="space-y-6">
+          <div className="space-y-3">
             <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>
               {personal.greeting || `Hi, I'm ${personal.name}`}
             </h1>
 
-            <div className="space-y-4" style={{ color: 'var(--theme-text)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', color: 'var(--theme-text)' }}>
               {/* Introduction */}
               {personal.bio.intro && (
                 <p className="leading-relaxed">
@@ -54,7 +54,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
               {/* Tagline */}
               {personal.bio.tagline && (
                 <p
-                  className="text-sm italic pt-4 border-t"
+                  className="text-sm italic pt-1 border-t"
                   style={{
                     color: 'var(--theme-text-dimmed)',
                     borderColor: 'rgba(var(--accent-color-rgb), 0.2)',

@@ -16,8 +16,8 @@ export const AboutTechGrid: React.FC = () => {
   return (
     <div
       style={{
-        marginTop: '2rem',
-        paddingTop: '1rem',
+        marginTop: '0',
+        paddingTop: '0',
         opacity: 1
       }}
     >
