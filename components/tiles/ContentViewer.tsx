@@ -321,31 +321,45 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                   <div
                     key={project.id}
                     className="border-b pb-4 transition-colors cursor-pointer"
-                    style={{ borderColor: 'var(--theme-border)', opacity: 0.3 }}
+                    style={{ borderColor: 'rgba(var(--accent-color-rgb), 0.2)' }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--accent-color)';
-                      e.currentTarget.style.opacity = '0.8';
-                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(var(--accent-color-rgb), 0.15)';
+                      // Title changes to accent color
+                      const title = e.currentTarget.querySelector('h3');
+                      if (title) (title as HTMLElement).style.color = 'var(--accent-color)';
+
+                      // Description becomes fully opaque
+                      const desc = e.currentTarget.querySelector('p');
+                      if (desc) (desc as HTMLElement).style.opacity = '1';
+
+                      // Border becomes more prominent (no glow)
+                      e.currentTarget.style.borderColor = 'rgba(var(--accent-color-rgb), 0.5)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--theme-border)';
-                      e.currentTarget.style.opacity = '0.3';
-                      e.currentTarget.style.boxShadow = 'none';
+                      // Title back to theme text
+                      const title = e.currentTarget.querySelector('h3');
+                      if (title) (title as HTMLElement).style.color = 'var(--theme-text)';
+
+                      // Description back to 80%
+                      const desc = e.currentTarget.querySelector('p');
+                      if (desc) (desc as HTMLElement).style.opacity = '0.8';
+
+                      // Border back to subtle
+                      e.currentTarget.style.borderColor = 'rgba(var(--accent-color-rgb), 0.2)';
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
                       onNavigate?.({ type: 'project', data: projectData });
                     }}
                   >
-                    <h3 className="font-bold text-base mb-2" style={{ color: 'var(--theme-success)' }}>{project.name}</h3>
-                    <p className="text-sm mb-3" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>{project.description}</p>
+                    <h3 className="font-bold text-base mb-2 transition-colors" style={{ color: 'var(--theme-text)' }}>{project.name}</h3>
+                    <p className="text-sm mb-3 transition-opacity" style={{ color: 'var(--theme-text)', opacity: 0.8 }}>{project.description}</p>
                     <div className="flex gap-2 flex-wrap">
                       {project.techStack.slice(0, 3).map((tech, idx) => (
                         <span
                           key={idx}
                           className="text-xs"
                           style={{
-                            color: 'var(--accent-color)'
+                            color: 'var(--theme-text-dimmed)'
                           }}
                         >
                           {tech}{idx < Math.min(2, project.techStack.length - 1) ? ' •' : ''}
@@ -385,16 +399,30 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                   <div
                     key={post.id}
                     className="border-b pb-4 transition-colors cursor-pointer"
-                    style={{ borderColor: 'var(--theme-border)', opacity: 0.3 }}
+                    style={{ borderColor: 'rgba(var(--accent-color-rgb), 0.2)' }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--accent-color)';
-                      e.currentTarget.style.opacity = '0.8';
-                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(var(--accent-color-rgb), 0.15)';
+                      // Title changes to accent color
+                      const title = e.currentTarget.querySelector('h3');
+                      if (title) (title as HTMLElement).style.color = 'var(--accent-color)';
+
+                      // Excerpt becomes fully opaque
+                      const excerpt = e.currentTarget.querySelector('p');
+                      if (excerpt) (excerpt as HTMLElement).style.opacity = '1';
+
+                      // Border becomes more prominent (no glow)
+                      e.currentTarget.style.borderColor = 'rgba(var(--accent-color-rgb), 0.5)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--theme-border)';
-                      e.currentTarget.style.opacity = '0.3';
-                      e.currentTarget.style.boxShadow = 'none';
+                      // Title back to theme text
+                      const title = e.currentTarget.querySelector('h3');
+                      if (title) (title as HTMLElement).style.color = 'var(--theme-text)';
+
+                      // Excerpt back to 80%
+                      const excerpt = e.currentTarget.querySelector('p');
+                      if (excerpt) (excerpt as HTMLElement).style.opacity = '0.8';
+
+                      // Border back to subtle
+                      e.currentTarget.style.borderColor = 'rgba(var(--accent-color-rgb), 0.2)';
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -402,11 +430,11 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                     }}
                   >
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-bold" style={{ color: 'var(--theme-success)' }}>{post.title}</h3>
+                      <h3 className="font-bold transition-colors" style={{ color: 'var(--theme-text)' }}>{post.title}</h3>
                       <span className="text-xs" style={{ color: 'var(--theme-text-dimmed)' }}>{post.date}</span>
                     </div>
-                    <p className="text-sm mb-2" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>{post.excerpt}</p>
-                    <span className="text-xs" style={{ color: 'var(--accent-color)' }}>{post.category}</span>
+                    <p className="text-sm mb-2 transition-opacity" style={{ color: 'var(--theme-text)', opacity: 0.8 }}>{post.excerpt}</p>
+                    <span className="text-xs" style={{ color: 'var(--theme-text-dimmed)' }}>{post.category}</span>
                   </div>
                 );
               })}
