@@ -149,20 +149,8 @@ const LayoutManager: React.FC = () => {
   return (
     <>
       <Background />
-      <motion.div
-        className="h-screen overflow-hidden relative flex flex-col"
-        animate={{
-          opacity: mode === 'zen' ? 0.25 : 1,
-          filter: mode === 'zen' ? 'blur(6px)' : 'blur(0px)'
-        }}
-        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <motion.div
-          animate={{ opacity: mode === 'zen' ? 0 : 1 }}
-          transition={{ duration: 0.16 }}
-        >
-          <Polybar onNavigate={handlePolybarNavigate} />
-        </motion.div>
+      <div className="h-screen overflow-hidden relative flex flex-col">
+        <Polybar onNavigate={handlePolybarNavigate} />
         <div className="flex-1 overflow-hidden" style={{ padding: '12px' }}>
           <LayoutGroup>
             <motion.div className="h-full flex" style={{ gap: '12px' }}>
@@ -330,9 +318,9 @@ const LayoutManager: React.FC = () => {
             </motion.div>
           </LayoutGroup>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Focused View for zen mode */}
+      {/* Focused View for zen mode - overlays on top without affecting tiled layout */}
       <FocusedView />
     </>
   );

@@ -32,7 +32,6 @@ interface FocusedViewProps {
 const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
   const { mode, section, contentData, exitToTiled, enterZen } = useView();
   const { setActiveContent } = useFocus();
-  const [showHUD, setShowHUD] = useState(false);
 
   // Detect prefers-reduced-motion (spec §9)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -93,15 +92,6 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
       setActiveContent(contentType);
     }
   }, [mode, section, contentData]);
-
-  // Show HUD briefly when entering zen mode
-  useEffect(() => {
-    if (mode === 'zen') {
-      setShowHUD(true);
-      const timer = setTimeout(() => setShowHUD(false), 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [mode]);
 
   // Don't render if not in zen mode
   if (mode === 'tiled') {
@@ -182,27 +172,31 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
                   zIndex: 2
                 }}
           >
-            {/* Floating Exit Button - Top Left */}
+            {/* Floating Exit Button - Top Left (sleek & minimalistic) */}
             <motion.button
               className="absolute z-50 shadow-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2"
               style={{
-                top: '16px',
-                left: '16px',
-                width: '48px',
-                height: '48px',
-                backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)',
-                border: '1px solid rgba(var(--accent-color-rgb), 0.3)',
+                top: '12px',
+                left: '12px',
+                width: '28px',
+                height: '28px',
+                backgroundColor: 'rgba(var(--theme-surface-rgb), 0.85)',
+                border: '0.5px solid rgba(var(--accent-color-rgb), 0.4)',
                 borderRadius: '0px',
-                backdropFilter: 'blur(10px)',
+                backdropFilter: 'blur(8px)',
                 color: 'var(--theme-text)'
               }}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{
+                scale: 1.05,
+                backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)'
+              }}
               whileTap={{ scale: 0.95 }}
               onClick={exitToTiled}
               title="Exit zen mode (Esc)"
+              aria-label="Exit zen mode"
             >
-              <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                <path d="M2 2L14 14M14 2L2 14" strokeWidth="1.5" />
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                <path d="M2 2L14 14M14 2L2 14" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             </motion.button>
 
@@ -229,26 +223,6 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
                 <ContentViewer onNavigate={handleContentNavigation} />
               </div>
             </div>
-
-            {/* Zen mode HUD */}
-            <AnimatePresence>
-              {showHUD && (
-                <motion.div
-                  className="absolute bottom-8 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded text-xs"
-                  initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
-                  animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-                  exit={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
-                  transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.2 }}
-                  style={{
-                    backgroundColor: 'rgba(var(--theme-surface-rgb), 0.95)',
-                    border: '1px solid rgba(var(--accent-color-rgb), 0.2)',
-                    color: 'var(--theme-text-dimmed)'
-                  }}
-                >
-                  Zen Mode — Esc to exit
-                </motion.div>
-              )}
-            </AnimatePresence>
               </motion.div>
             </div>
           </div>

@@ -46,26 +46,25 @@
 }
 
 /* kyrre.dev-style glass diffusion for top/bottom borders */
-/* Privacy glass effect: solid dots + blur + opacity/mask */
+/* Privacy glass effect: solid dots + semi-transparent gaps with blur */
 .gradient-dots {
-  /* Transparent background - dots are the only solid part */
+  /* Transparent background */
   background-color: transparent;
 
-  /* SOLID dot pattern - opaque dots on transparent background */
+  /* Radial gradient: SOLID dots (center) + SEMI-TRANSPARENT gaps (edge) */
   background-image: radial-gradient(
     circle at center,
-    rgb(var(--theme-bg-rgb)) 1.2px,
-    transparent 1.2px
+    rgb(var(--theme-bg-rgb)) 1.2px,          /* SOLID black dots */
+    rgba(var(--theme-bg-rgb), 0.3) 1.2px     /* SEMI-TRANSPARENT gaps */
   );
   background-size: 3px 3px;
 
   /* Strong blur creates "bathroom privacy glass" diffusion */
-  /* Blurs content visible through transparent gaps between dots */
+  /* Blurs content visible through semi-transparent circles */
   backdrop-filter: blur(12px) saturate(150%) brightness(110%) contrast(90%);
   -webkit-backdrop-filter: blur(12px) saturate(150%) brightness(110%) contrast(90%);
 
   /* Mask gradient for smooth fade (top/bottom borders) */
-  /* The dots are solid, but the entire layer fades out via mask */
   mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
 

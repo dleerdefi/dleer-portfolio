@@ -43,5 +43,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Development artifacts (not for public repo)
 /inspo
+/archive
 components.backup.*/

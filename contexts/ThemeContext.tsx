@@ -63,7 +63,6 @@ interface ThemeState {
   accentColor: AccentColor;
   backgroundEffect: boolean;
   backgroundImage: string | null;  // null = no background, string = image path
-  isTransitioning: boolean;
 }
 
 // Theme context value interface
@@ -93,8 +92,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     preset: 'tokyo-night',
     accentColor: themeDefaultAccents['tokyo-night'],  // Use theme default
     backgroundEffect: true,
-    backgroundImage: themeBackgrounds['tokyo-night'][0],  // Default to first bg of theme
-    isTransitioning: false
+    backgroundImage: themeBackgrounds['tokyo-night'][0]  // Default to first bg of theme
   });
 
   // Load saved preferences on mount
@@ -140,14 +138,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       root.classList.remove('bg-effect-enabled');
     }
 
-    // Add transitioning class
-    if (theme.isTransitioning) {
-      root.classList.add('theme-transitioning');
-      setTimeout(() => {
-        setTheme(prev => ({ ...prev, isTransitioning: false }));
-        root.classList.remove('theme-transitioning');
-      }, 600);
-    }
   }, [theme]);
 
   // Set theme preset - resets accent to theme default per spec
@@ -162,8 +152,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       ...prev,
       preset,
       accentColor: defaultAccent,  // Reset to theme's default accent
-      backgroundImage: defaultBgImage,  // Load theme-specific background
-      isTransitioning: true
+      backgroundImage: defaultBgImage  // Load theme-specific background
     }));
     localStorage.setItem(STORAGE_KEYS.preset, preset);
     // Remove saved accent color to prevent persistence across themes
