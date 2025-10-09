@@ -185,7 +185,46 @@ const MobileParallaxLayout: React.FC = () => {
         }}
       />
 
-      {/* Top Border Glass Effect - Privacy glass (kyrre.dev style) */}
+      {/* Border Diffusion Strips - Blur scrolling content at top/bottom edges */}
+      <div
+        className="fixed pointer-events-none"
+        style={{
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 41
+        }}
+      >
+        {/* Top border diffusion strip */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: `${borderPadding}px`,
+            backdropFilter: 'blur(20px) saturate(150%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(150%)'
+          }}
+        />
+
+        {/* Bottom border diffusion strip */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: `${borderPadding}px`,
+            backdropFilter: 'blur(20px) saturate(150%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(150%)'
+          }}
+        />
+      </div>
+
+      {/* Privacy Glass Dot Overlay - kyrre.dev style cover piece */}
+      {/* Top Border Glass Effect */}
       <div
         className="fixed gradient-dots pointer-events-none"
         style={{
@@ -193,11 +232,11 @@ const MobileParallaxLayout: React.FC = () => {
           left: '0',
           right: '0',
           height: `${borderPadding}px`,
-          zIndex: 40
+          zIndex: 42
         }}
       />
 
-      {/* Bottom Border Glass Effect - Privacy glass (kyrre.dev style) */}
+      {/* Bottom Border Glass Effect */}
       <div
         className="fixed gradient-dots pointer-events-none"
         style={{
@@ -206,7 +245,7 @@ const MobileParallaxLayout: React.FC = () => {
           right: '0',
           height: `${borderPadding}px`,
           transform: 'rotate(180deg)',
-          zIndex: 40
+          zIndex: 42
         }}
       />
 

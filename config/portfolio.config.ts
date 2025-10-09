@@ -198,24 +198,24 @@ Summary of key points and takeaways from the article.`
     },
     linkedin: {
       platform: "LinkedIn",
-      username: process.env.NEXT_PUBLIC_LINKEDIN_HANDLE || "dleer",
+      username: process.env.NEXT_PUBLIC_LINKEDIN_HANDLE || "David Leer",
       url: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://linkedin.com/in/dleer"
     },
     youtube: {
       platform: "YouTube",
-      username: process.env.NEXT_PUBLIC_YOUTUBE_HANDLE || "@dleer_defi",
+      username: process.env.NEXT_PUBLIC_YOUTUBE_HANDLE || "dleer tech",
       url: process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://youtube.com/@dleer_defi"
     },
     instagram: {
       platform: "Instagram",
-      username: process.env.NEXT_PUBLIC_INSTAGRAM_HANDLE || "feralchef5",
-      url: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://instagram.com/feralchef5",
+      username: process.env.NEXT_PUBLIC_INSTAGRAM_HANDLE || "theferalchef",
+      url: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://instagram.com/theferalchef5",
       followers: process.env.NEXT_PUBLIC_INSTAGRAM_STATS || "5M views"
     },
     tiktok: {
       platform: "TikTok",
-      username: process.env.NEXT_PUBLIC_TIKTOK_HANDLE || "feralchef5",
-      url: process.env.NEXT_PUBLIC_TIKTOK_URL || "https://tiktok.com/@feralchef5",
+      username: process.env.NEXT_PUBLIC_TIKTOK_HANDLE || "theferalchef",
+      url: process.env.NEXT_PUBLIC_TIKTOK_URL || "https://tiktok.com/@theferalchef5",
       followers: process.env.NEXT_PUBLIC_TIKTOK_STATS || "3M views"
     }
   },
