@@ -104,7 +104,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
       style={{
         color: isBlurred ? 'rgba(var(--theme-text-rgb), 0.7)' : 'var(--theme-text)'
       }}>
-      <div className={`mb-3 font-bold transition-all duration-300`}
+      <div className={`mb-3 text-lg font-bold transition-all duration-300`}
         style={{
           color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)'
         }}>{uiStrings.navigation.rootPath}</div>
@@ -295,10 +295,10 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
         </div>
       </div>
 
-      <div className="mt-auto pt-4 text-xs text-[#565f89]">
-        <div className="border-t border-[#565f89]/20 pt-3">
+      <div className="mt-auto pt-4 text-xs" style={{ color: 'var(--theme-text-dimmed)' }}>
+        <div className="border-t pt-3" style={{ borderColor: 'rgba(var(--theme-text-rgb), 0.1)' }}>
           <div>{`${2} directories, ${2 + projectItems.length + blogItems.length} files`}</div>
-          <div className="mt-2 text-[#565f89]/80">
+          <div className="mt-2" style={{ opacity: 0.8 }}>
             {uiStrings.navigation.tabHint}
           </div>
         </div>

@@ -98,21 +98,21 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
 
             <div className="space-y-4" style={{ color: 'var(--theme-text)' }}>
               <div>
-                <h2 className="font-bold mb-2" style={{ color: 'var(--theme-success)' }}>{uiStrings.headers.overview}</h2>
+                <h2 className="text-lg font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9 }}>{uiStrings.headers.overview}</h2>
                 <p className="text-sm leading-relaxed" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
                   {project.overview || "This project demonstrates advanced development practices with focus on security, efficiency, and scalability. Implemented using modern development tools and following industry best practices."}
                 </p>
               </div>
 
               <div>
-                <h2 className="font-bold mb-2" style={{ color: 'var(--theme-success)' }}>{uiStrings.headers.techStack}</h2>
+                <h2 className="text-lg font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9 }}>{uiStrings.headers.techStack}</h2>
                 <code className="text-xs font-mono p-3 rounded-lg mt-2 border block" style={{ color: 'var(--theme-info)', backgroundColor: 'var(--theme-bg)', borderColor: 'var(--theme-border)', opacity: 0.5 }}>
                   {project.techStack?.join(', ') || projectsConfig.find(p => p.id === project.id)?.techStackDisplay || 'Technologies not specified'}
                 </code>
               </div>
 
               <div>
-                <h2 className="font-bold mb-2" style={{ color: 'var(--theme-success)' }}>{uiStrings.headers.keyFeatures}</h2>
+                <h2 className="text-lg font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9 }}>{uiStrings.headers.keyFeatures}</h2>
                 <ul className="space-y-1 text-sm" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
                   {(project.features || [
                     "Fully tested and documented codebase",
@@ -172,12 +172,12 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                   <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
                     {blog.excerpt || "Content coming soon..."}
                   </p>
-                  <h2 className="font-bold" style={{ color: 'var(--theme-success)' }}>{uiStrings.headers.introduction}</h2>
+                  <h2 className="text-lg font-bold mb-3 mt-4" style={{ color: 'var(--accent-color)', opacity: 0.9 }}>{uiStrings.headers.introduction}</h2>
                   <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
                     Detailed explanation of the topic, with code examples and technical insights
                     that demonstrate deep understanding of the subject matter.
                   </p>
-                  <h2 className="font-bold" style={{ color: 'var(--theme-success)' }}>{uiStrings.headers.conclusion}</h2>
+                  <h2 className="text-lg font-bold mb-3 mt-4" style={{ color: 'var(--accent-color)', opacity: 0.9 }}>{uiStrings.headers.conclusion}</h2>
                   <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
                     Summary of key points and takeaways from the article.
                   </p>

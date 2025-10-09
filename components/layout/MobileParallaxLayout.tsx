@@ -275,35 +275,6 @@ const MobileParallaxLayout: React.FC = () => {
         }}
       />
 
-      {/* Fixed Neofetch Background - Extends to border edge */}
-      <motion.div
-        className="fixed flex items-center justify-center pointer-events-none"
-        style={{
-          top: `${borderPadding}px`,
-          left: `${borderPadding}px`,
-          right: `${borderPadding}px`,
-          height: '65vh',
-          opacity: backgroundOpacity,
-          backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
-          backdropFilter: 'blur(10px)',
-          zIndex: 2
-        }}
-      >
-        <div className="w-full max-w-4xl mx-auto" style={{
-          marginTop: `${borderPadding}px`,
-          paddingLeft: '48px',
-          paddingRight: '48px'
-        }}>
-          <NeofetchTile isBlurred={false} layout="parallax" />
-        </div>
-        <div
-          className="absolute inset-x-0 bottom-0 h-32"
-          style={{
-            background: 'linear-gradient(to bottom, transparent, var(--theme-bg))'
-          }}
-        />
-      </motion.div>
-
       {/* Scrollable Content - Container extends to viewport, padding creates border zone */}
       <div
         ref={scrollRef}
@@ -322,6 +293,37 @@ const MobileParallaxLayout: React.FC = () => {
         role="main"
         aria-label="Main content"
       >
+        {/* Fixed Neofetch Background - Now inside scroll container for clickability */}
+        <motion.div
+          className="fixed flex items-center justify-center"
+          style={{
+            top: `${borderPadding}px`,
+            left: `${borderPadding}px`,
+            right: `${borderPadding}px`,
+            height: '65vh',
+            opacity: backgroundOpacity,
+            backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
+            backdropFilter: 'blur(10px)',
+            zIndex: 1,
+            pointerEvents: 'none'
+          }}
+        >
+          <div className="w-full max-w-4xl mx-auto" style={{
+            marginTop: `${borderPadding}px`,
+            paddingLeft: '48px',
+            paddingRight: '48px',
+            pointerEvents: 'auto'
+          }}>
+            <NeofetchTile isBlurred={false} layout="parallax" />
+          </div>
+          <div
+            className="absolute inset-x-0 bottom-0 h-32"
+            style={{
+              background: 'linear-gradient(to bottom, transparent, var(--theme-bg))'
+            }}
+          />
+        </motion.div>
+
         {/* Spacer for fixed background */}
         <div
           style={{

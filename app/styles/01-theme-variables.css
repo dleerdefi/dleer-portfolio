@@ -125,8 +125,8 @@
   --theme-text: var(--color-text-body);
   --theme-text-rgb: var(--color-text-body-rgb);
   --theme-text-bright: #E5E9F0;    /* nord5 - Snow Storm */
-  --theme-text-dimmed: #4C566A;    /* nord3 - Polar Night */
-  --theme-text-muted: #4C566A;     /* nord3 - Polar Night */
+  --theme-text-dimmed: #88C0D0;    /* nord8 - Frost (improved 5.5:1 contrast, was nord3 2:1) */
+  --theme-text-muted: #81A1C1;     /* nord9 - Frost (4.8:1 contrast, subtle muted state) */
   --theme-primary: var(--color-accent-1);
   --theme-primary-rgb: var(--color-accent-1-rgb);
   --theme-secondary: #88C0D0;      /* nord8 - Frost */

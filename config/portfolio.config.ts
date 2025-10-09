@@ -14,7 +14,7 @@ export const portfolioConfig: PortfolioConfig = {
     bio: {
       // Structured bio for parallax sections
       intro: process.env.NEXT_PUBLIC_BIO_INTRO ||
-        "Founder–engineer building AI memory. I wire LLMs to knowledge graphs so products think with context and take action.",
+        "Founder–engineer building AI memory with knowledge graphs.",
 
       experience: process.env.NEXT_PUBLIC_BIO_EXPERIENCE ||
         "At ConsumerFi, I designed a three-layer architecture: ConsumerGraph, Graph Intelligence, and an Agentic Layer with non-custodial execution. I built hybrid agent and event simulators that modeled >$300M token economies for market makers and foundations.",
@@ -42,23 +42,23 @@ export const portfolioConfig: PortfolioConfig = {
   social: [
     {
       platform: "GitHub",
-      url: process.env.NEXT_PUBLIC_GITHUB_URL || "https://github.com/username",
-      username: process.env.NEXT_PUBLIC_GITHUB_USERNAME || "@username"
+      url: process.env.NEXT_PUBLIC_GITHUB_URL || "https://github.com/dleerdefi",
+      username: process.env.NEXT_PUBLIC_GITHUB_USERNAME || "@dleerdefi"
     },
     {
       platform: "LinkedIn",
-      url: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://linkedin.com/in/username",
-      username: process.env.NEXT_PUBLIC_LINKEDIN_USERNAME || "username"
+      url: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://linkedin.com/in/dleer",
+      username: process.env.NEXT_PUBLIC_LINKEDIN_USERNAME || "dleer"
     },
     {
       platform: "Twitter",
-      url: process.env.NEXT_PUBLIC_TWITTER_URL || "https://twitter.com/username",
-      username: process.env.NEXT_PUBLIC_TWITTER_USERNAME || "@username"
+      url: process.env.NEXT_PUBLIC_TWITTER_URL || "https://x.com/dleer_defi",
+      username: process.env.NEXT_PUBLIC_TWITTER_USERNAME || "@dleer_defi"
     },
     {
       platform: "Telegram",
-      url: process.env.NEXT_PUBLIC_TELEGRAM_URL || "https://t.me/username",
-      username: process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || "@username"
+      url: process.env.NEXT_PUBLIC_TELEGRAM_URL || "https://t.me/dleer",
+      username: process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || "@dleer"
     }
   ],
 
