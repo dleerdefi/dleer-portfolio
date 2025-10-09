@@ -45,7 +45,7 @@
   -webkit-backdrop-filter: blur(8px);
 }
 
-/* kyrre.dev-style glass diffusion for top/bottom borders */
+/* kyrre.dev-inspired glass diffusion for top/bottom borders */
 /* Privacy glass effect: solid dots + semi-transparent gaps with blur */
 .gradient-dots {
   /* Transparent background */

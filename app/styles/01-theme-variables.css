@@ -149,11 +149,11 @@
   --color-bg-rgb: 253, 246, 227;
   --color-surface: #eee8d5;        /* base2 - Background highlights */
   --color-surface-rgb: 238, 232, 213;
-  --color-text-body: #586e75;      /* base01 - PRIMARY BODY TEXT (7.1:1 contrast - AAA compliant) */
-  --color-text-body-rgb: 88, 110, 117;
+  --color-text-body: #073642;      /* base02 - EMPHASIZED TEXT (11.5:1 contrast - exceptional readability) */
+  --color-text-body-rgb: 7, 54, 66;
   --color-text-header: #268bd2;    /* blue - Accent headers (7.5:1 contrast) */
   --color-text-header-rgb: 38, 139, 210;
-  --color-input-text: #586e75;     /* base01 - Input text (matches body for consistency) */
+  --color-input-text: #073642;     /* base02 - Input text (matches body for consistency) */
   --color-accent-1: #d33682;       /* magenta - Primary accent */
   --color-accent-1-rgb: 211, 54, 130;
 
@@ -164,8 +164,8 @@
   --theme-surface-rgb: var(--color-surface-rgb);
   --theme-text: var(--color-text-body);
   --theme-text-rgb: var(--color-text-body-rgb);
-  --theme-text-dimmed: #657b83;    /* base00 - Secondary/dimmed text (5.3:1 contrast - AA compliant) */
-  --theme-text-muted: #93a1a1;     /* base1 - Tertiary/comments (use sparingly, 3.2:1 contrast) */
+  --theme-text-dimmed: #586e75;    /* base01 - Secondary/dimmed text (7.1:1 contrast - AAA compliant) */
+  --theme-text-muted: #657b83;     /* base00 - Tertiary/muted text (5.3:1 contrast - AA compliant) */
   --theme-primary: var(--color-text-header);
   --theme-primary-rgb: var(--color-text-header-rgb);
   --theme-border: #93a1a1;          /* base1 */
