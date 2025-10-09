@@ -194,7 +194,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
 
             <form className="space-y-4">
               <div>
-                <label className="block text-sm" style={{ color: 'var(--theme-text-dimmed)' }}>{uiStrings.labels.name}</label>
+                <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>{uiStrings.labels.name}</label>
                 <input
                   type="text"
                   value={formData.name}
@@ -219,7 +219,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                 />
               </div>
               <div>
-                <label className="block text-sm" style={{ color: 'var(--theme-text-dimmed)' }}>{uiStrings.labels.email}</label>
+                <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>{uiStrings.labels.email}</label>
                 <input
                   type="email"
                   value={formData.email}
@@ -244,7 +244,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                 />
               </div>
               <div>
-                <label className="block text-sm" style={{ color: 'var(--theme-text-dimmed)' }}>{uiStrings.labels.message}</label>
+                <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>{uiStrings.labels.message}</label>
                 <textarea
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
