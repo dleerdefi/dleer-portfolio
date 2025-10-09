@@ -204,8 +204,8 @@ const MobileParallaxLayout: React.FC = () => {
             left: 0,
             right: 0,
             height: `${borderPadding}px`,
-            backdropFilter: 'blur(20px) saturate(150%)',
-            WebkitBackdropFilter: 'blur(20px) saturate(150%)'
+            backdropFilter: 'blur(4px) saturate(120%)',
+            WebkitBackdropFilter: 'blur(4px) saturate(120%)'
           }}
         />
 
@@ -217,8 +217,8 @@ const MobileParallaxLayout: React.FC = () => {
             left: 0,
             right: 0,
             height: `${borderPadding}px`,
-            backdropFilter: 'blur(20px) saturate(150%)',
-            WebkitBackdropFilter: 'blur(20px) saturate(150%)'
+            backdropFilter: 'blur(4px) saturate(120%)',
+            WebkitBackdropFilter: 'blur(4px) saturate(120%)'
           }}
         />
       </div>
