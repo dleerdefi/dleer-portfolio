@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface FormData {
   name: string;
   email: string;
   message: string;
+  website?: string;
 }
 
 interface SocialLink {
@@ -32,16 +33,48 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
   socialLinks,
   personal
 }) => {
+  const [formRenderTime] = useState(new Date().toISOString());
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+
   const githubLink = socialLinks.find(link => link.platform === 'GitHub');
   const linkedinLink = socialLinks.find(link => link.platform === 'LinkedIn');
   const twitterLink = socialLinks.find(link => link.platform === 'Twitter');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Handle form submission here
-    alert('Message sent! (This is a demo)');
-    setFormData({ name: '', email: '', message: '' });
+    setIsSubmitting(true);
+    setSubmitError('');
+    setSubmitSuccess(false);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          website: formData.website || '',
+          timestamp: formRenderTime
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
+
+      setSubmitSuccess(true);
+      setFormData({ name: '', email: '', message: '', website: '' });
+
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Failed to send message');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -56,7 +89,23 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
         </h2>
 
         {/* Contact Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form id="contact-form-mobile" onSubmit={handleSubmit} className="space-y-4">
+        {/* Honeypot field - hidden from users, visible to bots */}
+        <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+          <label htmlFor="website-mobile" aria-hidden="true">
+            Website (leave blank)
+          </label>
+          <input
+            type="text"
+            id="website-mobile"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={formData.website || ''}
+            onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+          />
+        </div>
+
         <div>
           <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
             Name
@@ -119,41 +168,60 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
       <div style={{ display: 'inline-block', minWidth: '150px' }}>
         <button
           type="submit"
+          form="contact-form-mobile"
+          disabled={isSubmitting}
           className="px-6 py-2 rounded font-medium text-sm"
           style={{
-            backgroundColor: 'var(--accent-color)',
+            backgroundColor: isSubmitting
+              ? 'rgba(var(--accent-color-rgb), 0.5)'
+              : 'var(--accent-color)',
             color: 'var(--theme-bg)',
             marginTop: '24px',
             fontWeight: '600',
             width: '100%',
-            cursor: 'pointer',
+            cursor: isSubmitting ? 'not-allowed' : 'pointer',
             border: 'none',
+            opacity: isSubmitting ? 0.7 : 1,
             transition: 'transform 0.1s ease, opacity 0.2s ease'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'scale(1.02)';
+            if (!isSubmitting) {
+              e.currentTarget.style.transform = 'scale(1.02)';
+            }
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'scale(1)';
+            if (!isSubmitting) {
+              e.currentTarget.style.transform = 'scale(1)';
+            }
           }}
           onMouseDown={(e) => {
-            e.currentTarget.style.transform = 'scale(0.98)';
+            if (!isSubmitting) {
+              e.currentTarget.style.transform = 'scale(0.98)';
+            }
           }}
           onMouseUp={(e) => {
-            e.currentTarget.style.transform = 'scale(1.02)';
-          }}
-          onClick={(e) => {
-            e.preventDefault();
-            const form = e.currentTarget.closest('div')?.querySelector('form');
-            if (form) {
-              const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-              form.dispatchEvent(submitEvent);
+            if (!isSubmitting) {
+              e.currentTarget.style.transform = 'scale(1.02)';
             }
           }}
         >
-          Send Message
+          {isSubmitting ? 'Sending...' : 'Send Message'}
         </button>
       </div>
+
+      {/* Success message */}
+      {submitSuccess && (
+        <div className="mt-4" style={{ color: 'var(--theme-success)' }}>
+          ✓ Message sent successfully!
+        </div>
+      )}
+
+      {/* Error message */}
+      {submitError && (
+        <div className="mt-4" style={{ color: 'var(--theme-error)' }}>
+          ✗ {submitError}
+        </div>
+      )}
 
       {/* Social Links - Horizontal SVG Icons */}
       <div className="mt-8">

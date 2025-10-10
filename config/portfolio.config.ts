@@ -10,6 +10,7 @@ export const portfolioConfig: PortfolioConfig = {
     title: process.env.NEXT_PUBLIC_TITLE || "Founder & Software Engineer",
     subtitle: process.env.NEXT_PUBLIC_SUBTITLE || "Building next-generation AI memory systems",
     email: process.env.NEXT_PUBLIC_EMAIL || "your.email@example.com",
+    contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "david@aggregated.app",
     location: process.env.NEXT_PUBLIC_LOCATION || "Your Location",
     bio: {
       // Structured bio for parallax sections

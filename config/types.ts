@@ -7,6 +7,7 @@ export interface PersonalInfo {
   title: string;
   subtitle: string;
   email: string;
+  contactEmail: string;  // Email for contact form submissions
   location: string;
   bio: {
     // Structured bio fields for parallax mode
