@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { FormField } from '@/components/ui/FormField';
+import { useContactFormValidation } from '@/hooks/useContactFormValidation';
 
 interface FormData {
   name: string;
@@ -38,12 +40,24 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
+  // Contact form validation
+  const { errors, validateAll, handleFieldBlur, clearErrors } = useContactFormValidation({
+    maxMessageLength: 5000
+  });
+
   const githubLink = socialLinks.find(link => link.platform === 'GitHub');
   const linkedinLink = socialLinks.find(link => link.platform === 'LinkedIn');
   const twitterLink = socialLinks.find(link => link.platform === 'Twitter');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate all fields before submitting
+    const { isValid } = validateAll(formData);
+    if (!isValid) {
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitError('');
     setSubmitSuccess(false);
@@ -69,6 +83,7 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
 
       setSubmitSuccess(true);
       setFormData({ name: '', email: '', message: '', website: '' });
+      clearErrors();
 
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Failed to send message');
@@ -89,7 +104,7 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
         </h2>
 
         {/* Contact Form */}
-        <form id="contact-form-mobile" onSubmit={handleSubmit} className="space-y-4">
+        <form id="contact-form-mobile" onSubmit={handleSubmit} className="space-y-6">
         {/* Honeypot field - hidden from users, visible to bots */}
         <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
           <label htmlFor="website-mobile" aria-hidden="true">
@@ -106,62 +121,41 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
           />
         </div>
 
-        <div>
-          <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
-            Name
-          </label>
-          <input
-            type="text"
-            required
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full rounded px-3 py-2 text-sm transition-colors"
-            style={{
-              backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
-              color: 'var(--theme-text)',
-              border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
-            }}
-            placeholder="Your name"
-          />
-        </div>
+        <FormField
+          label="Name"
+          type="text"
+          value={formData.name}
+          onChange={(value) => setFormData({ ...formData, name: value })}
+          onBlur={() => handleFieldBlur('name', formData.name)}
+          error={errors.name}
+          required
+          placeholder="Your name"
+        />
 
-        <div>
-          <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
-            Email
-          </label>
-          <input
-            type="email"
-            required
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full rounded px-3 py-2 text-sm transition-colors"
-            style={{
-              backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
-              color: 'var(--theme-text)',
-              border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
-            }}
-            placeholder="your.email@example.com"
-          />
-        </div>
+        <FormField
+          label="Email"
+          type="email"
+          value={formData.email}
+          onChange={(value) => setFormData({ ...formData, email: value })}
+          onBlur={() => handleFieldBlur('email', formData.email)}
+          error={errors.email}
+          required
+          placeholder="your.email@example.com"
+        />
 
-        <div>
-          <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>
-            Message
-          </label>
-          <textarea
-            required
-            value={formData.message}
-            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-            rows={5}
-            className="w-full rounded px-3 py-2 text-sm resize-none transition-colors"
-            style={{
-              backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
-              color: 'var(--theme-text)',
-              border: '1px solid rgba(var(--accent-color-rgb), 0.3)'
-            }}
-            placeholder="Your message..."
-          />
-        </div>
+        <FormField
+          label="Message"
+          type="textarea"
+          value={formData.message}
+          onChange={(value) => setFormData({ ...formData, message: value })}
+          onBlur={() => handleFieldBlur('message', formData.message)}
+          error={errors.message}
+          required
+          rows={5}
+          maxLength={5000}
+          showCharCount
+          placeholder="Your message..."
+        />
       </form>
 
       {/* Submit Button - Outside form to control spacing */}
@@ -208,6 +202,11 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
           {isSubmitting ? 'Sending...' : 'Send Message'}
         </button>
       </div>
+
+      {/* Response time expectation */}
+      <p className="text-xs mt-2" style={{ color: 'var(--theme-text-dimmed)' }}>
+        I'll respond within 24-48 hours
+      </p>
 
       {/* Success message */}
       {submitSuccess && (
