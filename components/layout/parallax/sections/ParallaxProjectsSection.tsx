@@ -143,7 +143,7 @@ export const ParallaxProjectsSection: React.FC<ParallaxProjectsSectionProps> = (
               >
                 <h3
                   className="text-lg font-semibold mb-1 transition-colors group-hover:brightness-110"
-                  style={{ color: 'var(--theme-primary)' }}
+                  style={{ color: 'var(--theme-text)' }}
                 >
                   {project.name}
                 </h3>

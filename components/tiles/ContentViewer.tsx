@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { useFocusState, ContentType } from '@/contexts/FocusContext';
 import { usePersonalInfo, useProjects, useBlogPosts, useSkills, useUIStrings } from '@/lib/config';
 import { AboutTechGrid } from './about/AboutTechGrid';
+import { FormField } from '@/components/ui/FormField';
+import { useContactFormValidation } from '@/hooks/useContactFormValidation';
 
 interface ContentViewerProps {
   onNavigate?: (content: ContentType) => void;
@@ -22,10 +24,22 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
   const skills = useSkills();
   const uiStrings = useUIStrings();
 
+  // Contact form validation
+  const { errors, validateAll, handleFieldBlur, clearErrors } = useContactFormValidation({
+    maxMessageLength: 5000
+  });
+
   const content = activeContent;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate all fields before submitting
+    const { isValid } = validateAll(formData);
+    if (!isValid) {
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitError('');
     setSubmitSuccess(false);
@@ -51,6 +65,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
 
       setSubmitSuccess(true);
       setFormData({ name: '', email: '', message: '', website: '' });
+      clearErrors();
 
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Failed to send message');
@@ -231,7 +246,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
           <div className="space-y-4">
             <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>{uiStrings.headers.contact}</h1>
 
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Honeypot field - hidden from users, visible to bots */}
               <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
                 <label htmlFor="website" aria-hidden="true">
@@ -247,81 +262,43 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                   onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                 />
               </div>
-              <div>
-                <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>{uiStrings.labels.name}</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full rounded px-3 py-2 text-sm transition-colors"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    color: 'var(--theme-text)',
-                    borderWidth: '1px',
-                    borderColor: 'rgba(var(--accent-color-rgb), 0.5)'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = 'var(--accent-color)';
-                    e.target.style.outline = '2px solid var(--accent-color)';
-                    e.target.style.outlineOffset = '2px';
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = 'rgba(var(--accent-color-rgb), 0.5)';
-                    e.target.style.outline = 'none';
-                  }}
-                  placeholder={uiStrings.placeholders.name}
-                />
-              </div>
-              <div>
-                <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>{uiStrings.labels.email}</label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full rounded px-3 py-2 text-sm transition-colors"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    color: 'var(--theme-text)',
-                    borderWidth: '1px',
-                    borderColor: 'rgba(var(--accent-color-rgb), 0.5)'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = 'var(--accent-color)';
-                    e.target.style.outline = '2px solid var(--accent-color)';
-                    e.target.style.outlineOffset = '2px';
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = 'rgba(var(--accent-color-rgb), 0.5)';
-                    e.target.style.outline = 'none';
-                  }}
-                  placeholder={uiStrings.placeholders.email}
-                />
-              </div>
-              <div>
-                <label className="block text-sm mb-2" style={{ color: 'var(--theme-text-dimmed)' }}>{uiStrings.labels.message}</label>
-                <textarea
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  rows={5}
-                  className="w-full rounded px-3 py-2 text-sm resize-none transition-colors"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    color: 'var(--theme-text)',
-                    borderWidth: '1px',
-                    borderColor: 'rgba(var(--accent-color-rgb), 0.5)'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = 'var(--accent-color)';
-                    e.target.style.outline = '2px solid var(--accent-color)';
-                    e.target.style.outlineOffset = '2px';
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = 'rgba(var(--accent-color-rgb), 0.5)';
-                    e.target.style.outline = 'none';
-                  }}
-                  placeholder={uiStrings.placeholders.message}
-                />
-              </div>
+
+              <FormField
+                label={uiStrings.labels.name}
+                type="text"
+                value={formData.name}
+                onChange={(value) => setFormData({ ...formData, name: value })}
+                onBlur={() => handleFieldBlur('name', formData.name)}
+                error={errors.name}
+                required
+                placeholder={uiStrings.placeholders.name}
+              />
+
+              <FormField
+                label={uiStrings.labels.email}
+                type="email"
+                value={formData.email}
+                onChange={(value) => setFormData({ ...formData, email: value })}
+                onBlur={() => handleFieldBlur('email', formData.email)}
+                error={errors.email}
+                required
+                placeholder={uiStrings.placeholders.email}
+              />
+
+              <FormField
+                label={uiStrings.labels.message}
+                type="textarea"
+                value={formData.message}
+                onChange={(value) => setFormData({ ...formData, message: value })}
+                onBlur={() => handleFieldBlur('message', formData.message)}
+                error={errors.message}
+                required
+                rows={5}
+                maxLength={5000}
+                showCharCount
+                placeholder={uiStrings.placeholders.message}
+              />
+
               <div style={{ marginTop: '24px' }}>
                 <button
                   type="submit"
@@ -350,6 +327,11 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                   {isSubmitting ? 'Sending...' : uiStrings.buttons.sendMessage}
                 </button>
               </div>
+
+              {/* Response time expectation */}
+              <p className="text-xs" style={{ color: 'var(--theme-text-dimmed)', marginTop: '8px' }}>
+                I'll respond within 24-48 hours
+              </p>
 
               {/* Success message */}
               {submitSuccess && (

@@ -117,7 +117,7 @@ export const ParallaxBlogSection: React.FC<ParallaxBlogSectionProps> = ({
             >
               <h3
                 className="text-lg font-semibold mb-1 transition-colors group-hover:brightness-110"
-                style={{ color: 'var(--theme-primary)' }}
+                style={{ color: 'var(--theme-text)' }}
               >
                 {post.title}
               </h3>

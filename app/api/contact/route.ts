@@ -73,7 +73,10 @@ export async function POST(req: NextRequest) {
     // Validate required fields
     if (!name || !email || !message) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        {
+          error: 'All fields are required',
+          field: !name ? 'name' : !email ? 'email' : 'message'
+        },
         { status: 400 }
       );
     }
@@ -81,16 +84,28 @@ export async function POST(req: NextRequest) {
     // Validate name length
     if (name.trim().length < 2) {
       return NextResponse.json(
-        { error: 'Name must be at least 2 characters' },
+        {
+          error: 'Name must be at least 2 characters',
+          field: 'name'
+        },
         { status: 400 }
       );
     }
 
-    // Validate email format
+    // Validate email format with specific feedback
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
+      let specificError = 'Please enter a valid email address';
+      if (!email.includes('@')) {
+        specificError = 'Email must include @ symbol';
+      } else if (!email.includes('.')) {
+        specificError = 'Email must include a domain (e.g., .com, .org)';
+      }
       return NextResponse.json(
-        { error: 'Invalid email format' },
+        {
+          error: specificError,
+          field: 'email'
+        },
         { status: 400 }
       );
     }
@@ -98,14 +113,20 @@ export async function POST(req: NextRequest) {
     // Validate message length
     if (message.length > 5000) {
       return NextResponse.json(
-        { error: 'Message too long (max 5000 characters)' },
+        {
+          error: 'Message must not exceed 5000 characters',
+          field: 'message'
+        },
         { status: 400 }
       );
     }
 
     if (message.trim().length < 10) {
       return NextResponse.json(
-        { error: 'Message must be at least 10 characters' },
+        {
+          error: 'Message must be at least 10 characters',
+          field: 'message'
+        },
         { status: 400 }
       );
     }
