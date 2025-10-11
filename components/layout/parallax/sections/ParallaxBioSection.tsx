@@ -90,10 +90,9 @@ export const ParallaxBioSection: React.FC<ParallaxBioSectionProps> = ({
           {/* Tagline */}
           {tagline && (
             <p
-              className="text-sm italic pt-4 border-t"
+              className="text-sm italic pt-4"
               style={{
                 color: 'var(--theme-text-dimmed)',
-                borderColor: 'rgba(var(--accent-color-rgb), 0.2)',
                 opacity: 0.8
               }}
             >
@@ -101,15 +100,6 @@ export const ParallaxBioSection: React.FC<ParallaxBioSectionProps> = ({
             </p>
           )}
         </div>
-
-        {/* Visual accent element */}
-        <div
-          className="mt-8 h-1"
-          style={{
-            background: 'linear-gradient(90deg, var(--accent-color), transparent)',
-            opacity: 0.4
-          }}
-        />
       </div>
     </div>
   );
