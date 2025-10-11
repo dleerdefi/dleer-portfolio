@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useFocusState } from '@/contexts/FocusContext';
-import { useView } from '@/contexts/ViewContext';
 
 interface PolybarProps {
   onNavigate: (section: string) => void;
@@ -11,7 +10,6 @@ interface PolybarProps {
 const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
   const [time, setTime] = useState<Date | null>(null);
   const { activeContent } = useFocusState();
-  const { mode } = useView();
 
   useEffect(() => {
     // Set initial time after mount to avoid hydration mismatch
@@ -73,22 +71,6 @@ const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
 
         {/* Right Section */}
         <div className="flex items-center gap-3">
-          {/* Mode Indicator */}
-          <div className="hidden md:flex items-center gap-1">
-            <div
-              className="px-2 py-0.5 text-xs"
-              style={{
-                backgroundColor: mode === 'zen' ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
-                color: mode === 'zen' ? 'var(--accent-color)' : 'var(--color-text-dimmed)',
-                border: '1px solid',
-                borderColor: mode === 'zen' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)'
-              }}
-              title={mode === 'zen' ? 'Zen Mode Active' : 'Tiled Layout'}
-            >
-              {mode === 'zen' ? '☰ ZEN' : '◫◫'}
-            </div>
-          </div>
-          <span className="hidden md:inline" style={{ color: 'var(--color-text-dimmed)' }}>|</span>
           <span style={{ color: 'var(--color-text-body)' }}>
             {time ? time.toLocaleTimeString('en-US', {
               hour: '2-digit',
