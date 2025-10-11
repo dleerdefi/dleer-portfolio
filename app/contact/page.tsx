@@ -100,7 +100,7 @@ export default function Contact() {
             <Card hover={false} className="mt-6">
               <h3 className="text-lg font-semibold text-text-primary mb-3">Response Time</h3>
               <p className="text-text-secondary">
-                Typically respond within 24-48 hours for general inquiries.
+                Typically respond within 48 hours for general inquiries.
                 Faster response for urgent security matters.
               </p>
               <div className="mt-4">
