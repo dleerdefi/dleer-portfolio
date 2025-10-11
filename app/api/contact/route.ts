@@ -134,7 +134,9 @@ export async function POST(req: NextRequest) {
     // LAYER 5: Send Email via Resend
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const result = await resend.emails.send({
+
+    // Send email using Resend API
+    const { data, error } = await resend.emails.send({
       // Use 'onboarding@resend.dev' for testing without custom domain
       // Replace with 'contact@yourdomain.com' after domain verification
       from: 'onboarding@resend.dev',
@@ -173,9 +175,49 @@ export async function POST(req: NextRequest) {
       `
     });
 
-    console.log('Email sent successfully:', result.data?.id);
+    // Check for Resend API error (as per documentation)
+    if (error) {
+      console.error('Resend API error:', error);
 
-    return NextResponse.json({ success: true });
+      // Specific error handling
+      if (error.message?.includes('missing_required_field')) {
+        return NextResponse.json(
+          { error: 'Email configuration error. Please contact support.' },
+          { status: 500 }
+        );
+      }
+
+      if (error.message?.includes('invalid_api_key')) {
+        console.error('Invalid Resend API key');
+        return NextResponse.json(
+          { error: 'Email service configuration error.' },
+          { status: 500 }
+        );
+      }
+
+      // Generic error response
+      return NextResponse.json(
+        { error: error.message || 'Failed to send email. Please try again later.' },
+        { status: 500 }
+      );
+    }
+
+    // Verify we have a valid email ID
+    if (!data || !data.id) {
+      console.error('No email ID received from Resend');
+      return NextResponse.json(
+        { error: 'Email sending failed. No confirmation received.' },
+        { status: 500 }
+      );
+    }
+
+    // Success - we have a valid email ID
+    console.log('Email sent successfully:', data.id);
+
+    return NextResponse.json({
+      success: true,
+      emailId: data.id // Include for verification
+    });
 
   } catch (error) {
     console.error('Contact form error:', error);
