@@ -104,7 +104,7 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
         </h2>
 
         {/* Contact Form */}
-        <form id="contact-form-mobile" onSubmit={handleSubmit} className="space-y-6">
+        <form id="contact-form-mobile" onSubmit={handleSubmit}>
         {/* Honeypot field - hidden from users, visible to bots */}
         <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
           <label htmlFor="website-mobile" aria-hidden="true">
