@@ -95,7 +95,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:underline transition-colors duration-200 cursor-pointer"
-                style={{ color: 'var(--accent-color)' }}
+                style={{ color: 'var(--accent-color)', pointerEvents: 'auto' }}
               >
                 {system.github.username}
               </a>
@@ -111,7 +111,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:underline transition-colors duration-200 cursor-pointer"
-                style={{ color: 'var(--accent-color)' }}
+                style={{ color: 'var(--accent-color)', pointerEvents: 'auto' }}
               >
                 {system.twitter.username}
               </a>
@@ -128,7 +128,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:underline transition-colors duration-200 cursor-pointer"
-                style={{ color: 'var(--accent-color)' }}
+                style={{ color: 'var(--accent-color)', pointerEvents: 'auto' }}
               >
                 {system.linkedin.username}
               </a>
@@ -144,7 +144,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:underline transition-colors duration-200 cursor-pointer"
-                style={{ color: 'var(--accent-color)' }}
+                style={{ color: 'var(--accent-color)', pointerEvents: 'auto' }}
               >
                 {system.youtube.username}
               </a>
@@ -160,7 +160,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:underline transition-colors duration-200 cursor-pointer"
-                style={{ color: 'var(--accent-color)' }}
+                style={{ color: 'var(--accent-color)', pointerEvents: 'auto' }}
               >
                 {system.instagram.username}
               </a>
@@ -177,7 +177,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:underline transition-colors duration-200 cursor-pointer"
-                style={{ color: 'var(--accent-color)' }}
+                style={{ color: 'var(--accent-color)', pointerEvents: 'auto' }}
               >
                 {system.tiktok.username}
               </a>
