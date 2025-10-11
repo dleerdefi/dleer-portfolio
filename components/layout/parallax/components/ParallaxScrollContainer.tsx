@@ -105,22 +105,42 @@ export const ParallaxScrollContainer: React.FC<ParallaxScrollContainerProps> = (
         >
           {/* Dot gradient transition from Neofetch to content */}
           {index === 0 && (
-            <div
-              className="absolute left-0 right-0"
-              style={{
-                top: '-75px',
-                height: '75px',
-                backgroundImage: `radial-gradient(circle at 1px 1px, rgba(var(--accent-color-rgb), 0.3) 0.8px, transparent 0.8px)`,
-                backgroundSize: '3px 3px',
-                backgroundPosition: '0 0',
-                backdropFilter: 'blur(4px)',
-                WebkitBackdropFilter: 'blur(4px)',
-                maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)',
-                zIndex: 2,
-                pointerEvents: 'none'
-              }}
-            />
+            <>
+              <div
+                className="absolute left-0 right-0"
+                style={{
+                  top: '-75px',
+                  height: '75px',
+                  backgroundImage: `radial-gradient(circle at 1px 1px, rgba(var(--theme-bg-rgb), 0.8) 0.8px, transparent 0.8px)`,
+                  backgroundSize: '3px 3px',
+                  backgroundPosition: '0 0',
+                  backdropFilter: 'blur(4px)',
+                  WebkitBackdropFilter: 'blur(4px)',
+                  maskImage: 'linear-gradient(to bottom, transparent 0%, black 100%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 100%)',
+                  zIndex: 2,
+                  pointerEvents: 'none'
+                }}
+              />
+              {/* Line after gradient transition */}
+              <div
+                className="absolute max-w-3xl mx-auto w-full"
+                style={{
+                  top: '0',
+                  left: '0',
+                  right: '0',
+                  paddingLeft: '24px',
+                  paddingRight: '24px'
+                }}
+              >
+                <div
+                  style={{
+                    height: '1px',
+                    backgroundColor: 'rgba(var(--accent-color-rgb), 0.2)'
+                  }}
+                />
+              </div>
+            </>
           )}
 
           <div
@@ -136,16 +156,22 @@ export const ParallaxScrollContainer: React.FC<ParallaxScrollContainerProps> = (
           {/* Section divider */}
           {index < sections.length - 1 && (
             <div
-              className="absolute bottom-0 left-0 right-0"
+              className="absolute max-w-3xl mx-auto w-full"
               style={{
-                height: '1px',
-                background: 'linear-gradient(90deg, transparent 10%, rgba(var(--accent-color-rgb), 0.3) 50%, transparent 90%)',
-                boxShadow: `
-                  0 0 10px rgba(var(--accent-color-rgb), 0.2),
-                  0 0 20px rgba(var(--accent-color-rgb), 0.1)
-                `
+                bottom: '0',
+                left: '0',
+                right: '0',
+                paddingLeft: '24px',
+                paddingRight: '24px'
               }}
-            />
+            >
+              <div
+                style={{
+                  height: '1px',
+                  backgroundColor: 'rgba(var(--accent-color-rgb), 0.2)'
+                }}
+              />
+            </div>
           )}
         </section>
       ))}
