@@ -312,7 +312,7 @@ const MobileParallaxLayout: React.FC = () => {
             marginTop: `${borderPadding}px`,
             paddingLeft: '48px',
             paddingRight: '48px',
-            pointerEvents: 'auto'
+            pointerEvents: 'none'
           }}>
             <NeofetchTile isBlurred={false} layout="parallax" />
           </div>
