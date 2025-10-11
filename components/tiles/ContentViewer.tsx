@@ -246,7 +246,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
           <div className="space-y-4">
             <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>{uiStrings.headers.contact}</h1>
 
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
               {/* Honeypot field - hidden from users, visible to bots */}
               <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
                 <label htmlFor="website" aria-hidden="true">

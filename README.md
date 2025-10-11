@@ -252,7 +252,7 @@ cp .env.example .env.local
 |----------|------|---------|-------------|
 | **Contact Form** |
 | `RESEND_API_KEY` | Server | - | Resend API key (get from resend.com) |
-| `NEXT_PUBLIC_CONTACT_EMAIL` | Client | `david@aggregated.app` | Email recipient for contact form |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | Client | `email@email.com` | Email recipient for contact form |
 | **Personal Information** |
 | `NEXT_PUBLIC_NAME` | Client | "David Leer" | Your full name |
 | `NEXT_PUBLIC_USERNAME` | Client | "dleer" | Your username/handle |

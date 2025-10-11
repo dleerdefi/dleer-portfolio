@@ -24,7 +24,7 @@
 ## Overview
 
 ### Purpose
-Implement a production-ready contact form system that sends emails to `david@aggregated.app` with zero third-party branding, multi-layer spam protection, and Railway-native deployment compatibility.
+Implement a production-ready contact form system that sends emails to `email@email.com` with zero third-party branding, multi-layer spam protection, and Railway-native deployment compatibility.
 
 ### Requirements
 - ✅ No visible third-party branding to site visitors
@@ -486,7 +486,7 @@ personal: {
   username: process.env.NEXT_PUBLIC_USERNAME || "dleer",
   // ... existing fields
   email: process.env.NEXT_PUBLIC_EMAIL || "your.email@example.com",
-  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "david@aggregated.app",
+  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "email@email.com",
   // ... rest of config
 }
 ```
@@ -497,7 +497,7 @@ import { usePersonalInfo } from '@/lib/config';
 
 // In component:
 const personal = usePersonalInfo();
-console.log(personal.contactEmail); // "david@aggregated.app"
+console.log(personal.contactEmail); // "email@email.com"
 ```
 
 ---
@@ -648,14 +648,14 @@ npm install resend
 RESEND_API_KEY=re_YourActualAPIKey_here
 
 # Your contact email (where form submissions go)
-NEXT_PUBLIC_CONTACT_EMAIL=david@aggregated.app
+NEXT_PUBLIC_CONTACT_EMAIL=email@email.com
 ```
 
 **Update .env.example:**
 ```bash
 # Contact Form Configuration
 RESEND_API_KEY=your_resend_api_key_here
-NEXT_PUBLIC_CONTACT_EMAIL=david@aggregated.app
+NEXT_PUBLIC_CONTACT_EMAIL=email@email.com
 ```
 
 **Important:**
@@ -773,7 +773,7 @@ personal: {
   title: process.env.NEXT_PUBLIC_TITLE || "Founder & Software Engineer",
   subtitle: process.env.NEXT_PUBLIC_SUBTITLE || "Building next-generation AI memory systems",
   email: process.env.NEXT_PUBLIC_EMAIL || "your.email@example.com",
-  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "david@aggregated.app",  // ADD THIS LINE
+  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "email@email.com",  // ADD THIS LINE
   location: process.env.NEXT_PUBLIC_LOCATION || "Your Location",
   // ... rest of config
 }
@@ -817,7 +817,7 @@ In Railway dashboard:
 4. Click "New Variable" again
 5. Add:
    - **Name:** `NEXT_PUBLIC_CONTACT_EMAIL`
-   - **Value:** `david@aggregated.app`
+   - **Value:** `email@email.com`
 
 #### 8.3 Get Resend API Key
 
@@ -867,7 +867,7 @@ npm run dev
 1. Navigate to Contact section in content tile
 2. Fill form with valid data
 3. Submit → should see "Message sent successfully!"
-4. Check email inbox (david@aggregated.app)
+4. Check email inbox (email@email.com)
 
 **Test mobile layout:**
 1. Resize browser to mobile width (< 1024px) or use responsive mode
@@ -929,7 +929,7 @@ After deploying to Railway:
 
 5. **Verify email delivery:**
    - Send test message from production form
-   - Check david@aggregated.app inbox (including spam folder)
+   - Check email@email.com inbox (including spam folder)
    - Verify email headers show proper "From" address
 
 ---
@@ -964,7 +964,7 @@ After deploying to Railway:
 | Variable | Type | Required | Example | Purpose |
 |----------|------|----------|---------|---------|
 | `RESEND_API_KEY` | Server | ✅ Yes | `re_abc123xyz` | Resend authentication |
-| `NEXT_PUBLIC_CONTACT_EMAIL` | Client | ✅ Yes | `david@aggregated.app` | Email recipient |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | Client | ✅ Yes | `email@email.com` | Email recipient |
 
 ### Local Development Setup
 
@@ -974,7 +974,7 @@ After deploying to Railway:
 RESEND_API_KEY=re_YourActualAPIKey_GoesHere
 
 # Contact Form - Recipient Email
-NEXT_PUBLIC_CONTACT_EMAIL=david@aggregated.app
+NEXT_PUBLIC_CONTACT_EMAIL=email@email.com
 ```
 
 **Security notes:**
@@ -993,7 +993,7 @@ NEXT_PUBLIC_CONTACT_EMAIL=david@aggregated.app
    - ✅ Enable "Sealed" (hides value in UI for security)
 3. **Add Variable 2:**
    - Name: `NEXT_PUBLIC_CONTACT_EMAIL`
-   - Value: `david@aggregated.app`
+   - Value: `email@email.com`
 
 **Railway auto-injects these at build time and runtime.**
 
@@ -1004,10 +1004,10 @@ NEXT_PUBLIC_CONTACT_EMAIL=david@aggregated.app
 ```typescript
 // In app/api/contact/route.ts (server-side)
 console.log('API Key exists:', !!process.env.RESEND_API_KEY);  // Should log: true
-console.log('Contact email:', process.env.NEXT_PUBLIC_CONTACT_EMAIL);  // Should log: david@aggregated.app
+console.log('Contact email:', process.env.NEXT_PUBLIC_CONTACT_EMAIL);  // Should log: email@email.com
 
 // In browser console (client-side)
-console.log(process.env.NEXT_PUBLIC_CONTACT_EMAIL);  // Should show: david@aggregated.app
+console.log(process.env.NEXT_PUBLIC_CONTACT_EMAIL);  // Should show: email@email.com
 console.log(process.env.RESEND_API_KEY);  // Should show: undefined (correct! server-only)
 ```
 
@@ -1141,7 +1141,7 @@ await nodemailerTransport.sendMail({ ... });  // SMTP port 587 blocked
 
 **Symptoms:**
 - Form shows "Message sent successfully!"
-- No email arrives at `david@aggregated.app`
+- No email arrives at `email@email.com`
 
 **Debugging steps:**
 
@@ -1386,11 +1386,11 @@ npm install resend
    # .env.local should have no quotes, spaces, or comments on same line
    # ✅ Correct:
    RESEND_API_KEY=re_abc123
-   NEXT_PUBLIC_CONTACT_EMAIL=david@aggregated.app
+   NEXT_PUBLIC_CONTACT_EMAIL=email@email.com
 
    # ❌ Wrong:
    RESEND_API_KEY = "re_abc123"  # No spaces around =, no quotes
-   NEXT_PUBLIC_CONTACT_EMAIL=david@aggregated.app  # Comment here
+   NEXT_PUBLIC_CONTACT_EMAIL=email@email.com  # Comment here
    ```
 
 3. **Restart dev server:**

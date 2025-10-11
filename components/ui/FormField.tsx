@@ -82,7 +82,7 @@ export const FormField: React.FC<FormFieldProps> = ({
     .join(' ') || undefined;
 
   return (
-    <div className={className}>
+    <div className={`${className} mt-6 first:mt-0`}>
       {/* Label with required indicator */}
       <label
         htmlFor={fieldId}
