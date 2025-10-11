@@ -293,13 +293,13 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                 onBlur={() => handleFieldBlur('message', formData.message)}
                 error={errors.message}
                 required
-                rows={5}
+                rows={4}
                 maxLength={5000}
                 showCharCount
                 placeholder={uiStrings.placeholders.message}
               />
 
-              <div style={{ marginTop: '24px' }}>
+              <div style={{ marginTop: '12px' }}>
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -327,11 +327,6 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
                   {isSubmitting ? 'Sending...' : uiStrings.buttons.sendMessage}
                 </button>
               </div>
-
-              {/* Response time expectation */}
-              <p className="text-xs" style={{ color: 'var(--theme-text-dimmed)', marginTop: '8px' }}>
-                I'll respond within 24-48 hours
-              </p>
 
               {/* Success message */}
               {submitSuccess && (

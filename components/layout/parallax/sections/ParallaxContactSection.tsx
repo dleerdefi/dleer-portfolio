@@ -203,11 +203,6 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
         </button>
       </div>
 
-      {/* Response time expectation */}
-      <p className="text-xs mt-2" style={{ color: 'var(--theme-text-dimmed)' }}>
-        I'll respond within 24-48 hours
-      </p>
-
       {/* Success message */}
       {submitSuccess && (
         <div className="mt-4" style={{ color: 'var(--theme-success)' }}>

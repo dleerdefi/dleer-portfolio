@@ -86,7 +86,7 @@ export const FormField: React.FC<FormFieldProps> = ({
       {/* Label with required indicator */}
       <label
         htmlFor={fieldId}
-        className="block text-sm font-medium mb-2"
+        className="block text-sm font-medium mb-1"
         style={{ color: 'var(--theme-text)' }}
       >
         {label}
