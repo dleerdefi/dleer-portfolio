@@ -60,8 +60,8 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
           {project.name}
         </h3>
 
-        {/* Description - Simple one-liner */}
-        <p className="text-sm mb-2" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
+        {/* Description - Hidden on mobile, shown on desktop */}
+        <p className="desktop-only text-sm mb-2" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
           {project.description}
         </p>
 

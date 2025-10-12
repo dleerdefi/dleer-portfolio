@@ -2,59 +2,59 @@
 export const projectsData = [
   // === OPEN SOURCE PROJECTS (GitHub Available) ===
 
-  // 1. Peak AI Agent Stack
+  // 1. RinAI - Peak AI Agent Stack (Most sophisticated system)
   {
     id: "peak-ai-agent-stack",
-    name: "Peak AI Agent Stack",
+    name: "RinAI - Agentic AI Companion",
     filename: "peak-ai-agent-stack",
-    description: "Multi-agent AI orchestration framework for complex workflows",
-    overview: "Production-ready framework for orchestrating multiple AI agents with advanced state management, task routing, and error recovery. Built to handle complex, multi-step workflows with automatic fallbacks and parallel execution.",
+    description: "Sophisticated AI companion with graph-based RAG and intelligent context management",
+    overview: "Advanced agentic companion leveraging GraphRAG with Neo4j, real-time tool orchestration, and dynamic LLM gateway. Features ~18,000 processed messages in graph database with parallel execution capabilities and automated conversation summarization.",
     features: [
-      "Dynamic agent orchestration with dependency resolution",
-      "Built-in state persistence and recovery",
-      "Parallel task execution with resource management",
-      "Comprehensive error handling and retry logic",
-      "Real-time monitoring and observability"
+      "Graph-based RAG with Neo4j (18,000+ messages)",
+      "Parallel execution of tools, RAG, and LLM calls",
+      "Dynamic LLM gateway supporting multiple providers",
+      "Intelligent context management with auto-summarization",
+      "Advanced web search using DeepSeek R1"
     ],
-    techStack: ["Python", "LangChain", "Redis", "FastAPI", "PostgreSQL"],
-    techStackDisplay: "Python, LangChain, Redis, FastAPI, PostgreSQL",
+    techStack: ["Node.js", "Python", "Neo4j", "MongoDB", "LangChain"],
+    techStackDisplay: "Node.js, Python, Neo4j, MongoDB, LangChain",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/peak-ai-agent-stack`,
     status: "production",
     category: "systems",
     role: "built",
     visibility: "open-source",
     metrics: [
-      "Powers 10+ production AI applications",
-      "Handles 100K+ agent interactions daily",
-      "99.9% uptime in production"
+      "18,000+ processed messages",
+      "Multi-LLM provider support",
+      "Real-time parallel processing"
     ]
   },
 
-  // 2. LLM Security Auditor
+  // 2. LLM Security Auditor (Best concrete metrics)
   {
     id: "llm-security-auditor",
     name: "LLM Security Auditor",
     filename: "llm-security-auditor",
-    description: "Automated security analysis tool for LLM applications",
-    overview: "Comprehensive security testing framework specifically designed for LLM-powered applications. Identifies vulnerabilities, prompt injection risks, and data leakage issues.",
+    description: "Universal AI prompt auditing tool reducing jailbreak rates from 23% to 3%",
+    overview: "DSPy-powered security framework testing against 25+ attack categories aligned with OWASP LLM Top 10 2025. Cost-effective automated testing at ~$0.50 per audit compared to $1000s for manual testing. A public good tool for the AI community.",
     features: [
-      "Automated prompt injection testing",
-      "Data exfiltration detection",
-      "Model behavior analysis",
-      "Compliance checking (GDPR, CCPA)",
-      "Detailed vulnerability reporting"
+      "Automated jailbreak testing (25+ attack categories)",
+      "DSPy-powered prompt optimization",
+      "OWASP LLM Top 10 2025 aligned",
+      "Comprehensive security reports",
+      "Multi-model support (GPT-4o, Claude, local models)"
     ],
-    techStack: ["Python", "LangChain", "OWASP ZAP", "Burp Suite API"],
-    techStackDisplay: "Python, LangChain, OWASP ZAP, Burp Suite API",
+    techStack: ["Python", "DSPy", "MLflow", "Docker"],
+    techStackDisplay: "Python, DSPy, MLflow, Docker",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/llm-security-auditor`,
     status: "production",
     category: "systems",
     role: "built",
     visibility: "open-source",
     metrics: [
-      "Identified 50+ critical vulnerabilities",
-      "Used by 20+ AI companies",
-      "Reduced security review time by 80%"
+      "Jailbreak reduction: 23% → 3%",
+      "$0.50 per audit vs $1000s manual",
+      "25+ attack categories"
     ]
   },
 
@@ -63,84 +63,83 @@ export const projectsData = [
     id: "agent-state-machine",
     name: "Agent State Machine",
     filename: "agent-state-machine",
-    description: "Finite state machine framework for AI agent behavior",
-    overview: "Lightweight framework for managing complex AI agent behaviors using finite state machines. Provides visual debugging tools and behavior tree integration.",
+    description: "Hierarchical state machine with multi-tool integration and GraphRAG",
+    overview: "Streamlined version of RinAI focused on hierarchical state machine architecture for complex multi-turn interactions. Integrates multiple tools including Twitter, crypto tracking, weather, and NEAR Protocol transactions with GraphRAG memory system.",
     features: [
-      "Visual state machine editor",
-      "Behavior tree integration",
-      "Real-time state debugging",
-      "Plugin architecture",
-      "Performance monitoring"
+      "Hierarchical state machine for complex interactions",
+      "GraphRAG memory system with MongoDB",
+      "6+ tool integrations (Twitter, crypto, weather, NEAR)",
+      "Simple web-based chat interface",
+      "Optional Neo4j support for advanced graph operations"
     ],
-    techStack: ["TypeScript", "React", "D3.js", "Node.js"],
-    techStackDisplay: "TypeScript, React, D3.js, Node.js",
+    techStack: ["Python", "MongoDB", "Neo4j", "FastAPI"],
+    techStackDisplay: "Python, MongoDB, Neo4j, FastAPI",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/agent-state-machine`,
-    demo: "https://agent-fsm-demo.vercel.app",
     status: "production",
-    category: "experimental",
+    category: "systems",
     role: "built",
     visibility: "open-source",
     metrics: [
-      "Used in 50+ AI projects",
-      "500+ GitHub stars",
-      "Active community of 100+ developers"
+      "6+ integrated tools",
+      "Hierarchical state management",
+      "MIT licensed framework"
     ]
   },
 
   // 4. RinAI Multimodal VTuber
   {
     id: "rinai-multimodal-vtuber",
-    name: "RinAI Multimodal VTuber",
+    name: "RinAI VTuber & Desktop Agent",
     filename: "rinai-multimodal-vtuber",
-    description: "Real-time AI-powered virtual avatar with multimodal interaction",
-    overview: "Experimental project combining computer vision, NLP, and real-time rendering to create an interactive AI VTuber. Features emotion recognition, gesture control, and dynamic responses.",
+    description: "Open-source AI VTuber with speech processing and streaming automation",
+    overview: "Combines real-time speech processing, VTube Studio integration, and desktop automation for autonomous streaming. Features Twitter scheduling, YouTube chat interaction, and extensible tool framework designed for 24/7 autonomous operation.",
     features: [
-      "Real-time facial tracking and mapping",
-      "Voice synthesis with emotion",
-      "Gesture recognition and response",
-      "Live streaming integration",
-      "Custom avatar rendering pipeline"
+      "Real-time STT/TTS (Groq Whisper, 11Labs)",
+      "VTube Studio and OBS integration",
+      "Twitter automation and scheduling",
+      "YouTube chat interaction",
+      "GraphRAG memory system",
+      "Extensible tool framework"
     ],
-    techStack: ["Python", "PyTorch", "OpenCV", "Unity", "WebRTC"],
-    techStackDisplay: "Python, PyTorch, OpenCV, Unity, WebRTC",
+    techStack: ["Python", "Node.js", "TypeScript", "FFmpeg", "VoiceMeeter"],
+    techStackDisplay: "Python, Node.js, TypeScript, FFmpeg, VoiceMeeter",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/rinai-multimodal-vtuber`,
-    videoUrl: "https://youtube.com/watch?v=example1",
-    status: "development",
+    status: "production",
     category: "experimental",
     role: "built",
     visibility: "open-source",
     metrics: [
-      "10ms motion capture latency",
-      "95% emotion detection accuracy",
-      "1000+ GitHub stars"
+      "12+ GitHub stars",
+      "Autonomous streaming capable",
+      "98% Python codebase"
     ]
   },
 
-  // 5. Rin Streams
+  // 5. AI VTuber Trading Battle
   {
     id: "rin-streams",
-    name: "Rin Streams",
+    name: "AI VTuber Trading Battle",
     filename: "rin-streams",
-    description: "Streaming infrastructure for AI-powered content generation",
-    overview: "Real-time streaming platform that combines AI content generation with live broadcasting. Features automatic scene switching, chat interaction, and content moderation.",
+    description: "Dual AI VTubers engage in live trading battles driven by YouTube chat sentiment",
+    overview: "Revolutionary streaming system where AI VTubers Rin & Biscuit compete in real-time cryptocurrency trading battles. YouTube chat sentiment drives blockchain trades on Uniswap V3, creating a gamified intersection of AI, streaming, and DeFi. Features 30-second sentiment batch processing and synchronized avatar responses.",
     features: [
-      "AI-driven content generation",
-      "Automatic scene management",
-      "Chat sentiment analysis",
-      "Real-time content moderation",
-      "Multi-platform streaming"
+      "Dual AI VTubers with distinct personalities",
+      "Real-time sentiment-driven blockchain trading",
+      "30-second batch sentiment processing",
+      "User loyalty momentum system",
+      "Synchronized VTube Studio avatar control"
     ],
-    techStack: ["Node.js", "FFmpeg", "OBS WebSocket", "TensorFlow.js"],
-    techStackDisplay: "Node.js, FFmpeg, OBS WebSocket, TensorFlow.js",
-    github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/rin-streams`,
+    techStack: ["Python", "Node.js", "MongoDB", "Uniswap V3", "VTube Studio", "ElevenLabs"],
+    techStackDisplay: "Python, Node.js, MongoDB, Uniswap V3, VTube Studio, ElevenLabs",
+    github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/ai-vtuber-trading-battle`,
     status: "development",
     category: "experimental",
     role: "built",
     visibility: "open-source",
     metrics: [
-      "24/7 autonomous streaming",
-      "1000+ concurrent viewers",
-      "90% positive engagement rate"
+      "Sentiment-driven trading system",
+      "Dual AI personality competition",
+      "Real blockchain integration"
     ]
   },
 
@@ -173,30 +172,30 @@ export const projectsData = [
     ]
   },
 
-  // 7. Token Economy Simulator
+  // 7. Token Dynamics Simulator
   {
     id: "token-economy-simulator",
-    name: "Token Economy Simulator",
+    name: "Token Dynamics Simulator",
     filename: "token-economy-simulator",
-    description: "Agent-based simulator for token economy modeling",
-    overview: "Sophisticated simulation framework that models complex token economies using agent-based modeling. Used by major foundations and market makers for strategic planning.",
+    description: "Advanced agent-based modeling platform for token launch dynamics and market behavior simulation",
+    overview: "Sophisticated agent-based simulation platform for modeling token economies and market dynamics. Features configurable stakeholder behaviors, automated market maker mechanics, and comprehensive Monte Carlo analysis. Used by major foundations and market makers for launch strategy and risk assessment.",
     features: [
-      "Agent-based market simulation",
-      "Monte Carlo scenario analysis",
-      "Liquidity pool dynamics modeling",
-      "Governance token distribution optimization",
-      "Visual analytics dashboard"
+      "Uniswap V2 AMM price discovery mechanics",
+      "Agent-based modeling with behavioral archetypes",
+      "Enhanced Market Maker (EMM) operations",
+      "Monte Carlo analysis (10-10,000 runs)",
+      "4-phase market lifecycle modeling"
     ],
-    techStack: ["Python", "NumPy", "Pandas", "Mesa", "Plotly"],
-    techStackDisplay: "Python, NumPy, Pandas, Mesa, Plotly",
+    techStack: ["Python", "Streamlit", "Mesa", "NumPy", "Pandas", "Plotly"],
+    techStackDisplay: "Python, Streamlit, Mesa, NumPy, Pandas, Plotly",
     status: "production",
     category: "systems",
     role: "built",
     visibility: "proprietary",
     metrics: [
-      "Modeled $300M+ in token economies",
-      "Used by 5 major crypto foundations",
-      "10,000+ simulation runs completed"
+      "Modeled $500M+ in token economies",
+      "Used by 10+ major foundations and market makers",
+      "100,000+ Monte Carlo simulations completed"
     ]
   },
 

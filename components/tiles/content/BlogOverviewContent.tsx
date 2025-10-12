@@ -74,7 +74,7 @@ export const BlogOverviewContent: React.FC<BlogOverviewContentProps> = ({ onNavi
                 <h3 className="font-bold transition-colors" style={{ color: 'var(--theme-text)' }}>{post.title}</h3>
                 <span className="text-xs" style={{ color: 'var(--theme-text-dimmed)' }}>{post.date}</span>
               </div>
-              <p className="text-sm mb-2 transition-opacity" style={{ color: 'var(--theme-text)', opacity: 0.8 }}>{post.excerpt}</p>
+              <p className="desktop-only text-sm mb-2 transition-opacity" style={{ color: 'var(--theme-text)', opacity: 0.8 }}>{post.excerpt}</p>
               <span className="text-xs" style={{ color: 'var(--theme-text-dimmed)' }}>{post.category}</span>
             </div>
           );

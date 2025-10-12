@@ -121,14 +121,6 @@ export const ParallaxBlogSection: React.FC<ParallaxBlogSectionProps> = ({
               >
                 {post.title}
               </h3>
-              {post.excerpt && (
-                <p
-                  className="text-sm transition-opacity group-hover:opacity-100"
-                  style={{ color: 'var(--theme-text)', opacity: 0.8 }}
-                >
-                  {post.excerpt}
-                </p>
-              )}
               {index < blogPosts.length - 1 && (
                 <div
                   className="mt-3 h-px"
