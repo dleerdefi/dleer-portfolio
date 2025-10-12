@@ -57,14 +57,27 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
     setExpandedDirs(newExpanded);
   };
 
+  // Group projects by category
+  const projectsByCategory = {
+    systems: projects.filter(p => p.category === 'systems'),
+    product: projects.filter(p => p.category === 'product'),
+    experimental: projects.filter(p => p.category === 'experimental')
+  };
+
+  const categoryNames = {
+    systems: '🔧 Systems & Infrastructure',
+    product: '🧭 Product & Leadership',
+    experimental: '🛠 Experimental & Home Lab'
+  };
+
   // Map configuration data to navigation format with clean names
   const projectItems = projects.map(p => ({
     id: p.id,
     name: p.name.replace(/\.(tsx?|jsx?|py|rs|go)$/i, ''), // Remove file extensions
-    displayName: p.name.split('.')[0].split('-').map(word =>
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' '),
+    displayName: p.name,
     description: p.description,
+    category: p.category,
+    role: p.role,
     sections: [
       'Overview',
       ...(p.features ? ['Features'] : []),
@@ -170,34 +183,125 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
           </div>
           {expandedDirs.has('projects') && (
             <div className="ml-4">
-              {projectItems.map((project, index) => (
-                <div
-                  key={project.id}
-                  className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200"
-                  style={{
-                    backgroundColor: isActive('project', project) ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
-                    color: isActive('project', project) ? 'var(--accent-color)' : 'inherit'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive('project', project)) {
-                      e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive('project', project)) {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                    }
-                  }}
-                  onClick={(e) => handleSelect({ type: 'project', data: project }, e)}
-                >
-                  <span>
-                    <span className="text-[#9ece6a]">
-                      <span style={{ color: 'var(--accent-color)' }}>{index === projectItems.length - 1 ? '└──' : '├──'}</span>
-                    </span>{' '}
-                    {project.displayName}
-                  </span>
-                </div>
-              ))}
+              {/* Systems & Infrastructure */}
+              {projectsByCategory.systems.length > 0 && (
+                <>
+                  <div className="text-xs mt-1 mb-1" style={{ color: 'var(--theme-text-dimmed)' }}>
+                    {categoryNames.systems}
+                  </div>
+                  {projectsByCategory.systems.map((project, index) => {
+                    const projData = projectItems.find(p => p.id === project.id);
+                    return (
+                      <div
+                        key={project.id}
+                        className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200 ml-2"
+                        style={{
+                          backgroundColor: isActive('project', projData) ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
+                          color: isActive('project', projData) ? 'var(--accent-color)' : 'inherit'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isActive('project', projData)) {
+                            e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isActive('project', projData)) {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                          }
+                        }}
+                        onClick={(e) => handleSelect({ type: 'project', data: projData }, e)}
+                      >
+                        <span>
+                          <span style={{ color: 'var(--accent-color)' }}>
+                            {index === projectsByCategory.systems.length - 1 && projectsByCategory.product.length === 0 && projectsByCategory.experimental.length === 0 ? '└──' : '├──'}
+                          </span>{' '}
+                          {project.name}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+
+              {/* Product & Leadership */}
+              {projectsByCategory.product.length > 0 && (
+                <>
+                  <div className="text-xs mt-2 mb-1" style={{ color: 'var(--theme-text-dimmed)' }}>
+                    {categoryNames.product}
+                  </div>
+                  {projectsByCategory.product.map((project, index) => {
+                    const projData = projectItems.find(p => p.id === project.id);
+                    return (
+                      <div
+                        key={project.id}
+                        className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200 ml-2"
+                        style={{
+                          backgroundColor: isActive('project', projData) ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
+                          color: isActive('project', projData) ? 'var(--accent-color)' : 'inherit'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isActive('project', projData)) {
+                            e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isActive('project', projData)) {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                          }
+                        }}
+                        onClick={(e) => handleSelect({ type: 'project', data: projData }, e)}
+                      >
+                        <span>
+                          <span style={{ color: 'var(--accent-color)' }}>
+                            {index === projectsByCategory.product.length - 1 && projectsByCategory.experimental.length === 0 ? '└──' : '├──'}
+                          </span>{' '}
+                          {project.name}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+
+              {/* Experimental & Home Lab */}
+              {projectsByCategory.experimental.length > 0 && (
+                <>
+                  <div className="text-xs mt-2 mb-1" style={{ color: 'var(--theme-text-dimmed)' }}>
+                    {categoryNames.experimental}
+                  </div>
+                  {projectsByCategory.experimental.map((project, index) => {
+                    const projData = projectItems.find(p => p.id === project.id);
+                    return (
+                      <div
+                        key={project.id}
+                        className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200 ml-2"
+                        style={{
+                          backgroundColor: isActive('project', projData) ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
+                          color: isActive('project', projData) ? 'var(--accent-color)' : 'inherit'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isActive('project', projData)) {
+                            e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isActive('project', projData)) {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                          }
+                        }}
+                        onClick={(e) => handleSelect({ type: 'project', data: projData }, e)}
+                      >
+                        <span>
+                          <span style={{ color: 'var(--accent-color)' }}>
+                            {index === projectsByCategory.experimental.length - 1 ? '└──' : '├──'}
+                          </span>{' '}
+                          {project.name}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </>
+              )}
             </div>
           )}
         </div>

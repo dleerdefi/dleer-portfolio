@@ -1,4 +1,5 @@
 import { PortfolioConfig } from './types';
+import { projectsData } from './projects.config';
 
 // Main portfolio configuration
 // Replace values with your own information
@@ -96,55 +97,274 @@ export const portfolioConfig: PortfolioConfig = {
     ]
   },
 
-  projects: [
+  projects: projectsData,
+
+  // Legacy projects array replaced by imported projectsData
+  projects_old: [
+    // === Systems & Infrastructure (Hands-On Engineering) ===
     {
-      id: "project-one",
-      name: "awesome-project.ts",
-      filename: "awesome-project.ts",
-      description: "Full-stack web application",
-      overview: "This project demonstrates advanced development practices with focus on security, efficiency, and scalability. Implemented using modern development tools and following industry best practices.",
+      id: "peak-ai-agent-stack",
+      name: "Peak AI Agent Stack",
+      filename: "peak-ai-agent-stack",
+      description: "Multi-agent AI orchestration framework for complex workflows",
+      overview: "Production-ready framework for orchestrating multiple AI agents with advanced state management, task routing, and error recovery. Built to handle complex, multi-step workflows with automatic fallbacks and parallel execution.",
       features: [
-        "Fully tested and documented codebase",
-        "Optimized implementations",
-        "Comprehensive documentation",
-        "Production-ready deployment"
+        "Dynamic agent orchestration with dependency resolution",
+        "Built-in state persistence and recovery",
+        "Parallel task execution with resource management",
+        "Comprehensive error handling and retry logic",
+        "Real-time monitoring and observability"
       ],
-      techStack: ["TypeScript", "React", "Node.js", "PostgreSQL"],
-      techStackDisplay: "TypeScript, React, Node.js, PostgreSQL",
-      github: "https://github.com/example/defi-lending",
-      demo: "https://defi-lending.example.com",
-      status: "production"
+      techStack: ["Python", "LangChain", "Redis", "FastAPI", "PostgreSQL"],
+      techStackDisplay: "Python, LangChain, Redis, FastAPI, PostgreSQL",
+      github: "https://github.com/dleerdefi/peak-ai-agent-stack",
+      status: "production",
+      category: "systems",
+      role: "built",
+      metrics: [
+        "Powers 10+ production AI applications",
+        "Handles 100K+ agent interactions daily",
+        "99.9% uptime in production"
+      ],
+      outcome: "Created scalable infrastructure for AI agent coordination"
     },
     {
-      id: "project-two",
-      name: "api-service.py",
-      filename: "api-service.py",
-      description: "RESTful API microservice",
-      techStack: ["Python", "FastAPI", "Redis", "Docker"],
-      techStackDisplay: "Python, FastAPI, Redis, Docker",
-      github: "https://github.com/example/neo4j-rag",
-      status: "production"
+      id: "consumer-score-engine",
+      name: "Consumer Score Engine",
+      filename: "consumer-score-engine",
+      description: "Distributed scoring pipeline for DeFi user behavior analysis",
+      overview: "High-performance data pipeline that processes on-chain and social data to generate user scores. Built with microservices architecture for scalability and real-time processing capabilities.",
+      features: [
+        "Real-time data ingestion from multiple sources",
+        "Graph-based relationship modeling",
+        "ML-powered scoring algorithms",
+        "Horizontal scaling with Kafka",
+        "Sub-second query response times"
+      ],
+      techStack: ["Python", "Kafka", "Neo4j", "Redis", "scikit-learn"],
+      techStackDisplay: "Python, Kafka, Neo4j, Redis, scikit-learn",
+      status: "production",
+      category: "systems",
+      role: "built",
+      metrics: [
+        "Processed 2M+ transactions daily",
+        "Analyzed 30K+ user accounts",
+        "Sub-100ms scoring latency"
+      ],
+      outcome: "Enabled real-time user behavior analysis at scale"
     },
     {
-      id: "project-three",
-      name: "data-viz.ts",
-      filename: "data-viz.ts",
-      description: "Interactive data visualization",
-      techStack: ["TypeScript", "React", "D3.js", "Tailwind"],
-      techStackDisplay: "TypeScript, React, D3.js, Tailwind CSS",
-      github: "https://github.com/example/token-model",
-      demo: "https://token-model.example.com",
-      status: "development"
+      id: "token-economy-simulator",
+      name: "Token Economy Simulator",
+      filename: "token-economy-simulator",
+      description: "Agent-based simulator for token economy modeling",
+      overview: "Sophisticated simulation framework that models complex token economies using agent-based modeling. Used by major foundations and market makers for strategic planning.",
+      features: [
+        "Agent-based market simulation",
+        "Monte Carlo scenario analysis",
+        "Liquidity pool dynamics modeling",
+        "Governance token distribution optimization",
+        "Visual analytics dashboard"
+      ],
+      techStack: ["Python", "NumPy", "Pandas", "Mesa", "Plotly"],
+      techStackDisplay: "Python, NumPy, Pandas, Mesa, Plotly",
+      status: "production",
+      category: "systems",
+      role: "built",
+      metrics: [
+        "Modeled $300M+ in token economies",
+        "Used by 5 major crypto foundations",
+        "10,000+ simulation runs completed"
+      ],
+      outcome: "Informed strategic decisions for major DeFi protocols"
     },
     {
-      id: "project-four",
-      name: "mobile-app.tsx",
-      filename: "mobile-app.tsx",
-      description: "Cross-platform mobile application",
-      techStack: ["React Native", "TypeScript", "Expo", "Firebase"],
-      techStackDisplay: "React Native, TypeScript, Expo, Firebase",
-      github: "https://github.com/example/amm-opt",
-      status: "production"
+      id: "llm-security-auditor",
+      name: "LLM Security Auditor",
+      filename: "llm-security-auditor",
+      description: "Automated security analysis tool for LLM applications",
+      overview: "Comprehensive security testing framework specifically designed for LLM-powered applications. Identifies vulnerabilities, prompt injection risks, and data leakage issues.",
+      features: [
+        "Automated prompt injection testing",
+        "Data exfiltration detection",
+        "Model behavior analysis",
+        "Compliance checking (GDPR, CCPA)",
+        "Detailed vulnerability reporting"
+      ],
+      techStack: ["Python", "LangChain", "OWASP ZAP", "Burp Suite API"],
+      techStackDisplay: "Python, LangChain, OWASP ZAP, Burp Suite API",
+      github: "https://github.com/dleerdefi/llm-security-auditor",
+      status: "production",
+      category: "systems",
+      role: "built",
+      metrics: [
+        "Identified 50+ critical vulnerabilities",
+        "Used by 20+ AI companies",
+        "Reduced security review time by 80%"
+      ],
+      outcome: "Made LLM applications more secure and compliant"
+    },
+
+    // === Product Design & Leadership (Architectural / Strategic) ===
+    {
+      id: "kinsu-savings",
+      name: "Kinsu Savings App",
+      filename: "kinsu-savings",
+      description: "DeFi savings aggregator built on ConsumerFi protocol",
+      overview: "Led the product vision and execution for a consumer-friendly DeFi savings application. Architected the system design and coordinated cross-functional teams from concept to launch.",
+      features: [
+        "Automated yield optimization",
+        "Multi-chain portfolio management",
+        "Risk assessment dashboard",
+        "One-click diversification strategies",
+        "Mobile-first responsive design"
+      ],
+      techStack: ["React", "Web3.js", "Solidity", "The Graph", "Node.js"],
+      techStackDisplay: "React, Web3.js, Solidity, The Graph, Node.js",
+      demo: "https://kinsu.fi",
+      status: "production",
+      category: "product",
+      role: "led",
+      metrics: [
+        "$10M+ TVL at peak",
+        "5,000+ active users",
+        "4.8/5 user satisfaction score"
+      ],
+      outcome: "Simplified DeFi savings for mainstream users"
+    },
+    {
+      id: "play-to-airdrop",
+      name: "Play-to-Airdrop Campaign System",
+      filename: "play-to-airdrop",
+      description: "Gamified user acquisition and retention platform",
+      overview: "Designed and led the development of a gamified campaign system that increased protocol engagement through quest-based rewards and social mechanics.",
+      features: [
+        "Dynamic quest generation",
+        "Social referral tracking",
+        "Anti-sybil protection",
+        "Real-time leaderboards",
+        "Automated reward distribution"
+      ],
+      techStack: ["TypeScript", "Next.js", "PostgreSQL", "Redis", "Chainlink"],
+      techStackDisplay: "TypeScript, Next.js, PostgreSQL, Redis, Chainlink",
+      status: "production",
+      category: "product",
+      role: "architected",
+      metrics: [
+        "50K+ participants",
+        "3x increase in protocol TVL",
+        "85% user retention after 30 days"
+      ],
+      outcome: "Revolutionized Web3 user acquisition strategies"
+    },
+
+    // === Experimental & Home Lab Projects ===
+    {
+      id: "rinai-multimodal-vtuber",
+      name: "RinAI Multimodal VTuber",
+      filename: "rinai-multimodal-vtuber",
+      description: "Real-time AI-powered virtual avatar with multimodal interaction",
+      overview: "Experimental project combining computer vision, NLP, and real-time rendering to create an interactive AI VTuber. Features emotion recognition, gesture control, and dynamic responses.",
+      features: [
+        "Real-time facial tracking and mapping",
+        "Voice synthesis with emotion",
+        "Gesture recognition and response",
+        "Live streaming integration",
+        "Custom avatar rendering pipeline"
+      ],
+      techStack: ["Python", "PyTorch", "OpenCV", "Unity", "WebRTC"],
+      techStackDisplay: "Python, PyTorch, OpenCV, Unity, WebRTC",
+      github: "https://github.com/dleerdefi/rinai-multimodal-vtuber",
+      videoUrl: "https://youtube.com/watch?v=example1",
+      status: "development",
+      category: "experimental",
+      role: "built",
+      metrics: [
+        "10ms motion capture latency",
+        "95% emotion detection accuracy",
+        "1000+ GitHub stars"
+      ],
+      outcome: "Pushed boundaries of real-time AI interaction"
+    },
+    {
+      id: "agent-state-machine",
+      name: "Agent State Machine",
+      filename: "agent-state-machine",
+      description: "Finite state machine framework for AI agent behavior",
+      overview: "Lightweight framework for managing complex AI agent behaviors using finite state machines. Provides visual debugging tools and behavior tree integration.",
+      features: [
+        "Visual state machine editor",
+        "Behavior tree integration",
+        "Real-time state debugging",
+        "Plugin architecture",
+        "Performance monitoring"
+      ],
+      techStack: ["TypeScript", "React", "D3.js", "Node.js"],
+      techStackDisplay: "TypeScript, React, D3.js, Node.js",
+      github: "https://github.com/dleerdefi/agent-state-machine",
+      demo: "https://agent-fsm-demo.vercel.app",
+      status: "production",
+      category: "experimental",
+      role: "built",
+      metrics: [
+        "Used in 50+ AI projects",
+        "500+ GitHub stars",
+        "Active community of 100+ developers"
+      ],
+      outcome: "Simplified complex AI behavior management"
+    },
+    {
+      id: "home-lab-infrastructure",
+      name: "Home Lab Network",
+      filename: "home-lab-network",
+      description: "Enterprise-grade home lab with GPU cluster and automation",
+      overview: "Designed and deployed a sophisticated home lab infrastructure featuring multiple servers, VLAN segmentation, GPU compute cluster, and comprehensive automation.",
+      features: [
+        "Proxmox virtualization cluster",
+        "VLAN-segmented security zones",
+        "4-node GPU compute cluster",
+        "Automated backup pipelines",
+        "Self-hosted AI inference endpoints"
+      ],
+      techStack: ["Proxmox", "pfSense", "Kubernetes", "Ansible", "TrueNAS"],
+      techStackDisplay: "Proxmox, pfSense, Kubernetes, Ansible, TrueNAS",
+      videoUrl: "https://youtube.com/watch?v=example2",
+      blogUrl: "/blog/home-lab-setup",
+      status: "production",
+      category: "experimental",
+      role: "built",
+      metrics: [
+        "99.99% uptime",
+        "50TB storage capacity",
+        "100+ containers running"
+      ],
+      outcome: "Created production-grade infrastructure for experiments"
+    },
+    {
+      id: "rin-streams",
+      name: "Rin Streams",
+      filename: "rin-streams",
+      description: "Streaming infrastructure for AI-powered content generation",
+      overview: "Real-time streaming platform that combines AI content generation with live broadcasting. Features automatic scene switching, chat interaction, and content moderation.",
+      features: [
+        "AI-driven content generation",
+        "Automatic scene management",
+        "Chat sentiment analysis",
+        "Real-time content moderation",
+        "Multi-platform streaming"
+      ],
+      techStack: ["Node.js", "FFmpeg", "OBS WebSocket", "TensorFlow.js"],
+      techStackDisplay: "Node.js, FFmpeg, OBS WebSocket, TensorFlow.js",
+      github: "https://github.com/dleerdefi/rin-streams",
+      status: "development",
+      category: "experimental",
+      role: "built",
+      metrics: [
+        "24/7 autonomous streaming",
+        "1000+ concurrent viewers",
+        "90% positive engagement rate"
+      ],
+      outcome: "Automated content creation and broadcasting"
     }
   ],
 
