@@ -196,7 +196,10 @@ export const useContactFormValidation = (rules: Partial<ValidationRules> = {}) =
       } else {
         // Clear error if field is now valid or empty
         const newErrors = { ...prev };
-        delete newErrors[fieldName];
+        // Only delete if it's a valid error field (not website honeypot)
+        if (fieldName in newErrors) {
+          delete newErrors[fieldName as keyof FieldErrors];
+        }
         return newErrors;
       }
     });
@@ -243,7 +246,10 @@ export const useContactFormValidation = (rules: Partial<ValidationRules> = {}) =
   const clearFieldError = useCallback((fieldName: keyof FormData) => {
     setErrors(prev => {
       const newErrors = { ...prev };
-      delete newErrors[fieldName];
+      // Only delete if it's a valid error field (not website honeypot)
+      if (fieldName in newErrors) {
+        delete newErrors[fieldName as keyof FieldErrors];
+      }
       return newErrors;
     });
   }, []);

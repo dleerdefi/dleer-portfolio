@@ -99,8 +99,11 @@ export const portfolioConfig: PortfolioConfig = {
 
   projects: projectsData,
 
-  // Legacy projects array replaced by imported projectsData
-  projects_old: [
+  // Projects are now imported from projects.config.ts
+  // Legacy projects_old array removed
+
+  /*
+  projects_old_removed: [
     // === Systems & Infrastructure (Hands-On Engineering) ===
     {
       id: "peak-ai-agent-stack",
@@ -367,6 +370,7 @@ export const portfolioConfig: PortfolioConfig = {
       outcome: "Automated content creation and broadcasting"
     }
   ],
+  */
 
   blog: [
     {
