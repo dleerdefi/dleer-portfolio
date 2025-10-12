@@ -3,11 +3,19 @@
 export interface PersonalInfo {
   name: string;
   username: string;
+  greeting?: string;  // Personalized greeting (e.g., "Hi, I'm David Leer")
   title: string;
   subtitle: string;
   email: string;
+  contactEmail: string;  // Email for contact form submissions
   location: string;
   bio: {
+    // Structured bio fields for parallax mode
+    intro?: string;
+    experience?: string;
+    leadership?: string;
+    tagline?: string;
+    // Legacy fields
     short: string;
     long: string;
     homeDescription?: string;
@@ -27,6 +35,16 @@ export interface SkillCategory {
   skills: string[];
 }
 
+export interface Technology {
+  name: string;
+  icon: string;         // Icon identifier from react-icons (e.g., "SiPython")
+  category?: string;    // Optional category for grouping
+}
+
+export interface TechnologiesConfig {
+  items: Technology[];
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -40,6 +58,16 @@ export interface Project {
   github?: string;
   demo?: string;
   status?: 'production' | 'development' | 'archived';
+
+  // New fields for enhanced categorization
+  category?: 'systems' | 'product' | 'experimental';
+  role?: 'built' | 'architected' | 'led';
+  visibility?: 'open-source' | 'proprietary';  // For better project organization
+  metrics?: string[];  // e.g., ["Processed 2M+ transactions daily", "Modeled $300M+ token economies"]
+  outcome?: string;     // Brief outcome statement
+  videoUrl?: string;    // YouTube or other video embeds
+  blogUrl?: string;     // Link to detailed blog post
+  images?: string[];    // Screenshots, diagrams, etc.
 }
 
 export interface BlogPost {
@@ -52,15 +80,31 @@ export interface BlogPost {
   content?: string;
 }
 
+export interface SocialInfo {
+  platform: string;
+  username: string;
+  url: string;
+  followers?: string;  // Optional follower count or stats
+}
+
 export interface SystemInfo {
-  os: string;
-  kernel: string;
-  shell: string;
-  terminal: string;
-  cpu: string;
-  gpu: string;
-  memory: string;
-  [key: string]: string; // Allow custom fields
+  // Social links as objects
+  github?: SocialInfo;
+  twitter?: SocialInfo;
+  linkedin?: SocialInfo;
+  youtube?: SocialInfo;
+  instagram?: SocialInfo;
+  tiktok?: SocialInfo;
+
+  // Legacy support (for backward compatibility)
+  os?: string | SocialInfo;
+  terminal?: string | SocialInfo;
+  kernel?: string | SocialInfo;
+  cpu?: string | SocialInfo;
+  memory?: string | SocialInfo;
+  gpu?: string | SocialInfo;
+  shell?: string;
+  [key: string]: string | SocialInfo | undefined; // Allow custom fields
 }
 
 export interface NavigationSection {
@@ -142,6 +186,7 @@ export interface PortfolioConfig {
   personal: PersonalInfo;
   social: SocialLink[];
   skills: SkillCategory[];
+  technologies?: TechnologiesConfig;
   projects: Project[];
   blog: BlogPost[];
   system: SystemInfo;

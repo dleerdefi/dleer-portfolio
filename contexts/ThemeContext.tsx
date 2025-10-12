@@ -12,6 +12,26 @@ const themeDefaultAccents: Record<ThemePreset, AccentColor> = {
   'tokyo-night': 'purple'        // #bb9af7 maps to purple
 };
 
+// Background images for each theme preset
+export const themeBackgrounds: Record<ThemePreset, string[]> = {
+  'tokyo-night': [
+    '/images/purple-girl.webp',
+    '/images/cat_anime-girl.webp',
+    '/images/shiny_purple.webp',
+    '/images/pixel_big_city.webp'
+  ],
+  'nord': [
+    '/images/cool_rocks.webp',
+    '/images/lets_go_home.webp',
+    '/images/gradient-pb.webp'
+  ],
+  'solarized-light': [
+    '/images/pastel-window.webp',
+    '/images/yellow_kyoto.webp',
+    '/images/ign_colorful.webp'
+  ]
+};
+
 // Accent color types
 export type AccentColor =
   | 'rose' | 'pink' | 'fuchsia' | 'purple' | 'violet'
@@ -42,7 +62,7 @@ interface ThemeState {
   preset: ThemePreset;
   accentColor: AccentColor;
   backgroundEffect: boolean;
-  isTransitioning: boolean;
+  backgroundImage: string | null;  // null = no background, string = image path
 }
 
 // Theme context value interface
@@ -51,6 +71,7 @@ interface ThemeContextValue {
   setThemePreset: (preset: ThemePreset) => void;
   setAccentColor: (color: AccentColor) => void;
   toggleBackgroundEffect: () => void;
+  setBackgroundImage: (image: string | null) => void;
   getAccentHex: () => string;
 }
 
@@ -61,7 +82,8 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 const STORAGE_KEYS = {
   preset: 'theme-preset',
   accent: 'theme-accent',
-  backgroundEffect: 'theme-background-effect'
+  backgroundEffect: 'theme-background-effect',
+  backgroundImagePrefix: 'theme-background-image-'  // Per-theme storage
 };
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -70,7 +92,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     preset: 'tokyo-night',
     accentColor: themeDefaultAccents['tokyo-night'],  // Use theme default
     backgroundEffect: true,
-    isTransitioning: false
+    backgroundImage: themeBackgrounds['tokyo-night'][0]  // Default to first bg of theme
   });
 
   // Load saved preferences on mount
@@ -79,15 +101,20 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const loadedPreset = (localStorage.getItem(STORAGE_KEYS.preset) as ThemePreset) || 'tokyo-night';
     const loadedBgEffect = localStorage.getItem(STORAGE_KEYS.backgroundEffect);
+    const loadedBgImage = localStorage.getItem(`${STORAGE_KEYS.backgroundImagePrefix}${loadedPreset}`);
 
     // Don't load accent from storage - always use theme default
     const defaultAccent = themeDefaultAccents[loadedPreset];
+
+    // Load background image for this theme, or use first in array
+    const defaultBgImage = loadedBgImage || themeBackgrounds[loadedPreset][0];
 
     setTheme(prev => ({
       ...prev,
       preset: loadedPreset,
       accentColor: defaultAccent,  // Always use theme default
-      backgroundEffect: loadedBgEffect === null ? prev.backgroundEffect : loadedBgEffect === 'true'
+      backgroundEffect: loadedBgEffect === null ? prev.backgroundEffect : loadedBgEffect === 'true',
+      backgroundImage: defaultBgImage
     }));
   }, []);
 
@@ -97,8 +124,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const root = document.documentElement;
 
-    // Remove old theme classes
-    root.className = root.className.replace(/theme-[\w-]+/g, '').replace(/accent-[\w-]+/g, '').trim();
+    // Remove old theme and accent classes using classList API
+    const classesToRemove: string[] = [];
+    root.classList.forEach((cls) => {
+      if (cls.startsWith('theme-') || cls.startsWith('accent-')) {
+        classesToRemove.push(cls);
+      }
+    });
+    classesToRemove.forEach((cls) => root.classList.remove(cls));
 
     // Add new theme classes
     root.classList.add(`theme-${theme.preset}`);
@@ -111,24 +144,52 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       root.classList.remove('bg-effect-enabled');
     }
 
-    // Add transitioning class
-    if (theme.isTransitioning) {
-      root.classList.add('theme-transitioning');
-      setTimeout(() => {
-        setTheme(prev => ({ ...prev, isTransitioning: false }));
-        root.classList.remove('theme-transitioning');
-      }, 600);
-    }
   }, [theme]);
+
+  // Force theme class re-application when transitioning from mobile to desktop
+  // This recovers from MobileParallaxLayout's className override
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window === 'undefined') return;
+
+      // Only act when in desktop view (where ThemeContext should be in control)
+      if (window.innerWidth >= 1024) {
+        const root = document.documentElement;
+
+        // CRITICAL: Remove inline styles set by MobileParallaxLayout
+        // Inline styles have higher CSS specificity than classes, so they override all theme changes
+        // Without this, accent color stays stuck at #7dcfff even when user changes theme/accent
+        root.style.removeProperty('--accent-color');
+        root.style.removeProperty('--accent-color-rgb');
+
+        const hasThemeClass = Array.from(root.classList).some(cls => cls.startsWith('theme-'));
+
+        // If theme classes are missing, mobile parallax left DOM in broken state
+        // Re-apply classes from current theme state
+        if (!hasThemeClass) {
+          root.classList.add(`theme-${theme.preset}`);
+          root.classList.add(`accent-${theme.accentColor}`);
+        }
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [theme.preset, theme.accentColor]);
 
   // Set theme preset - resets accent to theme default per spec
   const setThemePreset = useCallback((preset: ThemePreset) => {
     const defaultAccent = themeDefaultAccents[preset];
+
+    // Load saved background for this theme, or use first as default
+    const savedBgImage = localStorage.getItem(`${STORAGE_KEYS.backgroundImagePrefix}${preset}`);
+    const defaultBgImage = savedBgImage || themeBackgrounds[preset][0];
+
     setTheme(prev => ({
       ...prev,
       preset,
       accentColor: defaultAccent,  // Reset to theme's default accent
-      isTransitioning: true
+      backgroundImage: defaultBgImage  // Load theme-specific background
     }));
     localStorage.setItem(STORAGE_KEYS.preset, preset);
     // Remove saved accent color to prevent persistence across themes
@@ -150,6 +211,17 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   }, []);
 
+  // Set background image - saves per-theme
+  const setBackgroundImage = useCallback((image: string | null) => {
+    setTheme(prev => ({ ...prev, backgroundImage: image }));
+    const key = `${STORAGE_KEYS.backgroundImagePrefix}${theme.preset}`;
+    if (image === null) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, image);
+    }
+  }, [theme.preset]);
+
   // Get current accent color hex value
   const getAccentHex = useCallback(() => {
     return accentColorMap[theme.accentColor];
@@ -160,6 +232,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setThemePreset,
     setAccentColor,
     toggleBackgroundEffect,
+    setBackgroundImage,
     getAccentHex
   };
 

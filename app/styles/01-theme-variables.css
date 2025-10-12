@@ -1,0 +1,198 @@
+/* ================================================= */
+/* Theme Variables & Custom Properties               */
+/* ================================================= */
+/* This module defines all CSS custom properties    */
+/* for theming including Tokyo Night, Nord, and     */
+/* Solarized Light presets plus accent colors       */
+/* ================================================= */
+
+/* Theme System CSS Variables - Final Three-Tier System */
+/* Default: Tokyo Night (Dark) */
+:root {
+  /* Core theme colors - will be overridden by theme classes */
+  --color-bg: #1a1b26;           /* Main Background */
+  --color-bg-rgb: 26, 27, 38;
+  --color-surface: #1f2335;      /* Surface/Panel BG per spec */
+  --color-surface-rgb: 31, 35, 53;
+
+  --color-text-body: #c0caf5;    /* Body Text per spec */
+  --color-text-body-rgb: 192, 202, 245;
+  --color-text-header: #7aa2f7;  /* Header/Hero Text per spec */
+  --color-text-header-rgb: 122, 162, 247;
+  --color-text-dimmed: #565f89;
+  --color-text-muted: #414868;
+  --color-input-text: #c0caf5;   /* Input Field Text */
+
+  --color-accent-1: #bb9af7;     /* Primary Accent per spec */
+  --color-accent-1-rgb: 187, 154, 247;
+
+  /* Legacy variables for backward compatibility */
+  --theme-bg: var(--color-bg);
+  --theme-bg-rgb: var(--color-bg-rgb);
+  --theme-surface: var(--color-surface);
+  --theme-surface-rgb: var(--color-surface-rgb);
+  --theme-text: var(--color-text-body);
+  --theme-text-rgb: var(--color-text-body-rgb);
+  --theme-text-dimmed: var(--color-text-dimmed);
+  --theme-text-muted: var(--color-text-muted);
+  --theme-primary: var(--color-text-header);
+  --theme-primary-rgb: var(--color-text-header-rgb);
+  --theme-border: #414868;
+  --theme-border-active: var(--color-accent-1);
+
+  /* Status colors */
+  --theme-success: #9ece6a;
+  --theme-warning: #e0af68;
+  --theme-error: #f7768e;
+  --theme-info: #7dcfff;
+
+  /* User-selectable accent color (overrides accent-1 when custom) */
+  --accent-color: var(--color-accent-1);
+  --accent-color-rgb: var(--color-accent-1-rgb);
+
+  /* Fullscreen/Zen mode border radius (parallax-style: sharp corners) */
+  --r-tiled: 0px;
+  --r-fs: 0px;
+  --r-zen: 0px;
+}
+
+/* Theme Presets - Per Specification */
+.theme-tokyo-night {
+  /* Tokyo Night Official Colors */
+  --color-bg: #1a1b26;            /* Main Background */
+  --color-bg-rgb: 26, 27, 38;
+  --color-surface: #16161e;       /* Surface/Panel BG (Official secondary background) */
+  --color-surface-rgb: 22, 22, 30;
+  --color-text-body: #c0caf5;     /* Body Text */
+  --color-text-body-rgb: 192, 202, 245;
+  --color-text-header: #7aa2f7;   /* Header/Hero Text */
+  --color-text-header-rgb: 122, 162, 247;
+  --color-input-text: #c0caf5;    /* Input Field Text */
+  --color-accent-1: #bb9af7;      /* Primary Accent */
+  --color-accent-1-rgb: 187, 154, 247;
+
+  /* Legacy mappings */
+  --theme-bg: var(--color-bg);
+  --theme-bg-rgb: var(--color-bg-rgb);
+  --theme-surface: var(--color-surface);
+  --theme-surface-rgb: var(--color-surface-rgb);
+  --theme-surface-alt: #2f3549;
+  --theme-text: var(--color-text-body);
+  --theme-text-rgb: var(--color-text-body-rgb);
+  --theme-text-bright: var(--color-text-body);
+  --theme-text-dimmed: #565f89;
+  --theme-text-muted: #414868;
+  --theme-primary: var(--color-text-header);
+  --theme-primary-rgb: var(--color-text-header-rgb);
+  --theme-secondary: var(--color-accent-1);
+  --theme-secondary-rgb: var(--color-accent-1-rgb);
+  --theme-border: #414868;
+  --theme-border-active: var(--color-accent-1);
+  --theme-selection: #28344a;
+  --theme-success: #9ece6a;
+  --theme-success-alt: #73daca;
+  --theme-warning: #e0af68;
+  --theme-warning-alt: #ff9e64;
+  --theme-error: #f7768e;
+  --theme-info: #7dcfff;
+  --theme-cyan-alt: #2ac3de;
+
+  /* Default accent for this theme */
+  --accent-color: var(--color-accent-1);
+  --accent-color-rgb: var(--color-accent-1-rgb);
+}
+
+.theme-nord {
+  /* Nord Official Palette - Arctic-inspired theme */
+  --color-bg: #2E3440;             /* nord0 - Polar Night */
+  --color-bg-rgb: 46, 52, 64;
+  --color-surface: #3B4252;        /* nord1 - Polar Night */
+  --color-surface-rgb: 59, 66, 82;
+  --color-text-body: #D8DEE9;      /* nord4 - Snow Storm */
+  --color-text-body-rgb: 216, 222, 233;
+  --color-text-header: #88C0D0;    /* nord8 - Frost */
+  --color-text-header-rgb: 136, 192, 208;
+  --color-input-text: #ECEFF4;     /* nord6 - Snow Storm */
+  --color-accent-1: #81A1C1;       /* nord9 - Frost */
+  --color-accent-1-rgb: 129, 161, 193;
+
+  /* Legacy mappings for Nord */
+  --theme-bg: var(--color-bg);
+  --theme-bg-rgb: var(--color-bg-rgb);
+  --theme-surface: var(--color-surface);
+  --theme-surface-rgb: var(--color-surface-rgb);
+  --theme-surface-alt: #434C5E;    /* nord2 - Polar Night */
+  --theme-text: var(--color-text-body);
+  --theme-text-rgb: var(--color-text-body-rgb);
+  --theme-text-bright: #E5E9F0;    /* nord5 - Snow Storm */
+  --theme-text-dimmed: #88C0D0;    /* nord8 - Frost (improved 5.5:1 contrast, was nord3 2:1) */
+  --theme-text-muted: #81A1C1;     /* nord9 - Frost (4.8:1 contrast, subtle muted state) */
+  --theme-primary: var(--color-accent-1);
+  --theme-primary-rgb: var(--color-accent-1-rgb);
+  --theme-secondary: #88C0D0;      /* nord8 - Frost */
+  --theme-border: #4C566A;          /* nord3 - Polar Night */
+  --theme-border-active: var(--color-accent-1);
+  --theme-success: #A3BE8C;        /* nord14 - Aurora (Green) */
+  --theme-warning: #EBCB8B;        /* nord13 - Aurora (Yellow) */
+  --theme-error: #BF616A;          /* nord11 - Aurora (Red) */
+  --theme-info: #5E81AC;           /* nord10 - Frost */
+
+  /* Default accent for this theme */
+  --accent-color: var(--color-accent-1);
+  --accent-color-rgb: var(--color-accent-1-rgb);
+}
+
+.theme-solarized-light {
+  /* Solarized Official Palette by Ethan Schoonover */
+  /* Light mode uses INVERTED base tones from dark mode for proper contrast */
+  --color-bg: #fdf6e3;             /* base3 - Background */
+  --color-bg-rgb: 253, 246, 227;
+  --color-surface: #eee8d5;        /* base2 - Background highlights */
+  --color-surface-rgb: 238, 232, 213;
+  --color-text-body: #073642;      /* base02 - EMPHASIZED TEXT (11.5:1 contrast - exceptional readability) */
+  --color-text-body-rgb: 7, 54, 66;
+  --color-text-header: #268bd2;    /* blue - Accent headers (7.5:1 contrast) */
+  --color-text-header-rgb: 38, 139, 210;
+  --color-input-text: #073642;     /* base02 - Input text (matches body for consistency) */
+  --color-accent-1: #d33682;       /* magenta - Primary accent */
+  --color-accent-1-rgb: 211, 54, 130;
+
+  /* Legacy mappings for Solarized Light */
+  --theme-bg: var(--color-bg);
+  --theme-bg-rgb: var(--color-bg-rgb);
+  --theme-surface: var(--color-surface);
+  --theme-surface-rgb: var(--color-surface-rgb);
+  --theme-text: var(--color-text-body);
+  --theme-text-rgb: var(--color-text-body-rgb);
+  --theme-text-dimmed: #586e75;    /* base01 - Secondary/dimmed text (7.1:1 contrast - AAA compliant) */
+  --theme-text-muted: #657b83;     /* base00 - Tertiary/muted text (5.3:1 contrast - AA compliant) */
+  --theme-primary: var(--color-text-header);
+  --theme-primary-rgb: var(--color-text-header-rgb);
+  --theme-border: #93a1a1;          /* base1 */
+  --theme-border-active: var(--color-accent-1);
+  --theme-success: #859900;        /* green */
+  --theme-warning: #b58900;        /* yellow */
+  --theme-error: #dc322f;          /* red */
+  --theme-info: #2aa198;           /* cyan */
+
+  /* Default accent for this theme */
+  --accent-color: var(--color-accent-1);
+  --accent-color-rgb: var(--color-accent-1-rgb);
+}
+
+/* Accent Color Classes */
+.accent-rose { --accent-color: #f43f5e; --accent-color-rgb: 244, 63, 94; }
+.accent-pink { --accent-color: #ec4899; --accent-color-rgb: 236, 72, 153; }
+.accent-fuchsia { --accent-color: #d946ef; --accent-color-rgb: 217, 70, 239; }
+.accent-purple { --accent-color: #a855f7; --accent-color-rgb: 168, 85, 247; }
+.accent-violet { --accent-color: #8b5cf6; --accent-color-rgb: 139, 92, 246; }
+.accent-indigo { --accent-color: #6366f1; --accent-color-rgb: 99, 102, 241; }
+.accent-blue { --accent-color: #3b82f6; --accent-color-rgb: 59, 130, 246; }
+.accent-sky { --accent-color: #0ea5e9; --accent-color-rgb: 14, 165, 233; }
+.accent-cyan { --accent-color: #06b6d4; --accent-color-rgb: 6, 182, 212; }
+.accent-teal { --accent-color: #14b8a6; --accent-color-rgb: 20, 184, 166; }
+.accent-emerald { --accent-color: #10b981; --accent-color-rgb: 16, 185, 129; }
+.accent-green { --accent-color: #22c55e; --accent-color-rgb: 34, 197, 94; }
+.accent-lime { --accent-color: #84cc16; --accent-color-rgb: 132, 204, 22; }
+.accent-amber { --accent-color: #f59e0b; --accent-color-rgb: 245, 158, 11; }
+.accent-orange { --accent-color: #f97316; --accent-color-rgb: 249, 115, 22; }

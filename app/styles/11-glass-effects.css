@@ -1,0 +1,94 @@
+/* ================================================= */
+/* Glass Effects & Visual Enhancements              */
+/* ================================================= */
+/* Glass morphism, gradient dots, scrollbar hiding, */
+/* and visual layer effects                         */
+/* ================================================= */
+
+/* Glass Morphism Effects */
+.glass-tile {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.glass-tile-clear {
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+}
+
+/* ================================ */
+/* No Scrollbar Utility */
+/* ================================ */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar,
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar,
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* ================================ */
+/* Glass Elevator Effect Styles     */
+/* ================================ */
+
+/* Dotted Border Pattern */
+.dotted-border {
+  background-image: radial-gradient(transparent 1px, var(--theme-bg) 1px);
+  background-size: 4px 4px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* kyrre.dev-inspired glass diffusion for top/bottom borders */
+/* Privacy glass effect: solid dots + semi-transparent gaps with blur */
+.gradient-dots {
+  /* Transparent background */
+  background-color: transparent;
+
+  /* Radial gradient: SOLID dots (center) + SEMI-TRANSPARENT gaps (edge) */
+  background-image: radial-gradient(
+    circle at center,
+    rgb(var(--theme-bg-rgb)) 1.2px,          /* SOLID black dots */
+    rgba(var(--theme-bg-rgb), 0.3) 1.2px     /* SEMI-TRANSPARENT gaps */
+  );
+  background-size: 3px 3px;
+
+  /* Strong blur creates "bathroom privacy glass" diffusion */
+  /* Blurs content visible through semi-transparent circles */
+  backdrop-filter: blur(12px) saturate(150%) brightness(110%) contrast(90%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%) brightness(110%) contrast(90%);
+
+  /* Mask gradient for smooth fade (top/bottom borders) */
+  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+
+  pointer-events: none;
+  z-index: 40;
+}
+
+/* glass-diffusion-edge class removed - using single-layer approach */
+
+/* Z-index utility for content layering */
+.z-2 {
+  z-index: 2;
+}
+
+/* Mobile performance optimization */
+@media (max-width: 1023px) {
+  .dotted-border {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  /* Reduced but still effective blur on mobile for performance */
+  .gradient-dots {
+    backdrop-filter: blur(8px) saturate(140%) brightness(105%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%) brightness(105%);
+  }
+}
