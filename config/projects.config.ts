@@ -1,5 +1,7 @@
+import type { Project } from './types';
+
 // Project configurations with open source projects prioritized
-export const projectsData = [
+export const projectsData: Project[] = [
   // === OPEN SOURCE PROJECTS (GitHub Available) ===
 
   // 1. RinAI - Peak AI Agent Stack (Most sophisticated system)
@@ -19,7 +21,7 @@ export const projectsData = [
     techStack: ["Node.js", "Python", "Neo4j", "MongoDB", "LangChain"],
     techStackDisplay: "Node.js, Python, Neo4j, MongoDB, LangChain",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/peak-ai-agent-stack`,
-    status: "production",
+    status: "production" as const,
     category: "systems",
     role: "built",
     visibility: "open-source",
@@ -47,7 +49,7 @@ export const projectsData = [
     techStack: ["Python", "DSPy", "MLflow", "Docker"],
     techStackDisplay: "Python, DSPy, MLflow, Docker",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/llm-security-auditor`,
-    status: "production",
+    status: "production" as const,
     category: "systems",
     role: "built",
     visibility: "open-source",
@@ -75,7 +77,7 @@ export const projectsData = [
     techStack: ["Python", "MongoDB", "Neo4j", "FastAPI"],
     techStackDisplay: "Python, MongoDB, Neo4j, FastAPI",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/agent-state-machine`,
-    status: "production",
+    status: "production" as const,
     category: "systems",
     role: "built",
     visibility: "open-source",
@@ -104,7 +106,7 @@ export const projectsData = [
     techStack: ["Python", "Node.js", "TypeScript", "FFmpeg", "VoiceMeeter"],
     techStackDisplay: "Python, Node.js, TypeScript, FFmpeg, VoiceMeeter",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/rinai-multimodal-vtuber`,
-    status: "production",
+    status: "production" as const,
     category: "experimental",
     role: "built",
     visibility: "open-source",
@@ -132,7 +134,7 @@ export const projectsData = [
     techStack: ["Python", "Node.js", "MongoDB", "Uniswap V3", "VTube Studio", "ElevenLabs"],
     techStackDisplay: "Python, Node.js, MongoDB, Uniswap V3, VTube Studio, ElevenLabs",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/ai-vtuber-trading-battle`,
-    status: "development",
+    status: "development" as const,
     category: "experimental",
     role: "built",
     visibility: "open-source",
@@ -161,7 +163,7 @@ export const projectsData = [
     ],
     techStack: ["Python", "Kafka", "Neo4j", "Redis", "scikit-learn"],
     techStackDisplay: "Python, Kafka, Neo4j, Redis, scikit-learn",
-    status: "production",
+    status: "production" as const,
     category: "systems",
     role: "built",
     visibility: "proprietary",
@@ -188,7 +190,7 @@ export const projectsData = [
     ],
     techStack: ["Python", "Streamlit", "Mesa", "NumPy", "Pandas", "Plotly"],
     techStackDisplay: "Python, Streamlit, Mesa, NumPy, Pandas, Plotly",
-    status: "production",
+    status: "production" as const,
     category: "systems",
     role: "built",
     visibility: "proprietary",
@@ -216,7 +218,7 @@ export const projectsData = [
     techStack: ["React", "Web3.js", "Solidity", "The Graph", "Node.js"],
     techStackDisplay: "React, Web3.js, Solidity, The Graph, Node.js",
     demo: "https://kinsu.fi",
-    status: "production",
+    status: "production" as const,
     category: "product",
     role: "led",
     visibility: "proprietary",
@@ -243,7 +245,7 @@ export const projectsData = [
     ],
     techStack: ["TypeScript", "Next.js", "PostgreSQL", "Redis", "Chainlink"],
     techStackDisplay: "TypeScript, Next.js, PostgreSQL, Redis, Chainlink",
-    status: "production",
+    status: "production" as const,
     category: "product",
     role: "architected",
     visibility: "proprietary",
@@ -272,7 +274,7 @@ export const projectsData = [
     techStackDisplay: "Proxmox, pfSense, Kubernetes, Ansible, TrueNAS",
     videoUrl: "https://youtube.com/watch?v=example2",
     blogUrl: "/blog/home-lab-setup",
-    status: "production",
+    status: "production" as const,
     category: "experimental",
     role: "built",
     visibility: "proprietary",
