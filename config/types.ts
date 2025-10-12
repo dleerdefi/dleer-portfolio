@@ -58,6 +58,16 @@ export interface Project {
   github?: string;
   demo?: string;
   status?: 'production' | 'development' | 'archived';
+
+  // New fields for enhanced categorization
+  category?: 'systems' | 'product' | 'experimental';
+  role?: 'built' | 'architected' | 'led';
+  visibility?: 'open-source' | 'proprietary';  // For better project organization
+  metrics?: string[];  // e.g., ["Processed 2M+ transactions daily", "Modeled $300M+ token economies"]
+  outcome?: string;     // Brief outcome statement
+  videoUrl?: string;    // YouTube or other video embeds
+  blogUrl?: string;     // Link to detailed blog post
+  images?: string[];    // Screenshots, diagrams, etc.
 }
 
 export interface BlogPost {
