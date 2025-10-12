@@ -1,0 +1,79 @@
+/* ================================================= */
+/* Theme-Specific Visual Effects                    */
+/* ================================================= */
+/* This module contains theme-specific shadows,     */
+/* transition animations, and background controls   */
+/* ================================================= */
+
+/* Theme-specific tile effects */
+/* Sharp tile borders for authentic tiling WM aesthetic */
+.theme-tokyo-night .border {
+  box-shadow: 0 0 0 1px rgba(122, 162, 247, 0.1);
+}
+
+.theme-tokyo-night .shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(122, 162, 247, 0.25),
+              0 0 20px -5px rgba(187, 154, 247, 0.1);
+}
+
+.theme-nord .border {
+  box-shadow: 0 0 0 1px rgba(129, 161, 193, 0.12);
+}
+
+.theme-nord .shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(129, 161, 193, 0.2),
+              0 0 20px -5px rgba(136, 192, 208, 0.1);
+}
+
+.theme-solarized-light .border {
+  box-shadow: 0 0 0 1px rgba(211, 54, 130, 0.15);
+}
+
+.theme-solarized-light .shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(211, 54, 130, 0.15),
+              0 0 15px -5px rgba(38, 139, 210, 0.1);
+}
+
+/* Theme transition animations */
+.theme-transitioning * {
+  transition: background-color 300ms ease,
+              color 300ms ease,
+              border-color 300ms ease !important;
+}
+
+/* Background effect control */
+.background-orbs {
+  display: block;
+}
+
+:not(.bg-effect-enabled) .background-orbs {
+  display: none;
+}
+
+/* View Transitions API - Desktop only (smooth background crossfades) */
+@media (min-width: 1024px) {
+  ::view-transition-old(background-wallpaper),
+  ::view-transition-new(background-wallpaper) {
+    animation-duration: 350ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Smooth crossfade effect */
+  ::view-transition-old(background-wallpaper) {
+    animation-name: fade-out-view-transition;
+  }
+
+  ::view-transition-new(background-wallpaper) {
+    animation-name: fade-in-view-transition;
+  }
+}
+
+@keyframes fade-out-view-transition {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fade-in-view-transition {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

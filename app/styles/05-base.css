@@ -1,0 +1,74 @@
+/* ================================================= */
+/* Base Styles & Resets                             */
+/* ================================================= */
+/* CSS reset, body styles, container utilities,     */
+/* and responsive breakpoints                       */
+/* ================================================= */
+
+/* Dark mode is now handled by theme classes */
+
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--theme-bg);
+  color: var(--theme-text);
+  font-family: "JetBrains Mono", "Fira Code", "IBM Plex Mono", monospace;
+  font-weight: 400;
+  min-height: 100vh;
+}
+
+/* Selection */
+::selection {
+  background: var(--term-accent);
+  color: var(--term-bg);
+  opacity: 0.9;
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid var(--term-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Smooth scrolling */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Framer Motion handles all layout animations now */
+/* The library provides better performance and smoother transitions */
+
+@media (min-width: 475px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 2rem;
+  }
+}

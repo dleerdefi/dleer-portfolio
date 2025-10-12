@@ -27,6 +27,14 @@ export function useSkills() {
 }
 
 /**
+ * Get technologies from config
+ */
+export function useTechnologies() {
+  const config = usePortfolioConfig();
+  return config.technologies;
+}
+
+/**
  * Get social links from config
  */
 export function useSocialLinks(): SocialLink[] {

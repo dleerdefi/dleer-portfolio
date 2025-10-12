@@ -1,0 +1,139 @@
+/* ================================================= */
+/* Mobile-Specific Styles                           */
+/* ================================================= */
+/* Safe area insets, mobile viewport optimization,  */
+/* touch actions, and performance optimizations     */
+/* ================================================= */
+
+/* ================================ */
+/* Mobile Single-Tile Viewport Styles */
+/* ================================ */
+
+/* Safe area insets for notched devices */
+:root {
+  --sat: env(safe-area-inset-top);
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+  --sar: env(safe-area-inset-right);
+}
+
+/* Viewport meta tag compatibility */
+@supports (padding: max(0px)) {
+  .safe-top {
+    padding-top: max(env(safe-area-inset-top), 12px);
+  }
+
+  .safe-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 12px);
+  }
+}
+
+/* Touch action for gesture areas */
+.touch-action-none {
+  touch-action: none;
+}
+
+.touch-action-pan-y {
+  touch-action: pan-y;
+}
+
+.touch-action-pan-x {
+  touch-action: pan-x;
+}
+
+/* Mobile viewport optimization */
+.mobile-viewport {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent iOS bounce */
+.prevent-bounce {
+  overscroll-behavior: contain;
+}
+
+/* Mobile bottom bar shadow */
+.mobile-bottom-bar {
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Slide-up sheet backdrop */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Sheet handle */
+.sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(var(--theme-text-rgb), 0.3);
+  border-radius: 2px;
+  margin: 8px auto;
+}
+
+/* Mobile performance optimizations */
+@media (max-width: 767px) {
+  /* Reduce blur for better performance */
+  .glass-tile {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  /* Hardware acceleration hints */
+  .mobile-viewport,
+  .mobile-bottom-bar {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* Optimize animations for mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Smooth momentum scrolling */
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+}
+
+/* Mobile landscape adjustments */
+@media (max-width: 767px) and (orientation: landscape) {
+  .mobile-bottom-bar {
+    height: 48px !important;
+  }
+
+  .mobile-viewport {
+    height: calc(100vh - 48px);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .mobile-bottom-bar {
+    border-top: 2px solid var(--accent-color);
+  }
+
+  .sheet-handle {
+    background: var(--accent-color);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-viewport * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
