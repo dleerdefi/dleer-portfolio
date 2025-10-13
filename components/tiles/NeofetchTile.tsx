@@ -39,9 +39,9 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
   // Determine gap and font sizes based on layout
   const gapClass = layout === 'parallax' ? 'gap-6 sm:gap-8 md:gap-10' : 'gap-4 sm:gap-6 md:gap-8';
   const asciiFontSize = layout === 'parallax' ?
-    (logoType === 'dleer' ? 'clamp(0.55rem, 1.2vw, 0.85rem)' : 'clamp(0.5rem, 1.7vw, 0.8rem)') :
-    (logoType === 'dleer' ? 'clamp(0.45rem, 1vw, 0.65rem)' : 'clamp(0.4rem, 1.5vw, 0.7rem)');
-  const infoFontSize = layout === 'parallax' ? 'clamp(0.75rem, 1.7vw, 0.95rem)' : 'clamp(0.65rem, 1.5vw, 0.85rem)';
+    (logoType === 'dleer' ? 'clamp(0.55rem, 1vw, 0.75rem)' : 'clamp(0.5rem, 1.4vw, 0.7rem)') :
+    (logoType === 'dleer' ? 'clamp(0.45rem, 0.85vw, 0.55rem)' : 'clamp(0.4rem, 1.2vw, 0.6rem)');
+  const infoFontSize = layout === 'parallax' ? 'clamp(0.75rem, 1.2vw, 0.875rem)' : 'clamp(0.65rem, 1vw, 0.75rem)';
 
   return (
     <div className={`flex ${gapClass} font-mono text-xs transition-all duration-300 w-full`}

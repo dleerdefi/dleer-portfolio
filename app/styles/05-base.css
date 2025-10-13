@@ -29,6 +29,18 @@ body {
   min-height: 100vh;
 }
 
+/* MacOS Retina display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  body {
+    font-weight: 420; /* Slightly heavier for better Retina readability */
+  }
+}
+
+/* Adjust font smoothing for light theme on MacOS */
+[data-theme="solarized-light"] html {
+  -webkit-font-smoothing: subpixel-antialiased; /* Crisper rendering on light backgrounds */
+}
+
 /* Selection */
 ::selection {
   background: var(--term-accent);

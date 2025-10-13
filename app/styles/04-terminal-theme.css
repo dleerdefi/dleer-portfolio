@@ -74,9 +74,14 @@
   --border-radius: 0px;
   --border-radius-lg: 0px;
 
-  /* Typography */
-  --font-size-base: 14px;
+  /* Typography - Responsive font sizes using clamp() */
+  --font-size-base: clamp(14px, 1.2vw + 0.5rem, 18px);
+  --font-size-sm: clamp(12px, 1vw + 0.4rem, 14px);
+  --font-size-lg: clamp(16px, 1.4vw + 0.6rem, 20px);
+  --font-size-xl: clamp(18px, 1.6vw + 0.8rem, 24px);
   --line-height-base: 1.6;
+  --line-height-tight: 1.4;
+  --line-height-relaxed: 1.8;
   --letter-spacing: 0.025em;
 }
 

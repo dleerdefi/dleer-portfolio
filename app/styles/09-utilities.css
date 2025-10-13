@@ -5,6 +5,22 @@
 /* and helper classes                               */
 /* ================================================= */
 
+/* Responsive Layout Spacing Variables */
+:root {
+  /* Base gaps scale with viewport for better adaptation */
+  --layout-gap-sm: clamp(8px, 0.8vw, 12px);   /* Smaller gaps */
+  --layout-gap-md: clamp(12px, 1vw, 16px);    /* Standard gaps */
+  --layout-gap-lg: clamp(16px, 1.2vw, 24px);  /* Larger gaps */
+
+  /* Tile padding scales with viewport */
+  --tile-padding-sm: clamp(12px, 1.5vw, 18px);
+  --tile-padding-md: clamp(16px, 2vw, 24px);
+  --tile-padding-lg: clamp(20px, 2.5vw, 32px);
+
+  /* Polybar height responsive */
+  --polybar-height: clamp(32px, 4vh, 44px);
+}
+
 /* Mobile-first responsive utilities */
 .mobile-only {
   display: block;

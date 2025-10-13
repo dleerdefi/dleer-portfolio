@@ -18,11 +18,8 @@ export const portfolioConfig: PortfolioConfig = {
       intro: process.env.NEXT_PUBLIC_BIO_INTRO ||
         "Founder–engineer building AI memory with knowledge graphs.",
 
-      experience: process.env.NEXT_PUBLIC_BIO_EXPERIENCE ||
-        "At ConsumerFi, I designed a three-layer architecture: ConsumerGraph, Graph Intelligence, and an Agentic Layer with non-custodial execution. I built hybrid agent and event simulators that modeled >$300M token economies for market makers and foundations.",
-
       leadership: process.env.NEXT_PUBLIC_BIO_LEADERSHIP ||
-        "My edge is shipping complex systems. Previously I managed $63M in scope and led 12+ engineers on a $500M hospital campus build. Today I focus on LLM memory, scoring and ranking and agent-routing algorithms, and privacy-first data infrastructure.",
+        "I enjoy shipping complex systems. Previously, I managed $63M in scope and led 12+ engineers on a $500M hospital campus build. Today I focus on LLM memory, scoring and ranking and agent-routing algorithms, and privacy-first data infrastructure.",
 
       // Personal tagline
       tagline: process.env.NEXT_PUBLIC_BIO_TAGLINE ||

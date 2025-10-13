@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   description: config.seo.description,
   keywords: config.seo.keywords,
   authors: [{ name: config.seo.author }],
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
   openGraph: {
     title: config.seo.title,
     description: config.seo.description,

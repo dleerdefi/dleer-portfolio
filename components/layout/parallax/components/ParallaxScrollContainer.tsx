@@ -21,6 +21,9 @@ interface ParallaxScrollContainerProps {
  * ParallaxScrollContainer Component
  * Manages the scrollable content area with fixed Neofetch background
  * Handles section rendering with separators and transitions
+ *
+ * Section divider design inspired by Kyrre Gjerstad's portfolio (https://www.kyrre.dev/)
+ * Clean thin lines with gradient dots for minimal, elegant separation between content sections
  */
 export const ParallaxScrollContainer: React.FC<ParallaxScrollContainerProps> = ({
   scrollRef,
