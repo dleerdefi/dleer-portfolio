@@ -33,7 +33,7 @@ const AccentColorTile: React.FC<AccentColorTileProps> = ({ isBlurred = false }) 
       isBlurred ? 'text-[#a9b1d6]/70' : 'text-[#a9b1d6]'
     }`}>
       {/* Color Palette Grid */}
-      <div className="grid grid-cols-5 gap-1.5">
+      <div className="grid grid-cols-5 gap-1">
         {colors.map((color) => (
           <button
             key={color.name}
@@ -42,7 +42,7 @@ const AccentColorTile: React.FC<AccentColorTileProps> = ({ isBlurred = false }) 
               theme.accentColor === color.name
                 ? 'border-white shadow-lg scale-110'
                 : 'border-[#414868]/30'
-            } w-6 h-6`}
+            } w-5 h-5`}
             style={{ backgroundColor: color.hex }}
             title={color.name}
             aria-label={`Select ${color.name} accent color`}

@@ -72,13 +72,40 @@ const BackgroundTile: React.FC<BackgroundTileProps> = ({ isBlurred = false }) =>
     <div className={`h-full flex flex-col items-center justify-center font-mono text-sm transition-all duration-300 px-3 ${
       isBlurred ? 'text-[#a9b1d6]/70' : 'text-[#a9b1d6]'
     }`}>
-      {/* Background Image Carousel */}
-      <div className="w-full space-y-2">
-        <div className="flex items-center gap-3">
-          {/* Previous Button */}
+      {/* Background Image Carousel - Compact Centered Layout */}
+      <div className="w-full flex flex-col items-center gap-1">
+        {/* Preview Image - Scales with tile size (Layer 2 compliant) */}
+        <div
+          className="w-[85%] aspect-[4/3] rounded border-2 overflow-hidden relative"
+          style={{
+            borderColor: 'rgba(var(--accent-color-rgb), 0.5)',
+            backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)'
+          }}
+        >
+          {theme.backgroundImage === null ? (
+            <span
+              className="absolute inset-0 flex items-center justify-center text-xs"
+              style={{ color: 'var(--theme-text-dimmed)' }}
+            >
+              NONE
+            </span>
+          ) : (
+            <Image
+              src={getThumbnailPath(theme.backgroundImage)}
+              alt="Background preview"
+              fill
+              quality={70}
+              sizes="(max-width: 1920px) 180px, 240px"
+              style={{ objectFit: 'cover' }}
+            />
+          )}
+        </div>
+
+        {/* Navigation arrows - Below preview */}
+        <div className="flex gap-2">
           <button
             onClick={handlePrevBackground}
-            className="px-2 py-1 rounded transition-all hover:scale-110 flex-shrink-0 w-8"
+            className="w-5 h-5 flex items-center justify-center rounded transition-all hover:scale-125 text-xs"
             style={{
               backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
               color: 'var(--theme-text)'
@@ -87,37 +114,9 @@ const BackgroundTile: React.FC<BackgroundTileProps> = ({ isBlurred = false }) =>
           >
             ‹
           </button>
-
-          {/* Preview */}
-          <div
-            className="h-16 rounded border-2 flex items-center justify-center text-xs overflow-hidden relative"
-            style={{
-              borderColor: 'rgba(var(--accent-color-rgb), 0.5)',
-              backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)',
-              flexGrow: 1,
-              flexShrink: 1,
-              flexBasis: '0%',
-              minWidth: 0
-            }}
-          >
-            {theme.backgroundImage === null ? (
-              <span style={{ color: 'var(--theme-text-dimmed)' }}>NONE</span>
-            ) : (
-              <Image
-                src={getThumbnailPath(theme.backgroundImage)}
-                alt="Background preview"
-                fill
-                quality={70}
-                sizes="150px"
-                style={{ objectFit: 'cover' }}
-              />
-            )}
-          </div>
-
-          {/* Next Button */}
           <button
             onClick={handleNextBackground}
-            className="px-2 py-1 rounded transition-all hover:scale-110 flex-shrink-0 w-8"
+            className="w-5 h-5 flex items-center justify-center rounded transition-all hover:scale-125 text-xs"
             style={{
               backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
               color: 'var(--theme-text)'
@@ -126,11 +125,6 @@ const BackgroundTile: React.FC<BackgroundTileProps> = ({ isBlurred = false }) =>
           >
             ›
           </button>
-        </div>
-
-        {/* Position indicator */}
-        <div className="text-center text-xs" style={{ color: 'var(--theme-text-dimmed)' }}>
-          {currentIndex === -1 ? 'None' : `${currentIndex + 1} / ${currentBackgrounds.length}`}
         </div>
       </div>
     </div>

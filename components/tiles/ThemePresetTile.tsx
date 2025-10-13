@@ -16,7 +16,7 @@ const ThemePresetTile: React.FC<ThemePresetTileProps> = ({ isBlurred = false }) 
       isBlurred ? 'text-[#a9b1d6]/70' : 'text-[#a9b1d6]'
     }`}>
       {/* Theme Preset Icons */}
-      <div className="flex items-center justify-center gap-6">
+      <div className="flex items-center justify-center gap-4">
         <button
           onClick={() => setThemePreset('solarized-light')}
           className="transition-all hover:scale-110"
@@ -27,7 +27,7 @@ const ThemePresetTile: React.FC<ThemePresetTileProps> = ({ isBlurred = false }) 
           aria-pressed={theme.preset === 'solarized-light'}
           title="Solarized Light"
         >
-          <SolarizedIcon size={24} />
+          <SolarizedIcon size={18} />
         </button>
         <button
           onClick={() => setThemePreset('nord')}
@@ -39,7 +39,7 @@ const ThemePresetTile: React.FC<ThemePresetTileProps> = ({ isBlurred = false }) 
           aria-pressed={theme.preset === 'nord'}
           title="Nord"
         >
-          <NordIcon size={24} />
+          <NordIcon size={18} />
         </button>
         <button
           onClick={() => setThemePreset('tokyo-night')}
@@ -51,7 +51,7 @@ const ThemePresetTile: React.FC<ThemePresetTileProps> = ({ isBlurred = false }) 
           aria-pressed={theme.preset === 'tokyo-night'}
           title="Tokyo Night"
         >
-          <TokyoNightIcon size={24} />
+          <TokyoNightIcon size={18} />
         </button>
       </div>
     </div>

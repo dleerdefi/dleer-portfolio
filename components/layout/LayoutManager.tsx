@@ -181,7 +181,7 @@ const LayoutManager: React.FC = () => {
                 </motion.div>
 
                 {/* Bottom Section - Navigation and 3 Theme Tiles */}
-                <motion.div className="h-3/5 flex" style={{ gap: '12px' }}>
+                <motion.div className="h-3/5 flex" style={{ gap: '12px', overflow: 'hidden' }}>
                   {/* Navigation Tile - 70% of bottom width */}
                   <motion.div
                     layout
@@ -210,8 +210,8 @@ const LayoutManager: React.FC = () => {
                   </motion.div>
 
                   {/* Theme Controls Column - 30% width, 3 stacked tiles */}
-                  <motion.div className="flex flex-col" style={{ flex: '0 0 calc(30% - 6px)', gap: '12px' }}>
-                    {/* Theme Preset Tile */}
+                  <motion.div className="flex flex-col" style={{ flex: '0 0 calc(30% - 6px)', gap: '12px', overflow: 'hidden' }}>
+                    {/* Theme Preset Tile - 15% height */}
                     <motion.div
                       layout
                       layoutId="tile-themePreset"
@@ -224,7 +224,7 @@ const LayoutManager: React.FC = () => {
                       }}
                       animate={{
                         backgroundColor: getTileOpacity('themePreset', focusedTile === 'themePreset'),
-                        height: 'calc((100% - 24px) / 3)',
+                        height: 'calc((100% - 24px) * 0.15)',
                         backdropFilter: 'blur(12px)',
                         borderRadius: '0px',
                         borderWidth: '1px',
@@ -236,7 +236,7 @@ const LayoutManager: React.FC = () => {
                       <ThemePresetTile isBlurred={focusedTile !== 'themePreset'} />
                     </motion.div>
 
-                    {/* Accent Color Tile */}
+                    {/* Accent Color Tile - 35% height */}
                     <motion.div
                       layout
                       layoutId="tile-accentColor"
@@ -249,7 +249,7 @@ const LayoutManager: React.FC = () => {
                       }}
                       animate={{
                         backgroundColor: getTileOpacity('accentColor', focusedTile === 'accentColor'),
-                        height: 'calc((100% - 24px) / 3)',
+                        height: 'calc((100% - 24px) * 0.35)',
                         backdropFilter: 'blur(12px)',
                         borderRadius: '0px',
                         borderWidth: '1px',
@@ -261,7 +261,7 @@ const LayoutManager: React.FC = () => {
                       <AccentColorTile isBlurred={focusedTile !== 'accentColor'} />
                     </motion.div>
 
-                    {/* Background Tile */}
+                    {/* Background Tile - 50% height */}
                     <motion.div
                       layout
                       layoutId="tile-background"
@@ -274,7 +274,7 @@ const LayoutManager: React.FC = () => {
                       }}
                       animate={{
                         backgroundColor: getTileOpacity('background', focusedTile === 'background'),
-                        height: 'calc((100% - 24px) / 3)',
+                        height: 'calc((100% - 24px) * 0.50)',
                         backdropFilter: 'blur(12px)',
                         borderRadius: '0px',
                         borderWidth: '1px',

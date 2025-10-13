@@ -26,6 +26,8 @@ import { ParallaxContactSection } from './parallax/sections/ParallaxContactSecti
  * MobileParallaxLayout Component
  * Main orchestrator for the mobile parallax scrolling experience
  * Coordinates theme, scrolling, navigation and content sections
+ *
+ * Design inspired by Kyrre Gjerstad's portfolio (https://www.kyrre.dev/)
  */
 const MobileParallaxLayout: React.FC = () => {
   const personal = usePersonalInfo();
