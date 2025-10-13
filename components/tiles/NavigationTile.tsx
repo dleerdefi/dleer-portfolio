@@ -401,8 +401,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
 
       <div className="mt-auto pt-4 text-xs" style={{ color: 'var(--theme-text-dimmed)' }}>
         <div className="border-t pt-3" style={{ borderColor: 'rgba(var(--theme-text-rgb), 0.1)' }}>
-          <div>{`${2} directories, ${2 + projectItems.length + blogItems.length} files`}</div>
-          <div className="mt-2" style={{ opacity: 0.8 }}>
+          <div style={{ opacity: 0.8 }}>
             {uiStrings.navigation.tabHint}
           </div>
         </div>
