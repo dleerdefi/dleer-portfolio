@@ -3,7 +3,6 @@
 import React from 'react';
 import { ContentType } from '@/contexts/FocusContext';
 import { useProjects, useUIStrings } from '@/lib/config';
-import { FONT_SIZES } from '@/lib/constants/typography';
 
 interface ProjectDetailContentProps {
   project: any;
@@ -36,7 +35,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
   return (
     <div className="space-y-6">
       {/* Breadcrumb Navigation */}
-      <div className="flex items-center gap-2" style={{ color: 'var(--theme-text-dimmed)', fontSize: FONT_SIZES.sm }}>
+      <div className="flex items-center gap-2" style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>
         <span
           className="cursor-pointer transition-colors hover:opacity-80"
           style={{ color: 'var(--accent-color)' }}
@@ -52,7 +51,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
       </div>
 
       <div className="border-b pb-4" style={{ borderColor: 'var(--theme-border)', opacity: 0.3 }}>
-        <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: FONT_SIZES['2xl'] }}>{fullProject.name}</h1>
+        <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(1.75rem, 1.75rem + 4cqi, 2.25rem)' }}>{fullProject.name}</h1>
         <p className="mt-1" style={{ color: 'var(--theme-text-dimmed)' }}>{fullProject.description}</p>
 
         {/* Category and Role badges */}
@@ -61,7 +60,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
             <span className="px-2 py-1 rounded" style={{
               backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
               color: 'var(--theme-text-dimmed)',
-              fontSize: FONT_SIZES.xs
+              fontSize: 'clamp(0.875rem, 0.875rem + 1cqi, 1rem)'
             }}>
               {categoryLabels[fullProject.category as keyof typeof categoryLabels]}
             </span>
@@ -70,7 +69,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
             <span className="px-2 py-1 rounded" style={{
               backgroundColor: 'rgba(var(--theme-info-rgb), 0.1)',
               color: 'var(--theme-text-dimmed)',
-              fontSize: FONT_SIZES.xs
+              fontSize: 'clamp(0.875rem, 0.875rem + 1cqi, 1rem)'
             }}>
               {roleLabels[fullProject.role as keyof typeof roleLabels]}
             </span>
@@ -79,7 +78,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
             <span className="px-2 py-1 rounded" style={{
               backgroundColor: fullProject.status === 'production' ? 'rgba(var(--theme-success-rgb), 0.2)' : 'rgba(var(--theme-warning-rgb), 0.2)',
               color: fullProject.status === 'production' ? 'var(--theme-success)' : 'var(--theme-warning)',
-              fontSize: FONT_SIZES.xs
+              fontSize: 'clamp(0.875rem, 0.875rem + 1cqi, 1rem)'
             }}>
               {fullProject.status}
             </span>
@@ -94,15 +93,15 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
             backgroundColor: 'rgba(var(--accent-color-rgb), 0.05)',
             borderLeft: '3px solid var(--accent-color)'
           }}>
-            <p className="italic" style={{ color: 'var(--accent-color)', fontSize: FONT_SIZES.sm }}>
+            <p className="italic" style={{ color: 'var(--accent-color)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>
               💡 {fullProject.outcome}
             </p>
           </div>
         )}
 
         <div>
-          <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: FONT_SIZES.lg }}>{uiStrings.headers.overview}</h2>
-          <p className="leading-relaxed" style={{ color: 'var(--theme-text)', opacity: 0.9, fontSize: FONT_SIZES.base }}>
+          <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>{uiStrings.headers.overview}</h2>
+          <p className="leading-relaxed" style={{ color: 'var(--theme-text)', opacity: 0.9, fontSize: 'clamp(1.125rem, 1.125rem + 2cqi, 1.25rem)' }}>
             {fullProject.overview || "This project demonstrates advanced development practices with focus on security, efficiency, and scalability. Implemented using modern development tools and following industry best practices."}
           </p>
         </div>
@@ -110,7 +109,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
         {/* Metrics Section */}
         {fullProject.metrics && fullProject.metrics.length > 0 && (
           <div>
-            <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: FONT_SIZES.lg }}>Key Metrics & Impact</h2>
+            <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>Key Metrics & Impact</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {fullProject.metrics.map((metric: string, index: number) => (
                 <div
@@ -121,7 +120,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
                     backgroundColor: 'rgba(var(--theme-surface-rgb), 0.2)'
                   }}
                 >
-                  <span style={{ color: 'var(--theme-info)', fontSize: FONT_SIZES.sm }}>
+                  <span style={{ color: 'var(--theme-info)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>
                     📊 {metric}
                   </span>
                 </div>
@@ -131,8 +130,8 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
         )}
 
         <div>
-          <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: FONT_SIZES.lg }}>{uiStrings.headers.keyFeatures}</h2>
-          <ul className="space-y-1" style={{ color: 'var(--theme-text)', opacity: 0.9, fontSize: FONT_SIZES.base }}>
+          <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>{uiStrings.headers.keyFeatures}</h2>
+          <ul className="space-y-1" style={{ color: 'var(--theme-text)', opacity: 0.9, fontSize: 'clamp(1.125rem, 1.125rem + 2cqi, 1.25rem)' }}>
             {(fullProject.features || [
               "Fully tested and documented codebase",
               "Optimized implementations",
@@ -145,8 +144,8 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
         </div>
 
         <div>
-          <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: FONT_SIZES.lg }}>{uiStrings.headers.techStack}</h2>
-          <code className="font-mono p-3 rounded-lg mt-2 border block" style={{ color: 'var(--theme-info)', backgroundColor: 'var(--theme-bg)', borderColor: 'var(--theme-border)', opacity: 0.5, fontSize: FONT_SIZES.xs }}>
+          <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>{uiStrings.headers.techStack}</h2>
+          <code className="font-mono p-3 rounded-lg mt-2 border block" style={{ color: 'var(--theme-info)', backgroundColor: 'var(--theme-bg)', borderColor: 'var(--theme-border)', opacity: 0.5, fontSize: 'clamp(10px, 1.5cqw, 16px)' }}>
             {fullProject.techStack?.join(', ') || fullProject.techStackDisplay || 'Technologies not specified'}
           </code>
         </div>
@@ -154,12 +153,12 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
         {/* Video Embed Section */}
         {fullProject.videoUrl && (
           <div>
-            <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: FONT_SIZES.lg }}>Video Demo</h2>
+            <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>Video Demo</h2>
             <div className="p-3 rounded-lg border" style={{
               borderColor: 'rgba(var(--accent-color-rgb), 0.3)',
               backgroundColor: 'rgba(var(--theme-surface-rgb), 0.2)'
             }}>
-              <p className="mb-2" style={{ color: 'var(--theme-text-dimmed)', fontSize: FONT_SIZES.sm }}>
+              <p className="mb-2" style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>
                 🎥 Video demonstration available
               </p>
               <a
@@ -167,7 +166,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block"
-                style={{ color: 'var(--theme-info)', fontSize: FONT_SIZES.sm }}
+                style={{ color: 'var(--theme-info)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}
               >
                 Watch on YouTube →
               </a>
@@ -182,7 +181,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
               target="_blank"
               rel="noopener noreferrer"
               className="touch-target touch-feedback px-4 py-2 rounded hover:opacity-90 transition-all duration-200 inline-block"
-              style={{ backgroundColor: 'var(--accent-color)', color: 'var(--theme-bg)', textDecoration: 'none', fontSize: FONT_SIZES.sm }}
+              style={{ backgroundColor: 'var(--accent-color)', color: 'var(--theme-bg)', textDecoration: 'none', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}
             >
               {uiStrings.buttons.viewGithub}
             </a>
@@ -198,7 +197,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
                 color: 'var(--accent-color)',
                 backgroundColor: 'transparent',
                 textDecoration: 'none',
-                fontSize: FONT_SIZES.sm
+                fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)'
               }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
@@ -215,7 +214,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
                 color: 'var(--theme-warning)',
                 backgroundColor: 'transparent',
                 textDecoration: 'none',
-                fontSize: FONT_SIZES.sm
+                fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)'
               }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(var(--theme-warning-rgb), 0.1)'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}

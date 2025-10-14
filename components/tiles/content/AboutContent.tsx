@@ -13,11 +13,11 @@ export const AboutContent: React.FC = () => {
 
   return (
     <div className="space-y-3">
-      <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(17px, 3.5cqw, 32px)' }}>
+      <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(1.5rem, 1.5rem + 3cqi, 1.75rem)' }}>
         {personal.greeting || `Hi, I'm ${personal.name}`}
       </h1>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', color: 'var(--theme-text)', fontSize: 'clamp(13px, 2.5cqw, 22px)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', color: 'var(--theme-text)', fontSize: 'clamp(1.125rem, 1.125rem + 2cqi, 1.25rem)' }}>
         {/* Introduction */}
         {personal.bio.intro && (
           <p className="leading-relaxed">
@@ -47,7 +47,7 @@ export const AboutContent: React.FC = () => {
               color: 'var(--theme-text-dimmed)',
               borderColor: 'rgba(var(--accent-color-rgb), 0.2)',
               opacity: 0.8,
-              fontSize: 'clamp(11px, 2cqw, 18px)'
+              fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)'
             }}
           >
             {personal.bio.tagline}

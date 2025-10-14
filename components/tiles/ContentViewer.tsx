@@ -49,7 +49,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="font-mono" style={{ containerType: 'inline-size' }}>
+    <div className="font-mono">
       {renderContent()}
     </div>
   );

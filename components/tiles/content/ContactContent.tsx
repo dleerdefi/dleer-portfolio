@@ -67,7 +67,7 @@ export const ContactContent: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(17px, 3.5cqw, 32px)' }}>{uiStrings.headers.contact}</h1>
+      <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(1.5rem, 1.5rem + 3cqi, 1.75rem)' }}>{uiStrings.headers.contact}</h1>
 
       <form onSubmit={handleSubmit}>
         {/* Honeypot field - hidden from users, visible to bots */}
@@ -135,7 +135,7 @@ export const ContactContent: React.FC = () => {
               fontWeight: 'bold',
               cursor: isSubmitting ? 'not-allowed' : 'pointer',
               opacity: isSubmitting ? 0.7 : 1,
-              fontSize: 'clamp(11px, 2cqw, 18px)'
+              fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)'
             }}
             onMouseEnter={(e) => {
               if (!isSubmitting) {

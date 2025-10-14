@@ -17,8 +17,8 @@ export const BlogOverviewContent: React.FC<BlogOverviewContentProps> = ({ onNavi
 
   return (
     <div className="space-y-6">
-      <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(17px, 3.5cqw, 32px)' }}>Blog</h1>
-      <p style={{ color: 'var(--theme-text)', fontSize: 'clamp(11px, 2cqw, 18px)' }}>
+      <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(1.5rem, 1.5rem + 3cqi, 1.75rem)' }}>Blog</h1>
+      <p style={{ color: 'var(--theme-text)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>
         Technical articles, tutorials, and insights from my development journey.
       </p>
       <div className="space-y-4">
@@ -71,10 +71,10 @@ export const BlogOverviewContent: React.FC<BlogOverviewContentProps> = ({ onNavi
               }}
             >
               <div className="flex justify-between items-start mb-2">
-                <h3 className="font-bold transition-colors" style={{ color: 'var(--theme-text)', fontSize: 'clamp(15px, 3cqw, 26px)' }}>{post.title}</h3>
-                <span style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(11px, 2cqw, 18px)' }}>{post.date}</span>
+                <h3 className="font-bold transition-colors" style={{ color: 'var(--theme-text)', fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>{post.title}</h3>
+                <span style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>{post.date}</span>
               </div>
-              <p className="desktop-only mb-2 transition-opacity" style={{ color: 'var(--theme-text)', opacity: 0.8, fontSize: 'clamp(11px, 2cqw, 18px)' }}>{post.excerpt}</p>
+              <p className="desktop-only mb-2 transition-opacity" style={{ color: 'var(--theme-text)', opacity: 0.8, fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>{post.excerpt}</p>
               <span style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(11px, 2cqw, 18px)' }}>{post.category}</span>
             </div>
           );
