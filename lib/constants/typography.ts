@@ -68,9 +68,9 @@ export const UI_SIZES = {
   iconLg: 'clamp(3rem, 3rem + 6cqi, 4.5rem)',        // 48-72px
 
   // Color picker tiles - interactive color selection elements
-  colorTileXs: 'clamp(1.75rem, 1.75rem + 3.5cqi, 2.5rem)',  // 28-40px
-  colorTileSm: 'clamp(2.25rem, 2.25rem + 5cqi, 3rem)',      // 36-48px
-  colorTileMd: 'clamp(3rem, 3rem + 6cqi, 4rem)',            // 48-64px
+  colorTileXs: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.75rem)',  // 20-28px
+  colorTileSm: 'clamp(1.5rem, 1.5rem + 3.5cqi, 2.25rem)',    // 24-36px
+  colorTileMd: 'clamp(2rem, 2rem + 4.5cqi, 2.75rem)',        // 32-44px
 } as const;
 
 export type UISize = keyof typeof UI_SIZES;
