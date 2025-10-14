@@ -54,21 +54,21 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
       >
         {/* Project Title - Larger on mobile to match header */}
         <h3
-          className="font-bold text-lg md:text-base mb-1 transition-colors hover:opacity-80"
-          style={{ color: 'var(--accent-color)' }}
+          className="font-bold mb-1 transition-colors hover:opacity-80"
+          style={{ color: 'var(--accent-color)', fontSize: 'clamp(15px, 3cqw, 26px)' }}
         >
           {project.name}
         </h3>
 
         {/* Description - Hidden on mobile, shown on desktop */}
-        <p className="desktop-only text-sm mb-2" style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
+        <p className="desktop-only mb-2" style={{ color: 'var(--theme-text)', opacity: 0.9, fontSize: 'clamp(11px, 2cqw, 18px)' }}>
           {project.description}
         </p>
 
         {/* Bottom row: Tech Stack and Links */}
         <div className="flex items-center justify-between">
           {/* Tech Stack - Subtle with dots */}
-          <div className="text-xs" style={{ color: 'var(--theme-text-dimmed)' }}>
+          <div style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(11px, 2cqw, 18px)' }}>
             {project.techStack.slice(0, 4).map((tech: string, idx: number) => (
               <span key={idx}>
                 {tech}
@@ -78,7 +78,7 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
           </div>
 
           {/* Links - Simple text */}
-          <div className="flex gap-3 text-xs">
+          <div className="flex gap-3" style={{ fontSize: 'clamp(11px, 2cqw, 18px)' }}>
             {project.github && (
               <a
                 href={project.github}
@@ -125,8 +125,8 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>Projects</h1>
-        <p className="text-sm mt-2" style={{ color: 'var(--theme-text)' }}>
+        <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(17px, 3.5cqw, 32px)' }}>Projects</h1>
+        <p className="mt-2" style={{ color: 'var(--theme-text)', fontSize: 'clamp(11px, 2cqw, 18px)' }}>
           Systems I've built, products I've led, and experimental work.
         </p>
       </div>
@@ -139,10 +139,11 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
           {projectsByCategory.systems.length > 0 && (
             <div>
               <h2
-                className="text-sm font-semibold mb-4 pb-2 border-b"
+                className="font-semibold mb-4 pb-2 border-b"
                 style={{
                   color: 'var(--theme-text-dimmed)',
-                  borderColor: 'rgba(var(--theme-text-rgb), 0.1)'
+                  borderColor: 'rgba(var(--theme-text-rgb), 0.1)',
+                  fontSize: 'clamp(11px, 2cqw, 18px)'
                 }}
               >
                 {categoryLabels.systems}
@@ -157,10 +158,11 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
           {projectsByCategory.product.length > 0 && (
             <div>
               <h2
-                className="text-sm font-semibold mb-4 pb-2 border-b"
+                className="font-semibold mb-4 pb-2 border-b"
                 style={{
                   color: 'var(--theme-text-dimmed)',
-                  borderColor: 'rgba(var(--theme-text-rgb), 0.1)'
+                  borderColor: 'rgba(var(--theme-text-rgb), 0.1)',
+                  fontSize: 'clamp(11px, 2cqw, 18px)'
                 }}
               >
                 {categoryLabels.product}
@@ -175,10 +177,11 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
           {projectsByCategory.experimental.length > 0 && (
             <div>
               <h2
-                className="text-sm font-semibold mb-4 pb-2 border-b"
+                className="font-semibold mb-4 pb-2 border-b"
                 style={{
                   color: 'var(--theme-text-dimmed)',
-                  borderColor: 'rgba(var(--theme-text-rgb), 0.1)'
+                  borderColor: 'rgba(var(--theme-text-rgb), 0.1)',
+                  fontSize: 'clamp(11px, 2cqw, 18px)'
                 }}
               >
                 {categoryLabels.experimental}

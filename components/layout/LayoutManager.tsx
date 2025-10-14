@@ -161,7 +161,7 @@ const LayoutManager: React.FC = () => {
                   layout
                   layoutId="tile-neofetch"
                   transition={layoutTransition}
-                  className={`h-2/5 shadow-xl border overflow-hidden ${
+                  className={`h-2/5 shadow-xl border overflow-auto ${
                     focusedTile === 'neofetch' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                   }`}
                   initial={{
@@ -173,7 +173,8 @@ const LayoutManager: React.FC = () => {
                     borderRadius: '0px',
                     borderWidth: '1px',
                     padding: '24px',
-                    willChange: 'background-color'
+                    willChange: 'background-color',
+                    containerType: 'inline-size'
                   }}
                   onClick={() => setFocusedTile('neofetch')}
                 >
@@ -202,7 +203,8 @@ const LayoutManager: React.FC = () => {
                       borderColor: focusedTile === 'navigation' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
                       padding: '24px',
                       willChange: 'background-color',
-                      boxShadow: focusedTile === 'navigation' ? '0 25px 50px -12px rgba(var(--accent-color-rgb), 0.3)' : undefined
+                      boxShadow: focusedTile === 'navigation' ? '0 25px 50px -12px rgba(var(--accent-color-rgb), 0.3)' : undefined,
+                      containerType: 'inline-size'
                     }}
                     onClick={() => setFocusedTile('navigation')}
                   >
@@ -229,7 +231,8 @@ const LayoutManager: React.FC = () => {
                         borderRadius: '0px',
                         borderWidth: '1px',
                         padding: '12px',
-                        willChange: 'background-color'
+                        willChange: 'background-color',
+                        containerType: 'inline-size'
                       }}
                       onClick={() => setFocusedTile('themePreset')}
                     >
@@ -254,7 +257,8 @@ const LayoutManager: React.FC = () => {
                         borderRadius: '0px',
                         borderWidth: '1px',
                         padding: '12px',
-                        willChange: 'background-color'
+                        willChange: 'background-color',
+                        containerType: 'inline-size'
                       }}
                       onClick={() => setFocusedTile('accentColor')}
                     >
@@ -279,7 +283,8 @@ const LayoutManager: React.FC = () => {
                         borderRadius: '0px',
                         borderWidth: '1px',
                         padding: '12px',
-                        willChange: 'background-color'
+                        willChange: 'background-color',
+                        containerType: 'inline-size'
                       }}
                       onClick={() => setFocusedTile('background')}
                     >
@@ -309,7 +314,8 @@ const LayoutManager: React.FC = () => {
                   borderWidth: '1px',
                   padding: '24px',
                   willChange: 'background-color',
-                  width: 'calc(50% - 6px)'
+                  width: 'calc(50% - 6px)',
+                  containerType: 'inline-size'
                 }}
                 onClick={() => setFocusedTile('content')}
               >

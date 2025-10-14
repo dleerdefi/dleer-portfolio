@@ -55,7 +55,7 @@ export const TechIcon: React.FC<TechIconProps> = ({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-3 group cursor-pointer">
+    <div className="flex flex-col items-center justify-center gap-3 group cursor-pointer tech-icon-wrapper">
       {/* Icon with white color and accent glow on hover */}
       <IconComponent
         size={size}
@@ -65,11 +65,13 @@ export const TechIcon: React.FC<TechIconProps> = ({
           filter: 'drop-shadow(0 0 0px rgba(var(--accent-color-rgb), 0))',
           transition: 'all 0.3s ease'
         }}
-        className="group-hover:opacity-100 group-hover:scale-110"
+        className="tech-icon group-hover:opacity-100"
         onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
           e.currentTarget.style.filter = 'drop-shadow(0 0 12px rgba(var(--accent-color-rgb), 0.6))';
         }}
         onMouseLeave={(e) => {
+          e.currentTarget.style.transform = '';
           e.currentTarget.style.filter = 'drop-shadow(0 0 0px rgba(var(--accent-color-rgb), 0))';
         }}
       />

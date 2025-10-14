@@ -15,7 +15,7 @@
 }
 
 html {
-  font-size: var(--font-size-base);
+  font-size: 16px; /* Fixed baseline - container queries (cqw) don't work at root level */
   line-height: var(--line-height-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

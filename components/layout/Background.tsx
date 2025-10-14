@@ -47,6 +47,7 @@ const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
   const { theme } = useTheme();
   const [currentTheme, setCurrentTheme] = useState<string>('theme-tokyo-night');
   const [displayedWallpaper, setDisplayedWallpaper] = useState<string | null>(null);
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     // Detect current theme from document root class
@@ -73,20 +74,43 @@ const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
   const activeWallpaper = wallpaperUrl || theme.backgroundImage || bgConfig.url;
   const showWallpaper = theme.backgroundImage !== null || wallpaperUrl !== undefined;
 
-  // Smooth View Transitions API for background changes (desktop only)
+  // FIX 1: Preload adjacent carousel images for instant switching
+  useEffect(() => {
+    if (typeof window === 'undefined' || !theme.backgroundImage) return;
+
+    // Get current theme's background array from ThemeContext
+    const currentBgArray = theme.preset ?
+      require('@/contexts/ThemeContext').themeBackgrounds[theme.preset] : [];
+
+    if (!currentBgArray || currentBgArray.length === 0) return;
+
+    const currentIndex = currentBgArray.indexOf(theme.backgroundImage);
+    if (currentIndex === -1) return;
+
+    // Preload next image
+    if (currentIndex < currentBgArray.length - 1) {
+      const nextImg = new window.Image();
+      nextImg.src = currentBgArray[currentIndex + 1];
+    }
+
+    // Preload previous image
+    if (currentIndex > 0) {
+      const prevImg = new window.Image();
+      prevImg.src = currentBgArray[currentIndex - 1];
+    }
+  }, [theme.backgroundImage, theme.preset]);
+
+  // FIX 2: Reset loading state when image changes
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [displayedWallpaper]);
+
+  // Update displayed wallpaper when active wallpaper changes
+  // Uses CSS transition for smooth crossfade (respects z-index stacking)
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const isDesktop = window.innerWidth >= 1024;
-    const hasViewTransitions = 'startViewTransition' in document;
-
-    if (isDesktop && hasViewTransitions && displayedWallpaper !== activeWallpaper) {
-      // Use View Transitions API for buttery smooth crossfade
-      (document as any).startViewTransition(() => {
-        setDisplayedWallpaper(activeWallpaper);
-      });
-    } else {
-      // Fallback for mobile or unsupported browsers
+    if (displayedWallpaper !== activeWallpaper) {
       setDisplayedWallpaper(activeWallpaper);
     }
   }, [activeWallpaper, displayedWallpaper]);
@@ -102,10 +126,11 @@ const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
         {/* Theme-aware wallpaper layer with enhancements - only shown if not NONE */}
         {showWallpaper && displayedWallpaper && (
           <div
-            className="absolute inset-0 transition-opacity duration-500"
+            className="absolute inset-0"
             style={{
-              opacity: 0.85,
-              viewTransitionName: 'background-wallpaper'
+              opacity: imageLoaded ? 0.85 : 0,
+              transition: 'opacity 300ms ease'
+              // viewTransitionName removed - was creating stacking context above tiles
             } as React.CSSProperties}
           >
             <Image
@@ -115,11 +140,13 @@ const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
               priority
               quality={85}
               sizes="100vw"
+              onLoad={() => setImageLoaded(true)}
               style={{
                 objectFit: 'cover',
                 filter: `blur(${bgConfig.blur}) brightness(${bgConfig.brightness}) contrast(${bgConfig.contrast})`,
                 transform: `scale(${bgConfig.scale})`,
-                transformOrigin: 'center'
+                transformOrigin: 'center',
+                willChange: 'opacity, filter, transform'
               }}
             />
           </div>

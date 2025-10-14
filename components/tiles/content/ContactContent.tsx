@@ -67,7 +67,7 @@ export const ContactContent: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>{uiStrings.headers.contact}</h1>
+      <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(17px, 3.5cqw, 32px)' }}>{uiStrings.headers.contact}</h1>
 
       <form onSubmit={handleSubmit}>
         {/* Honeypot field - hidden from users, visible to bots */}
@@ -126,7 +126,7 @@ export const ContactContent: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="touch-target touch-feedback px-4 py-2 text-sm rounded transition-all duration-200 block w-auto"
+            className="touch-target touch-feedback px-4 py-2 rounded transition-all duration-200 block w-auto"
             style={{
               backgroundColor: isSubmitting
                 ? 'rgba(var(--accent-color-rgb), 0.5)'
@@ -134,7 +134,8 @@ export const ContactContent: React.FC = () => {
               color: 'var(--theme-bg)',
               fontWeight: 'bold',
               cursor: isSubmitting ? 'not-allowed' : 'pointer',
-              opacity: isSubmitting ? 0.7 : 1
+              opacity: isSubmitting ? 0.7 : 1,
+              fontSize: 'clamp(11px, 2cqw, 18px)'
             }}
             onMouseEnter={(e) => {
               if (!isSubmitting) {
@@ -153,14 +154,14 @@ export const ContactContent: React.FC = () => {
 
         {/* Success message */}
         {submitSuccess && (
-          <div style={{ color: 'var(--theme-success)', fontSize: '0.875rem', marginTop: '12px' }}>
+          <div style={{ color: 'var(--theme-success)', fontSize: 'clamp(11px, 2cqw, 18px)', marginTop: '12px' }}>
             ✓ Message sent successfully!
           </div>
         )}
 
         {/* Error message */}
         {submitError && (
-          <div style={{ color: 'var(--theme-error)', fontSize: '0.875rem', marginTop: '12px' }}>
+          <div style={{ color: 'var(--theme-error)', fontSize: 'clamp(11px, 2cqw, 18px)', marginTop: '12px' }}>
             ✗ {submitError}
           </div>
         )}

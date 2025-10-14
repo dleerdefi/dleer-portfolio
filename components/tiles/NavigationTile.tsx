@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useFocusState, useFocusNavigation, ContentType } from '@/contexts/FocusContext';
 import { useProjects, useBlogPosts, useUIStrings } from '@/lib/config';
 import { useView } from '@/contexts/ViewContext';
+import { FONT_SIZES } from '@/lib/constants/typography';
 
 interface NavigationTileProps {
   onContentSelect?: (content: ContentType) => void;
@@ -113,13 +114,17 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
   };
 
   return (
-    <div className={`font-mono text-sm transition-all duration-300`}
+    <div
+      className="font-mono transition-all duration-300"
       style={{
-        color: isBlurred ? 'rgba(var(--theme-text-rgb), 0.7)' : 'var(--theme-text)'
+        color: isBlurred ? 'rgba(var(--theme-text-rgb), 0.7)' : 'var(--theme-text)',
+        fontSize: FONT_SIZES.sm
       }}>
-      <div className={`mb-3 text-lg font-bold transition-all duration-300`}
+      <div
+        className="mb-3 font-bold transition-all duration-300"
         style={{
-          color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)'
+          color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)',
+          fontSize: FONT_SIZES.lg
         }}>{uiStrings.navigation.rootPath}</div>
 
       <div className="touch-spacing">
@@ -186,7 +191,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
               {/* Systems & Infrastructure */}
               {projectsByCategory.systems.length > 0 && (
                 <>
-                  <div className="text-xs mt-1 mb-1" style={{ color: 'var(--theme-text-dimmed)' }}>
+                  <div className="mt-1 mb-1" style={{ color: 'var(--theme-text-dimmed)', fontSize: FONT_SIZES.sm }}>
                     {categoryNames.systems}
                   </div>
                   {projectsByCategory.systems.map((project, index) => {
@@ -226,7 +231,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
               {/* Product & Leadership */}
               {projectsByCategory.product.length > 0 && (
                 <>
-                  <div className="text-xs mt-2 mb-1" style={{ color: 'var(--theme-text-dimmed)' }}>
+                  <div className="mt-2 mb-1" style={{ color: 'var(--theme-text-dimmed)', fontSize: FONT_SIZES.sm }}>
                     {categoryNames.product}
                   </div>
                   {projectsByCategory.product.map((project, index) => {
@@ -266,7 +271,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
               {/* Experimental & Home Lab */}
               {projectsByCategory.experimental.length > 0 && (
                 <>
-                  <div className="text-xs mt-2 mb-1" style={{ color: 'var(--theme-text-dimmed)' }}>
+                  <div className="mt-2 mb-1" style={{ color: 'var(--theme-text-dimmed)', fontSize: FONT_SIZES.sm }}>
                     {categoryNames.experimental}
                   </div>
                   {projectsByCategory.experimental.map((project, index) => {
@@ -399,7 +404,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
         </div>
       </div>
 
-      <div className="mt-auto pt-4 text-xs" style={{ color: 'var(--theme-text-dimmed)' }}>
+      <div className="mt-auto pt-4" style={{ color: 'var(--theme-text-dimmed)', fontSize: FONT_SIZES.sm }}>
         <div className="border-t pt-3" style={{ borderColor: 'rgba(var(--theme-text-rgb), 0.1)' }}>
           <div style={{ opacity: 0.8 }}>
             {uiStrings.navigation.tabHint}

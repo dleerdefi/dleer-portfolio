@@ -86,8 +86,8 @@ export const FormField: React.FC<FormFieldProps> = ({
       {/* Label with required indicator */}
       <label
         htmlFor={fieldId}
-        className="block text-sm font-medium mb-1"
-        style={{ color: 'var(--theme-text)' }}
+        className="block font-medium mb-1"
+        style={{ color: 'var(--theme-text)', fontSize: 'clamp(11px, 2cqw, 18px)' }}
       >
         {label}
         {required && (
@@ -116,8 +116,8 @@ export const FormField: React.FC<FormFieldProps> = ({
           disabled={disabled}
           aria-invalid={hasError}
           aria-describedby={ariaDescribedBy}
-          className="w-full rounded px-3 py-2 text-sm resize-none transition-all"
-          style={baseInputStyles}
+          className="w-full rounded px-3 py-2 resize-none transition-all"
+          style={{ ...baseInputStyles, fontSize: 'clamp(11px, 2cqw, 18px)' }}
         />
       ) : (
         <input
@@ -137,8 +137,8 @@ export const FormField: React.FC<FormFieldProps> = ({
           autoComplete={
             type === 'text' ? 'name' : type === 'email' ? 'email' : undefined
           }
-          className="w-full rounded px-3 py-2 text-sm transition-all"
-          style={baseInputStyles}
+          className="w-full rounded px-3 py-2 transition-all"
+          style={{ ...baseInputStyles, fontSize: 'clamp(11px, 2cqw, 18px)' }}
         />
       )}
 
@@ -146,9 +146,10 @@ export const FormField: React.FC<FormFieldProps> = ({
       {showCharCount && maxLength && (
         <div
           id={charCountId}
-          className="text-xs mt-1"
+          className="mt-1"
           style={{
-            color: isNearLimit ? 'var(--theme-warning)' : 'var(--theme-text-dimmed)'
+            color: isNearLimit ? 'var(--theme-warning)' : 'var(--theme-text-dimmed)',
+            fontSize: 'clamp(11px, 2cqw, 18px)'
           }}
           aria-live="polite"
         >
@@ -160,8 +161,8 @@ export const FormField: React.FC<FormFieldProps> = ({
       {error && (
         <div
           id={errorId}
-          className="flex items-start gap-2 mt-2 text-sm"
-          style={{ color: 'var(--theme-error)' }}
+          className="flex items-start gap-2 mt-2"
+          style={{ color: 'var(--theme-error)', fontSize: 'clamp(11px, 2cqw, 18px)' }}
           role="alert"
           aria-live="polite"
         >

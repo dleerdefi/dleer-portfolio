@@ -3,6 +3,7 @@
 import React from 'react';
 import { useTheme, ThemePreset } from '@/contexts/ThemeContext';
 import { SolarizedIcon, NordIcon, TokyoNightIcon } from '@/components/icons/ThemeIcons';
+import { UI_SIZES } from '@/lib/constants/typography';
 
 interface ThemePresetTileProps {
   isBlurred?: boolean;
@@ -19,39 +20,45 @@ const ThemePresetTile: React.FC<ThemePresetTileProps> = ({ isBlurred = false }) 
       <div className="flex items-center justify-center gap-4">
         <button
           onClick={() => setThemePreset('solarized-light')}
-          className="transition-all hover:scale-110"
+          className="transition-all hover:scale-110 flex items-center justify-center"
           style={{
             color: theme.preset === 'solarized-light' ? 'var(--accent-color)' : 'var(--theme-text)',
-            opacity: theme.preset === 'solarized-light' ? 1 : 0.5
+            opacity: theme.preset === 'solarized-light' ? 1 : 0.5,
+            width: UI_SIZES.iconSm,
+            height: UI_SIZES.iconSm
           }}
           aria-pressed={theme.preset === 'solarized-light'}
           title="Solarized Light"
         >
-          <SolarizedIcon size={18} />
+          <SolarizedIcon size={100} />
         </button>
         <button
           onClick={() => setThemePreset('nord')}
-          className="transition-all hover:scale-110"
+          className="transition-all hover:scale-110 flex items-center justify-center"
           style={{
             color: theme.preset === 'nord' ? 'var(--accent-color)' : 'var(--theme-text)',
-            opacity: theme.preset === 'nord' ? 1 : 0.5
+            opacity: theme.preset === 'nord' ? 1 : 0.5,
+            width: UI_SIZES.iconSm,
+            height: UI_SIZES.iconSm
           }}
           aria-pressed={theme.preset === 'nord'}
           title="Nord"
         >
-          <NordIcon size={18} />
+          <NordIcon size={100} />
         </button>
         <button
           onClick={() => setThemePreset('tokyo-night')}
-          className="transition-all hover:scale-110"
+          className="transition-all hover:scale-110 flex items-center justify-center"
           style={{
             color: theme.preset === 'tokyo-night' ? 'var(--accent-color)' : 'var(--theme-text)',
-            opacity: theme.preset === 'tokyo-night' ? 1 : 0.5
+            opacity: theme.preset === 'tokyo-night' ? 1 : 0.5,
+            width: UI_SIZES.iconSm,
+            height: UI_SIZES.iconSm
           }}
           aria-pressed={theme.preset === 'tokyo-night'}
           title="Tokyo Night"
         >
-          <TokyoNightIcon size={18} />
+          <TokyoNightIcon size={100} />
         </button>
       </div>
     </div>
