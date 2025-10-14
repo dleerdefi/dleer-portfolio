@@ -17,8 +17,8 @@ export const BlogOverviewContent: React.FC<BlogOverviewContentProps> = ({ onNavi
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>Blog</h1>
-      <p className="text-sm" style={{ color: 'var(--theme-text)' }}>
+      <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(17px, 3.5cqw, 32px)' }}>Blog</h1>
+      <p style={{ color: 'var(--theme-text)', fontSize: 'clamp(11px, 2cqw, 18px)' }}>
         Technical articles, tutorials, and insights from my development journey.
       </p>
       <div className="space-y-4">
@@ -71,11 +71,11 @@ export const BlogOverviewContent: React.FC<BlogOverviewContentProps> = ({ onNavi
               }}
             >
               <div className="flex justify-between items-start mb-2">
-                <h3 className="font-bold transition-colors" style={{ color: 'var(--theme-text)' }}>{post.title}</h3>
-                <span className="text-xs" style={{ color: 'var(--theme-text-dimmed)' }}>{post.date}</span>
+                <h3 className="font-bold transition-colors" style={{ color: 'var(--theme-text)', fontSize: 'clamp(15px, 3cqw, 26px)' }}>{post.title}</h3>
+                <span style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(11px, 2cqw, 18px)' }}>{post.date}</span>
               </div>
-              <p className="desktop-only text-sm mb-2 transition-opacity" style={{ color: 'var(--theme-text)', opacity: 0.8 }}>{post.excerpt}</p>
-              <span className="text-xs" style={{ color: 'var(--theme-text-dimmed)' }}>{post.category}</span>
+              <p className="desktop-only mb-2 transition-opacity" style={{ color: 'var(--theme-text)', opacity: 0.8, fontSize: 'clamp(11px, 2cqw, 18px)' }}>{post.excerpt}</p>
+              <span style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(11px, 2cqw, 18px)' }}>{post.category}</span>
             </div>
           );
         })}

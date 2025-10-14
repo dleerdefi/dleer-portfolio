@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTheme, AccentColor, ThemePreset, themeBackgrounds } from '@/contexts/ThemeContext';
 import { SolarizedIcon, NordIcon, TokyoNightIcon } from '@/components/icons/ThemeIcons';
+import { FONT_SIZES } from '@/lib/constants/typography';
 
 interface ThemeTileProps {
   isBlurred?: boolean;
@@ -44,14 +45,17 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
   };
 
   return (
-    <div className={`h-full flex flex-col font-mono text-sm transition-all duration-300 ${
-      isBlurred ? 'text-[#a9b1d6]/70' : 'text-[#a9b1d6]'
-    }`}>
+    <div
+      className={`h-full flex flex-col font-mono transition-all duration-300 ${
+        isBlurred ? 'text-[#a9b1d6]/70' : 'text-[#a9b1d6]'
+      }`}
+      style={{ fontSize: FONT_SIZES.sm }}
+    >
       {/* Theme Presets - Icon-only Buttons (TOP) */}
       <div className="flex items-center justify-center gap-6 pt-2">
         <button
           onClick={() => setThemePreset('solarized-light')}
-          className="transition-all hover:scale-110"
+          className="transition-all hover:scale-110 theme-icon"
           style={{
             color: theme.preset === 'solarized-light' ? 'var(--accent-color)' : 'var(--theme-text)',
             opacity: theme.preset === 'solarized-light' ? 1 : 0.5
@@ -59,11 +63,11 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
           aria-pressed={theme.preset === 'solarized-light'}
           title="Solarized Light"
         >
-          <SolarizedIcon size={24} />
+          <SolarizedIcon size={32} />
         </button>
         <button
           onClick={() => setThemePreset('nord')}
-          className="transition-all hover:scale-110"
+          className="transition-all hover:scale-110 theme-icon"
           style={{
             color: theme.preset === 'nord' ? 'var(--accent-color)' : 'var(--theme-text)',
             opacity: theme.preset === 'nord' ? 1 : 0.5
@@ -71,11 +75,11 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
           aria-pressed={theme.preset === 'nord'}
           title="Nord"
         >
-          <NordIcon size={24} />
+          <NordIcon size={32} />
         </button>
         <button
           onClick={() => setThemePreset('tokyo-night')}
-          className="transition-all hover:scale-110"
+          className="transition-all hover:scale-110 theme-icon"
           style={{
             color: theme.preset === 'tokyo-night' ? 'var(--accent-color)' : 'var(--theme-text)',
             opacity: theme.preset === 'tokyo-night' ? 1 : 0.5
@@ -83,7 +87,7 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
           aria-pressed={theme.preset === 'tokyo-night'}
           title="Tokyo Night"
         >
-          <TokyoNightIcon size={24} />
+          <TokyoNightIcon size={32} />
         </button>
       </div>
 
@@ -114,8 +118,12 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
               theme.accentColor === color.name
                 ? 'border-white shadow-lg scale-110'
                 : 'border-[#414868]/30'
-            } w-5 h-5 sm:w-6 sm:h-6 md:w-5 md:h-5 lg:w-6 lg:h-6`}
-            style={{ backgroundColor: color.hex }}
+            }`}
+            style={{
+              backgroundColor: color.hex,
+              width: 'clamp(20px, 4cqw, 32px)',
+              height: 'clamp(20px, 4cqw, 32px)'
+            }}
             title={color.name}
             aria-label={`Select ${color.name} accent color`}
           />
@@ -132,7 +140,8 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
             className="px-2 py-1 rounded transition-all hover:scale-110"
             style={{
               backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
-              color: 'var(--theme-text)'
+              color: 'var(--theme-text)',
+              fontSize: FONT_SIZES.lg
             }}
             aria-label="Previous background"
           >
@@ -141,10 +150,11 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
 
           {/* Preview */}
           <div
-            className="flex-1 h-12 rounded border-2 flex items-center justify-center text-[10px] overflow-hidden"
+            className="flex-1 h-12 rounded border-2 flex items-center justify-center overflow-hidden"
             style={{
               borderColor: 'rgba(var(--accent-color-rgb), 0.5)',
-              backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)'
+              backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)',
+              fontSize: FONT_SIZES.sm
             }}
           >
             {theme.backgroundImage === null ? (
@@ -164,7 +174,8 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
             className="px-2 py-1 rounded transition-all hover:scale-110"
             style={{
               backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
-              color: 'var(--theme-text)'
+              color: 'var(--theme-text)',
+              fontSize: FONT_SIZES.lg
             }}
             aria-label="Next background"
           >
@@ -173,7 +184,7 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
         </div>
 
         {/* Position indicator */}
-        <div className="text-center text-[9px]" style={{ color: 'var(--theme-text-dimmed)' }}>
+        <div className="text-center" style={{ color: 'var(--theme-text-dimmed)', fontSize: FONT_SIZES.sm }}>
           {currentIndex === -1 ? 'None' : `${currentIndex + 1} / ${currentBackgrounds.length}`}
         </div>
       </div>

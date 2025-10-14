@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { archLogoASCII, archLogoCompact, dlLogoASCII, minimalLogo, dleerBlockLetters, dleerCompact } from '@/components/assets/archAscii';
 import { usePersonalInfo, useSystemInfo } from '@/lib/config';
+import { FONT_SIZES } from '@/lib/constants/typography';
 
 interface NeofetchTileProps {
   isBlurred?: boolean;
@@ -37,16 +38,21 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
   }
 
   // Determine gap and font sizes based on layout
+  // Tile layout uses container queries (cqw) for responsive sizing relative to tile size
+  // Parallax layout uses viewport queries (vw) for responsive sizing relative to viewport
+  // ASCII art max capped lower to prevent overflow in fixed-height tile
   const gapClass = layout === 'parallax' ? 'gap-6 sm:gap-8 md:gap-10' : 'gap-4 sm:gap-6 md:gap-8';
   const asciiFontSize = layout === 'parallax' ?
     (logoType === 'dleer' ? 'clamp(0.55rem, 1vw, 0.75rem)' : 'clamp(0.5rem, 1.4vw, 0.7rem)') :
-    (logoType === 'dleer' ? 'clamp(0.45rem, 0.85vw, 0.55rem)' : 'clamp(0.4rem, 1.2vw, 0.6rem)');
-  const infoFontSize = layout === 'parallax' ? 'clamp(0.75rem, 1.2vw, 0.875rem)' : 'clamp(0.65rem, 1vw, 0.75rem)';
+    (logoType === 'dleer' ? 'clamp(0.4rem, 1.5cqw, 0.75rem)' : 'clamp(0.38rem, 1.8cqw, 0.8rem)');
+  const infoFontSize = layout === 'parallax' ? 'clamp(0.75rem, 1.2vw, 0.875rem)' : 'clamp(0.6rem, 2cqw, 1.1rem)';
 
   return (
-    <div className={`flex ${gapClass} font-mono text-xs transition-all duration-300 w-full`}
+    <div
+      className={`flex ${gapClass} font-mono transition-all duration-300 w-full`}
       style={{
-        color: isBlurred ? 'rgba(var(--theme-text-rgb), 0.7)' : 'var(--theme-text)'
+        color: isBlurred ? 'rgba(var(--theme-text-rgb), 0.7)' : 'var(--theme-text)',
+        fontSize: layout === 'tile' ? FONT_SIZES.sm : undefined
       }}>
       {/* ASCII Art Column */}
       <div className="flex-shrink-0"

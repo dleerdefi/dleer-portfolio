@@ -48,3 +48,5 @@ next-env.d.ts
 /archive
 components.backup.*/
 specs
+
+docs/DESKTOP_SCALING_REFACTOR_SPEC.md

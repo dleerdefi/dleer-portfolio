@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useTheme, AccentColor } from '@/contexts/ThemeContext';
+import { UI_SIZES } from '@/lib/constants/typography';
 
 interface AccentColorTileProps {
   isBlurred?: boolean;
@@ -33,7 +34,7 @@ const AccentColorTile: React.FC<AccentColorTileProps> = ({ isBlurred = false }) 
       isBlurred ? 'text-[#a9b1d6]/70' : 'text-[#a9b1d6]'
     }`}>
       {/* Color Palette Grid */}
-      <div className="grid grid-cols-5 gap-1">
+      <div className="grid grid-cols-5 gap-2">
         {colors.map((color) => (
           <button
             key={color.name}
@@ -42,8 +43,12 @@ const AccentColorTile: React.FC<AccentColorTileProps> = ({ isBlurred = false }) 
               theme.accentColor === color.name
                 ? 'border-white shadow-lg scale-110'
                 : 'border-[#414868]/30'
-            } w-5 h-5`}
-            style={{ backgroundColor: color.hex }}
+            }`}
+            style={{
+              backgroundColor: color.hex,
+              width: UI_SIZES.colorTileSm,
+              height: UI_SIZES.colorTileSm
+            }}
             title={color.name}
             aria-label={`Select ${color.name} accent color`}
           />

@@ -13,11 +13,11 @@ export const AboutContent: React.FC = () => {
 
   return (
     <div className="space-y-3">
-      <h1 className="text-2xl font-bold" style={{ color: 'var(--accent-color)' }}>
+      <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(17px, 3.5cqw, 32px)' }}>
         {personal.greeting || `Hi, I'm ${personal.name}`}
       </h1>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', color: 'var(--theme-text)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', color: 'var(--theme-text)', fontSize: 'clamp(13px, 2.5cqw, 22px)' }}>
         {/* Introduction */}
         {personal.bio.intro && (
           <p className="leading-relaxed">
@@ -42,11 +42,12 @@ export const AboutContent: React.FC = () => {
         {/* Tagline */}
         {personal.bio.tagline && (
           <p
-            className="text-sm italic pt-1 border-t"
+            className="italic pt-1 border-t"
             style={{
               color: 'var(--theme-text-dimmed)',
               borderColor: 'rgba(var(--accent-color-rgb), 0.2)',
-              opacity: 0.8
+              opacity: 0.8,
+              fontSize: 'clamp(11px, 2cqw, 18px)'
             }}
           >
             {personal.bio.tagline}

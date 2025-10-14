@@ -50,7 +50,20 @@
   display: none;
 }
 
-/* View Transitions API - Desktop only (smooth background crossfades) */
+/* View Transitions API - DISABLED
+ * Removed due to z-index stacking context issues
+ * The ::view-transition layer paints ABOVE all page content (including tiles)
+ * This caused background to appear in front of tiles during transitions
+ * Breaking the glass effect (backdrop-filter) and tile visibility
+ *
+ * Now using standard CSS transitions with opacity for smooth crossfade
+ * See: Background.tsx line 144 (transition: 'opacity 300ms ease')
+ *
+ * Reference: https://github.com/w3c/csswg-drafts/issues/8941
+ * "Named elements appear above fixed elements when transitioning"
+ */
+
+/*
 @media (min-width: 1024px) {
   ::view-transition-old(background-wallpaper),
   ::view-transition-new(background-wallpaper) {
@@ -58,7 +71,6 @@
     animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Smooth crossfade effect */
   ::view-transition-old(background-wallpaper) {
     animation-name: fade-out-view-transition;
   }
@@ -77,3 +89,4 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+*/

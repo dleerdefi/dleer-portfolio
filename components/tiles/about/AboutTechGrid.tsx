@@ -5,7 +5,7 @@ import { TechIcon } from '@/components/ui/TechIcon';
 /**
  * Technology grid component for About section in tile layout
  * Displays first 8 technologies in a 4x2 grid (excludes Docker due to space constraints)
- * Uses smaller icons (32px) compared to parallax tech section (48px)
+ * Increased icon size to 40px for better visibility on large displays
  */
 export const AboutTechGrid: React.FC = () => {
   const technologies = useTechnologies();
@@ -21,14 +21,14 @@ export const AboutTechGrid: React.FC = () => {
         opacity: 1
       }}
     >
-      {/* 4 columns, 2 rows grid */}
-      <div className="grid grid-cols-4 gap-2">
+      {/* 4 columns, 2 rows grid with responsive gap */}
+      <div className="grid grid-cols-4 gap-3">
         {displayTechs.map((tech, idx) => (
           <TechIcon
             key={idx}
             iconName={tech.icon}
             name={tech.name}
-            size={32}  // Smaller icons for tile constraints
+            size={40}  // Increased from 32px for better scaling on large displays
           />
         ))}
       </div>

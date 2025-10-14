@@ -126,3 +126,86 @@
   transform: scale(0.98);
   opacity: 0.9;
 }
+
+/* ================================================= */
+/* Container-Responsive Icon Scaling                */
+/* ================================================= */
+/* Scale technology icons based on tile size using  */
+/* @container queries (not @utility - can't override) */
+/* ================================================= */
+
+.tech-icon {
+  transition: transform 0.3s ease, filter 0.3s ease;
+  transform: scale(1);
+}
+
+/* Small tiles: slightly smaller */
+@container (max-width: 599px) {
+  .tech-icon {
+    transform: scale(0.95);
+  }
+}
+
+/* Medium tiles: baseline */
+@container (min-width: 600px) and (max-width: 799px) {
+  .tech-icon {
+    transform: scale(1);
+  }
+}
+
+/* Large tiles: slightly larger */
+@container (min-width: 800px) and (max-width: 999px) {
+  .tech-icon {
+    transform: scale(1.05);
+  }
+}
+
+/* Extra large tiles: larger still */
+@container (min-width: 1000px) and (max-width: 1199px) {
+  .tech-icon {
+    transform: scale(1.10);
+  }
+}
+
+/* Huge tiles (27" monitors): maximum scale */
+@container (min-width: 1200px) {
+  .tech-icon {
+    transform: scale(1.15);
+  }
+}
+
+/* Theme preset icons - same scaling pattern */
+.theme-icon {
+  transition: transform 0.3s ease, filter 0.3s ease;
+  transform: scale(1);
+}
+
+@container (max-width: 599px) {
+  .theme-icon {
+    transform: scale(0.90);
+  }
+}
+
+@container (min-width: 600px) and (max-width: 799px) {
+  .theme-icon {
+    transform: scale(1);
+  }
+}
+
+@container (min-width: 800px) and (max-width: 999px) {
+  .theme-icon {
+    transform: scale(1.05);
+  }
+}
+
+@container (min-width: 1000px) and (max-width: 1199px) {
+  .theme-icon {
+    transform: scale(1.10);
+  }
+}
+
+@container (min-width: 1200px) {
+  .theme-icon {
+    transform: scale(1.15);
+  }
+}
