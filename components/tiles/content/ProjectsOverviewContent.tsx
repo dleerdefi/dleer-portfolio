@@ -55,20 +55,20 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
         {/* Project Title - Larger on mobile to match header */}
         <h3
           className="font-bold mb-1 transition-colors hover:opacity-80"
-          style={{ color: 'var(--accent-color)', fontSize: 'clamp(15px, 3cqw, 26px)' }}
+          style={{ color: 'var(--accent-color)', fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}
         >
           {project.name}
         </h3>
 
         {/* Description - Hidden on mobile, shown on desktop */}
-        <p className="desktop-only mb-2" style={{ color: 'var(--theme-text)', opacity: 0.9, fontSize: 'clamp(11px, 2cqw, 18px)' }}>
+        <p className="desktop-only mb-2" style={{ color: 'var(--theme-text)', opacity: 0.9, fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>
           {project.description}
         </p>
 
         {/* Bottom row: Tech Stack and Links */}
         <div className="flex items-center justify-between">
           {/* Tech Stack - Subtle with dots */}
-          <div style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(11px, 2cqw, 18px)' }}>
+          <div style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>
             {project.techStack.slice(0, 4).map((tech: string, idx: number) => (
               <span key={idx}>
                 {tech}
@@ -78,7 +78,7 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
           </div>
 
           {/* Links - Simple text */}
-          <div className="flex gap-3" style={{ fontSize: 'clamp(11px, 2cqw, 18px)' }}>
+          <div className="flex gap-3" style={{ fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>
             {project.github && (
               <a
                 href={project.github}
@@ -125,8 +125,8 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(17px, 3.5cqw, 32px)' }}>Projects</h1>
-        <p className="mt-2" style={{ color: 'var(--theme-text)', fontSize: 'clamp(11px, 2cqw, 18px)' }}>
+        <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(1.5rem, 1.5rem + 3cqi, 1.75rem)' }}>Projects</h1>
+        <p className="mt-2" style={{ color: 'var(--theme-text)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>
           Systems I've built, products I've led, and experimental work.
         </p>
       </div>
@@ -143,7 +143,7 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
                 style={{
                   color: 'var(--theme-text-dimmed)',
                   borderColor: 'rgba(var(--theme-text-rgb), 0.1)',
-                  fontSize: 'clamp(11px, 2cqw, 18px)'
+                  fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)'
                 }}
               >
                 {categoryLabels.systems}
@@ -162,7 +162,7 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
                 style={{
                   color: 'var(--theme-text-dimmed)',
                   borderColor: 'rgba(var(--theme-text-rgb), 0.1)',
-                  fontSize: 'clamp(11px, 2cqw, 18px)'
+                  fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)'
                 }}
               >
                 {categoryLabels.product}
@@ -181,7 +181,7 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
                 style={{
                   color: 'var(--theme-text-dimmed)',
                   borderColor: 'rgba(var(--theme-text-rgb), 0.1)',
-                  fontSize: 'clamp(11px, 2cqw, 18px)'
+                  fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)'
                 }}
               >
                 {categoryLabels.experimental}
