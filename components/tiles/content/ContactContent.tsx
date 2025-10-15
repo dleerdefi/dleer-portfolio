@@ -9,7 +9,7 @@ import { useUIStrings } from '@/lib/config';
  * Contact content component
  * Handles contact form with validation and submission
  */
-export const ContactContent: React.FC = () => {
+const ContactContentComponent: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '', website: '' });
   const [formRenderTime] = useState(new Date().toISOString());
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -169,3 +169,6 @@ export const ContactContent: React.FC = () => {
     </div>
   );
 };
+
+// Memoize to prevent unnecessary re-renders
+export const ContactContent = React.memo(ContactContentComponent);

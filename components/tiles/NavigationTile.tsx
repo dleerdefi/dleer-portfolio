@@ -24,28 +24,34 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
     // Prevent event from bubbling up to tile container
     e?.stopPropagation();
 
-    // First update the content in FocusContext
+    // Projects and blogs go DIRECTLY to zen mode (skip FocusContext update)
+    // They should NOT populate the right tile - zen mode only
+    if (content.type === 'project') {
+      enterZen('projects', content.data);
+      return;
+    }
+
+    if (content.type === 'blog') {
+      enterZen('blog', content.data);
+      return;
+    }
+
+    if (content.type === 'projects-overview') {
+      enterZen('projects');
+      return;
+    }
+
+    if (content.type === 'blog-overview') {
+      enterZen('blog');
+      return;
+    }
+
+    // About and Contact: Update FocusContext for tiled mode display
     if (onContentSelect) {
       onContentSelect(content);
     } else {
       handleContentNavigation(content);
     }
-
-    // Then trigger zen mode for immersive sections (per spec)
-    if (content.type === 'project') {
-      // Projects open directly to zen
-      enterZen('projects', content.data);
-    } else if (content.type === 'blog') {
-      // Blog posts open directly to zen
-      enterZen('blog', content.data);
-    } else if (content.type === 'projects-overview') {
-      // Projects overview also opens to zen
-      enterZen('projects');
-    } else if (content.type === 'blog-overview') {
-      // Blog overview also opens to zen
-      enterZen('blog');
-    }
-    // About stays in tiled mode (no zen trigger)
   };
 
   const toggleDir = (dir: string) => {

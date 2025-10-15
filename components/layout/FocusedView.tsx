@@ -31,10 +31,13 @@ interface FocusedViewProps {
 
 const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
   const { mode, section, contentData, exitToTiled, enterZen } = useView();
-  const { setActiveContent } = useFocus();
+  const { setActiveContent, activeContent } = useFocus();
 
   // Detect prefers-reduced-motion (spec §9)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  // Track previous mode to detect zen → tiled transitions
+  const prevModeRef = React.useRef<typeof mode>('tiled');
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -93,6 +96,19 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
     }
   }, [mode, section, contentData]);
 
+  // Reset to About when exiting zen mode (zen → tiled transition)
+  useEffect(() => {
+    if (prevModeRef.current === 'zen' && mode === 'tiled') {
+      // Only reset if content has changed - prevents unnecessary re-renders
+      if (activeContent.type !== 'about') {
+        setActiveContent({ type: 'about' });
+      }
+    }
+
+    // Update ref for next render
+    prevModeRef.current = mode;
+  }, [mode, activeContent, setActiveContent]);
+
   // Don't render if not in zen mode
   if (mode === 'tiled') {
     return null;
@@ -104,7 +120,7 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
   // Animation config - respect prefers-reduced-motion (spec §9)
   const fadeTransition = prefersReducedMotion
     ? { duration: 0 }
-    : { duration: 0.22 };
+    : { duration: 0.18, ease: [0.32, 0.72, 0, 1] };
 
   const expandTransition = prefersReducedMotion
     ? { duration: 0 }
@@ -117,7 +133,7 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
           className={`fixed inset-0 z-50 ${className}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          exit={{ opacity: 0, scale: 0.98, y: 8 }}
           transition={fadeTransition}
         >
           {/* Background component - full viewport (animated wallpaper) */}
@@ -162,6 +178,7 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
                 className="relative h-full overflow-hidden"
                 initial={prefersReducedMotion ? {} : fxExpand.initial}
                 animate={prefersReducedMotion ? {} : fxExpand.animate}
+                exit={prefersReducedMotion ? {} : { opacity: 0, scale: 0.98 }}
                 transition={expandTransition}
                 style={{
                   margin: '0',
