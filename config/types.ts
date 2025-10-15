@@ -9,6 +9,18 @@ export interface PersonalInfo {
   email: string;
   contactEmail: string;  // Email for contact form submissions
   location: string;
+  profilePhoto?: {
+    src: string;
+    alt: string;
+    width?: number;
+    height?: number;
+    exif?: {
+      location?: string;
+      aperture?: string;
+      shutter?: string;
+      iso?: string;
+    };
+  };
   bio: {
     // Structured bio fields for parallax mode
     intro?: string;

@@ -13,6 +13,18 @@ export const portfolioConfig: PortfolioConfig = {
     email: process.env.NEXT_PUBLIC_EMAIL || "your.email@example.com",
     contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "email@email.com",
     location: process.env.NEXT_PUBLIC_LOCATION || "Your Location",
+    profilePhoto: {
+      src: process.env.NEXT_PUBLIC_PROFILE_PHOTO || "/images/profile/shibuya-portrait.webp",
+      alt: "David Leer in Shibuya, Tokyo",
+      width: 450,
+      height: 716,
+      exif: {
+        location: "Shibuya, Tokyo",
+        aperture: "f/2.8",
+        shutter: "1/125s",
+        iso: "400"
+      }
+    },
     bio: {
       // Structured bio for parallax sections
       intro: process.env.NEXT_PUBLIC_BIO_INTRO ||
