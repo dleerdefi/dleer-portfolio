@@ -1,21 +1,23 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { getPortfolioConfig } from "@/config/portfolio.config";
 
 // Get configuration at build time
 const config = getPortfolioConfig();
 
+// Next.js 15: viewport must be separate export
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+};
+
 export const metadata: Metadata = {
   title: config.seo.title,
   description: config.seo.description,
   keywords: config.seo.keywords,
   authors: [{ name: config.seo.author }],
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-  },
   openGraph: {
     title: config.seo.title,
     description: config.seo.description,

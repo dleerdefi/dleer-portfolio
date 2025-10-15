@@ -20,7 +20,7 @@ interface ProfilePhotoProps {
 /**
  * ProfilePhoto Component
  * Displays a profile photo styled as a tiling window manager window
- * Features: macOS-style traffic lights, EXIF metadata status bar on hover
+ * Features: Clean title bar with centered filename, EXIF metadata status bar
  * Adapts to active theme colors
  */
 export const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
@@ -64,50 +64,25 @@ export const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
       >
         {/* Title Bar */}
         <div
-          className="flex items-center px-3 font-mono text-xs transition-colors duration-300"
+          className="flex items-center justify-center px-3 font-mono text-xs transition-colors duration-300"
           style={{
             height: '28px',
             backgroundColor: 'rgba(var(--theme-surface-rgb), 0.9)',
             color: 'var(--theme-text)',
-            borderBottom: '1px solid rgba(var(--accent-color-rgb), 0.2)'
+            borderBottom: '1px solid rgba(var(--accent-color-rgb), 0.2)',
+            overflow: 'hidden'
           }}
         >
-          {/* macOS Traffic Lights */}
-          <div className="flex items-center gap-2 mr-3">
-            <div
-              className="rounded-full"
-              style={{
-                width: '12px',
-                height: '12px',
-                background: isHovered
-                  ? 'linear-gradient(135deg, #ff5f56 0%, #e0443e 100%)'
-                  : 'rgba(var(--theme-text-rgb), 0.3)'
-              }}
-            />
-            <div
-              className="rounded-full"
-              style={{
-                width: '12px',
-                height: '12px',
-                background: isHovered
-                  ? 'linear-gradient(135deg, #ffbd2e 0%, #e2a512 100%)'
-                  : 'rgba(var(--theme-text-rgb), 0.3)'
-              }}
-            />
-            <div
-              className="rounded-full"
-              style={{
-                width: '12px',
-                height: '12px',
-                background: isHovered
-                  ? 'linear-gradient(135deg, #27c93f 0%, #1fa831 100%)'
-                  : 'rgba(var(--theme-text-rgb), 0.3)'
-              }}
-            />
-          </div>
-
-          {/* Filename */}
-          <span style={{ fontSize: 'clamp(11px, 0.75rem, 14px)' }}>
+          {/* Filename - Centered, fixed size for single-line guarantee */}
+          <span
+            style={{
+              fontSize: '11px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              maxWidth: '100%'
+            }}
+          >
             {alt.toLowerCase().replace(/\s+/g, '_')}.jpg
           </span>
         </div>
@@ -137,14 +112,18 @@ export const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
             style={{
               height: '24px',
               backgroundColor: 'rgba(var(--theme-bg-rgb), 0.95)',
-              borderTop: '1px solid rgba(var(--accent-color-rgb), 0.2)'
+              borderTop: '1px solid rgba(var(--accent-color-rgb), 0.2)',
+              overflow: 'hidden'
             }}
           >
             <div
               className="flex items-center justify-center h-full px-3 font-mono text-xs"
               style={{
                 color: 'var(--theme-text-dimmed)',
-                fontSize: 'clamp(10px, 0.65rem, 12px)'
+                fontSize: '10px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
               }}
             >
               {exifString}
