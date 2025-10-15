@@ -299,7 +299,7 @@ const LayoutManager: React.FC = () => {
                 layout
                 layoutId="tile-content"
                 transition={layoutTransition}
-                className={`shadow-xl border overflow-auto ${
+                className={`shadow-xl border overflow-auto no-scrollbar ${
                   focusedTile === 'content' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                 }`}
                 initial={{
