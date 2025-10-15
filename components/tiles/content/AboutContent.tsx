@@ -9,7 +9,7 @@ import { ProfilePhoto } from '@/components/ui/ProfilePhoto';
  * About content component
  * Displays personal bio information, profile photo, and technology grid
  */
-export const AboutContent: React.FC = () => {
+const AboutContentComponent: React.FC = () => {
   const personal = usePersonalInfo();
 
   return (
@@ -20,14 +20,26 @@ export const AboutContent: React.FC = () => {
         paddingLeft: '40px',
         paddingRight: '40px'
       }}>
-        {/* Profile Photo - Float right on desktop, full-width on mobile - MUST come first for header to wrap */}
+        {/* Header - Large, full-width, at top */}
+        <h1
+          className="font-bold"
+          style={{
+            color: 'var(--accent-color)',
+            fontSize: 'clamp(2rem, 2rem + 4cqi, 2.5rem)',
+            marginBottom: '24px'
+          }}
+        >
+          {personal.greeting || `Hi, I'm ${personal.name}`}
+        </h1>
+
+        {/* Profile Photo - Float right, aligned with intro text */}
         {personal.profilePhoto && (
           <div
             className="mb-4"
             style={{
               width: 'clamp(280px, 35%, 400px)',
               float: 'right',
-              marginLeft: '64px',
+              marginLeft: '32px',
               marginBottom: '12px'
             }}
           >
@@ -40,12 +52,6 @@ export const AboutContent: React.FC = () => {
             />
           </div>
         )}
-
-
-        {/* Header - now wraps around floated image */}
-        <h1 className="font-bold mb-3" style={{ color: 'var(--accent-color)', fontSize: 'clamp(1.5rem, 1.5rem + 3cqi, 1.75rem)' }}>
-          {personal.greeting || `Hi, I'm ${personal.name}`}
-        </h1>
 
         {/* Introduction */}
         {personal.bio.intro && (
@@ -93,3 +99,6 @@ export const AboutContent: React.FC = () => {
     </div>
   );
 };
+
+// Memoize to prevent unnecessary re-renders
+export const AboutContent = React.memo(AboutContentComponent);

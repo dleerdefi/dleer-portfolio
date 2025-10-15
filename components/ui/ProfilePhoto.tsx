@@ -23,7 +23,7 @@ interface ProfilePhotoProps {
  * Features: Clean title bar with centered filename, EXIF metadata status bar
  * Adapts to active theme colors
  */
-export const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
+const ProfilePhotoComponent: React.FC<ProfilePhotoProps> = ({
   src,
   alt,
   width = 400,
@@ -134,3 +134,6 @@ export const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
     </div>
   );
 };
+
+// Memoize to prevent unnecessary re-renders when props haven't changed
+export const ProfilePhoto = React.memo(ProfilePhotoComponent);
