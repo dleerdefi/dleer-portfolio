@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Window, Terminal, Admonition, Key, Figure } from '@/components/mdx';
+import { Window, Terminal, Admonition, Key } from '@/components/mdx';
 
 /**
  * MDX Shortcodes Test Page
@@ -101,23 +101,51 @@ Starting content-collections...
           </p>
         </section>
 
-        {/* Figure Component */}
+        {/* Figure Component - Deferred to Phase 6 */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--theme-text)' }}>
             5. Figure Component
           </h2>
 
-          <Figure
-            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80"
-            alt="Developer desk with code editor and terminal open"
-            caption="Clean development environment with Unix aesthetic"
-            width={1200}
-            height={800}
-          />
+          <Window title="Figure Component Status">
+            <div className="space-y-3 text-sm">
+              <p><strong>⏳ Testing deferred to Phase 6 (CDN Configuration)</strong></p>
 
-          <p className="mt-4 text-sm" style={{ color: 'var(--theme-text-dimmed)' }}>
-            Note: Figure component requires <code>alt</code> prop (TypeScript will error if missing)
-          </p>
+              <p style={{ color: 'var(--theme-text-dimmed)' }}>
+                The Figure component is fully implemented but requires <code>images.remotePatterns</code>
+                configuration in next.config.ts to load remote images.
+              </p>
+
+              <div className="mt-4">
+                <p className="mb-2"><strong>Component Implementation:</strong></p>
+                <ul className="list-disc list-inside space-y-1 ml-2">
+                  <li>✓ Wraps next/image with theme styling</li>
+                  <li>✓ Required alt prop (TypeScript enforced)</li>
+                  <li>✓ Optional caption support</li>
+                  <li>✓ Responsive width/height defaults</li>
+                  <li>✓ Theme-aware border (--accent-color-rgb)</li>
+                </ul>
+              </div>
+
+              <div className="mt-4">
+                <p className="mb-2"><strong>Usage Example:</strong></p>
+                <pre className="text-xs bg-black/20 p-2 rounded overflow-x-auto">
+{`<Figure
+  src="https://cdn.example.com/image.jpg"
+  alt="Description here"
+  caption="Optional caption"
+  width={1200}
+  height={800}
+/>`}
+                </pre>
+              </div>
+
+              <Admonition type="note">
+                <strong>Phase 6 will add:</strong> CDN configuration with images.remotePatterns
+                for production image hosting. Figure component will be fully tested at that time.
+              </Admonition>
+            </div>
+          </Window>
         </section>
 
         {/* Theme Integration Test */}
