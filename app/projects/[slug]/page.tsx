@@ -5,9 +5,9 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
 interface ProjectDetailPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 /**
@@ -15,7 +15,8 @@ interface ProjectDetailPageProps {
  * Provides SEO-optimized title, description, and Open Graph tags
  */
 export async function generateMetadata({ params }: ProjectDetailPageProps): Promise<Metadata> {
-  const project = allProjects.find((p) => p.slug === params.slug);
+  const { slug } = await params;
+  const project = allProjects.find((p) => p.slug === slug);
 
   if (!project) {
     return {
@@ -62,8 +63,9 @@ export async function generateMetadata({ params }: ProjectDetailPageProps): Prom
  *
  * Route: /projects/[slug]
  */
-export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
-  const project = allProjects.find((p) => p.slug === params.slug);
+export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
+  const { slug } = await params;
+  const project = allProjects.find((p) => p.slug === slug);
 
   if (!project) {
     notFound();

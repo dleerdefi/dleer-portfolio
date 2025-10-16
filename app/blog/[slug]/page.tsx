@@ -5,9 +5,9 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
 interface BlogPostPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 /**
@@ -15,7 +15,8 @@ interface BlogPostPageProps {
  * Provides SEO-optimized title, description, and Open Graph tags
  */
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const blog = allBlogs.find((b) => b.slug === params.slug);
+  const { slug } = await params;
+  const blog = allBlogs.find((b) => b.slug === slug);
 
   if (!blog) {
     return {
@@ -65,8 +66,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
  *
  * Route: /blog/[slug]
  */
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const blog = allBlogs.find((b) => b.slug === params.slug);
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { slug } = await params;
+  const blog = allBlogs.find((b) => b.slug === slug);
 
   if (!blog) {
     notFound();
@@ -179,10 +181,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
 
           {/* MDX Content */}
           <div
-            className="prose prose-invert max-w-none"
-            style={{
-              color: 'var(--theme-text)',
-            }}
+            className="blog-prose"
             dangerouslySetInnerHTML={{ __html: blog.html }}
           />
 
