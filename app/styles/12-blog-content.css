@@ -61,7 +61,7 @@
   height: 1.5em;
   background: linear-gradient(180deg, var(--accent-color), rgba(var(--accent-color-rgb), 0.4));
   border-radius: 3px;
-  box-shadow: 0 0 12px rgba(var(--accent-color-rgb), 0.4));
+  box-shadow: 0 0 12px rgba(var(--accent-color-rgb), 0.4);
 }
 
 .blog-prose h3 {
