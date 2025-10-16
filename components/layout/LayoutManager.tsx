@@ -168,7 +168,7 @@ const LayoutManager: React.FC = () => {
                   layout
                   layoutId="tile-neofetch"
                   transition={layoutTransition}
-                  className={`h-2/5 shadow-xl border overflow-auto ${
+                  className={`h-2/5 shadow-xl border overflow-auto no-scrollbar ${
                     focusedTile === 'neofetch' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                   }`}
                   initial={{
@@ -195,7 +195,7 @@ const LayoutManager: React.FC = () => {
                     layout
                     layoutId="tile-navigation"
                     transition={layoutTransition}
-                    className={`shadow-xl border overflow-auto ${
+                    className={`shadow-xl border overflow-auto no-scrollbar ${
                       focusedTile === 'navigation' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
                     }`}
                     initial={{

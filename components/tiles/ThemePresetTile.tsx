@@ -17,7 +17,7 @@ const ThemePresetTile: React.FC<ThemePresetTileProps> = ({ isBlurred = false }) 
       isBlurred ? 'text-[#a9b1d6]/70' : 'text-[#a9b1d6]'
     }`}>
       {/* Theme Preset Icons */}
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center justify-center gap-2">
         <button
           onClick={() => setThemePreset('solarized-light')}
           className="transition-all hover:scale-110 flex items-center justify-center"
