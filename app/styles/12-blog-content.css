@@ -1,49 +1,54 @@
 /**
  * Blog Content / Prose Styling
  * Professional typography and spacing for MDX blog posts
- * Inspired by Josh Comeau's blog design
+ * Inspired by Josh Comeau's blog with syntax highlighting integration
  */
 
 .blog-prose {
+  /* Use beautiful sans-serif for prose, NOT monospace */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+
   /* Optimal reading width */
   max-width: 65ch;
-  line-height: 1.7;
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--theme-text);
 }
 
-/* Typography Scale */
+/* Typography Scale - Larger, More Impact */
 .blog-prose h1 {
-  font-size: 2.5rem;
-  line-height: 1.2;
-  font-weight: 700;
+  font-size: 3rem;
+  line-height: 1.1;
+  font-weight: 800;
   margin-top: 0;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   color: var(--accent-color);
+  letter-spacing: -0.02em;
 }
 
 .blog-prose h2 {
-  font-size: 2rem;
-  line-height: 1.3;
+  font-size: 2.25rem;
+  line-height: 1.2;
   font-weight: 700;
-  margin-top: 3rem;
-  margin-bottom: 1rem;
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
   color: var(--theme-text);
-  position: relative;
-}
-
-.blog-prose h2::before {
-  content: "";
-  position: absolute;
-  left: -1.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 4px;
-  height: 70%;
-  background: var(--accent-color);
-  border-radius: 2px;
+  letter-spacing: -0.01em;
 }
 
 .blog-prose h3 {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
+  line-height: 1.3;
+  font-weight: 600;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--theme-text);
+}
+
+.blog-prose h4 {
+  font-size: 1.375rem;
   line-height: 1.4;
   font-weight: 600;
   margin-top: 2rem;
@@ -52,85 +57,106 @@
 }
 
 .blog-prose p {
-  font-size: 1.125rem;
-  line-height: 1.7;
-  margin-bottom: 1.5rem;
-  color: var(--theme-text);
+  margin-bottom: 1.75rem;
+  line-height: 1.8;
 }
 
-/* Links */
+/* Links - Smooth Hover Effects */
 .blog-prose a {
   color: var(--accent-color);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
   transition: all 0.2s ease;
+  font-weight: 500;
 }
 
 .blog-prose a:hover {
   text-decoration-thickness: 2px;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .blog-prose .heading-anchor {
   text-decoration: none;
   color: inherit;
+  font-weight: inherit;
 }
 
 .blog-prose .heading-anchor:hover {
   opacity: 1;
 }
 
-/* Code Blocks */
+/* Code Blocks - Professional Syntax Highlighting */
 .blog-prose pre {
-  background: rgba(var(--accent-color-rgb), 0.05);
-  border: 1px solid rgba(var(--accent-color-rgb), 0.2);
-  border-radius: 8px;
-  padding: 1.5rem;
+  background: #1a1b26 !important; /* Tokyo Night background */
+  border-radius: 12px;
+  padding: 1.75rem;
   overflow-x: auto;
-  margin: 2rem 0;
-  font-size: 0.9rem;
+  margin: 2.5rem 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   line-height: 1.6;
 }
 
-.blog-prose code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.9em;
+.blog-prose pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 0.9rem;
+  color: inherit;
+  font-weight: normal;
 }
 
+/* Inline Code - Accent Themed */
 .blog-prose :not(pre) > code {
-  background: rgba(var(--accent-color-rgb), 0.1);
-  padding: 0.2em 0.4em;
-  border-radius: 3px;
+  background: rgba(var(--accent-color-rgb), 0.12);
+  padding: 0.25em 0.5em;
+  border-radius: 4px;
   font-size: 0.9em;
   color: var(--accent-color);
-  font-weight: 500;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', 'SF Mono', Monaco, Consolas, monospace;
+  border: 1px solid rgba(var(--accent-color-rgb), 0.2);
 }
 
-/* Lists */
+/* Lists - Better Spacing */
 .blog-prose ul,
 .blog-prose ol {
-  margin: 1.5rem 0;
-  padding-left: 2rem;
+  margin: 2rem 0;
+  padding-left: 2.5rem;
 }
 
 .blog-prose li {
+  margin: 1rem 0;
+  line-height: 1.8;
+}
+
+.blog-prose li p {
   margin: 0.5rem 0;
-  line-height: 1.7;
 }
 
 .blog-prose li strong {
   color: var(--accent-color);
+  font-weight: 600;
 }
 
-/* Blockquotes */
+.blog-prose ul > li {
+  padding-left: 0.5rem;
+}
+
+/* Blockquotes - Elegant */
 .blog-prose blockquote {
   border-left: 4px solid var(--accent-color);
-  padding-left: 1.5rem;
-  margin: 2rem 0;
+  padding: 1rem 1.75rem;
+  margin: 2.5rem 0;
   font-style: italic;
-  opacity: 0.9;
+  background: rgba(var(--accent-color-rgb), 0.05);
+  border-radius: 0 8px 8px 0;
   color: var(--theme-text-dimmed);
+}
+
+.blog-prose blockquote p:last-child {
+  margin-bottom: 0;
 }
 
 /* Images & Figures */
@@ -139,30 +165,31 @@
 }
 
 .blog-prose img {
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   width: 100%;
   height: auto;
 }
 
 .blog-prose figcaption {
   text-align: center;
-  font-size: 0.9rem;
-  margin-top: 0.75rem;
-  opacity: 0.7;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+  color: var(--theme-text-dimmed);
   font-style: italic;
 }
 
-/* Tables */
+/* Tables - Clean Design */
 .blog-prose table {
   width: 100%;
   border-collapse: collapse;
-  margin: 2rem 0;
+  margin: 2.5rem 0;
+  font-size: 0.95rem;
 }
 
 .blog-prose th,
 .blog-prose td {
-  padding: 0.75rem 1rem;
+  padding: 0.875rem 1.25rem;
   border: 1px solid rgba(var(--accent-color-rgb), 0.2);
   text-align: left;
 }
@@ -170,36 +197,69 @@
 .blog-prose th {
   background: rgba(var(--accent-color-rgb), 0.1);
   font-weight: 600;
+  color: var(--accent-color);
+}
+
+.blog-prose tr:hover {
+  background: rgba(var(--accent-color-rgb), 0.03);
 }
 
 /* Horizontal Rules */
 .blog-prose hr {
   border: none;
   border-top: 2px solid rgba(var(--accent-color-rgb), 0.2);
-  margin: 3rem 0;
+  margin: 4rem 0;
+}
+
+/* Strong/Bold Text */
+.blog-prose strong {
+  font-weight: 700;
+  color: var(--theme-text);
+}
+
+/* Emphasis/Italic */
+.blog-prose em {
+  font-style: italic;
 }
 
 /* Responsive Typography */
 @media (max-width: 768px) {
-  .blog-prose h1 {
-    font-size: 2rem;
-  }
-
-  .blog-prose h2 {
-    font-size: 1.75rem;
-    margin-top: 2rem;
-  }
-
-  .blog-prose h3 {
-    font-size: 1.25rem;
-  }
-
-  .blog-prose p {
+  .blog-prose {
     font-size: 1rem;
   }
 
+  .blog-prose h1 {
+    font-size: 2.25rem;
+  }
+
+  .blog-prose h2 {
+    font-size: 1.875rem;
+    margin-top: 3rem;
+  }
+
+  .blog-prose h3 {
+    font-size: 1.5rem;
+  }
+
+  .blog-prose h4 {
+    font-size: 1.25rem;
+  }
+
   .blog-prose pre {
-    padding: 1rem;
+    padding: 1.25rem;
     font-size: 0.85rem;
+    margin: 2rem 0;
+  }
+
+  .blog-prose ul,
+  .blog-prose ol {
+    padding-left: 1.75rem;
+  }
+}
+
+/* Dark Mode Optimizations */
+@media (prefers-color-scheme: dark) {
+  .blog-prose img {
+    opacity: 0.95;
   }
 }

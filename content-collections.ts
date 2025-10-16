@@ -4,6 +4,7 @@ import readingTime from 'reading-time';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeHighlight from 'rehype-highlight';
 import { z } from 'zod';
 
 /**
@@ -44,6 +45,7 @@ const blog = defineCollection({
             },
           },
         ],
+        rehypeHighlight, // Syntax highlighting for code blocks
       ],
     });
 
@@ -105,6 +107,7 @@ const projects = defineCollection({
             },
           },
         ],
+        rehypeHighlight, // Syntax highlighting for code blocks
       ],
     });
 
