@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
  * Shows horizontal progress bar at top of page as user scrolls
  */
 export function ReadingProgress() {
-  const [progress, set Progress] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const updateProgress = () => {
