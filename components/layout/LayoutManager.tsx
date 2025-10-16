@@ -31,7 +31,7 @@ const LayoutManager: React.FC = () => {
   } = useFocus();
 
   const { theme } = useTheme();
-  const { mode } = useView();
+  const { mode, enterZen } = useView();
 
   // Hydration-safe mobile detection (prevents SSR/client mismatch)
   const [isStacked, setIsStacked] = React.useState(false);
@@ -112,8 +112,15 @@ const LayoutManager: React.FC = () => {
     return { focused, unfocused };
   };
 
-  // Handle navigation from polybar - now using context
+  // Handle navigation from polybar - route projects/blog to zen, about/contact to tiled
   const handlePolybarNavigate = (section: string) => {
+    // Projects and blogs go directly to zen mode (zen-only sections)
+    if (section === 'projects' || section === 'blog') {
+      enterZen(section as 'projects' | 'blog');
+      return;
+    }
+
+    // About and Contact update FocusContext for tiled display
     handlePolybarNavigation(section);
   };
 

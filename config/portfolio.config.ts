@@ -14,15 +14,23 @@ export const portfolioConfig: PortfolioConfig = {
     contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "email@email.com",
     location: process.env.NEXT_PUBLIC_LOCATION || "Your Location",
     profilePhoto: {
-      src: process.env.NEXT_PUBLIC_PROFILE_PHOTO || "/images/profile/shinjuku-portrait.webp",
+      src: process.env.NEXT_PUBLIC_PROFILE_PHOTO || "/images/profile/dleer-shinjuku.webp",
       alt: "David in Tokyo",
-      width: 450,
-      height: 600,
+      width: 1536,
+      height: 2048,
       exif: {
         location: "Shinjuku, Tokyo",
-        aperture: "f/2.8",
-        shutter: "1/125s",
-        iso: "400"
+        aperture: "f/1.7",
+        shutter: "1/1000s",
+        iso: "32"
+      },
+      detectionVariant: {
+        src: "/images/profile/dleer-shinjuku-RF-DETR.webp",
+        exif: {
+          location: "Shinjuku, Tokyo",
+          model: "RF-DETR",
+          task: "Object Detection"
+        }
       }
     },
     bio: {

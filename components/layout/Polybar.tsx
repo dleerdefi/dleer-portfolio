@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useFocusState } from '@/contexts/FocusContext';
+import { useView } from '@/contexts/ViewContext';
 
 interface PolybarProps {
   onNavigate: (section: string) => void;
@@ -10,6 +11,7 @@ interface PolybarProps {
 const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
   const [time, setTime] = useState<Date | null>(null);
   const { activeContent } = useFocusState();
+  const { mode, section } = useView();
 
   useEffect(() => {
     // Set initial time after mount to avoid hydration mismatch
@@ -26,11 +28,17 @@ const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
   ];
 
   const isActive = (workspace: string) => {
+    // When in zen mode, check ViewContext.section
+    if (mode === 'zen') {
+      return workspace === section;
+    }
+
+    // When in tiled mode, check FocusContext.activeContent
     if (workspace === activeContent.type) return true;
-    // Check for projects section
-    if (workspace === 'projects' && (activeContent.type === 'project' || activeContent.type === 'projects-overview')) return true;
-    // Check for blog section
-    if (workspace === 'blog' && (activeContent.type === 'blog' || activeContent.type === 'blog-overview')) return true;
+    // Check for projects section (legacy - shouldn't happen with zen-only)
+    if (workspace === 'projects' && activeContent.type === 'projects-overview') return true;
+    // Check for blog section (legacy - shouldn't happen with zen-only)
+    if (workspace === 'blog' && activeContent.type === 'blog-overview') return true;
     return false;
   };
 
@@ -54,9 +62,10 @@ const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
             <button
               key={ws.id}
               onClick={() => onNavigate(ws.id)}
-              className="flex items-center gap-1 transition-colors hover:opacity-80"
+              className="flex items-center gap-1 transition-colors hover:opacity-80 focus:outline-none"
               style={{
-                color: isActive(ws.id) ? 'var(--accent-color)' : 'var(--color-text-dimmed)'
+                color: isActive(ws.id) ? 'var(--accent-color)' : 'var(--color-text-dimmed)',
+                outline: 'none'
               }}
             >
               <span style={{
