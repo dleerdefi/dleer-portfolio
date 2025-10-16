@@ -76,7 +76,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <div
-      className="min-h-screen font-mono"
+      className="min-h-screen"
       style={{
         backgroundColor: 'var(--theme-bg)',
         color: 'var(--theme-text)',
