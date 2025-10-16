@@ -87,7 +87,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           backgroundColor: 'var(--theme-surface)',
         }}
       >
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
+        <div className="max-w-5xl flex items-center justify-between" style={{ margin: '0 auto' }}>
           <Link
             href="/projects-zen"
             className="flex items-center gap-2 px-3 py-1 border-2 hover:bg-opacity-10 transition-colors"
@@ -113,8 +113,8 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
       </div>
 
       {/* Project content */}
-      <article className="py-8 px-6">
-        <div className="max-w-4xl mx-auto" style={{ maxWidth: '72ch' }}>
+      <article className="py-12 px-6">
+        <div className="max-w-5xl" style={{ margin: '0 auto' }}>
           {/* Title and metadata */}
           <header className="mb-8 pb-8 border-b-2" style={{ borderColor: 'var(--theme-border)' }}>
             <div className="flex items-start justify-between gap-4 mb-4">
