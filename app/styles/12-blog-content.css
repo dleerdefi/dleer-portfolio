@@ -12,6 +12,7 @@
 
   /* Optimal reading width with breathing room */
   max-width: 68ch;
+  margin: 0 auto;
   font-size: 1.15rem;
   line-height: 1.75;
   color: var(--theme-text);
