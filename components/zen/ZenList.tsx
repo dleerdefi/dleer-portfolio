@@ -79,10 +79,11 @@ export function ZenList<T>({
 
   return (
     <div
-      className={`min-h-screen font-mono ${className}`}
+      className={`min-h-screen ${className}`}
       style={{
         backgroundColor: 'var(--theme-bg)',
         color: 'var(--theme-text)',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       }}
       onKeyDown={handleKeyDown}
       tabIndex={0}
@@ -99,8 +100,11 @@ export function ZenList<T>({
           <div className="flex items-center justify-between">
             <div>
               <h1
-                className="text-2xl font-bold"
-                style={{ color: 'var(--accent-color)' }}
+                className="text-3xl font-bold"
+                style={{
+                  color: 'var(--accent-color)',
+                  letterSpacing: '-0.02em',
+                }}
               >
                 {title}
               </h1>
@@ -130,7 +134,7 @@ export function ZenList<T>({
       </div>
 
       {/* List Content */}
-      <div className="py-8 px-6">
+      <div className="py-12 px-6">
         <div className="max-w-5xl" style={{ margin: '0 auto' }}>
           {items.length === 0 ? (
             <div
@@ -140,7 +144,7 @@ export function ZenList<T>({
               <p>{emptyMessage}</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {items.map((item, index) => {
                 const isSelected = index === activeIndex;
 
@@ -148,8 +152,10 @@ export function ZenList<T>({
                   <div
                     key={index}
                     ref={getItemRef(index)}
-                    className="border-2 p-4 transition-all cursor-pointer"
+                    className="p-6 transition-all cursor-pointer group"
                     style={{
+                      borderRadius: '12px',
+                      border: '2px solid',
                       borderColor: isSelected
                         ? 'var(--accent-color)'
                         : 'var(--theme-border)',
@@ -157,8 +163,23 @@ export function ZenList<T>({
                         ? 'rgba(var(--accent-color-rgb), 0.05)'
                         : 'var(--theme-surface)',
                       boxShadow: isSelected
-                        ? '0 0 0 2px rgba(var(--accent-color-rgb), 0.2)'
-                        : 'none',
+                        ? '0 8px 24px rgba(var(--accent-color-rgb), 0.2), 0 0 0 2px rgba(var(--accent-color-rgb), 0.1)'
+                        : '0 2px 8px rgba(0, 0, 0, 0.1)',
+                      transform: isSelected ? 'translateY(-2px)' : 'translateY(0)',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isSelected) {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.15)';
+                        e.currentTarget.style.borderColor = 'rgba(var(--accent-color-rgb), 0.3)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSelected) {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+                        e.currentTarget.style.borderColor = 'var(--theme-border)';
+                      }
                     }}
                     onClick={() => onSelect(item, index)}
                     role="button"
@@ -183,7 +204,7 @@ export function ZenList<T>({
           color: 'var(--theme-text-dimmed)',
         }}
       >
-        <div className="max-w-4xl mx-auto flex justify-between">
+        <div className="max-w-5xl flex justify-between" style={{ margin: '0 auto' }}>
           <span>
             {items.length} {items.length === 1 ? 'item' : 'items'}
           </span>
