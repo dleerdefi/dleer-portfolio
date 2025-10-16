@@ -44,7 +44,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
   const gapClass = layout === 'parallax' ? 'gap-6 sm:gap-8 md:gap-10' : 'gap-4 sm:gap-6 md:gap-8';
   const asciiFontSize = layout === 'parallax' ?
     (logoType === 'dleer' ? 'clamp(0.55rem, 1vw, 0.75rem)' : 'clamp(0.5rem, 1.4vw, 0.7rem)') :
-    (logoType === 'dleer' ? 'clamp(0.4rem, 1.5cqw, 0.75rem)' : 'clamp(0.38rem, 1.8cqw, 0.8rem)');
+    (logoType === 'dleer' ? 'clamp(0.3rem, 1.5cqw, 0.75rem)' : 'clamp(0.28rem, 1.8cqw, 0.8rem)');
   const infoFontSize = layout === 'parallax' ? 'clamp(0.75rem, 1.2vw, 0.875rem)' : 'clamp(0.6rem, 2cqw, 1.1rem)';
 
   return (
@@ -70,7 +70,8 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
             border: 'none',
             margin: 0,
             fontSize: asciiFontSize,
-            whiteSpace: 'pre'
+            whiteSpace: 'pre',
+            overflow: 'hidden'
           }}
         >
 {asciiArt}

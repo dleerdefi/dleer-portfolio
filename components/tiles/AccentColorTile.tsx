@@ -34,7 +34,7 @@ const AccentColorTile: React.FC<AccentColorTileProps> = ({ isBlurred = false }) 
       isBlurred ? 'text-[#a9b1d6]/70' : 'text-[#a9b1d6]'
     }`}>
       {/* Color Palette Grid */}
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-5 gap-1.5">
         {colors.map((color) => (
           <button
             key={color.name}

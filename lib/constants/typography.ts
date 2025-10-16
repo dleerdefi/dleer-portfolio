@@ -62,15 +62,15 @@ export type FontSizeValue = typeof FONT_SIZES[FontSize];
  */
 export const UI_SIZES = {
   // Icon sizes - theme preset buttons, navigation icons
-  iconXs: 'clamp(1.5rem, 1.5rem + 3cqi, 2rem)',      // 24-32px
-  iconSm: 'clamp(2rem, 2rem + 4cqi, 2.5rem)',        // 32-40px
-  iconMd: 'clamp(2.5rem, 2.5rem + 5cqi, 3.5rem)',    // 40-56px
-  iconLg: 'clamp(3rem, 3rem + 6cqi, 4.5rem)',        // 48-72px
+  iconXs: 'clamp(1rem, 1.5rem + 3cqi, 2rem)',      // 16-32px (reduced min for extreme resize)
+  iconSm: 'clamp(1.25rem, 2rem + 4cqi, 2.5rem)',   // 20-40px (reduced min)
+  iconMd: 'clamp(1.5rem, 2.5rem + 5cqi, 3.5rem)',  // 24-56px (reduced min)
+  iconLg: 'clamp(2rem, 3rem + 6cqi, 4.5rem)',      // 32-72px (reduced min)
 
   // Color picker tiles - interactive color selection elements
-  colorTileXs: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.75rem)',  // 20-28px
-  colorTileSm: 'clamp(1.5rem, 1.5rem + 3.5cqi, 2.25rem)',    // 24-36px
-  colorTileMd: 'clamp(2rem, 2rem + 4.5cqi, 2.75rem)',        // 32-44px
+  colorTileXs: 'clamp(0.875rem, 1.25rem + 2.5cqi, 1.75rem)',  // 14-28px (reduced min)
+  colorTileSm: 'clamp(1rem, 1.5rem + 3.5cqi, 2.25rem)',        // 16-36px (reduced min)
+  colorTileMd: 'clamp(1.25rem, 2rem + 4.5cqi, 2.75rem)',       // 20-44px (reduced min)
 } as const;
 
 export type UISize = keyof typeof UI_SIZES;
