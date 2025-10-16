@@ -144,7 +144,7 @@ export function ZenList<T>({
               <p>{emptyMessage}</p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div>
               {items.map((item, index) => {
                 const isSelected = index === activeIndex;
 
@@ -152,33 +152,17 @@ export function ZenList<T>({
                   <div
                     key={index}
                     ref={getItemRef(index)}
-                    className="p-6 transition-all cursor-pointer group"
+                    className="py-8 cursor-pointer transition-all"
                     style={{
-                      borderRadius: '12px',
-                      border: '2px solid',
-                      borderColor: isSelected
-                        ? 'var(--accent-color)'
-                        : 'var(--theme-border)',
-                      backgroundColor: isSelected
-                        ? 'rgba(var(--accent-color-rgb), 0.05)'
-                        : 'var(--theme-surface)',
-                      boxShadow: isSelected
-                        ? '0 8px 24px rgba(var(--accent-color-rgb), 0.2), 0 0 0 2px rgba(var(--accent-color-rgb), 0.1)'
-                        : '0 2px 8px rgba(0, 0, 0, 0.1)',
-                      transform: isSelected ? 'translateY(-2px)' : 'translateY(0)',
+                      borderBottom: '1px solid var(--theme-border)',
+                      opacity: isSelected ? 1 : 0.85,
                     }}
                     onMouseEnter={(e) => {
-                      if (!isSelected) {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.15)';
-                        e.currentTarget.style.borderColor = 'rgba(var(--accent-color-rgb), 0.3)';
-                      }
+                      e.currentTarget.style.opacity = '1';
                     }}
                     onMouseLeave={(e) => {
                       if (!isSelected) {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
-                        e.currentTarget.style.borderColor = 'var(--theme-border)';
+                        e.currentTarget.style.opacity = '0.85';
                       }
                     }}
                     onClick={() => onSelect(item, index)}
