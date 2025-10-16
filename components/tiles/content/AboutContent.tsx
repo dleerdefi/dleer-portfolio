@@ -40,7 +40,9 @@ const AboutContentComponent: React.FC = () => {
               width: 'clamp(280px, 35%, 400px)',
               float: 'right',
               marginLeft: '32px',
-              marginBottom: '12px'
+              marginBottom: '12px',
+              position: 'relative',
+              zIndex: 10
             }}
           >
             <ProfilePhoto
@@ -49,6 +51,7 @@ const AboutContentComponent: React.FC = () => {
               width={personal.profilePhoto.width}
               height={personal.profilePhoto.height}
               exif={personal.profilePhoto.exif}
+              detectionVariant={personal.profilePhoto.detectionVariant}
             />
           </div>
         )}

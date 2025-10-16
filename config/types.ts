@@ -19,6 +19,16 @@ export interface PersonalInfo {
       aperture?: string;
       shutter?: string;
       iso?: string;
+      model?: string;
+      task?: string;
+    };
+    detectionVariant?: {
+      src: string;
+      exif?: {
+        location?: string;
+        model?: string;
+        task?: string;
+      };
     };
   };
   bio: {
