@@ -1,0 +1,205 @@
+/**
+ * Blog Content / Prose Styling
+ * Professional typography and spacing for MDX blog posts
+ * Inspired by Josh Comeau's blog design
+ */
+
+.blog-prose {
+  /* Optimal reading width */
+  max-width: 65ch;
+  line-height: 1.7;
+}
+
+/* Typography Scale */
+.blog-prose h1 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--accent-color);
+}
+
+.blog-prose h2 {
+  font-size: 2rem;
+  line-height: 1.3;
+  font-weight: 700;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  color: var(--theme-text);
+  position: relative;
+}
+
+.blog-prose h2::before {
+  content: "";
+  position: absolute;
+  left: -1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 70%;
+  background: var(--accent-color);
+  border-radius: 2px;
+}
+
+.blog-prose h3 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--theme-text);
+}
+
+.blog-prose p {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  color: var(--theme-text);
+}
+
+/* Links */
+.blog-prose a {
+  color: var(--accent-color);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: all 0.2s ease;
+}
+
+.blog-prose a:hover {
+  text-decoration-thickness: 2px;
+  opacity: 0.8;
+}
+
+.blog-prose .heading-anchor {
+  text-decoration: none;
+  color: inherit;
+}
+
+.blog-prose .heading-anchor:hover {
+  opacity: 1;
+}
+
+/* Code Blocks */
+.blog-prose pre {
+  background: rgba(var(--accent-color-rgb), 0.05);
+  border: 1px solid rgba(var(--accent-color-rgb), 0.2);
+  border-radius: 8px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 2rem 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.blog-prose code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+}
+
+.blog-prose :not(pre) > code {
+  background: rgba(var(--accent-color-rgb), 0.1);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+  color: var(--accent-color);
+  font-weight: 500;
+}
+
+/* Lists */
+.blog-prose ul,
+.blog-prose ol {
+  margin: 1.5rem 0;
+  padding-left: 2rem;
+}
+
+.blog-prose li {
+  margin: 0.5rem 0;
+  line-height: 1.7;
+}
+
+.blog-prose li strong {
+  color: var(--accent-color);
+}
+
+/* Blockquotes */
+.blog-prose blockquote {
+  border-left: 4px solid var(--accent-color);
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  opacity: 0.9;
+  color: var(--theme-text-dimmed);
+}
+
+/* Images & Figures */
+.blog-prose figure {
+  margin: 3rem 0;
+}
+
+.blog-prose img {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: auto;
+}
+
+.blog-prose figcaption {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Tables */
+.blog-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+}
+
+.blog-prose th,
+.blog-prose td {
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(var(--accent-color-rgb), 0.2);
+  text-align: left;
+}
+
+.blog-prose th {
+  background: rgba(var(--accent-color-rgb), 0.1);
+  font-weight: 600;
+}
+
+/* Horizontal Rules */
+.blog-prose hr {
+  border: none;
+  border-top: 2px solid rgba(var(--accent-color-rgb), 0.2);
+  margin: 3rem 0;
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  .blog-prose h1 {
+    font-size: 2rem;
+  }
+
+  .blog-prose h2 {
+    font-size: 1.75rem;
+    margin-top: 2rem;
+  }
+
+  .blog-prose h3 {
+    font-size: 1.25rem;
+  }
+
+  .blog-prose p {
+    font-size: 1rem;
+  }
+
+  .blog-prose pre {
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+}
