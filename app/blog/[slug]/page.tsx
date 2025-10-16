@@ -121,7 +121,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       {/* Article content */}
       <article className="py-12 px-6">
-        <div className="max-w-5xl mx-auto">
+        <div
+          className="max-w-5xl"
+          style={{ margin: '0 auto' }}
+        >
           {/* Title and metadata */}
           <header className="mb-8 pb-8 border-b-2" style={{ borderColor: 'var(--theme-border)' }}>
             <h1
