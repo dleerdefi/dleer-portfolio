@@ -41,11 +41,13 @@ export default function BlogZenPage() {
           {/* Header: Title and Date */}
           <div className="flex items-start justify-between gap-4">
             <h2
-              className="text-lg font-bold flex-1"
+              className="text-xl font-bold flex-1"
               style={{
                 color: isSelected
                   ? 'var(--accent-color)'
                   : 'var(--theme-text)',
+                lineHeight: '1.4',
+                letterSpacing: '-0.01em',
               }}
             >
               {blog.title}
@@ -60,8 +62,11 @@ export default function BlogZenPage() {
 
           {/* Summary */}
           <p
-            className="text-sm"
-            style={{ color: 'var(--theme-text-dimmed)' }}
+            className="text-base"
+            style={{
+              color: 'var(--theme-text-dimmed)',
+              lineHeight: '1.6',
+            }}
           >
             {blog.summary}
           </p>
