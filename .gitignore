@@ -43,6 +43,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# content-collections
+.content-collections/
+
 # Development artifacts (not for public repo)
 /inspo
 /archive

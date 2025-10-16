@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withContentCollections } from '@content-collections/next';
 
 const nextConfig: NextConfig = {
   // Enable standalone output for optimized Docker builds
@@ -6,4 +7,5 @@ const nextConfig: NextConfig = {
   output: 'standalone',
 };
 
-export default nextConfig;
+// withContentCollections must be the last plugin in the chain
+export default withContentCollections(nextConfig);

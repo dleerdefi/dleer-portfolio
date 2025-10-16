@@ -162,8 +162,8 @@ export function useUIStrings(): UIStrings {
  * Format username for display (e.g., "dleer@portfolio")
  */
 export function formatUsername(): string {
-  const { username } = usePersonalInfo();
-  return `${username}@portfolio`;
+  const config = getPortfolioConfig();
+  return `${config.personal.username}@portfolio`;
 }
 
 /**
