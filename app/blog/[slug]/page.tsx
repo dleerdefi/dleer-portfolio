@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { allBlogs } from 'content-collections';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { ReadingProgress } from '@/components/blog/ReadingProgress';
+import { CodeCopyButton } from '@/components/blog/CodeCopyButton';
+import { ScrollReveal } from '@/components/blog/ScrollReveal';
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -75,14 +78,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   return (
-    <div
-      className="min-h-screen"
-      style={{
-        backgroundColor: 'var(--theme-bg)',
-        color: 'var(--theme-text)',
-      }}
-    >
-      {/* Header with back button */}
+    <>
+      <ReadingProgress />
+      <CodeCopyButton />
+      <ScrollReveal />
+
+      <div
+        className="min-h-screen"
+        style={{
+          backgroundColor: 'var(--theme-bg)',
+          color: 'var(--theme-text)',
+        }}
+      >
+        {/* Header with back button */}
       <div
         className="border-b-2 py-4 px-6"
         style={{
@@ -200,7 +208,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </footer>
         </div>
       </article>
-    </div>
+      </div>
+    </>
   );
 }
 
