@@ -2,10 +2,59 @@ import React from 'react';
 import Link from 'next/link';
 import { allBlogs } from 'content-collections';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 
 interface BlogPostPageProps {
   params: {
     slug: string;
+  };
+}
+
+/**
+ * Generate metadata for blog post pages
+ * Provides SEO-optimized title, description, and Open Graph tags
+ */
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+  const blog = allBlogs.find((b) => b.slug === params.slug);
+
+  if (!blog) {
+    return {
+      title: 'Blog Post Not Found',
+      description: 'The requested blog post could not be found.',
+    };
+  }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const ogImage = blog.cover || `${siteUrl}/og-image.png`;
+
+  return {
+    title: blog.title,
+    description: blog.summary,
+    keywords: blog.tags,
+    authors: [{ name: 'Your Name' }],
+    openGraph: {
+      title: blog.title,
+      description: blog.summary,
+      type: 'article',
+      url: `${siteUrl}${blog.url}`,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: blog.title,
+        },
+      ],
+      publishedTime: blog.date,
+      modifiedTime: blog.updated || blog.date,
+      tags: blog.tags,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: blog.title,
+      description: blog.summary,
+      images: [ogImage],
+    },
   };
 }
 
@@ -171,6 +220,12 @@ function formatDate(dateString: string): string {
     return dateString;
   }
 }
+
+/**
+ * ISR Configuration
+ * Revalidate blog posts once per day (86400 seconds)
+ */
+export const revalidate = 86400;
 
 /**
  * Generate static params for all blog posts

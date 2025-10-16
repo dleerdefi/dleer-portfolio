@@ -2,10 +2,56 @@ import React from 'react';
 import Link from 'next/link';
 import { allProjects } from 'content-collections';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 
 interface ProjectDetailPageProps {
   params: {
     slug: string;
+  };
+}
+
+/**
+ * Generate metadata for project pages
+ * Provides SEO-optimized title, description, and Open Graph tags
+ */
+export async function generateMetadata({ params }: ProjectDetailPageProps): Promise<Metadata> {
+  const project = allProjects.find((p) => p.slug === params.slug);
+
+  if (!project) {
+    return {
+      title: 'Project Not Found',
+      description: 'The requested project could not be found.',
+    };
+  }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const ogImage = project.cover || `${siteUrl}/og-image.png`;
+
+  return {
+    title: project.title,
+    description: project.summary,
+    keywords: project.tags,
+    authors: [{ name: 'Your Name' }],
+    openGraph: {
+      title: project.title,
+      description: project.summary,
+      type: 'website',
+      url: `${siteUrl}${project.url}`,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: project.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: project.title,
+      description: project.summary,
+      images: [ogImage],
+    },
   };
 }
 
@@ -255,6 +301,12 @@ function getStatusColor(status: string): string {
       return 'var(--theme-text)';
   }
 }
+
+/**
+ * ISR Configuration
+ * Revalidate projects once per day (86400 seconds)
+ */
+export const revalidate = 86400;
 
 /**
  * Generate static params for all projects
