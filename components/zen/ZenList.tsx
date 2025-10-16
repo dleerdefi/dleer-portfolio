@@ -95,7 +95,7 @@ export function ZenList<T>({
           backgroundColor: 'var(--theme-surface)',
         }}
       >
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl" style={{ margin: '0 auto' }}>
           <div className="flex items-center justify-between">
             <div>
               <h1
@@ -131,7 +131,7 @@ export function ZenList<T>({
 
       {/* List Content */}
       <div className="py-8 px-6">
-        <div className="max-w-4xl mx-auto" style={{ maxWidth: '72ch' }}>
+        <div className="max-w-5xl" style={{ margin: '0 auto' }}>
           {items.length === 0 ? (
             <div
               className="text-center py-12"
