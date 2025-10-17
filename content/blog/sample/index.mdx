@@ -29,7 +29,7 @@ Rule: **SPEC leads the code**. Update the specification first, then implement.
 
 Here's how I build features today with Claude Code:
 
-### 1. Write the Spec
+### Step 1: Write the Spec
 
 Create a developer spec in `/docs/` that answers:
 
@@ -51,7 +51,7 @@ Unix aesthetic shortcodes, cursor-reactive blob background.
 ```
 </Window>
 
-### 2. Break Into Milestones
+### Step 2: Break Into Milestones
 
 Construction has phases: sitework → foundations → framing → MEP → finishes.
 
@@ -72,17 +72,18 @@ Each milestone has:
 - **DoD** (what must pass before moving on)
 - **Rollback plan** (if tests fail)
 
-### 3. Implement With Testing Gates
+### Step 3: Implement With Testing Gates
 
 Submit the spec to your coding agent:
 
-<Key>Cmd</Key> + <Key>K</Key> → "Ingest `docs/BLOG_V2_SPEC.md` and implement M1. Run build test after."
+Press <Key>Cmd</Key> + <Key>K</Key> then type: "Ingest `docs/BLOG_V2_SPEC.md` and implement M1. Run build test after."
 
 The agent:
-1. Reads the spec
-2. Implements M1 tasks
-3. Runs `npm run build`
-4. Reports pass/fail
+
+- **(1)** Reads the spec
+- **(2)** Implements M1 tasks
+- **(3)** Runs `npm run build`
+- **(4)** Reports pass/fail
 
 If ✅ pass → move to M2.
 If ❌ fail → agent debugs, or you adjust the spec.
@@ -101,9 +102,9 @@ In construction, **scope creep kills budgets**. In software, it kills momentum.
 
 The spec defines boundaries. If a new idea comes up mid-implementation:
 
-1. Note it in `## Future Enhancements`
-2. Finish current milestone
-3. Decide if the new idea merits a new spec
+- **(1)** Note it in `## Future Enhancements`
+- **(2)** Finish current milestone
+- **(3)** Decide if the new idea merits a new spec
 
 <Admonition type="warn">
 **Don't mix phases.** Framing crews don't install HVAC. Your M2 shortcode PR doesn't refactor routing.
@@ -116,7 +117,7 @@ Every milestone ends with a test:
 - M1: `npm run build` generates types
 - M2: Shortcodes render in 3 themes
 - M3: Keyboard nav works (manual test)
-- M4: CPU <1% idle (DevTools)
+- M4: CPU {'<'}1% idle (DevTools)
 
 If a gate fails, you don't proceed. This prevents compounding technical debt.
 
@@ -124,10 +125,10 @@ If a gate fails, you don't proceed. This prevents compounding technical debt.
 
 I'm shipping this blog system using the preconstruction method:
 
-1. ✅ Wrote [BLOG_V2_SPEC.md](https://github.com/example/dleer-portfolio/blob/main/docs/BLOG_V2_SPEC.md)
-2. ✅ Broke into M1–M7 with DoD per milestone
-3. 🔄 Implementing M3 (Zen list + keyboard nav)
-4. ⏳ Remaining: M4–M7
+- ✅ **Step 1**: Wrote [BLOG_V2_SPEC.md](https://github.com/example/dleer-portfolio/blob/main/docs/BLOG_V2_SPEC.md)
+- ✅ **Step 2**: Broke into M1–M7 with DoD per milestone
+- 🔄 **Step 3**: Implementing M3 (Zen list + keyboard nav)
+- ⏳ **Step 4**: Remaining: M4–M7
 
 Each PR is a milestone. Each merge passes CI. No "fix later" commits.
 
@@ -151,14 +152,14 @@ Not every feature needs a 300-line spec. Use judgment:
 - **Need a spec**: Multi-day features, new architecture, agent handoff
 - **Skip the spec**: Bug fixes, one-file changes, copy updates
 
-If it takes <30 minutes and touches <100 LOC, just code it.
+If it takes {'<'}30 minutes and touches {'<'}100 LOC, just code it.
 
 ## Key Takeaways
 
-1. **Spec first, code second** → Prevents rework
-2. **Milestone-driven** → Ship iteratively, test at gates
-3. **Acceptance criteria** → Know when you're done
-4. **Async-friendly** → Agents/collaborators read the spec, not your mind
+- **(1)** **Spec first, code second** → Prevents rework
+- **(2)** **Milestone-driven** → Ship iteratively, test at gates
+- **(3)** **Acceptance criteria** → Know when you're done
+- **(4)** **Async-friendly** → Agents/collaborators read the spec, not your mind
 
 <Admonition type="note">
 Think like a builder: Pour a solid foundation (spec), frame the structure (milestones), wire the systems (implementation), finish the surfaces (polish).

@@ -1,0 +1,227 @@
+---
+title: "Agent State Machine"
+slug: "agent-state-machine"
+summary: "Hierarchical state machine with multi-tool integration and GraphRAG"
+date: "2025-08-20"
+updated: "2025-10-16"
+tags: ["ai", "state-machine", "graphrag", "tools", "near"]
+tech: ["Python", "MongoDB", "Neo4j", "FastAPI"]
+cover: ""
+status: "production"
+github: "https://github.com/dleerdefi/agent-state-machine"
+featured: false
+---
+
+## Overview
+
+Streamlined version of RinAI focused on hierarchical state machine architecture for complex multi-turn interactions. Integrates multiple tools including Twitter, crypto tracking, weather, and NEAR Protocol transactions with GraphRAG memory system.
+
+This framework provides a clean, extensible architecture for building stateful AI agents with complex decision trees and tool orchestration.
+
+## Key Features
+
+### Hierarchical State Machine
+- **Multi-level state management** for complex conversation flows
+- Parent-child state relationships
+- State transition guards and validators
+- Automatic state persistence and recovery
+- Visual state machine debugging tools
+
+### GraphRAG Memory System
+- MongoDB for document storage and retrieval
+- Optional Neo4j integration for advanced graph operations
+- Vector embeddings for semantic search
+- Context-aware memory retrieval
+- Automatic memory consolidation
+
+### 6+ Integrated Tools
+- **Twitter**: Tweet posting, timeline retrieval, mentions tracking
+- **Crypto**: Real-time price tracking, portfolio monitoring
+- **Weather**: Multi-location weather forecasts
+- **NEAR Protocol**: Transaction queries, wallet balance checks
+- **Web Search**: Multi-source search aggregation
+- **Calendar**: Event scheduling and reminders
+
+### Simple Web-Based Interface
+- Clean chat UI for testing and demonstrations
+- Real-time state visualization
+- Tool execution logging
+- Conversation history with search
+- Mobile-responsive design
+
+### Optional Neo4j Support
+- Advanced graph traversal queries
+- Relationship discovery
+- Community detection
+- Centrality analysis
+- Graph algorithms (shortest path, PageRank)
+
+## Architecture
+
+<Terminal cmd="state machine architecture">
+┌─────────────┐      ┌──────────────┐      ┌─────────────┐
+│   FastAPI   │─────▶│  State FSM   │─────▶│  Tool       │
+│   Server    │      │  Manager     │      │  Registry   │
+└─────────────┘      └──────────────┘      └─────────────┘
+       │                     │                      │
+       ▼                     ▼                      ▼
+  ┌─────────┐          ┌─────────┐          ┌─────────┐
+  │ MongoDB │          │  Neo4j  │          │  Tools  │
+  │ Memory  │          │ (opt)   │          │ (6+)    │
+  └─────────┘          └─────────┘          └─────────┘
+</Terminal>
+
+## State Machine Example
+
+```python
+from agent_state_machine import StateMachine, State, Transition
+
+# Define states
+idle = State("idle", on_enter=greet_user)
+listening = State("listening", on_enter=process_input)
+thinking = State("thinking", on_enter=select_tool)
+responding = State("responding", on_enter=generate_response)
+
+# Define transitions
+fsm = StateMachine([
+    Transition(idle, listening, trigger="user_input"),
+    Transition(listening, thinking, guard=has_tool_request),
+    Transition(thinking, responding, trigger="tool_complete"),
+    Transition(responding, idle, trigger="response_sent"),
+])
+```
+
+## Tool Integration Example
+
+```python
+from agent_state_machine.tools import ToolRegistry
+
+@ToolRegistry.register("weather")
+async def get_weather(location: str) -> dict:
+    """Get current weather for a location."""
+    # Implementation using external weather API
+    return {
+        "location": location,
+        "temperature": 72,
+        "conditions": "Partly cloudy"
+    }
+
+# Agent automatically discovers and can use this tool
+```
+
+## Performance Metrics
+
+- **6+ integrated tools** working out of the box
+- **Hierarchical state management** for complex flows
+- **MIT licensed** framework for community use
+- **Production-ready** with comprehensive error handling
+- **<50ms** state transition latency
+
+## Getting Started
+
+<Admonition type="tip">
+Minimal dependencies for quick prototyping.
+</Admonition>
+
+### Installation
+
+<Terminal cmd="git clone && pip install">
+$ git clone https://github.com/dleerdefi/agent-state-machine
+$ cd agent-state-machine
+$ pip install -r requirements.txt
+$ python -m agent_state_machine.server
+
+✓ MongoDB connected
+✓ Tool registry loaded (6 tools)
+✓ FastAPI server running on http://localhost:8000
+</Terminal>
+
+### Configuration
+
+```yaml
+# config.yaml
+memory:
+  provider: mongodb  # or neo4j
+  uri: mongodb://localhost:27017
+  database: agent_fsm
+
+tools:
+  enabled:
+    - twitter
+    - crypto
+    - weather
+    - near
+    - search
+    - calendar
+
+state_machine:
+  max_depth: 5  # Maximum state nesting
+  timeout: 300  # State timeout in seconds
+```
+
+## Use Cases
+
+### Customer Support Bot
+- Initial greeting state
+- Intent classification state
+- Tool execution state (check order, refund, etc.)
+- Response generation state
+- Follow-up question state
+
+### Research Assistant
+- Query understanding state
+- Source selection state
+- Web search state
+- Data aggregation state
+- Citation formatting state
+
+### Trading Bot
+- Market analysis state
+- Signal detection state
+- Risk assessment state
+- Order execution state
+- Portfolio update state
+
+## Extension Examples
+
+### Adding Custom Tools
+
+```python
+@ToolRegistry.register("custom_api")
+async def call_custom_api(param: str) -> dict:
+    """Call your custom API."""
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"https://api.example.com/{param}")
+        return response.json()
+```
+
+### Custom State Handlers
+
+```python
+class CustomState(State):
+    async def on_enter(self, context):
+        # Custom logic when entering state
+        logger.info(f"Entering {self.name} with context: {context}")
+
+    async def on_exit(self, context):
+        # Cleanup logic when exiting state
+        await self.save_state_snapshot(context)
+```
+
+## Future Enhancements
+
+- [ ] Visual state machine editor
+- [ ] Behavior tree integration
+- [ ] Multi-agent coordination
+- [ ] Plugin marketplace
+- [ ] Cloud deployment templates
+
+## Community
+
+- **Discord**: Join our community server
+- **GitHub Discussions**: Ask questions and share projects
+- **Examples**: 20+ example projects in `/examples`
+
+## License
+
+MIT License - Use freely in your projects.

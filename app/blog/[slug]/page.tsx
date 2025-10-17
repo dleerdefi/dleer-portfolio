@@ -3,9 +3,16 @@ import Link from 'next/link';
 import { allBlogs } from 'content-collections';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { MDXRemote } from 'next-mdx-remote/rsc';
 import { ReadingProgress } from '@/components/blog/ReadingProgress';
 import { CodeCopyButton } from '@/components/blog/CodeCopyButton';
 import { ScrollReveal } from '@/components/blog/ScrollReveal';
+import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
+import { Admonition, Terminal, Window, Key, Figure } from '@/components/mdx';
+import remarkGfm from 'remark-gfm';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeHighlight from 'rehype-highlight';
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -82,6 +89,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <ReadingProgress />
       <CodeCopyButton />
       <ScrollReveal />
+      <EscKeyHandler returnPath="/blog" />
 
       <div
         className="min-h-screen"
@@ -100,7 +108,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       >
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <Link
-            href="/blog-zen"
+            href="/blog"
             className="flex items-center gap-2 px-3 py-1 border-2 hover:bg-opacity-10 transition-colors"
             style={{
               borderColor: 'var(--theme-border)',
@@ -191,15 +199,41 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </header>
 
           {/* MDX Content */}
-          <div
-            className="blog-prose"
-            dangerouslySetInnerHTML={{ __html: blog.html }}
-          />
+          <div className="blog-prose">
+            <MDXRemote
+              source={blog.content}
+              components={{
+                Admonition,
+                Terminal,
+                Window,
+                Key,
+                Figure,
+              }}
+              options={{
+                mdxOptions: {
+                  remarkPlugins: [remarkGfm],
+                  rehypePlugins: [
+                    rehypeSlug,
+                    [
+                      rehypeAutolinkHeadings,
+                      {
+                        behavior: 'wrap',
+                        properties: {
+                          className: ['heading-anchor'],
+                        },
+                      },
+                    ],
+                    rehypeHighlight,
+                  ],
+                },
+              }}
+            />
+          </div>
 
           {/* Footer navigation */}
           <footer className="mt-12 pt-8 border-t-2" style={{ borderColor: 'var(--theme-border)' }}>
             <Link
-              href="/blog-zen"
+              href="/blog"
               className="flex items-center gap-2 px-4 py-2 border-2 hover:bg-opacity-10 transition-colors"
               style={{
                 borderColor: 'var(--accent-color)',

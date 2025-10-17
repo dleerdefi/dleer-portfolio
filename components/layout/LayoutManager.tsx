@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, LayoutGroup } from 'framer-motion';
 import NeofetchTile from '@/components/tiles/NeofetchTile';
 import NavigationTile from '@/components/tiles/NavigationTile';
@@ -26,12 +27,14 @@ const LayoutManager: React.FC = () => {
     setFocusedTile,
     setActiveContent,
     handleTabNavigation,
+    handleDirectionalNavigation,
     handleContentNavigation,
     handlePolybarNavigation
   } = useFocus();
 
   const { theme } = useTheme();
   const { mode, enterZen } = useView();
+  const router = useRouter();
 
   // Hydration-safe mobile detection (prevents SSR/client mismatch)
   const [isStacked, setIsStacked] = React.useState(false);
@@ -50,20 +53,41 @@ const LayoutManager: React.FC = () => {
     return () => window.removeEventListener('resize', checkLayout);
   }, []);
 
-  // Handle Tab key navigation for desktop tiled layout
+  // Handle keyboard navigation for desktop tiled layout
   useEffect(() => {
-    // Only add Tab handler for desktop (not mobile parallax)
+    // Only add keyboard handlers for desktop (not mobile parallax)
     if (!isStacked) {
       const handleKeyDown = (e: KeyboardEvent) => {
+        // Tab key: linear cycle through tiles
         if (e.key === 'Tab') {
           e.preventDefault();
           handleTabNavigation(e.shiftKey);
+          return;
+        }
+
+        // hjkl keys: vim-style directional navigation
+        if (e.key === 'h' || e.key === 'j' || e.key === 'k' || e.key === 'l') {
+          // Skip if typing in input field
+          const target = e.target as HTMLElement;
+          if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+            return;
+          }
+
+          e.preventDefault();
+          let direction: 'up' | 'down' | 'left' | 'right';
+
+          if (e.key === 'h') direction = 'left';
+          else if (e.key === 'j') direction = 'down';
+          else if (e.key === 'k') direction = 'up';
+          else direction = 'right'; // l
+
+          handleDirectionalNavigation(direction);
         }
       };
       window.addEventListener('keydown', handleKeyDown);
       return () => window.removeEventListener('keydown', handleKeyDown);
     }
-  }, [handleTabNavigation, isStacked]);
+  }, [handleTabNavigation, handleDirectionalNavigation, isStacked]);
 
   // Framer Motion animation settings
   const layoutTransition = {
@@ -112,11 +136,16 @@ const LayoutManager: React.FC = () => {
     return { focused, unfocused };
   };
 
-  // Handle navigation from polybar - route projects/blog to zen, about/contact to tiled
+  // Handle navigation from polybar - route projects/blog to list pages, about/contact to tiled
   const handlePolybarNavigate = (section: string) => {
-    // Projects and blogs go directly to zen mode (zen-only sections)
-    if (section === 'projects' || section === 'blog') {
-      enterZen(section as 'projects' | 'blog');
+    // Projects and blogs navigate to list pages (real Next.js routes)
+    if (section === 'projects') {
+      router.push('/projects');
+      return;
+    }
+
+    if (section === 'blog') {
+      router.push('/blog');
       return;
     }
 

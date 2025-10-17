@@ -3,6 +3,13 @@ import Link from 'next/link';
 import { allProjects } from 'content-collections';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { MDXRemote } from 'next-mdx-remote/rsc';
+import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
+import { Admonition, Terminal, Window, Key, Figure } from '@/components/mdx';
+import remarkGfm from 'remark-gfm';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeHighlight from 'rehype-highlight';
 
 interface ProjectDetailPageProps {
   params: Promise<{
@@ -72,7 +79,9 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   }
 
   return (
-    <div
+    <>
+      <EscKeyHandler returnPath="/projects" />
+      <div
       className="min-h-screen font-mono"
       style={{
         backgroundColor: 'var(--theme-bg)',
@@ -89,7 +98,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
       >
         <div className="max-w-5xl flex items-center justify-between" style={{ margin: '0 auto' }}>
           <Link
-            href="/projects-zen"
+            href="/projects"
             className="flex items-center gap-2 px-3 py-1 border-2 hover:bg-opacity-10 transition-colors"
             style={{
               borderColor: 'var(--theme-border)',
@@ -248,13 +257,41 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
             style={{
               color: 'var(--theme-text)',
             }}
-            dangerouslySetInnerHTML={{ __html: project.html }}
-          />
+          >
+            <MDXRemote
+              source={project.content}
+              components={{
+                Admonition,
+                Terminal,
+                Window,
+                Key,
+                Figure,
+              }}
+              options={{
+                mdxOptions: {
+                  remarkPlugins: [remarkGfm],
+                  rehypePlugins: [
+                    rehypeSlug,
+                    [
+                      rehypeAutolinkHeadings,
+                      {
+                        behavior: 'wrap',
+                        properties: {
+                          className: ['heading-anchor'],
+                        },
+                      },
+                    ],
+                    rehypeHighlight,
+                  ],
+                },
+              }}
+            />
+          </div>
 
           {/* Footer navigation */}
           <footer className="mt-12 pt-8 border-t-2" style={{ borderColor: 'var(--theme-border)' }}>
             <Link
-              href="/projects-zen"
+              href="/projects"
               className="flex items-center gap-2 px-4 py-2 border-2 hover:bg-opacity-10 transition-colors"
               style={{
                 borderColor: 'var(--accent-color)',
@@ -266,7 +303,8 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           </footer>
         </div>
       </article>
-    </div>
+      </div>
+    </>
   );
 }
 
