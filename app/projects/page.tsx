@@ -1,89 +1,187 @@
-import Section from '@/components/ui/Section';
-import ProjectCard from '@/components/ui/ProjectCard';
-import Badge from '@/components/ui/Badge';
-import type { ProjectsData } from '@/lib/types';
+'use client';
 
-const projectsData: ProjectsData = require('@/content/projects.json');
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { ZenList } from '@/components/zen/ZenList';
+import { allProjects } from 'content-collections';
 
-export default function Projects() {
-  const techCount = projectsData.projects.reduce((acc, project) => {
-    project.tech.forEach(tech => {
-      acc[tech] = (acc[tech] || 0) + 1;
-    });
-    return acc;
-  }, {} as Record<string, number>);
+/**
+ * Projects Zen View - Fullscreen list of projects
+ * Features j/k/Enter/Esc keyboard navigation
+ * Displays projects from content-collections
+ *
+ * Route: /projects
+ */
+export default function ProjectsZenPage() {
+  const router = useRouter();
 
-  const topTech = Object.entries(techCount)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 8);
+  // Sort projects by date (newest first), featured first
+  const sortedProjects = [...allProjects].sort((a, b) => {
+    // Featured projects first
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+
+    // Then by date
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+
+  const handleSelect = (project: typeof allProjects[0]) => {
+    router.push(project.url);
+  };
+
+  const handleExit = () => {
+    router.push('/');
+  };
 
   return (
-    <>
-      {/* Hero Section */}
-      <Section className="py-16 bg-bg-secondary">
-        <h1 className="text-4xl font-bold text-text-primary mb-4">
-          Projects Portfolio
-        </h1>
-        <p className="text-lg text-text-secondary max-w-3xl">
-          A collection of DeFi protocols, smart contracts, and knowledge graph applications
-          I've built over the years. Each project showcases different aspects of blockchain
-          development and token economics design.
-        </p>
-      </Section>
+    <ZenList
+      items={sortedProjects}
+      onSelect={handleSelect}
+      onExit={handleExit}
+      title="~/projects"
+      subtitle="Portfolio of technical work and experiments"
+      emptyMessage="No projects found."
+      renderItem={(project, _index, isSelected) => (
+        <div className="space-y-4">
+          {/* Header: Title and Status Badge */}
+          <div className="flex items-start justify-between gap-4">
+            <h2
+              className="text-xl font-bold flex-1"
+              style={{
+                color: isSelected
+                  ? 'var(--accent-color)'
+                  : 'var(--theme-text)',
+                lineHeight: '1.4',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              {project.title}
+              {project.featured && (
+                <span
+                  className="ml-2 text-xs px-2 py-0.5 border"
+                  style={{
+                    borderColor: 'var(--accent-color)',
+                    color: 'var(--accent-color)',
+                  }}
+                >
+                  Featured
+                </span>
+              )}
+            </h2>
 
-      {/* Projects Grid */}
-      <Section>
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {projectsData.projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
-      </Section>
+            {/* Status Badge */}
+            <span
+              className="text-xs px-2 py-1 border shrink-0"
+              style={{
+                borderColor: getStatusColor(project.status),
+                color: getStatusColor(project.status),
+              }}
+            >
+              {project.status.toUpperCase()}
+            </span>
+          </div>
 
-      {/* Tech Distribution */}
-      <Section className="bg-bg-secondary">
-        <h2 className="text-2xl font-bold text-text-primary mb-6">
-          Technology Distribution
-        </h2>
-        <div className="flex flex-wrap gap-3">
-          {topTech.map(([tech, count]) => (
-            <div key={tech} className="flex items-center gap-2">
-              <Badge variant="default">{tech}</Badge>
-              <span className="text-text-muted text-sm">×{count}</span>
-            </div>
-          ))}
-        </div>
-      </Section>
+          {/* Summary */}
+          <p
+            className="text-base"
+            style={{
+              color: 'var(--theme-text-dimmed)',
+              lineHeight: '1.6',
+            }}
+          >
+            {project.summary}
+          </p>
 
-      {/* Summary Stats */}
-      <Section>
-        <div className="grid md:grid-cols-4 gap-6 text-center">
-          <div>
-            <div className="text-3xl font-bold text-accent-primary">
-              {projectsData.projects.length}
+          {/* Tech Stack */}
+          {project.tech.length > 0 && (
+            <div className="flex items-center gap-2 flex-wrap">
+              <span
+                className="text-xs"
+                style={{ color: 'var(--theme-text-dimmed)' }}
+              >
+                Stack:
+              </span>
+              {project.tech.map((tech) => (
+                <span
+                  key={tech}
+                  className="text-xs px-2 py-0.5 border"
+                  style={{
+                    borderColor: 'var(--theme-border)',
+                    color: 'var(--theme-text)',
+                  }}
+                >
+                  {tech}
+                </span>
+              ))}
             </div>
-            <div className="text-text-muted">Total Projects</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-semantic-success">
-              {projectsData.projects.filter(p => p.status === 'production').length}
-            </div>
-            <div className="text-text-muted">In Production</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-mauve">
-              $50M+
-            </div>
-            <div className="text-text-muted">Total TVL</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-accent-secondary">
-              10K+
-            </div>
-            <div className="text-text-muted">Active Users</div>
+          )}
+
+          {/* Links and Tags */}
+          <div className="flex items-center gap-4 text-xs flex-wrap">
+            {/* External Links */}
+            {(project.github || project.demo) && (
+              <div className="flex items-center gap-3">
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                    style={{ color: 'var(--accent-color)' }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    GitHub →
+                  </a>
+                )}
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                    style={{ color: 'var(--accent-color)' }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Live Demo →
+                  </a>
+                )}
+              </div>
+            )}
+
+            {/* Tags */}
+            {project.tags.length > 0 && (
+              <div className="flex items-center gap-2">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    style={{ color: 'var(--theme-text-dimmed)' }}
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
-      </Section>
-    </>
+      )}
+    />
   );
+}
+
+/**
+ * Get status-appropriate color
+ */
+function getStatusColor(status: string): string {
+  switch (status) {
+    case 'production':
+      return 'var(--theme-success)';
+    case 'beta':
+      return 'var(--theme-info)';
+    case 'development':
+      return 'var(--theme-warning)';
+    case 'concept':
+      return 'var(--theme-text-dimmed)';
+    default:
+      return 'var(--theme-text)';
+  }
 }

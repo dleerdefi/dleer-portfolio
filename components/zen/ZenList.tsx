@@ -88,14 +88,8 @@ export function ZenList<T>({
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
-      {/* Header */}
-      <div
-        className="border-b-2 py-4 px-6"
-        style={{
-          borderColor: 'var(--theme-border)',
-          backgroundColor: 'var(--theme-surface)',
-        }}
-      >
+      {/* Header - zen flat style, no background/border */}
+      <div className="py-4 px-6">
         <div className="max-w-5xl" style={{ margin: '0 auto' }}>
           <div className="flex items-center justify-between">
             <div>
@@ -152,7 +146,7 @@ export function ZenList<T>({
                   <div
                     key={index}
                     ref={getItemRef(index)}
-                    className="py-8 cursor-pointer transition-all"
+                    className="py-16 cursor-pointer transition-all"
                     style={{
                       borderBottom: '1px solid var(--theme-border)',
                       opacity: isSelected ? 1 : 0.85,
@@ -179,12 +173,10 @@ export function ZenList<T>({
         </div>
       </div>
 
-      {/* Footer - item count */}
+      {/* Footer - item count, zen flat style */}
       <div
-        className="fixed bottom-0 left-0 right-0 border-t-2 py-2 px-6 text-xs"
+        className="fixed bottom-0 left-0 right-0 py-2 px-6 text-xs"
         style={{
-          borderColor: 'var(--theme-border)',
-          backgroundColor: 'var(--theme-surface)',
           color: 'var(--theme-text-dimmed)',
         }}
       >

@@ -1,108 +1,132 @@
-import Section from '@/components/ui/Section';
-import Card from '@/components/ui/Card';
-import Badge from '@/components/ui/Badge';
+'use client';
 
-export default function Blog() {
-  // Placeholder blog posts - will be replaced with MDX content later
-  const blogPosts = [
-    {
-      title: "Building Sustainable Token Economics",
-      excerpt: "Deep dive into designing token economies that align incentives and create long-term value.",
-      date: "Coming Soon",
-      tags: ["DeFi", "Tokenomics", "Game Theory"],
-      readTime: "10 min"
-    },
-    {
-      title: "Neo4j Knowledge Graphs for Web3",
-      excerpt: "How to leverage graph databases for on-chain data analysis and DeFi protocol insights.",
-      date: "Coming Soon",
-      tags: ["Neo4j", "Data", "Analytics"],
-      readTime: "8 min"
-    },
-    {
-      title: "MEV Protection Strategies",
-      excerpt: "Practical approaches to protect your protocol and users from MEV exploitation.",
-      date: "Coming Soon",
-      tags: ["MEV", "Security", "DeFi"],
-      readTime: "12 min"
-    }
-  ];
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { ZenList } from '@/components/zen/ZenList';
+import { allBlogs } from 'content-collections';
 
-  const categories = ["DeFi", "Token Economics", "Neo4j", "Smart Contracts", "Security"];
+/**
+ * Blog Zen View - Fullscreen list of blog posts
+ * Features j/k/Enter/Esc keyboard navigation
+ * Displays published blog posts from content-collections
+ *
+ * Route: /blog
+ */
+export default function BlogZenPage() {
+  const router = useRouter();
+
+  // Filter to published posts only, sorted by date (newest first)
+  const publishedBlogs = allBlogs
+    .filter((blog) => blog.status === 'published')
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  const handleSelect = (blog: typeof allBlogs[0]) => {
+    router.push(blog.url);
+  };
+
+  const handleExit = () => {
+    router.push('/');
+  };
 
   return (
-    <>
-      {/* Hero Section */}
-      <Section className="py-16 bg-bg-secondary">
-        <h1 className="text-4xl font-bold text-text-primary mb-4">
-          Blog
-        </h1>
-        <p className="text-lg text-text-secondary max-w-3xl">
-          Technical articles on DeFi protocol design, token economics, and knowledge graph applications.
-          Deep dives into blockchain architecture and practical implementation guides.
-        </p>
-      </Section>
-
-      {/* Categories */}
-      <Section>
-        <h2 className="text-2xl font-bold text-text-primary mb-6">Categories</h2>
-        <div className="flex flex-wrap gap-3 mb-12">
-          {categories.map((category) => (
-            <Badge key={category} variant="default">
-              {category}
-            </Badge>
-          ))}
-        </div>
-
-        {/* Blog Posts */}
-        <h2 className="text-2xl font-bold text-text-primary mb-8">Recent Posts</h2>
-        <div className="grid gap-6">
-          {blogPosts.map((post, index) => (
-            <Card key={index} className="hover:border-accent-primary transition-all">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-text-primary mb-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-text-secondary mb-4">
-                    {post.excerpt}
-                  </p>
-                  <div className="flex flex-wrap items-center gap-4 text-sm">
-                    <span className="text-text-muted">{post.date}</span>
-                    <span className="text-text-muted">•</span>
-                    <span className="text-text-muted">{post.readTime} read</span>
-                    <div className="flex gap-2">
-                      {post.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      {/* Coming Soon Notice */}
-      <Section className="bg-bg-secondary">
-        <Card className="text-center py-12">
-          <h3 className="text-2xl font-bold text-accent-primary mb-4">
-            Full Blog System Coming Soon
-          </h3>
-          <p className="text-text-secondary max-w-2xl mx-auto">
-            The blog is being built with MDX support for rich content, code syntax highlighting,
-            and embedded demos. Subscribe to get notified when new articles are published.
-          </p>
-          <div className="mt-8">
-            <button className="bg-accent-primary text-bg-primary px-4 py-2 rounded-lg font-medium hover:bg-accent-hover transition-all">
-              Get Notified
-            </button>
+    <ZenList
+      items={publishedBlogs}
+      onSelect={handleSelect}
+      onExit={handleExit}
+      title="~/blog"
+      subtitle="Technical articles and insights"
+      emptyMessage="No blog posts found. Check back soon!"
+      renderItem={(blog, _index, isSelected) => (
+        <div className="space-y-4">
+          {/* Header: Title and Date */}
+          <div className="flex items-start justify-between gap-4">
+            <h2
+              className="text-xl font-bold flex-1"
+              style={{
+                color: isSelected
+                  ? 'var(--accent-color)'
+                  : 'var(--theme-text)',
+                lineHeight: '1.4',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              {blog.title}
+            </h2>
+            <span
+              className="text-sm shrink-0"
+              style={{ color: 'var(--theme-text-dimmed)' }}
+            >
+              {formatDate(blog.date)}
+            </span>
           </div>
-        </Card>
-      </Section>
-    </>
+
+          {/* Summary */}
+          <p
+            className="text-base"
+            style={{
+              color: 'var(--theme-text-dimmed)',
+              lineHeight: '1.6',
+            }}
+          >
+            {blog.summary}
+          </p>
+
+          {/* Metadata: Tags, Reading Time, Series */}
+          <div className="flex items-center gap-4 text-xs flex-wrap">
+            {/* Tags */}
+            {blog.tags.length > 0 && (
+              <div className="flex items-center gap-2">
+                {blog.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2 py-0.5 border"
+                    style={{
+                      borderColor: 'var(--theme-border)',
+                      color: 'var(--theme-text-dimmed)',
+                    }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Reading time */}
+            <span style={{ color: 'var(--theme-text-dimmed)' }}>
+              {blog.readingTime}
+            </span>
+
+            {/* Series indicator */}
+            {blog.series && (
+              <span
+                className="px-2 py-0.5 border"
+                style={{
+                  borderColor: 'var(--accent-color)',
+                  color: 'var(--accent-color)',
+                }}
+              >
+                Series: {blog.series}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+    />
   );
+}
+
+/**
+ * Format date to readable string
+ */
+function formatDate(dateString: string): string {
+  try {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  } catch {
+    return dateString;
+  }
 }

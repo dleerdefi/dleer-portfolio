@@ -1,84 +1,87 @@
 import React from 'react';
 
-type AdmonitionType = 'tip' | 'warn' | 'note';
+export type AdmonitionType = 'note' | 'tip' | 'warn' | 'error' | 'info';
 
 interface AdmonitionProps {
   type?: AdmonitionType;
+  title?: string;
   children: React.ReactNode;
-  className?: string;
 }
 
-interface AdmonitionTheme {
-  ring: string;
-  bg: string;
-  text: string;
-  label: string;
-}
-
-const admonitionThemes: Record<AdmonitionType, AdmonitionTheme> = {
+const admonitionConfig: Record<AdmonitionType, {
+  icon: string;
+  borderColor: string;
+  bgColor: string;
+  textColor: string;
+  defaultTitle: string;
+}> = {
+  note: {
+    icon: '📝',
+    borderColor: 'var(--theme-info)',
+    bgColor: 'rgba(var(--theme-info-rgb), 0.1)',
+    textColor: 'var(--theme-info)',
+    defaultTitle: 'Note',
+  },
   tip: {
-    ring: 'rgba(34, 197, 94, 0.3)', // emerald-500
-    bg: 'rgba(34, 197, 94, 0.05)',
-    text: 'rgb(134, 239, 172)', // emerald-300
-    label: 'Tip',
+    icon: '💡',
+    borderColor: 'var(--theme-success)',
+    bgColor: 'rgba(var(--theme-success-rgb), 0.1)',
+    textColor: 'var(--theme-success)',
+    defaultTitle: 'Tip',
   },
   warn: {
-    ring: 'rgba(251, 191, 36, 0.3)', // amber-400
-    bg: 'rgba(251, 191, 36, 0.05)',
-    text: 'rgb(252, 211, 77)', // amber-300
-    label: 'Warning',
+    icon: '⚠️',
+    borderColor: 'var(--theme-warning)',
+    bgColor: 'rgba(var(--theme-warning-rgb), 0.1)',
+    textColor: 'var(--theme-warning)',
+    defaultTitle: 'Warning',
   },
-  note: {
-    ring: 'rgba(56, 189, 248, 0.3)', // sky-400
-    bg: 'rgba(56, 189, 248, 0.05)',
-    text: 'rgb(125, 211, 252)', // sky-300
-    label: 'Note',
+  error: {
+    icon: '❌',
+    borderColor: 'var(--theme-error)',
+    bgColor: 'rgba(var(--theme-error-rgb), 0.1)',
+    textColor: 'var(--theme-error)',
+    defaultTitle: 'Error',
+  },
+  info: {
+    icon: 'ℹ️',
+    borderColor: 'var(--accent-color)',
+    bgColor: 'rgba(var(--accent-color-rgb), 0.1)',
+    textColor: 'var(--accent-color)',
+    defaultTitle: 'Info',
   },
 };
 
-/**
- * Admonition component - callout boxes for tips, warnings, notes
- * Meets WCAG AA contrast requirements in all themes
- *
- * Usage:
- * <Admonition type="tip">
- *   This is a helpful tip!
- * </Admonition>
- *
- * LOC: ~65
- */
-export function Admonition({
-  type = 'note',
-  children,
-  className = '',
-}: AdmonitionProps) {
-  const theme = admonitionThemes[type];
+export function Admonition({ type = 'note', title, children }: AdmonitionProps) {
+  const config = admonitionConfig[type];
 
   return (
     <div
-      className={`rounded-xl p-3 my-4 ${className}`}
+      className="my-6 rounded border-l-4 p-5"
       style={{
-        border: `1px solid ${theme.ring}`,
-        backgroundColor: theme.bg,
-        boxShadow: `0 0 0 1px ${theme.ring}`,
+        borderLeftColor: config.borderColor,
+        backgroundColor: config.bgColor,
       }}
-      role="note"
-      aria-label={theme.label}
     >
-      {/* Label */}
-      <div
-        className="text-xs font-medium mb-1 font-mono"
-        style={{ color: theme.text }}
-      >
-        {theme.label}
-      </div>
-
-      {/* Content */}
-      <div className="text-sm" style={{ color: 'var(--theme-text)' }}>
-        {children}
+      <div className="flex items-start gap-3">
+        <span className="text-2xl flex-shrink-0 mt-0.5" role="img" aria-label={config.defaultTitle}>
+          {config.icon}
+        </span>
+        <div className="flex-1 min-w-0">
+          <div
+            className="font-bold mb-2 text-sm uppercase tracking-wide"
+            style={{ color: config.textColor }}
+          >
+            {title || config.defaultTitle}
+          </div>
+          <div
+            className="text-sm leading-relaxed"
+            style={{ color: 'var(--theme-text)' }}
+          >
+            {children}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
-export default Admonition;

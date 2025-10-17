@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useFocusState, useFocusNavigation, ContentType } from '@/contexts/FocusContext';
-import { useProjects, useBlogPosts, useUIStrings } from '@/lib/config';
-import { useView } from '@/contexts/ViewContext';
+import { useUIStrings } from '@/lib/config';
+import { allProjects, allBlogs } from 'content-collections';
 import { FONT_SIZES } from '@/lib/constants/typography';
 
 interface NavigationTileProps {
@@ -13,36 +14,41 @@ interface NavigationTileProps {
 
 const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlurred = false }) => {
   const [expandedDirs, setExpandedDirs] = useState<Set<string>>(new Set());
+  const router = useRouter();
   const { activeContent } = useFocusState();
   const { handleContentNavigation } = useFocusNavigation();
-  const { enterZen } = useView();
-  const projects = useProjects();
-  const blogs = useBlogPosts();
   const uiStrings = useUIStrings();
+
+  // Use content-collections instead of config
+  const projects = allProjects;
+  const blogs = allBlogs.filter(blog => blog.status === 'published');
 
   const handleSelect = (content: ContentType, e?: React.MouseEvent) => {
     // Prevent event from bubbling up to tile container
     e?.stopPropagation();
 
-    // Projects and blogs go DIRECTLY to zen mode (skip FocusContext update)
-    // They should NOT populate the right tile - zen mode only
-    if (content.type === 'project') {
-      enterZen('projects', content.data);
+    // Projects and blogs navigate to real Next.js routes (MDX pages) using slug
+    if (content.type === 'project' && content.data?.slug) {
+      // Navigate to individual project detail page using slug
+      router.push(`/projects/${content.data.slug}`);
       return;
     }
 
-    if (content.type === 'blog') {
-      enterZen('blog', content.data);
+    if (content.type === 'blog' && content.data?.slug) {
+      // Navigate to individual blog detail page using slug
+      router.push(`/blog/${content.data.slug}`);
       return;
     }
 
     if (content.type === 'projects-overview') {
-      enterZen('projects');
+      // Navigate to projects list page
+      router.push('/projects');
       return;
     }
 
     if (content.type === 'blog-overview') {
-      enterZen('blog');
+      // Navigate to blog list page
+      router.push('/blog');
       return;
     }
 
@@ -64,11 +70,23 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
     setExpandedDirs(newExpanded);
   };
 
-  // Group projects by category
+  // Group projects by status and tags for categorization
+  // Since MDX doesn't have category field, use tags to infer category
+  const categorizeProject = (p: typeof projects[0]) => {
+    const tags = p.tags.map(t => t.toLowerCase());
+    if (tags.some(t => ['infrastructure', 'systems', 'kafka', 'neo4j', 'ml', 'security'].includes(t))) {
+      return 'systems';
+    }
+    if (tags.some(t => ['product', 'growth', 'gamification', 'defi', 'yield'].includes(t))) {
+      return 'product';
+    }
+    return 'experimental';
+  };
+
   const projectsByCategory = {
-    systems: projects.filter(p => p.category === 'systems'),
-    product: projects.filter(p => p.category === 'product'),
-    experimental: projects.filter(p => p.category === 'experimental')
+    systems: projects.filter(p => categorizeProject(p) === 'systems'),
+    product: projects.filter(p => categorizeProject(p) === 'product'),
+    experimental: projects.filter(p => categorizeProject(p) === 'experimental')
   };
 
   const categoryNames = {
@@ -77,27 +95,22 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
     experimental: '🛠 Experimental & Home Lab'
   };
 
-  // Map configuration data to navigation format with clean names
+  // Map MDX project data to navigation format
   const projectItems = projects.map(p => ({
-    id: p.id,
-    name: p.name.replace(/\.(tsx?|jsx?|py|rs|go)$/i, ''), // Remove file extensions
-    displayName: p.name,
-    description: p.description,
-    category: p.category,
-    role: p.role,
-    sections: [
-      'Overview',
-      ...(p.features ? ['Features'] : []),
-      'Tech Stack'
-    ]
+    slug: p.slug,
+    title: p.title,
+    summary: p.summary,
+    status: p.status,
+    featured: p.featured,
+    tags: p.tags
   }));
 
   const blogItems = blogs.map(b => ({
-    id: b.id,
-    name: b.filename.replace(/\.md$/i, ''), // Remove .md extension
-    displayName: b.title,
+    slug: b.slug,
+    title: b.title,
     date: b.date,
-    sections: extractBlogSections(b.content || '')
+    summary: b.summary,
+    tags: b.tags
   }));
 
   // Extract sections from blog content
@@ -109,10 +122,10 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
   const isActive = (type: string, data?: any) => {
     if (activeContent.type === type) {
       if (data && activeContent.type === 'project') {
-        return (activeContent as any).data?.id === data.id;
+        return (activeContent as any).data?.slug === data.slug;
       }
       if (data && activeContent.type === 'blog') {
-        return (activeContent as any).data?.id === data.id;
+        return (activeContent as any).data?.slug === data.slug;
       }
       return true;
     }
@@ -201,10 +214,10 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                     {categoryNames.systems}
                   </div>
                   {projectsByCategory.systems.map((project, index) => {
-                    const projData = projectItems.find(p => p.id === project.id);
+                    const projData = projectItems.find(p => p.slug === project.slug);
                     return (
                       <div
-                        key={project.id}
+                        key={project.slug}
                         className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200 ml-2"
                         style={{
                           backgroundColor: isActive('project', projData) ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
@@ -226,7 +239,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                           <span style={{ color: 'var(--accent-color)' }}>
                             {index === projectsByCategory.systems.length - 1 && projectsByCategory.product.length === 0 && projectsByCategory.experimental.length === 0 ? '└──' : '├──'}
                           </span>{' '}
-                          {project.name}
+                          {project.title}
                         </span>
                       </div>
                     );
@@ -241,10 +254,10 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                     {categoryNames.product}
                   </div>
                   {projectsByCategory.product.map((project, index) => {
-                    const projData = projectItems.find(p => p.id === project.id);
+                    const projData = projectItems.find(p => p.slug === project.slug);
                     return (
                       <div
-                        key={project.id}
+                        key={project.slug}
                         className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200 ml-2"
                         style={{
                           backgroundColor: isActive('project', projData) ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
@@ -266,7 +279,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                           <span style={{ color: 'var(--accent-color)' }}>
                             {index === projectsByCategory.product.length - 1 && projectsByCategory.experimental.length === 0 ? '└──' : '├──'}
                           </span>{' '}
-                          {project.name}
+                          {project.title}
                         </span>
                       </div>
                     );
@@ -281,10 +294,10 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                     {categoryNames.experimental}
                   </div>
                   {projectsByCategory.experimental.map((project, index) => {
-                    const projData = projectItems.find(p => p.id === project.id);
+                    const projData = projectItems.find(p => p.slug === project.slug);
                     return (
                       <div
-                        key={project.id}
+                        key={project.slug}
                         className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200 ml-2"
                         style={{
                           backgroundColor: isActive('project', projData) ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
@@ -306,7 +319,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                           <span style={{ color: 'var(--accent-color)' }}>
                             {index === projectsByCategory.experimental.length - 1 ? '└──' : '├──'}
                           </span>{' '}
-                          {project.name}
+                          {project.title}
                         </span>
                       </div>
                     );
@@ -357,7 +370,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
             <div className="ml-4">
               {blogItems.map((blog, index) => (
                 <div
-                  key={blog.id}
+                  key={blog.slug}
                   className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200"
                   style={{
                     backgroundColor: isActive('blog', blog) ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
@@ -379,7 +392,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                     <span className="text-[#9ece6a]">
                       <span style={{ color: 'var(--accent-color)' }}>{index === blogItems.length - 1 ? '└──' : '├──'}</span>
                     </span>{' '}
-                    {blog.displayName}
+                    {blog.title}
                   </span>
                 </div>
               ))}

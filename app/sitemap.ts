@@ -19,13 +19,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${siteUrl}/blog-zen`,
+      url: `${siteUrl}/blog`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
-      url: `${siteUrl}/projects-zen`,
+      url: `${siteUrl}/projects`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,

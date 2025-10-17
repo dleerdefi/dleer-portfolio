@@ -3,54 +3,35 @@ import React from 'react';
 interface TerminalProps {
   cmd?: string;
   children: React.ReactNode;
-  className?: string;
 }
 
-/**
- * Terminal component - terminal output styling with command prompt
- * Uses terminal theme color system from 04-terminal-theme.css
- *
- * Usage:
- * <Terminal cmd="npm run build">
- *   Build output here
- * </Terminal>
- *
- * LOC: ~55
- */
-export function Terminal({ cmd, children, className = '' }: TerminalProps) {
+export function Terminal({ cmd, children }: TerminalProps) {
   return (
-    <div
-      className={`rounded-xl overflow-hidden my-6 font-mono ${className}`}
-      style={{
-        border: '1px solid rgba(var(--accent-color-rgb), 0.2)',
-        backgroundColor: 'rgba(11, 13, 16, 0.8)', // Dark terminal background
-      }}
-    >
-      {/* Command prompt header */}
+    <div className="my-6 rounded-lg overflow-hidden border-2" style={{ borderColor: 'var(--theme-border)' }}>
       {cmd && (
         <div
-          className="px-3 py-2 text-xs border-b"
+          className="px-4 py-2 font-mono text-sm flex items-center gap-2 border-b-2"
           style={{
-            borderColor: 'rgba(var(--accent-color-rgb), 0.2)',
-            color: 'var(--theme-text-dimmed)'
+            backgroundColor: 'var(--theme-surface)',
+            borderBottomColor: 'var(--theme-border)',
+            color: 'var(--theme-text-dimmed)',
           }}
         >
-          <span style={{ color: 'var(--theme-success)' }}>$</span> {cmd}
+          <span style={{ color: 'var(--accent-color)' }}>$</span>
+          <span>{cmd}</span>
         </div>
       )}
-
-      {/* Terminal output */}
-      <pre
-        className="p-3 text-xs leading-relaxed whitespace-pre-wrap overflow-x-auto"
+      <div
+        className="px-4 py-3 font-mono text-sm overflow-x-auto"
         style={{
+          backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
           color: 'var(--theme-text)',
-          margin: 0
         }}
       >
-        {children}
-      </pre>
+        <pre className="m-0">
+          <code>{children}</code>
+        </pre>
+      </div>
     </div>
   );
 }
-
-export default Terminal;

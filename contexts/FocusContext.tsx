@@ -44,6 +44,7 @@ interface FocusContextValue {
 
   // Navigation helpers
   handleTabNavigation: (reverse?: boolean) => void;
+  handleDirectionalNavigation: (direction: 'up' | 'down' | 'left' | 'right') => void;
   handleContentNavigation: (content: ContentType) => void;
   handlePolybarNavigation: (section: string) => void;
 
@@ -167,7 +168,7 @@ export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }, trigger);
   }, [updateFocusState]);
 
-  // Tab navigation handler
+  // Tab navigation handler (linear cycle through all tiles)
   const handleTabNavigation = useCallback((reverse = false) => {
     const tiles: TileType[] = ['neofetch', 'navigation', 'content', 'themePreset', 'accentColor', 'background'];
     const currentIndex = tiles.indexOf(focusState.tile);
@@ -176,6 +177,60 @@ export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const nextTile = tiles[nextIndex];
 
     setFocusedTile(nextTile, 'tab');
+  }, [focusState.tile, setFocusedTile]);
+
+  // Directional (hjkl) navigation handler - vim-style 2D navigation
+  const handleDirectionalNavigation = useCallback((direction: 'up' | 'down' | 'left' | 'right') => {
+    // Define tile layout in 2D columns
+    const leftColumn: TileType[] = ['neofetch', 'navigation', 'themePreset', 'accentColor', 'background'];
+    const rightColumn: TileType[] = ['content'];
+
+    const currentTile = focusState.tile;
+    let nextTile: TileType;
+
+    // Determine which column we're in
+    const inLeftColumn = leftColumn.includes(currentTile);
+    const inRightColumn = rightColumn.includes(currentTile);
+
+    // Vertical navigation (j/k - up/down within column)
+    if (direction === 'up' || direction === 'down') {
+      if (inLeftColumn) {
+        // Navigate within left column
+        const currentIndex = leftColumn.indexOf(currentTile);
+        const delta = direction === 'down' ? 1 : -1;
+        const nextIndex = (currentIndex + delta + leftColumn.length) % leftColumn.length;
+        nextTile = leftColumn[nextIndex];
+      } else if (inRightColumn) {
+        // Content tile is alone in right column, stay on content
+        nextTile = 'content';
+      } else {
+        // Fallback to neofetch if somehow in unknown state
+        nextTile = 'neofetch';
+      }
+    }
+    // Horizontal navigation (h/l - left/right between columns)
+    else if (direction === 'left') {
+      // h key: move to left column
+      if (inRightColumn) {
+        // From content, jump to neofetch (top of left column)
+        nextTile = 'neofetch';
+      } else {
+        // Already on left, stay put
+        nextTile = currentTile;
+      }
+    }
+    else if (direction === 'right') {
+      // l key: move to right column
+      if (inLeftColumn) {
+        // From any left tile, jump to content
+        nextTile = 'content';
+      } else {
+        // Already on content, stay put
+        nextTile = 'content';
+      }
+    }
+
+    setFocusedTile(nextTile, 'navigation');
   }, [focusState.tile, setFocusedTile]);
 
   // Content navigation handler
@@ -268,6 +323,7 @@ export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setActiveContent,
     setFocus,
     handleTabNavigation,
+    handleDirectionalNavigation,
     handleContentNavigation,
     handlePolybarNavigation,
     requestScroll,
@@ -306,12 +362,14 @@ export const useFocusState = () => {
 export const useFocusNavigation = () => {
   const {
     handleTabNavigation,
+    handleDirectionalNavigation,
     handleContentNavigation,
     handlePolybarNavigation
   } = useFocus();
 
   return {
     handleTabNavigation,
+    handleDirectionalNavigation,
     handleContentNavigation,
     handlePolybarNavigation
   };
