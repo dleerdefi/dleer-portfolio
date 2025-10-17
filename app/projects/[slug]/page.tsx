@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
+import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
 import { Admonition, Terminal, Window, Key, Figure } from '@/components/mdx';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
@@ -81,22 +82,17 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   return (
     <>
       <EscKeyHandler returnPath="/projects" />
-      <div
-      className="min-h-screen font-mono"
-      style={{
-        backgroundColor: 'var(--theme-bg)',
-        color: 'var(--theme-text)',
-      }}
-    >
-      {/* Header with back button */}
-      <div
-        className="border-b-2 py-4 px-6"
-        style={{
-          borderColor: 'var(--theme-border)',
-          backgroundColor: 'var(--theme-surface)',
-        }}
-      >
-        <div className="max-w-5xl flex items-center justify-between" style={{ margin: '0 auto' }}>
+      <FramedPageLayout>
+        {/* Header with back button */}
+        <div
+          className="border-b-2 py-4 px-4 sm:px-6 font-mono"
+          style={{
+            borderColor: 'var(--theme-border)',
+            backgroundColor: 'var(--theme-surface)',
+            color: 'var(--theme-text)',
+          }}
+        >
+        <div className="max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl flex items-center justify-between" style={{ margin: '0 auto' }}>
           <Link
             href="/projects"
             className="flex items-center gap-2 px-3 py-1 border-2 hover:bg-opacity-10 transition-colors"
@@ -122,8 +118,8 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
       </div>
 
       {/* Project content */}
-      <article className="py-12 px-6">
-        <div className="max-w-5xl" style={{ margin: '0 auto' }}>
+      <article className="py-8 sm:py-12 px-4 sm:px-6 md:px-8">
+        <div className="max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl" style={{ margin: '0 auto' }}>
           {/* Title and metadata */}
           <header className="mb-8 pb-8 border-b-2" style={{ borderColor: 'var(--theme-border)' }}>
             <div className="flex items-start justify-between gap-4 mb-4">
@@ -303,7 +299,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           </footer>
         </div>
       </article>
-      </div>
+      </FramedPageLayout>
     </>
   );
 }

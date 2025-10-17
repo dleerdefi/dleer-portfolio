@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { getPortfolioConfig } from "@/config/portfolio.config";
 import { SubtleBlobBackground } from "@/components/SubtleBlobBackground";
+import { Providers } from "@/components/providers/Providers";
 
 // Get configuration at build time
 const config = getPortfolioConfig();
@@ -40,9 +41,11 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-mono antialiased bg-term-bg text-term-text min-h-screen">
         <SubtleBlobBackground />
-        <main className="relative">
-          {children}
-        </main>
+        <Providers>
+          <main className="relative">
+            {children}
+          </main>
+        </Providers>
       </body>
     </html>
   );

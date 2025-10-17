@@ -74,7 +74,7 @@ export const ParallaxBioSection: React.FC<ParallaxBioSectionProps> = ({
           )}
 
           {/* Leadership */}
-          {leadership && experience && ( // Only show if we have experience (to avoid duplication with fallback)
+          {leadership && (
             <p
               className="text-sm sm:text-base leading-relaxed"
               style={{

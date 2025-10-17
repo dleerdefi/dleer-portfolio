@@ -84,7 +84,7 @@ Real-world impact from production deployments.
 - **Cost efficiency**: $0.50 per audit vs $1000s for manual penetration testing
 - **Coverage**: 25+ attack categories tested automatically
 - **Speed**: Full audit completed in under 10 minutes
-- **Accuracy**: 94% true positive rate, <2% false positives
+- **Accuracy**: 94% true positive rate, {'<'}2% false positives
 
 ## Tech Stack
 
@@ -117,8 +117,8 @@ Report saved to: security-audit-2025-10-16.pdf
 
 ### Configuration Example
 
+<Window title="config.yaml">
 ```yaml
-# config.yaml
 target:
   url: https://your-api.com/chat
   auth: bearer YOUR_TOKEN
@@ -132,6 +132,7 @@ reporting:
   include_remediation: true
   compliance: [owasp, gdpr]
 ```
+</Window>
 
 ## Real-World Impact
 
@@ -151,7 +152,7 @@ Manual Penetration Testing:
 
 LLM Security Auditor:
   Cost: $0.50 per full audit
-  Time: <10 minutes
+  Time: {'<'}10 minutes
   Coverage: 25+ standardized attack categories
   Continuous: Run on every deployment
 </Terminal>

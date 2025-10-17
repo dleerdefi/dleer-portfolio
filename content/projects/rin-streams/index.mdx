@@ -81,8 +81,8 @@ This project pushes the boundaries of interactive entertainment by combining aut
 
 ## Sentiment Analysis Flow
 
+<Window title="sentiment/processBatch.py">
 ```python
-# Every 30 seconds
 def process_sentiment_batch(messages: List[ChatMessage]):
     # 1. Filter valid messages
     valid = filter_spam(messages)
@@ -100,12 +100,13 @@ def process_sentiment_batch(messages: List[ChatMessage]):
     rin_score = sum(w for w in weighted if positive(w))
     biscuit_score = sum(w for w in weighted if negative(w))
 
-    # 5. Generate trades
+    # 5. Generate trades (runs every 30 seconds)
     if rin_score > threshold:
         execute_trade(rin, "buy", calculate_size(rin_score))
     if biscuit_score > threshold:
         execute_trade(biscuit, "sell", calculate_size(biscuit_score))
 ```
+</Window>
 
 ## Performance Metrics
 
@@ -125,7 +126,7 @@ This is experimental software with real financial risk. Always use testnet first
 - **Maximum position size**: 0.1 ETH per trade
 - **Daily loss limit**: 1 ETH per VTuber
 - **Slippage protection**: Max 2% slippage
-- **Gas price caps**: Reject if gas >100 gwei
+- **Gas price caps**: Reject if gas {'>'}100 gwei
 - **Emergency pause**: Stream host can halt trading
 
 ### Scoring System

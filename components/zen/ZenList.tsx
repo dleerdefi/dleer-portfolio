@@ -52,7 +52,7 @@ interface ZenListProps<T> {
  *   renderItem={(blog, i, selected) => (
  *     <BlogCard blog={blog} isSelected={selected} />
  *   )}
- *   title="~/blog"
+ *   title="Blog
  * />
  */
 export function ZenList<T>({
@@ -89,8 +89,8 @@ export function ZenList<T>({
       tabIndex={0}
     >
       {/* Header - zen flat style, no background/border */}
-      <div className="py-4 px-6">
-        <div className="max-w-5xl" style={{ margin: '0 auto' }}>
+      <div className="py-4 px-4 sm:px-6">
+        <div className="max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl" style={{ margin: '0 auto' }}>
           <div className="flex items-center justify-between">
             <div>
               <h1
@@ -128,8 +128,8 @@ export function ZenList<T>({
       </div>
 
       {/* List Content */}
-      <div className="py-12 px-6">
-        <div className="max-w-5xl" style={{ margin: '0 auto' }}>
+      <div className="py-8 sm:py-12 px-4 sm:px-6">
+        <div className="max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl" style={{ margin: '0 auto' }}>
           {items.length === 0 ? (
             <div
               className="text-center py-12"

@@ -127,6 +127,7 @@ Results from ConsumerFi play-to-airdrop seasons 1-3.
 
 ### Detection Mechanisms
 
+<Window title="sybil-detection/calculateRisk.ts">
 ```typescript
 interface SybilScore {
   walletClustering: number;    // 0-100 (higher = more suspicious)
@@ -154,6 +155,7 @@ function calculateSybilRisk(user: User): number {
 // Manual review for 50-70
 // Auto-approve < 50
 ```
+</Window>
 
 ### Graph Analysis
 
@@ -167,8 +169,8 @@ function calculateSybilRisk(user: User): number {
 
 ### Merkle Tree Claims
 
+<Window title="contracts/RewardDistributor.sol">
 ```solidity
-// RewardDistributor.sol
 contract RewardDistributor {
     bytes32 public merkleRoot;
     mapping(address => bool) public claimed;
@@ -188,6 +190,7 @@ contract RewardDistributor {
     }
 }
 ```
+</Window>
 
 ### Vesting Schedules
 
@@ -235,8 +238,8 @@ Claim Rewards → Vest Tokens → Stay Active → Repeat Next Season
 
 ### Quest Verification
 
+<Window title="quest-system/verifyQuest.ts">
 ```typescript
-// Quest verification system
 async function verifyQuest(
   userId: string,
   questId: string
@@ -261,9 +264,11 @@ async function verifyQuest(
   }
 }
 ```
+</Window>
 
 ### Real-Time Leaderboard
 
+<Window title="leaderboard/redisLeaderboard.ts">
 ```typescript
 // Redis-powered leaderboard
 async function updateLeaderboard(
@@ -294,6 +299,7 @@ async function getTopN(n: number): Promise<LeaderboardEntry[]> {
   return parseLeaderboardResults(results);
 }
 ```
+</Window>
 
 ## Business Impact
 

@@ -121,8 +121,8 @@ Production usage for token launches worth $500M+ combined.
 
 ## Configuration Example
 
+<Window title="simulation_config.py">
 ```python
-# simulation_config.py
 from token_simulator import TokenEconomy, AgentConfig
 
 # Token parameters
@@ -169,14 +169,15 @@ results = simulate_token_launch(
     monte_carlo_runs=1000
 )
 ```
+</Window>
 
 ## Key Insights from Simulations
 
 ### Liquidity Depth Matters
-- **<$100K liquidity**: 50%+ price swings daily
+- **{'<'}$100K liquidity**: 50%+ price swings daily
 - **$100K-$500K**: 20-30% volatility
 - **$500K-$1M**: 10-15% volatility
-- **>$1M**: <10% volatility under normal conditions
+- **{'>'}$1M**: {'<'}10% volatility under normal conditions
 
 ### Vesting Impact
 - **No vesting**: 80% likelihood of catastrophic dump
@@ -232,7 +233,7 @@ results = simulate_token_launch(
 ### DeFi Protocol Launch ($100M FDV)
 - **Challenge**: Optimize launch liquidity
 - **Solution**: Simulated 5000 scenarios
-- **Result**: $50M successful launch, <20% volatility
+- **Result**: $50M successful launch, {'<'}20% volatility
 
 ### Gaming Token ($50M Raise)
 - **Challenge**: Prevent post-TGE dump
