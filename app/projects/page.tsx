@@ -4,6 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { ZenList } from '@/components/zen/ZenList';
 import { allProjects } from 'content-collections';
+import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
 
 /**
  * Projects Zen View - Fullscreen list of projects
@@ -34,14 +35,15 @@ export default function ProjectsZenPage() {
   };
 
   return (
-    <ZenList
-      items={sortedProjects}
-      onSelect={handleSelect}
-      onExit={handleExit}
-      title="~/projects"
-      subtitle="Portfolio of technical work and experiments"
-      emptyMessage="No projects found."
-      renderItem={(project, _index, isSelected) => (
+    <FramedPageLayout>
+      <ZenList
+        items={sortedProjects}
+        onSelect={handleSelect}
+        onExit={handleExit}
+        title="Projects"
+        subtitle="Portfolio of technical work and experiments"
+        emptyMessage="No projects found."
+        renderItem={(project, _index, isSelected) => (
         <div className="space-y-4">
           {/* Header: Title and Status Badge */}
           <div className="flex items-start justify-between gap-4">
@@ -164,7 +166,8 @@ export default function ProjectsZenPage() {
           </div>
         </div>
       )}
-    />
+      />
+    </FramedPageLayout>
   );
 }
 

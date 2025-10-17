@@ -4,6 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { ZenList } from '@/components/zen/ZenList';
 import { allBlogs } from 'content-collections';
+import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
 
 /**
  * Blog Zen View - Fullscreen list of blog posts
@@ -29,14 +30,15 @@ export default function BlogZenPage() {
   };
 
   return (
-    <ZenList
-      items={publishedBlogs}
-      onSelect={handleSelect}
-      onExit={handleExit}
-      title="~/blog"
-      subtitle="Technical articles and insights"
-      emptyMessage="No blog posts found. Check back soon!"
-      renderItem={(blog, _index, isSelected) => (
+    <FramedPageLayout>
+      <ZenList
+        items={publishedBlogs}
+        onSelect={handleSelect}
+        onExit={handleExit}
+        title="Blog"
+        subtitle="Technical articles and insights"
+        emptyMessage="No blog posts found. Check back soon!"
+        renderItem={(blog, _index, isSelected) => (
         <div className="space-y-4">
           {/* Header: Title and Date */}
           <div className="flex items-start justify-between gap-4">
@@ -111,7 +113,8 @@ export default function BlogZenPage() {
           </div>
         </div>
       )}
-    />
+      />
+    </FramedPageLayout>
   );
 }
 

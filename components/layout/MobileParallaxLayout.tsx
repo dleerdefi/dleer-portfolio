@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useRef, useState, useCallback } from 'react';
-import { usePersonalInfo, useProjects, useBlogPosts, useSocialLinks } from '@/lib/config';
+import { usePersonalInfo, useSocialLinks } from '@/lib/config';
+import { allProjects, allBlogs } from 'content-collections';
 import Background from '@/components/layout/Background';
 import ScrollProgress from '@/components/ui/ScrollProgress';
 
@@ -31,13 +32,11 @@ import { ParallaxContactSection } from './parallax/sections/ParallaxContactSecti
  */
 const MobileParallaxLayout: React.FC = () => {
   const personal = usePersonalInfo();
-  const projects = useProjects();
-  const blogPosts = useBlogPosts();
+  const projects = allProjects;
+  const blogPosts = allBlogs.filter(blog => blog.status === 'published');
   const socialLinks = useSocialLinks();
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [selectedProject, setSelectedProject] = useState<string | null>(null);
-  const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null!);
 
   // Border padding for glass elevator effect (constant 16px for mobile-only parallax)
@@ -69,17 +68,9 @@ const MobileParallaxLayout: React.FC = () => {
     navigateToNextSection: baseNavigateToNextSection
   } = useSectionNavigation(scrollRef, sections);
 
-  // Wrap navigation functions to handle local state updates
+  // Wrap navigation functions
   const navigateToSection = useCallback((sectionId: string) => {
-    // Reset selections when navigating away from their sections
-    if (sectionId !== 'projects') setSelectedProject(null);
-    if (sectionId !== 'blog') setSelectedBlog(null);
-
-    // Call the base navigation function
-    baseNavigateToSection(sectionId, {
-      onProjectsLeave: () => setSelectedProject(null),
-      onBlogLeave: () => setSelectedBlog(null)
-    });
+    baseNavigateToSection(sectionId);
   }, [baseNavigateToSection]);
 
   const navigateToNextSection = useCallback((reverse = false) => {
@@ -110,18 +101,26 @@ const MobileParallaxLayout: React.FC = () => {
       case 'projects':
         return (
           <ParallaxProjectsSection
-            projects={projects}
-            selectedProject={selectedProject}
-            setSelectedProject={setSelectedProject}
+            projects={projects.map(p => ({
+              id: p.slug,
+              slug: p.slug,
+              name: p.title,
+              description: p.summary
+            }))}
           />
         );
 
       case 'blog':
         return (
           <ParallaxBlogSection
-            blogPosts={blogPosts}
-            selectedBlog={selectedBlog}
-            setSelectedBlog={setSelectedBlog}
+            blogPosts={blogPosts.map(b => ({
+              id: b.slug,
+              slug: b.slug,
+              title: b.title,
+              date: b.date,
+              excerpt: b.summary,
+              category: b.tags[0]
+            }))}
           />
         );
 

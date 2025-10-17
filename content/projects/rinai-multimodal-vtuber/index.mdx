@@ -21,7 +21,7 @@ This project demonstrates the convergence of AI, streaming technology, and deskt
 ## Key Features
 
 ### Real-Time STT/TTS Processing
-- **Groq Whisper** for ultra-fast speech-to-text (<200ms latency)
+- **Groq Whisper** for ultra-fast speech-to-text ({'<'}200ms latency)
 - **ElevenLabs** for high-quality text-to-speech with emotion
 - Voice activity detection (VAD) for natural conversation flow
 - Background noise suppression
@@ -93,7 +93,7 @@ Production metrics from 24/7 autonomous streaming operations.
 - **12+ GitHub stars** from the VTuber dev community
 - **Autonomous streaming capable** with 8+ hour sessions
 - **98% Python codebase** with TypeScript for web interfaces
-- **<200ms** speech processing latency
+- **{'<'}200ms** speech processing latency
 - **99.2% uptime** over 3 months
 
 ## Tech Stack
@@ -134,8 +134,8 @@ $ python main.py
 
 ### Configuration
 
+<Window title="config.yaml">
 ```yaml
-# config.yaml
 speech:
   stt: groq_whisper  # or openai_whisper
   tts: elevenlabs    # or google, azure
@@ -163,6 +163,7 @@ memory:
   provider: mongodb
   consolidation_schedule: "0 4 * * *"  # 4 AM daily
 ```
+</Window>
 
 ## Autonomous Streaming Workflow
 
@@ -191,6 +192,7 @@ memory:
 
 ## Tool Extension Example
 
+<Window title="tools/custom_tool.py">
 ```python
 from rinai.tools import Tool, tool_registry
 
@@ -207,6 +209,7 @@ class CustomTool(Tool):
             "data": result
         }
 ```
+</Window>
 
 ## Use Cases
 
@@ -239,7 +242,7 @@ Built with RinAI:
 ## Challenges & Solutions
 
 **Challenge**: Speech latency breaking immersion
-**Solution**: Groq Whisper reduces STT to <200ms, pre-generating common responses
+**Solution**: Groq Whisper reduces STT to {'<'}200ms, pre-generating common responses
 
 **Challenge**: Avatar movements feeling robotic
 **Solution**: Sentiment-based expression mapping with randomized micro-movements

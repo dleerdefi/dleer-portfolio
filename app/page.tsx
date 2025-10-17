@@ -1,16 +1,15 @@
 import LayoutManager from '@/components/layout/LayoutManager';
 import { FocusProvider } from '@/contexts/FocusContext';
-import { ThemeProvider } from '@/contexts/ThemeContext';
 import { ViewProvider } from '@/contexts/ViewContext';
 
 export default function Home() {
+  // ThemeProvider comes from root layout (app/layout.tsx)
+  // Only need Focus/View providers for homepage layout management
   return (
-    <ThemeProvider>
-      <FocusProvider>
-        <ViewProvider>
-          <LayoutManager />
-        </ViewProvider>
-      </FocusProvider>
-    </ThemeProvider>
+    <FocusProvider>
+      <ViewProvider>
+        <LayoutManager />
+      </ViewProvider>
+    </FocusProvider>
   );
 }

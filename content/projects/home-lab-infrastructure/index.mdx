@@ -203,6 +203,7 @@ Monitoring data from 6 months of continuous operation.
 
 ### Ansible Playbook: Deploy New VM
 
+<Window title="ansible/deploy-vm.yml">
 ```yaml
 ---
 - name: Deploy and configure new VM
@@ -241,12 +242,14 @@ Monitoring data from 6 months of continuous operation.
     - name: Run initial setup
       include_tasks: vm_setup.yml
 ```
+</Window>
 
 ### Automatic Updates & Rollback
 
+<Window title="scripts/auto-update-with-rollback.sh">
 ```bash
 #!/bin/bash
-# auto-update-with-rollback.sh
+# Auto-update with rollback support
 
 # Pre-update snapshot
 qm snapshot $VMID pre-update-$(date +%Y%m%d)
@@ -265,6 +268,7 @@ else
   qm start $VMID
 fi
 ```
+</Window>
 
 ## Use Cases
 

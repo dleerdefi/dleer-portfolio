@@ -8,6 +8,7 @@ import { ReadingProgress } from '@/components/blog/ReadingProgress';
 import { CodeCopyButton } from '@/components/blog/CodeCopyButton';
 import { ScrollReveal } from '@/components/blog/ScrollReveal';
 import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
+import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
 import { Admonition, Terminal, Window, Key, Figure } from '@/components/mdx';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
@@ -91,22 +92,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <ScrollReveal />
       <EscKeyHandler returnPath="/blog" />
 
-      <div
-        className="min-h-screen"
-        style={{
-          backgroundColor: 'var(--theme-bg)',
-          color: 'var(--theme-text)',
-        }}
-      >
+      <FramedPageLayout>
         {/* Header with back button */}
-      <div
-        className="border-b-2 py-4 px-6"
-        style={{
-          borderColor: 'var(--theme-border)',
-          backgroundColor: 'var(--theme-surface)',
-        }}
-      >
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
+        <div
+          className="border-b-2 py-4 px-4 sm:px-6"
+          style={{
+            borderColor: 'var(--theme-border)',
+            backgroundColor: 'var(--theme-surface)',
+            color: 'var(--theme-text)',
+          }}
+        >
+        <div className="max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto flex items-center justify-between">
           <Link
             href="/blog"
             className="flex items-center gap-2 px-3 py-1 border-2 hover:bg-opacity-10 transition-colors"
@@ -128,9 +124,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </div>
 
       {/* Article content */}
-      <article className="py-12 px-6">
+      <article className="py-8 sm:py-12 px-4 sm:px-6 md:px-8">
         <div
-          className="max-w-5xl"
+          className="max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl"
           style={{ margin: '0 auto' }}
         >
           {/* Title and metadata */}
@@ -245,7 +241,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </footer>
         </div>
       </article>
-      </div>
+      </FramedPageLayout>
     </>
   );
 }

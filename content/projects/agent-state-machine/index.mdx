@@ -73,6 +73,7 @@ This framework provides a clean, extensible architecture for building stateful A
 
 ## State Machine Example
 
+<Window title="state_machine_example.py">
 ```python
 from agent_state_machine import StateMachine, State, Transition
 
@@ -90,9 +91,11 @@ fsm = StateMachine([
     Transition(responding, idle, trigger="response_sent"),
 ])
 ```
+</Window>
 
 ## Tool Integration Example
 
+<Window title="tools/weather_tool.py">
 ```python
 from agent_state_machine.tools import ToolRegistry
 
@@ -108,6 +111,7 @@ async def get_weather(location: str) -> dict:
 
 # Agent automatically discovers and can use this tool
 ```
+</Window>
 
 ## Performance Metrics
 
@@ -115,7 +119,7 @@ async def get_weather(location: str) -> dict:
 - **Hierarchical state management** for complex flows
 - **MIT licensed** framework for community use
 - **Production-ready** with comprehensive error handling
-- **<50ms** state transition latency
+- **{'<'}50ms** state transition latency
 
 ## Getting Started
 

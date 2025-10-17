@@ -93,12 +93,16 @@ Production-grade stack designed for 24/7 autonomous operation.
 Requires Neo4j 5.x, MongoDB 7.x, and Node.js 18+.
 </Admonition>
 
-<Terminal cmd="git clone && npm install">
-$ git clone https://github.com/dleerdefi/peak-ai-agent-stack
-$ cd peak-ai-agent-stack
-$ cp .env.example .env
-$ docker-compose up -d
+<Window title="Installation - RinAI Setup">
+```bash
+git clone https://github.com/dleerdefi/peak-ai-agent-stack
+cd peak-ai-agent-stack
+cp .env.example .env
+docker-compose up -d
+```
+</Window>
 
+<Terminal cmd="docker-compose status">
 ✓ Neo4j running on localhost:7687
 ✓ MongoDB running on localhost:27017
 ✓ Agent server running on localhost:3000

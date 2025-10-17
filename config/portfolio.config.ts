@@ -34,7 +34,7 @@ export const portfolioConfig: PortfolioConfig = {
       }
     },
     bio: {
-      // Structured bio for parallax sections
+      // Structured bio for parallax sections (minimal version)
       intro: process.env.NEXT_PUBLIC_BIO_INTRO ||
         "Founder–engineer building AI memory with knowledge graphs.",
 
