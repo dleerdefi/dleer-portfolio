@@ -11,18 +11,7 @@ import Background from '@/components/layout/Background';
 const fxExpand = {
   initial: { scale: 0.98, opacity: 0.96 },
   animate: { scale: 1, opacity: 1 },
-  transition: { type: 'spring', stiffness: 420, damping: 32, mass: 0.7 }
-};
-
-const fxChromeOff = {
-  animate: { opacity: 0, y: -6 },
-  transition: { duration: 0.16, ease: [0.25, 0.46, 0.45, 0.94] }
-};
-
-const fxChromeOn = {
-  initial: { opacity: 0, y: -6 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.16, ease: [0.25, 0.46, 0.45, 0.94] }
+  transition: { type: 'spring', stiffness: 420, damping: 32, mass: 0.7 } as const
 };
 
 interface FocusedViewProps {
@@ -120,7 +109,7 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
   // Animation config - respect prefers-reduced-motion (spec §9)
   const fadeTransition = prefersReducedMotion
     ? { duration: 0 }
-    : { duration: 0.18, ease: [0.32, 0.72, 0, 1] };
+    : { duration: 0.18, ease: [0.32, 0.72, 0, 1] as const };
 
   const expandTransition = prefersReducedMotion
     ? { duration: 0 }

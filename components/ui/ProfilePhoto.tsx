@@ -21,6 +21,9 @@ interface ProfilePhotoProps {
     src: string;
     exif?: {
       location?: string;
+      aperture?: string;
+      shutter?: string;
+      iso?: string;
       model?: string;
       task?: string;
     };

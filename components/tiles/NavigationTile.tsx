@@ -113,12 +113,6 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
     tags: b.tags
   }));
 
-  // Extract sections from blog content
-  function extractBlogSections(content: string): string[] {
-    const sections = content.match(/^##\s+(.+)$/gm) || [];
-    return sections.map(s => s.replace(/^##\s+/, ''));
-  }
-
   const isActive = (type: string, data?: any) => {
     if (activeContent.type === type) {
       if (data && activeContent.type === 'project') {

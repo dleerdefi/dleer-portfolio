@@ -186,7 +186,7 @@ export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const rightColumn: TileType[] = ['content'];
 
     const currentTile = focusState.tile;
-    let nextTile: TileType;
+    let nextTile: TileType = currentTile; // Initialize with current to prevent undefined
 
     // Determine which column we're in
     const inLeftColumn = leftColumn.includes(currentTile);

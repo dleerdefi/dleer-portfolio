@@ -13,54 +13,15 @@ featured: false
 
 ## Overview
 
-High-performance data pipeline that processes on-chain and social data to generate user scores. Built with microservices architecture for scalability and real-time processing capabilities.
+High-performance data pipeline processing **2M+ transactions daily** across multiple chains to generate user scores for DeFi protocols. Built with microservices architecture featuring Apache Kafka for event streaming, Neo4j for graph relationships, and ML-powered scoring with **Sub-100ms latency**.
 
-This proprietary system powered user acquisition and risk assessment for ConsumerFi protocol, processing millions of transactions daily to generate actionable user insights.
-
-## Key Features
-
-### Real-Time Data Ingestion
-- Multi-source data collection (blockchain, social, off-chain)
-- Apache Kafka for event streaming
-- Schema validation and transformation
-- Automatic retry and dead letter queues
-- Backpressure handling for throughput control
-
-### Graph-Based Relationship Modeling
-- Neo4j for entity relationship storage
-- Social graph analysis (followers, engagement)
-- Transaction flow visualization
-- Community detection algorithms
-- Influence propagation modeling
-
-### ML-Powered Scoring Algorithms
-- Behavioral pattern recognition
-- Risk assessment models
-- Credit scoring for DeFi lending
-- Sybil detection
-- Anomaly detection for fraud prevention
-
-### Horizontal Scaling with Kafka
-- Partitioned topic architecture
-- Consumer group load balancing
-- Exactly-once delivery semantics
-- Stream processing with Kafka Streams
-- Monitoring with Kafka Manager
-
-### Sub-Second Query Performance
-- Redis caching layer
-- Pre-computed score aggregations
-- Read replicas for query distribution
-- Connection pooling and batch queries
-- Query optimization with explain plans
-
-## Architecture
+Proprietary system powering ConsumerFi's user acquisition and risk assessment, achieving **$10M+ in prevented fraud** through Sybil detection, **95% accuracy** in credit risk prediction, and **99.95% uptime** over 12 months of production deployment.
 
 <Terminal cmd="data pipeline architecture">
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
 │  Blockchain  │─────▶│    Kafka     │─────▶│  Score       │
 │  Events      │      │   Streams    │      │  Engine      │
-└──────────────┘      └──────────────┘      └──────────────┘
+└──────┬───────┘      └──────┬───────┘      └──────┬───────┘
        │                     │                      │
        ▼                     ▼                      ▼
   ┌──────────┐          ┌──────────┐          ┌──────────┐
@@ -69,120 +30,41 @@ This proprietary system powered user acquisition and risk assessment for Consume
   └──────────┘          └──────────┘          └──────────┘
 </Terminal>
 
-## Performance Metrics
+<Window title="scoring/calculate_user_score.py">
+```python
+from scoring import ScoreEngine
 
-<Admonition type="note">
-Production metrics from ConsumerFi deployment.
-</Admonition>
+async def calculate_user_score(user_address: str) -> dict:
+    # Real-time data aggregation from multiple sources
+    on_chain = await fetch_blockchain_activity(user_address)
+    social = await fetch_social_reputation(user_address)
+    defi = await fetch_defi_behavior(user_address)
+    network = await fetch_network_effects(user_address)
 
-- **Processed 2M+ transactions daily** across multiple chains
-- **Analyzed 30K+ user accounts** with comprehensive scoring
-- **Sub-100ms scoring latency** for real-time decisioning
-- **99.95% uptime** over 12 months
+    # ML-powered scoring across 4 dimensions
+    scores = {
+        "on_chain": score_on_chain_activity(on_chain),      # 0-100
+        "social": score_social_reputation(social),          # 0-100
+        "defi": score_defi_behavior(defi),                  # 0-100
+        "network": score_network_effects(network),          # 0-100
+    }
+
+    # Weighted composite score with risk assessment
+    composite = (
+        scores["on_chain"] * 0.30 +
+        scores["social"] * 0.20 +
+        scores["defi"] * 0.35 +
+        scores["network"] * 0.15
+    )
+
+    # Cache result for sub-100ms retrieval
+    await redis.setex(f"score:{user_address}", 3600, composite)
+
+    return {"score": composite, "breakdown": scores}
+```
+</Window>
+
+**Links:**
+- Proprietary system developed for ConsumerFi
+- Case studies available for institutional clients
 - **Detected 2000+ Sybil accounts** preventing $500K+ fraud
-
-## Tech Stack
-
-- **Pipeline**: Python 3.11, Apache Kafka, Kafka Streams
-- **Graph DB**: Neo4j 5.x with Graph Data Science library
-- **Caching**: Redis 7.x with cluster mode
-- **ML**: scikit-learn, XGBoost, pandas, NumPy
-- **Monitoring**: Prometheus, Grafana, Sentry
-- **Deployment**: Kubernetes with Helm charts
-
-## Scoring Dimensions
-
-### On-Chain Activity Score
-- Transaction frequency and volume
-- Contract interaction diversity
-- Gas spending patterns
-- Wallet age and history
-- Multi-chain activity
-
-### Social Reputation Score
-- Twitter followers and engagement
-- Discord/Telegram participation
-- GitHub contributions (for devs)
-- Gitcoin grants history
-- ENS domain ownership
-
-### DeFi Behavior Score
-- Protocol usage patterns
-- Liquidity provision history
-- Loan repayment record
-- Yield farming sophistication
-- Risk-taking indicators
-
-### Network Effects Score
-- Referral quality and quantity
-- Community engagement
-- Influence on protocol decisions
-- Governance participation
-- Organic vs paid growth
-
-## Use Cases
-
-### User Acquisition
-- Identify high-value users for campaigns
-- Personalized onboarding flows
-- Targeted referral bonuses
-- Segmentation for marketing
-
-### Risk Management
-- Credit scoring for lending protocols
-- Sybil detection for airdrops
-- Fraud prevention
-- Collateral requirements adjustment
-
-### Product Optimization
-- Feature usage analysis
-- User journey mapping
-- Churn prediction
-- Lifetime value estimation
-
-## Business Impact
-
-- **$10M+ in prevented fraud** through Sybil detection
-- **300% increase in user acquisition efficiency** via scoring
-- **$2M cost savings** by replacing manual review
-- **95% accuracy** in credit risk prediction
-
-## Technical Challenges Solved
-
-**Challenge**: Processing 2M+ events/day without data loss
-**Solution**: Kafka partitioning strategy + exactly-once semantics
-
-**Challenge**: Graph queries at scale (30K+ nodes)
-**Solution**: Neo4j GDS algorithms + Redis caching
-
-**Challenge**: Real-time scoring in {'<'}100ms
-**Solution**: Pre-computed aggregates + optimized queries
-
-## Privacy & Compliance
-
-- **Data minimization**: Only collect necessary fields
-- **Encryption**: At rest and in transit
-- **Access controls**: Role-based permissions
-- **Audit logging**: Complete activity trail
-- **GDPR compliance**: Right to deletion, data portability
-
-## Future Enhancements
-
-- Machine learning model retraining pipeline
-- Real-time anomaly detection alerts
-- Cross-protocol scoring aggregation
-- ZK-proof based privacy-preserving scoring
-- API for third-party protocol integration
-
-## Technologies Used
-
-- **Python**: Core application logic
-- **Apache Kafka**: Event streaming backbone
-- **Neo4j**: Graph database for relationships
-- **Redis**: High-performance caching
-- **scikit-learn**: Machine learning models
-- **PostgreSQL**: Structured data storage
-- **Docker**: Containerization
-- **Kubernetes**: Orchestration and scaling
-
-*Proprietary system developed for ConsumerFi. Not available for open source release.*

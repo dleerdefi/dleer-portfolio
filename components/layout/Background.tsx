@@ -79,25 +79,25 @@ const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
     if (typeof window === 'undefined' || !theme.backgroundImage) return;
 
     // Get current theme's background array from ThemeContext
-    const currentBgArray = theme.preset ?
-      require('@/contexts/ThemeContext').themeBackgrounds[theme.preset] : [];
+    import('@/contexts/ThemeContext').then(({ themeBackgrounds }) => {
+      const currentBgArray = theme.preset ? themeBackgrounds[theme.preset] : [];
+      if (!currentBgArray || currentBgArray.length === 0) return;
 
-    if (!currentBgArray || currentBgArray.length === 0) return;
+      const currentIndex = currentBgArray.indexOf(theme.backgroundImage!);
+      if (currentIndex === -1) return;
 
-    const currentIndex = currentBgArray.indexOf(theme.backgroundImage);
-    if (currentIndex === -1) return;
+      // Preload next image
+      if (currentIndex < currentBgArray.length - 1) {
+        const nextImg = new window.Image();
+        nextImg.src = currentBgArray[currentIndex + 1];
+      }
 
-    // Preload next image
-    if (currentIndex < currentBgArray.length - 1) {
-      const nextImg = new window.Image();
-      nextImg.src = currentBgArray[currentIndex + 1];
-    }
-
-    // Preload previous image
-    if (currentIndex > 0) {
-      const prevImg = new window.Image();
-      prevImg.src = currentBgArray[currentIndex - 1];
-    }
+      // Preload previous image
+      if (currentIndex > 0) {
+        const prevImg = new window.Image();
+        prevImg.src = currentBgArray[currentIndex - 1];
+      }
+    });
   }, [theme.backgroundImage, theme.preset]);
 
   // FIX 2: Reset loading state when image changes

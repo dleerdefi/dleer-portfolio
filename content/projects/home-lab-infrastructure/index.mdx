@@ -1,11 +1,11 @@
 ---
-title: "Home Lab Network"
+title: "Home Lab Infrastructure"
 slug: "home-lab-infrastructure"
 summary: "Enterprise-grade home lab with GPU cluster and automation"
 date: "2024-11-01"
 updated: "2025-10-16"
 tags: ["homelab", "infrastructure", "kubernetes", "proxmox", "gpu-cluster"]
-tech: ["Proxmox", "pfSense", "Kubernetes", "Ansible", "TrueNAS"]
+tech: ["Proxmox", "TrueNAS", "OPNsense", "Ansible", "Docker"]
 cover: ""
 status: "production"
 featured: false
@@ -13,353 +13,72 @@ featured: false
 
 ## Overview
 
-Designed and deployed a sophisticated home lab infrastructure featuring multiple servers, VLAN segmentation, GPU compute cluster, and comprehensive automation.
+Enterprise homelab infrastructure featuring 4 Dell PowerEdge servers running Proxmox with **1.3TB total ECC RAM**, 88-core Xeon CPUs, and **2x RTX A4000 GPUs** for local LLM inference and real-time object detection. The cluster includes **60TB NAS storage** via TrueNAS and 10GbE networking backbone.
 
-This production-grade environment supports AI research, self-hosted services, and continuous learning - all running 24/7 with enterprise reliability.
+Currently preparing for network expansion with OPNsense firewall deployment, managed switch upgrades, and enterprise wireless access points. Production environment supporting AI research, media streaming, home automation, and self-hosted services running 24/7.
 
-## Key Features
-
-### Proxmox Virtualization Cluster
-- **3-node HA cluster** with Ceph storage
-- Live migration of VMs/containers
-- Automated backups to NAS
-- Resource pooling and allocation
-- Web-based management interface
-
-### VLAN-Segmented Security Zones
-
-**Management VLAN (10)**: Infrastructure services
-- Proxmox hosts
-- pfSense management
-- TrueNAS admin
-- Ansible control node
-
-**Services VLAN (20)**: Self-hosted applications
-- Home Assistant
-- Plex Media Server
-- Nextcloud
-- Gitea
-- Monitoring stack
-
-**Compute VLAN (30)**: GPU workloads
-- ML/AI training
-- Inference endpoints
-- Jupyter notebooks
-- Development environments
-
-**IoT VLAN (40)**: Internet of Things devices (isolated)
-- Smart home devices
-- Cameras
-- Sensors
-
-**Guest VLAN (50)**: Visitor network (internet-only)
-
-### 4-Node GPU Compute Cluster
-- **Node 1**: 2x RTX 4090 (ML training)
-- **Node 2**: 2x RTX 4090 (Inference)
-- **Node 3**: 4x RTX 3090 (Distributed workloads)
-- **Node 4**: 4x A5000 (Professional compute)
-
-**Total Compute**:
-- 10 GPUs
-- 360GB VRAM
-- ~1 PetaFLOP FP32 performance
-
-### Automated Backup Pipelines
-- **3-2-1 backup strategy**
-  - 3 copies of data
-  - 2 different storage types
-  - 1 off-site location
-- Proxmox → TrueNAS (hourly incremental)
-- TrueNAS → Cloud (nightly)
-- VM snapshots before updates
-- Retention: 7 daily, 4 weekly, 12 monthly
-
-### Self-Hosted AI Inference Endpoints
-- **Text Generation**: Llama 3, Mistral, DeepSeek
-- **Image Generation**: Stable Diffusion XL, Flux
-- **Code Completion**: Code Llama, StarCoder
-- **Embeddings**: BGE, E5, all-MiniLM
-- **Speech**: Whisper, Bark TTS
-
-## Network Architecture
-
-<Terminal cmd="network topology">
+<Terminal cmd="network architecture">
                  ┌─────────────┐
                  │  Internet   │
                  └──────┬──────┘
                         │
                  ┌──────▼──────┐
-                 │   pfSense   │
-                 │  Firewall   │
+                 │  OPNsense   │
+                 │  Firewall   │  (planned)
                  └──────┬──────┘
                         │
               ┌─────────▼─────────┐
-              │  10G Core Switch  │
+              │  Core Switch      │
+              │  + WiFi APs       │  (expansion)
               └┬──┬──┬──┬──┬──┬──┘
                │  │  │  │  │  │
         ┌──────┘  │  │  │  │  └─────┐
         │         │  │  │  │        │
     ┌───▼──┐  ┌──▼──▼──▼──▼──┐  ┌──▼──┐
-    │ NAS  │  │ Proxmox       │  │ AP  │
-    │TrueNAS│ │Cluster (3node)│  │WiFi │
+    │TrueNAS│ │   Proxmox     │  │ POE │
+    │ 60TB │  │ Cluster (4x)  │  │Cams │
     └──────┘  └───┬───┬───┬───┘  └─────┘
                   │   │   │
               ┌───▼┐ ┌▼──┐▼───┐
-              │GPU │ │GPU│GPU │
-              │Node│ │Nod│Node│
+              │GPU │ │GPU│VMs │
+              │LLM │ │CV │    │
               └────┘ └───┘────┘
 </Terminal>
 
-## Hardware Specifications
-
-### Proxmox Hosts (3x)
-**Per Node**:
-- CPU: AMD EPYC 7763 (64C/128T)
-- RAM: 512GB DDR4 ECC
-- Boot: 2x 1TB NVMe (RAID1)
-- Ceph: 4x 4TB NVMe
-- Network: Dual 10GbE
-
-### GPU Compute Nodes (4x)
-**High-End Nodes (2x)**:
-- CPU: AMD Ryzen 9 7950X
-- RAM: 128GB DDR5
-- GPUs: 2x RTX 4090 24GB
-- Storage: 2TB NVMe
-- PSU: 1600W Titanium
-
-**Distributed Nodes (2x)**:
-- CPU: AMD Threadripper PRO 5975WX
-- RAM: 256GB DDR4 ECC
-- GPUs: 4x RTX 3090 / A5000
-- Storage: 4TB NVMe
-- PSU: 2000W Platinum
-
-### Storage (TrueNAS)
-- CPU: Intel Xeon E-2388G
-- RAM: 128GB ECC
-- Boot: 2x 500GB SSD (mirror)
-- Data Pool: 12x 18TB HDD (RAIDZ2)
-- Cache: 2x 2TB NVMe
-- Total Capacity: 50TB usable
-
-### Networking
-- **Router**: Protectli VP4650 (pfSense)
-- **Core Switch**: UniFi Enterprise 24 PoE (10G uplinks)
-- **Access Points**: 3x UniFi WiFi 6 Pro
-- **Cables**: Cat 6A throughout
-
-## Performance Metrics
-
-<Admonition type="note">
-Monitoring data from 6 months of continuous operation.
-</Admonition>
-
-- **Uptime**: 99.99% (4 hours downtime total, planned maintenance)
-- **Storage Capacity**: 50TB usable
-- **Active VMs/Containers**: 100+
-- **Daily Backup Size**: 2TB incremental
-- **Power Consumption**: 1.5kW idle, 4kW peak
-- **Network Throughput**: 10Gbps LAN, 1Gbps WAN
-
-## Software Stack
-
-### Virtualization & Orchestration
-- **Proxmox VE**: Hypervisor and container management
-- **Kubernetes**: Container orchestration (K3s)
-- **Docker Compose**: Service definitions
-- **Ansible**: Configuration management and automation
-
-### Network & Security
-- **pfSense**: Firewall, routing, VPN (Wireguard)
-- **Suricata**: Intrusion detection/prevention
-- **Cloudflare Tunnel**: Secure external access (zero-trust)
-- **Let's Encrypt**: Automated SSL certificates
-- **Authelia**: Single sign-on (SSO) and 2FA
-
-### Storage & Backup
-- **TrueNAS**: Network-attached storage
-- **Ceph**: Distributed storage for Proxmox
-- **Restic**: Encrypted backups to cloud
-- **Syncthing**: File synchronization
-- **MinIO**: S3-compatible object storage
-
-### Monitoring & Observability
-- **Prometheus**: Metrics collection
-- **Grafana**: Visualization dashboards
-- **Loki**: Log aggregation
-- **Alertmanager**: Alert routing
-- **Uptime Kuma**: Service monitoring
-
-### Self-Hosted Services
-- **Media**: Plex, Jellyfin, Sonarr, Radarr
-- **Productivity**: Nextcloud, Calibre-Web, Paperless-ngx
-- **Development**: Gitea, Drone CI, Mattermost
-- **Home Automation**: Home Assistant, Node-RED
-- **AI/ML**: JupyterHub, Ollama, Stable Diffusion WebUI
-
-## Automation Examples
-
-### Ansible Playbook: Deploy New VM
-
-<Window title="ansible/deploy-vm.yml">
+<Window title="proxmox/deploy-gpu-vm.yml">
 ```yaml
 ---
-- name: Deploy and configure new VM
-  hosts: proxmox_cluster
+# Ansible playbook for GPU-accelerated LLM deployment
+- name: Deploy LLM inference VM with GPU passthrough
+  hosts: r730_proxmox
   tasks:
-    - name: Clone VM template
+    - name: Clone GPU-enabled template
       proxmox_kvm:
-        api_host: "{{ proxmox_host }}"
-        api_user: "{{ proxmox_user }}"
-        api_password: "{{ proxmox_password }}"
+        api_host: "192.168.0.58"
         vmid: "{{ new_vmid }}"
-        clone: "{{ template_vmid }}"
-        name: "{{ vm_name }}"
-        storage: ceph-pool
-        full: yes
+        clone: "gpu-template"
+        name: "llm-{{ model_name }}"
+        cores: 16
+        memory: 65536
 
-    - name: Configure VM resources
+    - name: Configure PCIe GPU passthrough
       proxmox_kvm:
         vmid: "{{ new_vmid }}"
-        cores: 8
-        memory: 16384
-        net:
-          net0: "virtio,bridge=vmbr20,tag=20"
+        hostpci0: "0000:3b:00.0,pcie=1"  # RTX A4000
+        machine: "q35"
 
-    - name: Start VM
-      proxmox_kvm:
-        vmid: "{{ new_vmid }}"
-        state: started
-
-    - name: Wait for SSH
-      wait_for:
-        host: "{{ vm_ip }}"
-        port: 22
-        timeout: 300
-
-    - name: Run initial setup
-      include_tasks: vm_setup.yml
+    - name: Deploy Ollama with model
+      shell: |
+        ssh vm-{{ new_vmid }} "
+          docker run -d --gpus all \
+            -v ollama:/root/.ollama \
+            -p 11434:11434 \
+            ollama/ollama
+          docker exec ollama ollama pull {{ model_name }}
+        "
 ```
 </Window>
 
-### Automatic Updates & Rollback
-
-<Window title="scripts/auto-update-with-rollback.sh">
-```bash
-#!/bin/bash
-# Auto-update with rollback support
-
-# Pre-update snapshot
-qm snapshot $VMID pre-update-$(date +%Y%m%d)
-
-# Run updates
-ssh $VM_IP "apt update && apt upgrade -y"
-
-# Health check
-if ssh $VM_IP "systemctl is-system-running" | grep -q "running"; then
-  echo "Update successful"
-  # Keep snapshot for 7 days
-  at now + 7 days <<< "qm delsnapshot $VMID pre-update-$(date +%Y%m%d)"
-else
-  echo "Health check failed, rolling back"
-  qm rollback $VMID pre-update-$(date +%Y%m%d)
-  qm start $VMID
-fi
-```
-</Window>
-
-## Use Cases
-
-### AI/ML Experimentation
-- Training custom LLMs (fine-tuning)
-- Image generation model testing
-- Reinforcement learning experiments
-- Multi-GPU distributed training
-
-### Self-Hosted Services
-- Private cloud storage (Nextcloud)
-- Media streaming (Plex, Jellyfin)
-- Password manager (Vaultwarden)
-- Git hosting (Gitea)
-- CI/CD pipelines (Drone)
-
-### Home Automation
-- Smart home control (Home Assistant)
-- Security camera NVR (Frigate)
-- Energy monitoring
-- Presence detection
-- Automated routines
-
-### Development Environment
-- Disposable test environments
-- Staging replicas of production
-- Database sandboxes
-- Network simulation (GNS3)
-
-## Cost Analysis
-
-### Initial Investment: ~$25,000
-- Servers & workstations: $15,000
-- GPUs: $8,000
-- Networking: $1,500
-- Storage (drives): $1,000
-- Rack & UPS: $500
-
-### Monthly Operating Costs: ~$150
-- Electricity (~300kWh @ $0.12/kWh): $36
-- Internet (2Gbps fiber): $80
-- Cloud backup (2TB): $20
-- Domain & certificates: $10
-
-### ROI Calculation
-**Cloud Equivalent Costs** (monthly):
-- GPU compute (A100 equivalent): $2,500
-- Storage (50TB): $1,000
-- VMs (equivalent resources): $500
-- **Total**: $4,000/month
-
-**Payback Period**: 6.25 months
-
-**Savings Year 1**: $25,000 - ($25,000 + $1,800) = Break-even
-**Savings Year 2+**: ~$46,000/year
-
-## Challenges & Solutions
-
-**Challenge**: Heat management with 10 GPUs
-**Solution**: Dedicated AC unit + exhaust fans, temperature monitoring
-
-**Challenge**: Power consumption spikes tripping breakers
-**Solution**: Dedicated 240V circuits, load balancing automation
-
-**Challenge**: Network bottlenecks during backups
-**Solution**: 10GbE upgrade, traffic shaping, backup windows
-
-**Challenge**: Noise levels (60+ dB at full load)
-**Solution**: Sound-dampened rack, relocated to garage
-
-## Future Enhancements
-
-- [ ] Expand to 5-node Proxmox cluster
-- [ ] Add 100GbE network backbone
-- [ ] Solar panels + battery backup
-- [ ] Liquid cooling for GPUs
-- [ ] Dedicated AI inference accelerators (Groq, Cerebras)
-
-## Learning Outcomes
-
-- **Enterprise Infrastructure**: Hands-on with production-grade systems
-- **Network Engineering**: VLAN, routing, firewalls, VPNs
-- **Automation**: Infrastructure as Code (IaC) with Ansible
-- **Kubernetes**: Container orchestration at scale
-- **Hardware**: Building, troubleshooting, optimizing servers
-
-## Community Impact
-
-- **Open source contributions**: Ansible roles, Proxmox scripts
-- **Blog posts**: 10+ tutorials on r/homelab, Medium
-- **Helped 50+ people** plan their first homelab
-- **Shared configs**: GitHub repo with 200+ stars
-
-*Personal infrastructure project. Selected configs open sourced at github.com/dleerdefi/homelab-configs*
+**Links:**
+- Hardware specs and network diagrams coming soon
+- Infrastructure configs: Private repository

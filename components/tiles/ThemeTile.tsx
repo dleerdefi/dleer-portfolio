@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useTheme, AccentColor, ThemePreset, themeBackgrounds } from '@/contexts/ThemeContext';
+import React from 'react';
+import { useTheme, AccentColor, themeBackgrounds } from '@/contexts/ThemeContext';
 import { SolarizedIcon, NordIcon, TokyoNightIcon } from '@/components/icons/ThemeIcons';
 import { FONT_SIZES } from '@/lib/constants/typography';
 
@@ -10,7 +10,7 @@ interface ThemeTileProps {
 }
 
 const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
-  const { theme, setThemePreset, setAccentColor, setBackgroundImage, getAccentHex } = useTheme();
+  const { theme, setThemePreset, setAccentColor, setBackgroundImage } = useTheme();
 
   // Get current backgrounds for the active theme
   const currentBackgrounds = themeBackgrounds[theme.preset];

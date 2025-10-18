@@ -14,44 +14,9 @@ featured: true
 
 ## Overview
 
-Advanced agentic companion leveraging GraphRAG with Neo4j, real-time tool orchestration, and dynamic LLM gateway. Features ~18,000 processed messages in graph database with parallel execution capabilities and automated conversation summarization.
+Advanced agentic AI companion leveraging GraphRAG with Neo4j for knowledge modeling, parallel tool execution, and dynamic LLM gateway. Designed for 24/7 autonomous operation with intelligent context management and real-time web search capabilities powered by DeepSeek R1.
 
-This system represents the cutting edge of AI agent architecture, combining knowledge graph technology with modern LLM orchestration to create a truly context-aware AI companion.
-
-## Key Features
-
-### Graph-Based RAG with Neo4j
-- **18,000+ messages** stored in Neo4j knowledge graph
-- Semantic relationship modeling between conversations, entities, and topics
-- Vector embeddings for similarity search
-- Graph traversal for context discovery
-- Automated relationship extraction
-
-### Parallel Execution Architecture
-- Concurrent tool execution, RAG retrieval, and LLM calls
-- Async processing with intelligent batching
-- Resource-aware scheduling
-- Sub-200ms latency for most operations
-
-### Dynamic LLM Gateway
-- Multi-provider support (OpenAI, Anthropic, local models)
-- Automatic fallback and load balancing
-- Cost optimization through provider routing
-- Response streaming for real-time interactions
-
-### Intelligent Context Management
-- Automated conversation summarization
-- Rolling context window with smart compression
-- Topic extraction and classification
-- Memory consolidation for long-term learning
-
-### Advanced Web Search Integration
-- DeepSeek R1 powered search capabilities
-- Multi-source aggregation
-- Result ranking and relevance scoring
-- Citation tracking and source verification
-
-## Architecture
+Production system processing **18,000+ messages** in a knowledge graph with **sub-200ms latency** for cached queries and **99.8% uptime** over 6 months.
 
 <Terminal cmd="system architecture">
 ┌─────────────┐      ┌──────────────┐      ┌─────────────┐
@@ -66,56 +31,21 @@ This system represents the cutting edge of AI agent architecture, combining know
   └─────────┘          └─────────┘           └─────────┘
 </Terminal>
 
-## Tech Stack
+<Window title="Agent Query Flow">
+```typescript
+// Parallel processing architecture
+const result = await Promise.all([
+  neo4j.semanticSearch(query),     // Graph traversal
+  mongodb.vectorSearch(query),      // Document retrieval
+  llmGateway.complete(context),     // LLM generation
+  toolOrchestrator.execute(tools)   // Tool execution
+]);
 
-<Admonition type="note">
-Production-grade stack designed for 24/7 autonomous operation.
-</Admonition>
-
-- **Backend**: Node.js (orchestration), Python (ML/NLP)
-- **Graph DB**: Neo4j with APOC and GDS libraries
-- **Document Store**: MongoDB for unstructured data
-- **LLM Framework**: LangChain for agent coordination
-- **Vector Store**: Neo4j vector index for embeddings
-- **Deployment**: Docker Compose with health monitoring
-
-## Performance Metrics
-
-- **18,000+ processed messages** in knowledge graph
-- **Multi-LLM provider support** with automatic failover
-- **Real-time parallel processing** for tool orchestration
-- **Sub-200ms** average response time for cached queries
-- **99.8% uptime** over 6 months of production use
-
-## Getting Started
-
-<Admonition type="tip">
-Requires Neo4j 5.x, MongoDB 7.x, and Node.js 18+.
-</Admonition>
-
-<Window title="Installation - RinAI Setup">
-```bash
-git clone https://github.com/dleerdefi/peak-ai-agent-stack
-cd peak-ai-agent-stack
-cp .env.example .env
-docker-compose up -d
+// Sub-200ms latency for cached queries
+// Automatic fallback across LLM providers
+// Real-time context compression
 ```
 </Window>
 
-<Terminal cmd="docker-compose status">
-✓ Neo4j running on localhost:7687
-✓ MongoDB running on localhost:27017
-✓ Agent server running on localhost:3000
-</Terminal>
-
-## Future Enhancements
-
-- [ ] Multi-user support with authentication
-- [ ] Advanced graph analytics dashboard
-- [ ] Voice interaction capabilities
-- [ ] Mobile companion app
-- [ ] Plugin system for custom tools
-
-## License
-
-MIT License - Open source for the AI community.
+**Links:**
+- [GitHub Repository →](https://github.com/dleerdefi/peak-ai-agent-stack)

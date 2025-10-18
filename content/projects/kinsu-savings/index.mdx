@@ -14,62 +14,9 @@ featured: false
 
 ## Overview
 
-Led the product vision and execution for a consumer-friendly DeFi savings application. Architected the system design and coordinated cross-functional teams from concept to launch.
+Led product vision and execution for a consumer-friendly DeFi savings aggregator, architecting the system design and coordinating cross-functional teams from concept to launch. Simplified yield farming for mainstream users through automated optimization, multi-chain portfolio management, and one-click diversification strategies.
 
-Kinsu simplified yield farming for mainstream users, achieving $10M+ TVL at peak with 5,000+ active users.
-
-## Key Features
-
-### Automated Yield Optimization
-- Real-time yield comparison across 20+ protocols
-- Automated fund allocation to highest APY
-- Gas-optimized rebalancing
-- Compound interest reinvestment
-- Tax-loss harvesting
-
-### Multi-Chain Portfolio Management
-- Support for Ethereum, Polygon, Arbitrum, Optimism
-- Cross-chain yield aggregation
-- Unified portfolio dashboard
-- Bridge integration for seamless transfers
-- Chain-specific gas optimization
-
-### Risk Assessment Dashboard
-- Protocol safety scores
-- Historical APY trends
-- Impermanent loss calculations
-- Smart contract audit status
-- Insurance coverage indicators
-
-### One-Click Diversification Strategies
-- Conservative (stablecoins, blue-chip DeFi)
-- Moderate (mixed stables + ETH)
-- Aggressive (high-yield farms, new protocols)
-- Custom allocation builder
-- Rebalancing automation
-
-### Mobile-First Responsive Design
-- Progressive web app (PWA)
-- Touch-optimized interfaces
-- Offline transaction queuing
-- Biometric authentication
-- Push notifications for opportunities
-
-## Product Strategy
-
-### Target Audience
-- Crypto-native users tired of manual yield farming
-- Traditional finance users exploring DeFi
-- Small to mid-size portfolios ($1K-$100K)
-- Risk-conscious yield seekers
-
-### Value Proposition
-- **Save time**: Automated vs 10+ hours/week manual farming
-- **Maximize yield**: Algorithm beats manual by avg 3.2%
-- **Reduce risk**: Diversification + safety scoring
-- **Simplify complexity**: One-click vs multi-protocol juggling
-
-## Architecture
+Achieved **$10M+ TVL at peak** with **5,000+ active users** and **4.8/5 user satisfaction score** (1,200+ reviews). Platform generated **$500K+ in protocol fees** with **95% retention** after first deposit.
 
 <Terminal cmd="system architecture">
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
@@ -84,152 +31,29 @@ Kinsu simplified yield farming for mainstream users, achieving $10M+ TVL at peak
   └──────────┘          └──────────┘          └──────────┘
 </Terminal>
 
-## Product Metrics
+<Window title="Smart Contract Strategy">
+```solidity
+// Automated yield allocation
+contract KinsuVault {
+  function deposit(uint256 amount) external {
+    // Allocate to highest yield protocol
+    uint256 bestAPY = findBestYield();
+    allocateFunds(bestAPY, amount);
 
-<Admonition type="note">
-Peak performance metrics from ConsumerFi deployment.
-</Admonition>
+    // Emit event for indexer
+    emit Deposit(msg.sender, amount, bestAPY);
+  }
 
-- **$10M+ TVL at peak** across all chains
-- **5,000+ active users** with verified wallets
-- **4.8/5 user satisfaction score** (1,200+ reviews)
-- **95% retention** after first deposit
-- **$500K+ in fees generated** for the protocol
-
-## User Journey Optimization
-
-### Onboarding Flow (3 steps, 2 minutes)
-1. Connect wallet (MetaMask, WalletConnect, Coinbase Wallet)
-2. Select risk profile (Conservative/Moderate/Aggressive)
-3. Deposit funds → Automatically deployed
-
-### Core User Loop
+  function rebalance() external {
+    // Gas-optimized multi-protocol rebalancing
+    if (shouldRebalance()) {
+      withdrawFromLowYield();
+      depositToHighYield();
+    }
+  }
+}
 ```
-Deposit → Auto-allocate → Earn yield → Compound → Grow portfolio
-         ↑___________________|
-              (Automated)
-```
+</Window>
 
-### Key Features for Retention
-- Daily yield notifications
-- Weekly portfolio performance emails
-- Referral rewards program
-- Gamification (badges, milestones)
-- Educational content in-app
-
-## Cross-Functional Leadership
-
-### Teams Coordinated
-- **Engineering**: 5 full-stack developers
-- **Design**: 2 UI/UX designers
-- **Smart Contracts**: 2 Solidity developers
-- **Marketing**: 3 growth specialists
-- **Customer Support**: 2 community managers
-
-### Responsibilities
-- Product roadmap and prioritization
-- Sprint planning and execution
-- Stakeholder communication
-- User research and interviews
-- Competitive analysis
-- Go-to-market strategy
-
-## Technical Innovations
-
-### Gas Optimization
-- Batch transactions to save 40% on fees
-- Layer 2 deployment (Polygon, Arbitrum)
-- Meta-transactions for gasless UX
-- Intelligent transaction timing
-
-### Safety Mechanisms
-- Multi-signature treasury
-- Time-delayed withdrawals (anti-rug)
-- Emergency pause functionality
-- Protocol whitelisting
-- Audit trail for all operations
-
-## Competitive Positioning
-
-| Feature | Kinsu | Yearn | Convex | Beefy |
-|---------|-------|-------|--------|-------|
-| Mobile UX | ✅ | ❌ | ❌ | Partial |
-| Risk Scores | ✅ | ❌ | ❌ | ✅ |
-| Multi-Chain | ✅ | Partial | ❌ | ✅ |
-| 1-Click Deploy | ✅ | ❌ | ❌ | ✅ |
-| Insurance | ✅ | Partial | ❌ | ❌ |
-
-## User Testimonials
-
-> "Kinsu made DeFi simple. I'm earning 8% on stablecoins while traditional banks offer 0.01%."
-> — Sarah M., Early Adopter
-
-> "The risk dashboard gave me confidence to try DeFi for the first time. Two months in, very happy!"
-> — James K., TradFi Convert
-
-> "Auto-compounding saved me hours per week. Worth it just for the time savings."
-> — Alex P., Yield Farmer
-
-## Growth Metrics
-
-### Launch to $10M TVL Timeline
-- **Week 1**: $500K (friends & family)
-- **Month 1**: $2M (organic growth + marketing)
-- **Month 3**: $5M (influencer campaigns)
-- **Month 6**: $10M (exchange listing, partnerships)
-
-### User Acquisition Channels
-- **Organic**: 40% (SEO, word-of-mouth)
-- **Paid**: 30% (Twitter ads, Google)
-- **Referrals**: 20% (incentive program)
-- **Partnerships**: 10% (protocol integrations)
-
-## Challenges & Solutions
-
-**Challenge**: High gas fees deterring small users
-**Solution**: Layer 2 deployment + batch transactions
-
-**Challenge**: User trust in new protocol
-**Solution**: Multiple audits + insurance integration
-
-**Challenge**: Complexity overwhelming new users
-**Solution**: Simplified 3-step onboarding + educational tooltips
-
-**Challenge**: Retention after first deposit
-**Solution**: Gamification + daily engagement hooks
-
-## Business Impact
-
-- **Revenue**: $500K+ in protocol fees (0.5% performance fee)
-- **Partnerships**: Integrated with 20+ DeFi protocols
-- **Press**: Featured in CoinDesk, The Defiant, Bankless
-- **Community**: 10K+ Discord members, 25K+ Twitter followers
-
-## Product Roadmap (Completed)
-
-- [x] Multi-chain support (4 chains)
-- [x] Mobile PWA launch
-- [x] Risk scoring system
-- [x] Insurance integration (Nexus Mutual)
-- [x] Referral program
-- [x] Fiat on-ramp (Ramp Network)
-- [x] Tax reporting (CoinTracker integration)
-
-## Lessons Learned
-
-1. **Simplicity wins**: Every additional click costs 10% conversion
-2. **Trust is everything**: Audits and transparency > features
-3. **Mobile matters**: 60% of users primarily mobile
-4. **Education required**: In-app guidance increased retention 2x
-5. **Community driven**: Active Discord = lower churn
-
-## Tech Stack
-
-- **Frontend**: React 18, TypeScript, Tailwind CSS
-- **Web3**: Web3.js, Ethers.js, WalletConnect
-- **Smart Contracts**: Solidity 0.8.x, Hardhat, OpenZeppelin
-- **Indexing**: The Graph (subgraphs)
-- **Backend**: Node.js, Express, PostgreSQL
-- **Infrastructure**: AWS, Cloudflare, IPFS
-
-*Product-focused case study. Proprietary ConsumerFi technology.*
+**Links:**
+- [Live Application →](https://kinsu.fi)

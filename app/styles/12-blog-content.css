@@ -129,15 +129,85 @@
   content: none;
 }
 
-/* Code blocks are handled by CodeBlock component - don't interfere */
+/* Fenced code blocks - Window/macOS style */
 .blog-prose pre {
-  /* CodeBlock wrapper handles all styling */
+  margin: 2rem 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 2px solid var(--theme-border);
+  background: transparent;
+  position: relative;
+}
+
+/* macOS-style header with colored dots */
+.blog-prose pre::before {
+  content: '';
+  display: block;
+  height: 32px;
+  background: var(--theme-surface);
+  border-bottom: 2px solid var(--theme-border);
+  background-image:
+    radial-gradient(circle, #ff5f56 5px, transparent 5px),
+    radial-gradient(circle, #ffbd2e 5px, transparent 5px),
+    radial-gradient(circle, #27c93f 5px, transparent 5px);
+  background-size: 12px 12px, 12px 12px, 12px 12px;
+  background-position: 12px center, 28px center, 44px center;
+  background-repeat: no-repeat;
 }
 
 .blog-prose pre code {
-  /* Let syntax highlighter handle this */
+  display: block;
+  padding: 1rem 1.5rem;
+  padding-top: 0.75rem;
+  background: rgba(var(--theme-surface-rgb), 0.5);
+  color: var(--theme-text);
   font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  white-space: pre-wrap;
+  word-break: break-word;
+  tab-size: 2;
 }
+
+/* Copy button in header area */
+.blog-prose pre .copy-button {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: rgba(var(--theme-surface-rgb), 0.8);
+  border: 1px solid var(--theme-border);
+  color: var(--theme-text);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.blog-prose pre .copy-button:hover {
+  background: rgba(var(--theme-surface-rgb), 1);
+  border-color: var(--accent-color);
+}
+
+.blog-prose pre .copy-button svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+/* Syntax highlighting */
+.blog-prose pre code .hljs-keyword { color: var(--accent-color); }
+.blog-prose pre code .hljs-string { color: var(--theme-success); }
+.blog-prose pre code .hljs-comment { color: var(--theme-text-dimmed); font-style: italic; }
+.blog-prose pre code .hljs-number { color: var(--theme-info); }
+.blog-prose pre code .hljs-function { color: var(--theme-text); }
 
 /* ============================================ */
 /* Blockquotes */
@@ -197,6 +267,27 @@
 }
 
 /* ============================================ */
+/* MDX Custom Components Spacing */
+/* ============================================ */
+
+/* Terminal, Window, Admonition, and Figure components render as divs */
+/* They need explicit spacing within blog-prose context */
+.blog-prose > div {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Ensure first element has no top margin */
+.blog-prose > :first-child {
+  margin-top: 0;
+}
+
+/* Ensure last element has no bottom margin */
+.blog-prose > :last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================ */
 /* Responsive Typography */
 /* ============================================ */
 
@@ -224,9 +315,21 @@
     font-size: 1.125rem;
   }
 
-  .blog-prose pre {
-    padding: 1rem;
-    margin: 1.5rem -1rem;
-    border-radius: 0;
+  .blog-prose pre code {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    max-height: 400px;
+  }
+
+  .blog-prose pre .copy-button {
+    top: 5px;
+    right: 6px;
+    padding: 3px 6px;
+    font-size: 0.7rem;
+  }
+
+  .blog-prose pre .copy-button svg {
+    width: 12px;
+    height: 12px;
   }
 }

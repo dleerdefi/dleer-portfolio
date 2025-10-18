@@ -14,63 +14,15 @@ featured: false
 
 ## Overview
 
-Revolutionary streaming system where AI VTubers Rin & Biscuit compete in real-time cryptocurrency trading battles. YouTube chat sentiment drives blockchain trades on Uniswap V3, creating a gamified intersection of AI, streaming, and DeFi.
+Revolutionary streaming system where AI VTubers Rin & Biscuit compete in real-time cryptocurrency trading battles. **YouTube chat sentiment drives blockchain trades on Uniswap V3**, creating a gamified intersection of AI, streaming, and DeFi with **30-second batch processing** and viewer loyalty momentum system.
 
-This project pushes the boundaries of interactive entertainment by combining autonomous AI agents with real financial markets, all driven by live audience participation.
-
-## Key Features
-
-### Dual AI VTubers with Distinct Personalities
-
-**Rin (Bullish Trader)**
-- Optimistic, aggressive trading style
-- Prefers high-growth tokens
-- Quick to enter positions
-- Voice: Energetic, confident tone
-- Avatar: Animated reactions to wins
-
-**Biscuit (Conservative Trader)**
-- Cautious, research-focused approach
-- Emphasizes risk management
-- Patient entry timing
-- Voice: Calm, analytical tone
-- Avatar: Thoughtful expressions
-
-### Real-Time Sentiment-Driven Trading
-- YouTube chat messages analyzed for sentiment (bullish/bearish)
-- 30-second batch processing windows
-- Weighted by user loyalty score
-- Sentiment translates to trade size and direction
-- Real blockchain transactions on Base/Arbitrum
-
-### User Loyalty Momentum System
-- **Viewer Loyalty Score**: Track history supporting each VTuber
-- **Momentum Bonuses**: Consistent support amplifies sentiment weight
-- **Streak Rewards**: Multi-stream attendance increases influence
-- **Team Badges**: Display allegiance in chat
-- **Leaderboards**: Top supporters per VTuber
-
-### Synchronized VTube Studio Control
-- Coordinated avatar movements during trades
-- Victory/defeat animations based on P&L
-- Real-time emotional responses to market moves
-- Synchronized celebrations for profitable trades
-- Dual-camera split-screen layouts
-
-### 30-Second Sentiment Batch Processing
-- Aggregate chat sentiment every 30 seconds
-- Filter spam and bot messages
-- Weight by user loyalty and subscription tier
-- Generate trade recommendations
-- Execute via smart contract
-
-## Architecture
+Combines autonomous AI agents with real financial markets, featuring dual personalities (bullish Rin vs conservative Biscuit), synchronized VTube Studio animations, and comprehensive safety mechanisms including position limits, slippage protection, and emergency pause functionality.
 
 <Terminal cmd="trading battle system">
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
 │  YouTube     │─────▶│  Sentiment   │─────▶│  Trading     │
 │  Chat API    │      │  Engine      │      │  Engine      │
-└──────────────┘      └──────────────┘      └──────────────┘
+└──────┬───────┘      └──────┬───────┘      └──────┬───────┘
        │                     │                      │
        ▼                     ▼                      ▼
   ┌──────────┐          ┌──────────┐          ┌──────────┐
@@ -78,8 +30,6 @@ This project pushes the boundaries of interactive entertainment by combining aut
   │ System   │          │ History  │          │ V3 API   │
   └──────────┘          └──────────┘          └──────────┘
 </Terminal>
-
-## Sentiment Analysis Flow
 
 <Window title="sentiment/processBatch.py">
 ```python
@@ -90,7 +40,7 @@ def process_sentiment_batch(messages: List[ChatMessage]):
     # 2. Calculate sentiment scores
     sentiments = [analyze_sentiment(msg) for msg in valid]
 
-    # 3. Apply loyalty weights
+    # 3. Apply loyalty weights (viewers earn 1-3x influence)
     weighted = [
         sentiment * get_loyalty_score(msg.user)
         for sentiment, msg in zip(sentiments, valid)
@@ -105,180 +55,13 @@ def process_sentiment_batch(messages: List[ChatMessage]):
         execute_trade(rin, "buy", calculate_size(rin_score))
     if biscuit_score > threshold:
         execute_trade(biscuit, "sell", calculate_size(biscuit_score))
+
+    # 6. Update VTube Studio avatar reactions
+    sync_avatar_emotions(rin, biscuit)
 ```
 </Window>
 
-## Performance Metrics
-
-- **Sentiment-driven trading system** with real blockchain execution
-- **Dual AI personality competition** with distinct strategies
-- **Real Uniswap V3 integration** on Base and Arbitrum
-- **30-second batch processing** for smooth audience interaction
-- **MongoDB analytics** for trade history and performance tracking
-
-## Trading Rules & Safety
-
-<Admonition type="warn">
-This is experimental software with real financial risk. Always use testnet first.
-</Admonition>
-
-### Safety Mechanisms
-- **Maximum position size**: 0.1 ETH per trade
-- **Daily loss limit**: 1 ETH per VTuber
-- **Slippage protection**: Max 2% slippage
-- **Gas price caps**: Reject if gas {'>'}100 gwei
-- **Emergency pause**: Stream host can halt trading
-
-### Scoring System
-- **P&L Tracking**: Real-time profit/loss per VTuber
-- **Win Rate**: Successful trades / total trades
-- **Sharpe Ratio**: Risk-adjusted returns
-- **Max Drawdown**: Largest peak-to-trough decline
-- **ROI**: Return on initial capital
-
-## Getting Started
-
-<Admonition type="tip">
-Start on testnet (Base Sepolia) before using real funds.
-</Admonition>
-
-### Installation
-
-<Terminal cmd="git clone && setup testnet">
-$ git clone https://github.com/dleerdefi/ai-vtuber-trading-battle
-$ cd ai-vtuber-trading-battle
-$ pip install -r requirements.txt
-$ cp .env.example .env
-
-# Configure for testnet
-$ nano .env
-NETWORK=base-sepolia
-MAX_POSITION_SIZE=0.1
-DAILY_LOSS_LIMIT=1.0
-
-$ python main.py --testnet
-
-✓ Connected to Base Sepolia
-✓ VTubers initialized (Rin vs Biscuit)
-✓ YouTube chat monitoring started
-✓ Waiting for stream to start...
-</Terminal>
-
-### Configuration
-
-```yaml
-# config.yaml
-vtubers:
-  rin:
-    personality: bullish
-    risk_tolerance: 0.7
-    voice: elevenlabs_rachel
-    avatar: vtube_studio_rin
-  biscuit:
-    personality: conservative
-    risk_tolerance: 0.3
-    voice: elevenlabs_charlie
-    avatar: vtube_studio_biscuit
-
-trading:
-  network: base  # or arbitrum, ethereum
-  dex: uniswap_v3
-  max_position_eth: 0.1
-  slippage_tolerance: 0.02
-  gas_price_limit: 100
-
-sentiment:
-  batch_interval: 30  # seconds
-  min_messages: 5
-  spam_filter: enabled
-  loyalty_weight: 0.5
-
-streaming:
-  platform: youtube
-  channel_id: YOUR_CHANNEL
-  obs_scene: trading_split_screen
-```
-
-## Example Stream Scenarios
-
-### Scenario 1: Bullish Rally
-```
-Chat: "ETH to the moon! 🚀" x 20
-→ Rin buys 0.08 ETH of ETH
-→ Price pumps 5%
-→ Rin celebrates, Biscuit skeptical
-```
-
-### Scenario 2: Bear Market Fear
-```
-Chat: "Everything dumping 📉" x 15
-→ Biscuit sells position, takes profit
-→ Market drops 8%
-→ Biscuit victory dance, Rin resilient
-```
-
-### Scenario 3: Split Sentiment
-```
-Chat: Mixed bullish/bearish signals
-→ Both VTubers hold positions
-→ Sideways market
-→ Banter about patience vs action
-```
-
-## Loyalty System
-
-### Earning Loyalty Points
-- **Watch time**: 1 point per minute
-- **Chat participation**: 5 points per message
-- **Consistent support**: 50 point streak bonus
-- **Subscriptions**: 100 points per tier level
-- **Super chats**: 10 points per $1 donated
-
-### Loyalty Benefits
-- **Increased sentiment weight** (up to 3x)
-- **Exclusive badges** displayed in chat
-- **Trade preview access** (5 seconds early)
-- **Custom commands** (!rin-stats, !biscuit-stats)
-- **VIP reactions** from avatars
-
-## Technical Challenges Solved
-
-**Challenge**: Real-time blockchain execution during live stream
-**Solution**: Pre-signed transaction batches with dynamic parameters
-
-**Challenge**: Coordinating dual avatar animations
-**Solution**: Shared state machine with millisecond sync
-
-**Challenge**: Preventing manipulation via bot spam
-**Solution**: Multi-layer spam detection + loyalty weighting
-
-**Challenge**: Managing financial risk in volatile markets
-**Solution**: Circuit breakers, position limits, and emergency pause
-
-## Future Enhancements
-
-- [ ] Multi-asset trading (DeFi, NFTs, memecoins)
-- [ ] Team battles (viewers choose sides)
-- [ ] Custom trading strategies (user-submitted)
-- [ ] Cross-platform streaming (Twitch + YouTube)
-- [ ] Historical strategy backtesting
-- [ ] Mobile app for alerts and voting
-
-## Community Showcase
-
-Example streams:
-- **"Battle Royale"**: 100+ viewers, $2K volume
-- **"Comeback Kings"**: Rin down 40%, rallies to win
-- **"Cautious Wins"**: Biscuit's risk management pays off
-
-## Disclaimer
-
-<Admonition type="warn">
-**Financial Risk Warning**
-
-This is experimental software for entertainment and educational purposes. Cryptocurrency trading involves substantial risk of loss. Never invest more than you can afford to lose. The developers are not responsible for financial losses. Always start with testnet and small amounts. Consult a financial advisor before trading.
-</Admonition>
-
-## License
-
-MIT License - Trade at your own risk.
+**Links:**
+- [GitHub Repository →](https://github.com/dleerdefi/ai-vtuber-trading-battle)
+- Start on testnet (Base Sepolia) before using real funds
+- **Financial Risk Warning**: Experimental software for entertainment/education only

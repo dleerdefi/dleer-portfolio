@@ -127,7 +127,7 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
       <div>
         <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(1.5rem, 1.5rem + 3cqi, 1.75rem)' }}>Projects</h1>
         <p className="mt-2" style={{ color: 'var(--theme-text)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>
-          Systems I've built, products I've led, and experimental work.
+          Systems I&apos;ve built, products I&apos;ve led, and experimental work.
         </p>
       </div>
 
