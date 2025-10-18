@@ -6,7 +6,6 @@ import type { Metadata } from 'next';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { ReadingProgress } from '@/components/blog/ReadingProgress';
 import { CodeCopyButton } from '@/components/blog/CodeCopyButton';
-import { ScrollReveal } from '@/components/blog/ScrollReveal';
 import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
 import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
 import { Admonition, Terminal, Window, Key, Figure } from '@/components/mdx';
@@ -89,7 +88,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     <>
       <ReadingProgress />
       <CodeCopyButton />
-      <ScrollReveal />
       <EscKeyHandler returnPath="/blog" />
 
       <FramedPageLayout>
@@ -126,20 +124,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       {/* Article content */}
       <article className="py-8 sm:py-12 px-4 sm:px-6 md:px-8">
         <div
-          className="max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl"
+          className="max-w-[720px]"
           style={{ margin: '0 auto' }}
         >
           {/* Title and metadata */}
-          <header className="mb-8 pb-8 border-b-2" style={{ borderColor: 'var(--theme-border)' }}>
+          <header className="mb-12 pb-8 border-b-2" style={{ borderColor: 'var(--theme-border)' }}>
             <h1
-              className="text-3xl font-bold mb-4"
+              className="text-3xl font-bold mb-8"
               style={{ color: 'var(--accent-color)' }}
             >
               {blog.title}
             </h1>
 
             <p
-              className="text-lg mb-4"
+              className="text-lg mb-12"
               style={{ color: 'var(--theme-text-dimmed)' }}
             >
               {blog.summary}
@@ -159,39 +157,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </>
               )}
 
-              {blog.series && (
-                <>
-                  <span style={{ color: 'var(--theme-text-dimmed)' }}>•</span>
-                  <span
-                    className="px-2 py-0.5 border"
-                    style={{
-                      borderColor: 'var(--accent-color)',
-                      color: 'var(--accent-color)',
-                    }}
-                  >
-                    Series: {blog.series}
-                  </span>
-                </>
-              )}
+              <span style={{ color: 'var(--theme-text-dimmed)' }}>•</span>
+              <span style={{ color: 'var(--theme-text-dimmed)' }}>
+                {blog.readingTime}
+              </span>
             </div>
-
-            {/* Tags */}
-            {blog.tags.length > 0 && (
-              <div className="flex items-center gap-2 mt-4 flex-wrap">
-                {blog.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs px-2 py-1 border"
-                    style={{
-                      borderColor: 'var(--theme-border)',
-                      color: 'var(--theme-text-dimmed)',
-                    }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
           </header>
 
           {/* MDX Content */}

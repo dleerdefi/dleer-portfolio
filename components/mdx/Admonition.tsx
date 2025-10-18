@@ -57,13 +57,13 @@ export function Admonition({ type = 'note', title, children }: AdmonitionProps) 
 
   return (
     <div
-      className="my-6 rounded border-l-4 p-5"
+      className="my-6 rounded border-l-4 pl-6 pr-5 py-5"
       style={{
         borderLeftColor: config.borderColor,
         backgroundColor: config.bgColor,
       }}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-4">
         <span className="text-2xl flex-shrink-0 mt-0.5" role="img" aria-label={config.defaultTitle}>
           {config.icon}
         </span>

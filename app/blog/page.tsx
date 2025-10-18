@@ -39,77 +39,30 @@ export default function BlogZenPage() {
         subtitle="Technical articles and insights"
         emptyMessage="No blog posts found. Check back soon!"
         renderItem={(blog, _index, isSelected) => (
-        <div className="space-y-4">
-          {/* Header: Title and Date */}
-          <div className="flex items-start justify-between gap-4">
-            <h2
-              className="text-xl font-bold flex-1"
-              style={{
-                color: isSelected
-                  ? 'var(--accent-color)'
-                  : 'var(--theme-text)',
-                lineHeight: '1.4',
-                letterSpacing: '-0.01em',
-              }}
-            >
-              {blog.title}
-            </h2>
-            <span
-              className="text-sm shrink-0"
-              style={{ color: 'var(--theme-text-dimmed)' }}
-            >
-              {formatDate(blog.date)}
-            </span>
-          </div>
-
-          {/* Summary */}
-          <p
-            className="text-base"
+        <div>
+          {/* Title */}
+          <h2
+            className="text-xl font-bold mb-4"
             style={{
-              color: 'var(--theme-text-dimmed)',
-              lineHeight: '1.6',
+              color: isSelected
+                ? 'var(--accent-color)'
+                : 'var(--theme-text)',
+              lineHeight: '1.4',
+              letterSpacing: '-0.01em',
             }}
           >
-            {blog.summary}
-          </p>
+            {blog.title}
+          </h2>
 
-          {/* Metadata: Tags, Reading Time, Series */}
-          <div className="flex items-center gap-4 text-xs flex-wrap">
-            {/* Tags */}
-            {blog.tags.length > 0 && (
-              <div className="flex items-center gap-2">
-                {blog.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-0.5 border"
-                    style={{
-                      borderColor: 'var(--theme-border)',
-                      color: 'var(--theme-text-dimmed)',
-                    }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* Reading time */}
+          {/* Metadata: Date and Reading Time */}
+          <div className="flex items-center gap-4 text-sm">
+            <time style={{ color: 'var(--theme-text-dimmed)' }}>
+              {formatDate(blog.date)}
+            </time>
+            <span style={{ color: 'var(--theme-text-dimmed)' }}>•</span>
             <span style={{ color: 'var(--theme-text-dimmed)' }}>
               {blog.readingTime}
             </span>
-
-            {/* Series indicator */}
-            {blog.series && (
-              <span
-                className="px-2 py-0.5 border"
-                style={{
-                  borderColor: 'var(--accent-color)',
-                  color: 'var(--accent-color)',
-                }}
-              >
-                Series: {blog.series}
-              </span>
-            )}
           </div>
         </div>
       )}

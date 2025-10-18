@@ -1,0 +1,208 @@
+---
+title: "Building Software Like a Builder"
+slug: "building-software-like-a-builder"
+summary: "Stop vibe coding. Learn the preconstruction mindset: spec first, build in slices, deploy from day one. Steal-able templates and checklists inside."
+date: "2025-10-17"
+updated: "2025-10-17"
+tags: ["engineering", "ai", "workflow"]
+status: "published"
+series: "Preconstruction Mindset"
+---
+
+I didn't learn to ship software in a CS lab. I learned it on muddy jobsites, helping engineer a **$548 million medical campus** where hidden systems—med gas, reverse-osmosis lines, even pneumatic tubes—had to mesh perfectly. You think in dependencies and sequencing because the only alternative is chaos.
+
+Years later, as a Chief of Product who regularly ships code, I operate the same way. I call it the **preconstruction mindset**: plan first with ruthless clarity, then execute in slices. It's the difference between "it works on my machine" and a clean deployment.
+
+## The Siren Song of "Vibe Coding"
+
+<Admonition type="warn" title="The AI Trap">
+AI makes it tempting to skip straight to prompting. You'll get **800 lines in minutes**, then spend the next **48 hours** spamming "pls fix" for errors in code you didn't design.
+
+**Velocity collapses by week two.**
+</Admonition>
+
+The antidote is a short, explicit spec you and your coding agent both obey.
+
+---
+
+## Phase 1: Preconstruction
+
+Start with a short plan in a single text file. This is the **contract** for what you're building. Put it in your repository as `docs/SPEC.md` and treat it as the source of truth for you and your coding agent.
+
+### The Five-Step Planning Process
+
+**1. Define the Goal**
+
+Open with the project's purpose in plain language: who it's for, the problem you're solving, and the signal of success. A non-technical friend should be able to repeat it back to you.
+
+**2. Describe the System**
+
+Nouns and verbs, plus boundaries. Be boring and explicit—ambiguity becomes rework.
+
+**3. Choose the Stack**
+
+Ask a frontier LLM for an end-to-end stack recommendation. Then, ask a *different* model to critique that recommendation, pointing out risks or missing pieces. Once you're comfortable, have your preferred model draft a full developer specification from the validated stack.
+
+**4. Pick Your AI Environment**
+
+This is a big part of your tooling decision. You generally have three options:
+
+- **No-code (Replit, Lovable):** Good for a quick taste, but you'll hit a ceiling on control and complexity just as fast.
+- **Agentic IDEs (Cursor):** Less intimidating but are the shortest path to vibe-coding debt if you skip the spec.
+- **Terminal-first agents (Claude Code):** Pairs perfectly with a written spec, encouraging discrete steps and clean, reviewable outputs.
+
+**5. Define "Done"**
+
+Create **measurable acceptance criteria** for each slice of work.
+
+<Admonition type="tip" title="The Golden Rule">
+When changes occur, **update the SPEC first**, then the code.
+
+Never let the code drift from the spec. The spec is the architectural drawing—your agent is the general contractor.
+</Admonition>
+
+---
+
+## A Spec You Can Steal
+
+Copy this template into `docs/SPEC.md` and fill it in before you write a single line of code.
+
+```markdown
+# Project Spec — TodoSync
+
+## 1. Goal
+- **For:** Busy people who lose track of tasks
+- **Problem:** Tasks scattered across devices; no fast, reliable sync
+- **Success:** TTI < 2s, task ops < 150ms, p50 sync < 800ms, DAU > 100 by week 2
+
+## 2. System Components
+- **Entities:** `User { id, email }`, `Task { id, userId, title, status, dueAt }`, `List { id, userId, name }`
+- **Actions:** `auth:signInWithGoogle`, `task:create|edit|complete`, `list:create|share`
+- **Boundaries:** Web (Next.js) / API (FastAPI) / DB (Postgres) / Cache (Redis)
+
+## 3. Constraints
+- **Stack:** Next.js + FastAPI + Postgres + Redis; Auth via OAuth (Google)
+- **Libraries:** Auth (NextAuth), ORM (Prisma/SQLModel), Logging (Pino/Stdlib), Telemetry (OTLP)
+- **Non-negotiables:** API contracts documented in `openapi.yaml`; migrations versioned
+
+## 4. Acceptance Criteria (examples)
+- **Complete Task:** Clicking "Complete" moves task to Done within **1s**; API returns **200**; UI optimistic-updates and reconciles on server response.
+- **Sync:** Creating a task on device A shows on device B within **800ms** (p50) during a 2-device test.
+
+## 5. Work Packages (1–2 days each)
+- **M1:** Auth + User model (DoD: Google sign-in persists session; /me returns user)
+- **M2:** Tasks CRUD (DoD: create/edit/complete works; unit tests for service layer)
+- **M3:** Realtime sync (DoD: 2-device test meets p50 < 800ms)
+- **M4:** Share read-only list links (DoD: public route guarded, no edit leaks)
+
+## 6. Risks
+- **Auth vendor lock-in** → Wrap auth in an internal adapter; keep user schema portable.
+
+## 7. Open Questions
+- Roles (admin/editor) needed?
+- Offline first? If yes, queue + reconcile strategy.
+
+## 8. Repo Layout
+- apps/web
+- apps/api
+- packages/ui
+- infra/docker
+- docs/SPEC.md
+
+## 9. Environments
+- **.env.example:** `DATABASE_URL=...`, `REDIS_URL=...`, `GOOGLE_CLIENT_ID=...`
+```
+
+---
+
+## Phase 2: Construction
+
+Open your IDE, drop your spec into the project directory, and fire up your coding agent. The workflow is a tight loop:
+
+```bash
+# 1. Create a branch for one slice
+git checkout -b feature/m1-auth
+
+# 2. Have your agent build only that slice
+# (Ingest docs/SPEC.md and implement M1)
+
+# 3. Run the acceptance checks
+npm run build && npm run test
+
+# 4. Commit small and often
+git add . && git commit -m "feat: implement M1 (auth + user model)"
+```
+
+If ✅ **pass** → move to M2.
+If ❌ **fail** → agent debugs, or you adjust the spec.
+
+<Admonition type="note" title="Why This Works">
+**Async Collaboration**: Your spec is the single source of truth. The agent reads it, you review diffs, the next agent picks up where the last left off. No "what were we doing?" moments.
+
+**Scope Control**: In construction, scope creep kills budgets. In software, it kills momentum. The spec defines boundaries.
+
+**Quality Gates**: Every milestone ends with a test. If a gate fails, you don't proceed. This prevents compounding technical debt.
+</Admonition>
+
+---
+
+## Phase 3: Post-Construction
+
+When a building is "finished," there's still work to do: **final inspections, owner training, and fixing all the small issues** found on the final walkthrough (the "punch list").
+
+Shipping an MVP is the same. Once real users arrive, you learn what's broken and what features are valuable. The work becomes a steady rhythm of fixing bugs, measuring performance, and turning feature requests into clear stories in your spec.
+
+<Admonition type="tip" title="The Best Problem">
+Reaching this stage is a massive win. **Having users who care enough to complain about your product is the best possible outcome for a builder.**
+</Admonition>
+
+---
+
+## Plan Deployment from Day Zero
+
+If you ignore deployment until the end, your app will never graduate from localhost. Use this checklist from day one:
+
+- ✅ **Dev Environment Mirrors Production** — Your local setup, ideally via Docker, uses the same base image and OS libraries as production.
+
+- ✅ **No Secrets in Git** — An `.env.example` is committed, but secrets only load from environment variables.
+
+- ✅ **Consistent Storage Layers** — Your data stores (Postgres, Redis, etc.) run identically across all environments via Docker Compose.
+
+- ✅ **Stateless and Scalable App** — The application is stateless. User uploads go to external object storage (S3, R2), not the container filesystem.
+
+- ✅ **Health Endpoints** — Your app includes `/health` (liveness) and `/ready` (readiness) endpoints for monitoring.
+
+- ✅ **Optimized, Multi-stage Dockerfile** — Assets are built in an initial stage; the final image contains only lean runtime code.
+
+- ✅ **Basic Telemetry** — The application logs essential metrics: request duration, error rates, for visibility after deployment.
+
+- ✅ **Simple Deploy Script** — You have a one-command script to deploy (e.g., `fly deploy` or a custom shell script).
+
+---
+
+## Key Takeaways
+
+<Admonition type="tip" title="Think Like a Builder">
+Pour a solid foundation (spec), frame the structure (milestones), wire the systems (implementation), finish the surfaces (polish).
+</Admonition>
+
+**The Preconstruction Workflow:**
+
+1. **Spec first, code second** → Prevents rework
+2. **Milestone-driven** → Ship iteratively, test at gates
+3. **Acceptance criteria** → Know when you're done
+4. **Async-friendly** → Agents/collaborators read the spec, not your mind
+
+---
+
+## For Solo Builders
+
+If you're a solo builder using AI, **steal the spec, run the loop, and deploy from day one.**
+
+Your unique domain expertise is your greatest advantage. The next wave of great applications will come from people outside the tech bubble who understand real-world problems.
+
+**With the right workflow, you have everything you need to build one of them.**
+
+---
+
+*Part of the **Preconstruction Mindset** series. Written with Claude Code using the workflow described above.*
