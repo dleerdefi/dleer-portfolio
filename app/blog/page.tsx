@@ -30,7 +30,7 @@ export default function BlogZenPage() {
   };
 
   return (
-    <FramedPageLayout>
+    <FramedPageLayout autoFocus={false}>
       <ZenList
         items={publishedBlogs}
         onSelect={handleSelect}

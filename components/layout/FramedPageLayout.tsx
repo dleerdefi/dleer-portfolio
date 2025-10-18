@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useRef } from 'react';
 import Background from '@/components/layout/Background';
 import { ParallaxBorderFrame } from '@/components/layout/parallax/components/ParallaxBorderFrame';
 
@@ -8,6 +8,7 @@ interface FramedPageLayoutProps {
   children: ReactNode;
   borderPadding?: number;
   showBackground?: boolean;
+  autoFocus?: boolean;
 }
 
 /**
@@ -33,8 +34,19 @@ interface FramedPageLayoutProps {
 export const FramedPageLayout: React.FC<FramedPageLayoutProps> = ({
   children,
   borderPadding = 16,
-  showBackground = true
+  showBackground = true,
+  autoFocus = true,
 }) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-focus container on mount for immediate keyboard event handling
+  // (disabled when wrapping interactive components like ZenList that handle their own focus)
+  useEffect(() => {
+    if (autoFocus) {
+      scrollContainerRef.current?.focus();
+    }
+  }, [autoFocus]);
+
   return (
     <>
       {/* Animated background with orbs */}
@@ -45,7 +57,9 @@ export const FramedPageLayout: React.FC<FramedPageLayoutProps> = ({
 
       {/* Scrollable content container - must start at 0,0 so content can scroll through border zones */}
       <div
-        className="fixed overflow-y-auto hide-scrollbar"
+        ref={scrollContainerRef}
+        tabIndex={0}
+        className="fixed overflow-y-auto hide-scrollbar outline-none"
         style={{
           top: '0',
           left: '0',
@@ -53,7 +67,6 @@ export const FramedPageLayout: React.FC<FramedPageLayoutProps> = ({
           bottom: '0',
           padding: `${borderPadding}px`,
           zIndex: 2,
-          scrollBehavior: 'smooth',
           overscrollBehavior: 'contain',
           WebkitOverflowScrolling: 'touch' as any
         }}

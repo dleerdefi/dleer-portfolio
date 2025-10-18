@@ -14,7 +14,10 @@ export function ReadingProgress() {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = (scrollTop / docHeight) * 100;
-      setProgress(Math.min(100, Math.max(0, scrollPercent)));
+      const rounded = Math.round(Math.min(100, Math.max(0, scrollPercent)));
+
+      // Only update state if progress changed (reduces re-renders by ~100x)
+      setProgress((prev) => prev !== rounded ? rounded : prev);
     };
 
     window.addEventListener('scroll', updateProgress, { passive: true });

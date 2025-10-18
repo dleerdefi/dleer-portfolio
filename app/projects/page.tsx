@@ -35,7 +35,7 @@ export default function ProjectsZenPage() {
   };
 
   return (
-    <FramedPageLayout>
+    <FramedPageLayout autoFocus={false}>
       <ZenList
         items={sortedProjects}
         onSelect={handleSelect}

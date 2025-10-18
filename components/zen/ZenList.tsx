@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useKeyboardNav } from '@/hooks/useKeyboardNav';
 
 interface ZenListProps<T> {
@@ -76,9 +76,16 @@ export function ZenList<T>({
   );
 
   const activeIndex = controlledIndex !== undefined ? controlledIndex : selectedIndex;
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-focus this component on mount for immediate keyboard navigation
+  useEffect(() => {
+    containerRef.current?.focus();
+  }, []);
 
   return (
     <div
+      ref={containerRef}
       className={`min-h-screen ${className}`}
       style={{
         backgroundColor: 'var(--theme-bg)',
@@ -146,10 +153,11 @@ export function ZenList<T>({
                   <div
                     key={index}
                     ref={getItemRef(index)}
-                    className="py-20 cursor-pointer transition-all"
+                    className="py-20 cursor-pointer transition-opacity duration-200"
                     style={{
                       borderBottom: '1px solid var(--theme-border)',
                       opacity: isSelected ? 1 : 0.85,
+                      willChange: 'opacity',
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.opacity = '1';

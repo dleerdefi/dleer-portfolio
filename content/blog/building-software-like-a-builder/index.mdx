@@ -15,11 +15,7 @@ Years later, as a Chief of Product who regularly ships code, I operate the same 
 
 ## The Siren Song of "Vibe Coding"
 
-<Admonition type="warn" title="The AI Trap">
-AI makes it tempting to skip straight to prompting. You'll get **800 lines in minutes**, then spend the next **48 hours** spamming "pls fix" for errors in code you didn't design.
-
-**Velocity collapses by week two.**
-</Admonition>
+AI makes it tempting to skip straight to prompting. You'll get **800 lines in minutes**, then spend the next **48 hours** spamming "pls fix" for errors in code you didn't design. **Velocity collapses by week two.**
 
 The antidote is a short, explicit spec you and your coding agent both obey.
 
@@ -55,11 +51,7 @@ This is a big part of your tooling decision. You generally have three options:
 
 Create **measurable acceptance criteria** for each slice of work.
 
-<Admonition type="tip" title="The Golden Rule">
-When changes occur, **update the SPEC first**, then the code.
-
-Never let the code drift from the spec. The spec is the architectural drawing—your agent is the general contractor.
-</Admonition>
+When changes occur, **update the SPEC first**, then the code. Never let the code drift from the spec. The spec is the architectural drawing—your agent is the general contractor.
 
 ---
 
@@ -136,13 +128,13 @@ git add . && git commit -m "feat: implement M1 (auth + user model)"
 If ✅ **pass** → move to M2.
 If ❌ **fail** → agent debugs, or you adjust the spec.
 
-<Admonition type="note" title="Why This Works">
+**Why this works:**
+
 **Async Collaboration**: Your spec is the single source of truth. The agent reads it, you review diffs, the next agent picks up where the last left off. No "what were we doing?" moments.
 
 **Scope Control**: In construction, scope creep kills budgets. In software, it kills momentum. The spec defines boundaries.
 
 **Quality Gates**: Every milestone ends with a test. If a gate fails, you don't proceed. This prevents compounding technical debt.
-</Admonition>
 
 ---
 
@@ -152,9 +144,7 @@ When a building is "finished," there's still work to do: **final inspections, ow
 
 Shipping an MVP is the same. Once real users arrive, you learn what's broken and what features are valuable. The work becomes a steady rhythm of fixing bugs, measuring performance, and turning feature requests into clear stories in your spec.
 
-<Admonition type="tip" title="The Best Problem">
 Reaching this stage is a massive win. **Having users who care enough to complain about your product is the best possible outcome for a builder.**
-</Admonition>
 
 ---
 
@@ -182,9 +172,7 @@ If you ignore deployment until the end, your app will never graduate from localh
 
 ## Key Takeaways
 
-<Admonition type="tip" title="Think Like a Builder">
-Pour a solid foundation (spec), frame the structure (milestones), wire the systems (implementation), finish the surfaces (polish).
-</Admonition>
+**Think like a builder:** Pour a solid foundation (spec), frame the structure (milestones), wire the systems (implementation), finish the surfaces (polish).
 
 **The Preconstruction Workflow:**
 
