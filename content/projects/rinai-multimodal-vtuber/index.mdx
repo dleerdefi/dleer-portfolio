@@ -14,258 +14,44 @@ featured: false
 
 ## Overview
 
-Combines real-time speech processing, VTube Studio integration, and desktop automation for autonomous streaming. Features Twitter scheduling, YouTube chat interaction, and extensible tool framework designed for 24/7 autonomous operation.
+Open-source AI VTuber combining real-time speech processing, avatar control, and desktop automation for autonomous 24/7 streaming. Built with Python, featuring Groq Whisper for ultra-fast STT, ElevenLabs TTS, and GraphRAG memory for context-aware interactions.
 
-This project demonstrates the convergence of AI, streaming technology, and desktop automation to create a fully autonomous content creation system.
-
-## Key Features
-
-### Real-Time STT/TTS Processing
-- **Groq Whisper** for ultra-fast speech-to-text ({'<'}200ms latency)
-- **ElevenLabs** for high-quality text-to-speech with emotion
-- Voice activity detection (VAD) for natural conversation flow
-- Background noise suppression
-- Multi-speaker diarization support
-
-### VTube Studio Integration
-- Real-time avatar control via WebSocket API
-- Expression mapping from sentiment analysis
-- Gesture synchronization with speech
-- Scene management and transitions
-- Custom hotkey bindings for reactions
-
-### OBS Integration
-- Automated scene switching based on activity
-- Source visibility control
-- Filter management (blur, color correction)
-- Recording and streaming state management
-- Virtual camera output
-
-### Twitter Automation
-- Scheduled tweet posting
-- Thread creation and management
-- Media upload (images, GIFs)
-- Engagement tracking
-- Reply automation with sentiment awareness
-
-### YouTube Chat Interaction
-- Real-time chat monitoring
-- Sentiment analysis for responses
-- Super chat highlighting
-- Command processing (!info, !help)
-- Moderation automation
-
-### GraphRAG Memory System
-- Long-term conversation memory
-- User preference tracking
-- Topic relationship modeling
-- Context-aware responses
-- Memory consolidation overnight
-
-### Extensible Tool Framework
-- Plugin architecture for custom tools
-- Hot-reload for development
-- Dependency injection
-- Error recovery and retry logic
-- Performance monitoring
-
-## Architecture
+Production system with **12+ GitHub stars** from the VTuber dev community, capable of **8+ hour autonomous streaming sessions** with **99.2% uptime** over 3 months of continuous operation.
 
 <Terminal cmd="streaming system architecture">
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
 │   YouTube    │─────▶│  Chat Agent  │─────▶│  VTube       │
 │   Chat API   │      │  (Python)    │      │  Studio API  │
 └──────────────┘      └──────────────┘      └──────────────┘
-       │                     │                      │
-       ▼                     ▼                      ▼
-  ┌──────────┐          ┌──────────┐          ┌──────────┐
-  │ Twitter  │          │ GraphRAG │          │   OBS    │
-  │ API      │          │ Memory   │          │ WebSocket│
-  └──────────┘          └──────────┘          └──────────┘
+       │                     ▼                      │
+       ▼              ┌──────────┐                  ▼
+  ┌──────────┐       │ GraphRAG │             ┌──────────┐
+  │ Twitter  │       │ Memory   │             │   OBS    │
+  │ API      │       └──────────┘             │ WebSocket│
+  └──────────┘                                └──────────┘
 </Terminal>
 
-## Performance Metrics
-
-<Admonition type="note">
-Production metrics from 24/7 autonomous streaming operations.
-</Admonition>
-
-- **12+ GitHub stars** from the VTuber dev community
-- **Autonomous streaming capable** with 8+ hour sessions
-- **98% Python codebase** with TypeScript for web interfaces
-- **{'<'}200ms** speech processing latency
-- **99.2% uptime** over 3 months
-
-## Tech Stack
-
-- **Core**: Python 3.11 with asyncio
-- **Speech**: Groq Whisper (STT), ElevenLabs (TTS)
-- **Avatar**: VTube Studio WebSocket API
-- **Streaming**: OBS WebSocket, VoiceMeeter Banana
-- **Audio**: FFmpeg, PyAudio, sounddevice
-- **Frontend**: TypeScript + React for control panel
-- **Memory**: MongoDB with vector search
-
-## Getting Started
-
-<Admonition type="tip">
-Requires VTube Studio, OBS, and VoiceMeeter Banana installed.
-</Admonition>
-
-### Installation
-
-<Terminal cmd="git clone && setup">
-$ git clone https://github.com/dleerdefi/rinai-multimodal-vtuber
-$ cd rinai-multimodal-vtuber
-$ pip install -r requirements.txt
-$ cp .env.example .env
-
-# Configure your API keys
-$ nano .env
-
-$ python main.py
-
-✓ VTube Studio connected
-✓ OBS WebSocket connected
-✓ Speech engines initialized
-✓ Memory system ready
-✓ Starting autonomous mode...
-</Terminal>
-
-### Configuration
-
-<Window title="config.yaml">
-```yaml
-speech:
-  stt: groq_whisper  # or openai_whisper
-  tts: elevenlabs    # or google, azure
-  voice_id: "rachel"  # ElevenLabs voice
-  emotion_mapping: true
-
-streaming:
-  obs:
-    host: localhost
-    port: 4455
-    password: your_password
-  vtube_studio:
-    host: localhost
-    port: 8001
-
-automation:
-  twitter:
-    enabled: true
-    post_frequency: "0 */4 * * *"  # Every 4 hours
-  youtube:
-    chat_monitoring: true
-    auto_respond: true
-
-memory:
-  provider: mongodb
-  consolidation_schedule: "0 4 * * *"  # 4 AM daily
-```
-</Window>
-
-## Autonomous Streaming Workflow
-
-1. **Pre-Stream**: Load schedule, check equipment, test audio
-2. **Going Live**: Start OBS, activate VTube Studio, announce on Twitter
-3. **During Stream**: Monitor chat, respond to viewers, execute scheduled segments
-4. **Raids/Hosts**: Automatic thank you messages and reactions
-5. **Post-Stream**: Save VOD highlights, post clips to Twitter, memory consolidation
-6. **Overnight**: Background tasks, content planning, Twitter scheduling
-
-## Voice Command Examples
-
-```
-"Rin, what's the weather like?"
-→ Calls weather API, speaks forecast, shows overlay
-
-"Check crypto prices"
-→ Fetches latest prices, displays chart, reads top movers
-
-"Tweet about our stream"
-→ Generates tweet, shows preview, posts with stream link
-
-"Play that song we saved"
-→ Searches Spotify, starts playback, shows now playing
-```
-
-## Tool Extension Example
-
-<Window title="tools/custom_tool.py">
+<Window title="Autonomous Streaming Features">
 ```python
-from rinai.tools import Tool, tool_registry
+# Real-time chat interaction with sentiment analysis
+chat_agent.monitor_youtube()
+  → responds to viewer questions
+  → highlights super chats
+  → executes !commands
 
-@tool_registry.register
-class CustomTool(Tool):
-    name = "custom_action"
-    description = "Does something custom"
+# Automated social media presence
+twitter_scheduler.post()
+  → stream announcements
+  → clip sharing
+  → engagement tracking
 
-    async def execute(self, params: dict):
-        # Your logic here
-        result = await your_api_call(params)
-        return {
-            "success": True,
-            "data": result
-        }
+# Voice-activated desktop control
+voice_commands.execute("tweet about stream")
+  → generates content
+  → posts with stream link
+  → updates OBS scenes
 ```
 </Window>
 
-## Use Cases
-
-### Educational Streaming
-- Automated tutorial segments
-- Q&A with memory of previous sessions
-- Resource link sharing
-- Quiz and poll management
-
-### Entertainment Streaming
-- Music requests with Spotify integration
-- Game integration (current game, stats display)
-- Viewer interaction games
-- Real-time translation for international audiences
-
-### Community Management
-- Automated moderation
-- Welcome messages for new subscribers
-- Birthday announcements
-- Anniversary celebrations
-
-## Community Projects
-
-Built with RinAI:
-- **EduStream**: Educational content automation
-- **MusicVT**: 24/7 music streaming VTuber
-- **GameHost**: Automated game show hosting
-- **TalkRadio**: AI-powered podcast host
-
-## Challenges & Solutions
-
-**Challenge**: Speech latency breaking immersion
-**Solution**: Groq Whisper reduces STT to {'<'}200ms, pre-generating common responses
-
-**Challenge**: Avatar movements feeling robotic
-**Solution**: Sentiment-based expression mapping with randomized micro-movements
-
-**Challenge**: Context loss in long streams
-**Solution**: GraphRAG memory with rolling summarization every 30 minutes
-
-## Future Enhancements
-
-- [ ] Multi-language support (JP, ES, FR)
-- [ ] 3D avatar support (VRM models)
-- [ ] Twitch integration
-- [ ] Voice cloning for custom personas
-- [ ] Mobile app for remote control
-
-## Contributing
-
-We welcome contributions! Priority areas:
-- New tool integrations
-- Avatar platforms (Live2D, VSeeFace)
-- Streaming platforms (Twitch, Kick)
-- Documentation and tutorials
-
-## License
-
-MIT License - Build your own AI VTuber!
+**Links:**
+- [GitHub Repository →](https://github.com/dleerdefi/rinai-multimodal-vtuber)

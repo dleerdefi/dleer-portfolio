@@ -74,7 +74,7 @@ Starting content-collections...
           </Admonition>
 
           <Admonition type="warn">
-            <strong>Warning:</strong> Don't mix implementation phases. Complete current milestone before starting the next.
+            <strong>Warning:</strong> Don&apos;t mix implementation phases. Complete current milestone before starting the next.
           </Admonition>
 
           <Admonition type="note">

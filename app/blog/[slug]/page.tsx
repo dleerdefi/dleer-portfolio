@@ -200,13 +200,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <footer className="mt-12 pt-8 border-t-2" style={{ borderColor: 'var(--theme-border)' }}>
             <Link
               href="/blog"
-              className="flex items-center gap-2 px-4 py-2 border-2 hover:bg-opacity-10 transition-colors"
-              style={{
-                borderColor: 'var(--accent-color)',
-                color: 'var(--accent-color)',
-              }}
+              className="hover:underline"
+              style={{ color: 'var(--accent-color)' }}
             >
-              ← Back to Blog List
+              ← Back to Blog
             </Link>
           </footer>
         </div>

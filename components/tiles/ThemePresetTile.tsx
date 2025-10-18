@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useTheme, ThemePreset } from '@/contexts/ThemeContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { SolarizedIcon, NordIcon, TokyoNightIcon } from '@/components/icons/ThemeIcons';
 import { UI_SIZES } from '@/lib/constants/typography';
 

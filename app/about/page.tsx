@@ -1,6 +1,5 @@
 import Section from '@/components/ui/Section';
 import Card from '@/components/ui/Card';
-import Badge from '@/components/ui/Badge';
 
 export default function About() {
   const experience = [

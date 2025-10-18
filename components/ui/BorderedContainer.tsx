@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useEffect } from 'react';
 
 interface BorderedContainerProps {
   children: React.ReactNode;
@@ -10,7 +9,6 @@ interface BorderedContainerProps {
 
 const BorderedContainer: React.FC<BorderedContainerProps> = ({ children, onScroll }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [scrollPercent, setScrollPercent] = useState(0);
 
   useEffect(() => {
     const container = scrollContainerRef.current;
@@ -21,7 +19,6 @@ const BorderedContainer: React.FC<BorderedContainerProps> = ({ children, onScrol
       const scrollHeight = container.scrollHeight - container.clientHeight;
       const percent = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
 
-      setScrollPercent(percent);
       onScroll?.(percent);
     };
 

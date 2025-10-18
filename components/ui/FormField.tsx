@@ -44,7 +44,6 @@ export const FormField: React.FC<FormFieldProps> = ({
   const [isFocused, setIsFocused] = useState(false);
   const fieldId = useId();
   const errorId = `${fieldId}-error`;
-  const descriptionId = `${fieldId}-description`;
   const charCountId = `${fieldId}-charcount`;
 
   const hasError = !!error;

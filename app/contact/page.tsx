@@ -1,6 +1,5 @@
 import Section from '@/components/ui/Section';
 import Card from '@/components/ui/Card';
-import Badge from '@/components/ui/Badge';
 
 export default function Contact() {
   const contactMethods = [
@@ -49,7 +48,7 @@ export default function Contact() {
         </h1>
         <p className="text-lg text-text-secondary max-w-3xl">
           Open to collaborating on innovative DeFi protocols, token economics design,
-          and knowledge graph applications. Let's build something amazing together.
+          and knowledge graph applications. Let&apos;s build something amazing together.
         </p>
       </Section>
 
@@ -75,7 +74,7 @@ export default function Contact() {
                         </div>
                       </div>
                       {method.primary && (
-                        <Badge variant="primary">Primary</Badge>
+                        <span className="text-xs px-2 py-1 rounded" style={{ backgroundColor: 'var(--accent-color)', color: 'var(--theme-bg)' }}>Primary</span>
                       )}
                     </div>
                   </a>
@@ -104,7 +103,7 @@ export default function Contact() {
                 Faster response for urgent security matters.
               </p>
               <div className="mt-4">
-                <Badge variant="secondary">Time Zone: PST (UTC-8)</Badge>
+                <span className="text-xs px-2 py-1 rounded" style={{ backgroundColor: 'rgba(var(--theme-text-rgb), 0.1)', color: 'var(--theme-text)' }}>Time Zone: PST (UTC-8)</span>
               </div>
             </Card>
           </div>

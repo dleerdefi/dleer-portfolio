@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, LayoutGroup } from 'framer-motion';
 import NeofetchTile from '@/components/tiles/NeofetchTile';
@@ -11,10 +11,8 @@ import AccentColorTile from '@/components/tiles/AccentColorTile';
 import BackgroundTile from '@/components/tiles/BackgroundTile';
 import Background from '@/components/layout/Background';
 import Polybar from '@/components/layout/Polybar';
-import BorderedContainer from '@/components/ui/BorderedContainer';
 import { useFocus, ContentType as FocusContentType } from '@/contexts/FocusContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import { useView } from '@/contexts/ViewContext';
 import FocusedView from '@/components/layout/FocusedView';
 
 // Bridge the content types
@@ -25,7 +23,6 @@ const LayoutManager: React.FC = () => {
     focusedTile,
     activeContent,
     setFocusedTile,
-    setActiveContent,
     handleTabNavigation,
     handleDirectionalNavigation,
     handleContentNavigation,
@@ -33,7 +30,6 @@ const LayoutManager: React.FC = () => {
   } = useFocus();
 
   const { theme } = useTheme();
-  const { mode, enterZen } = useView();
   const router = useRouter();
 
   // Hydration-safe mobile detection (prevents SSR/client mismatch)

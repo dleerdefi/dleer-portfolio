@@ -32,8 +32,7 @@ interface ParallaxContactSectionProps {
 export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
   formData,
   setFormData,
-  socialLinks,
-  personal
+  socialLinks
 }) => {
   const [formRenderTime] = useState(new Date().toISOString());
   const [isSubmitting, setIsSubmitting] = useState(false);
