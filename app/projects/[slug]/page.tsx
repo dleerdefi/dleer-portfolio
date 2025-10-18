@@ -119,38 +119,25 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
       {/* Project content */}
       <article className="py-8 sm:py-12 px-4 sm:px-6 md:px-8">
-        <div className="max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl" style={{ margin: '0 auto' }}>
+        <div className="max-w-[720px]" style={{ margin: '0 auto' }}>
           {/* Title and metadata */}
-          <header className="mb-8 pb-8 border-b-2" style={{ borderColor: 'var(--theme-border)' }}>
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <h1
-                className="text-3xl font-bold flex-1"
-                style={{ color: 'var(--accent-color)' }}
-              >
-                {project.title}
-                {project.featured && (
-                  <span
-                    className="ml-3 text-sm px-2 py-1 border"
-                    style={{
-                      borderColor: 'var(--accent-color)',
-                      color: 'var(--accent-color)',
-                    }}
-                  >
-                    Featured
-                  </span>
-                )}
-              </h1>
-            </div>
+          <header className="mt-8 pb-8 border-b-2" style={{ borderColor: 'var(--theme-border)' }}>
+            <h1
+              className="text-3xl font-bold mb-8"
+              style={{ color: 'var(--accent-color)' }}
+            >
+              {project.title}
+            </h1>
 
             <p
-              className="text-lg mb-4"
+              className="text-lg mb-6"
               style={{ color: 'var(--theme-text-dimmed)' }}
             >
               {project.summary}
             </p>
 
             {/* Date */}
-            <div className="flex items-center gap-4 text-sm mb-4 flex-wrap">
+            <div className="flex items-center gap-4 text-sm mb-6 flex-wrap">
               <time style={{ color: 'var(--theme-text-dimmed)' }}>
                 {formatDate(project.date)}
               </time>
@@ -172,31 +159,33 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
             {/* Tech Stack */}
             {project.tech.length > 0 && (
-              <div className="flex items-center gap-2 mb-4 flex-wrap">
+              <div className="mb-6">
                 <span
-                  className="text-sm font-bold"
+                  className="text-sm font-bold block mb-3"
                   style={{ color: 'var(--theme-text)' }}
                 >
                   Tech Stack:
                 </span>
-                {project.tech.map((tech) => (
-                  <span
-                    key={tech}
-                    className="text-sm px-2 py-1 border"
-                    style={{
-                      borderColor: 'var(--theme-border)',
-                      color: 'var(--theme-text)',
-                    }}
-                  >
-                    {tech}
-                  </span>
-                ))}
+                <div className="flex items-center gap-2 flex-wrap">
+                  {project.tech.map((tech) => (
+                    <span
+                      key={tech}
+                      className="text-sm px-2 py-1 border"
+                      style={{
+                        borderColor: 'var(--theme-border)',
+                        color: 'var(--theme-text)',
+                      }}
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
 
             {/* External Links */}
             {(project.github || project.demo) && (
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center gap-4">
                 {project.github && (
                   <a
                     href={project.github}
@@ -225,24 +214,6 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                     Live Demo →
                   </a>
                 )}
-              </div>
-            )}
-
-            {/* Tags */}
-            {project.tags.length > 0 && (
-              <div className="flex items-center gap-2 flex-wrap">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs px-2 py-1 border"
-                    style={{
-                      borderColor: 'var(--theme-border)',
-                      color: 'var(--theme-text-dimmed)',
-                    }}
-                  >
-                    #{tag}
-                  </span>
-                ))}
               </div>
             )}
           </header>

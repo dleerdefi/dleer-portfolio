@@ -3,5 +3,6 @@ export { Terminal } from './Terminal';
 export { Window } from './Window';
 export { Key } from './Key';
 export { Figure } from './Figure';
+export { CodeBlock, InlineCode } from './Code';
 
 export type { AdmonitionType } from './Admonition';

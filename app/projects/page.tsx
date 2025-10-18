@@ -44,9 +44,9 @@ export default function ProjectsZenPage() {
         subtitle="Portfolio of technical work and experiments"
         emptyMessage="No projects found."
         renderItem={(project, _index, isSelected) => (
-        <div className="space-y-4">
+        <div>
           {/* Header: Title and Status Badge */}
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start justify-between gap-4 mb-6">
             <h2
               className="text-xl font-bold flex-1"
               style={{
@@ -85,7 +85,7 @@ export default function ProjectsZenPage() {
 
           {/* Summary */}
           <p
-            className="text-base"
+            className="text-base mb-4"
             style={{
               color: 'var(--theme-text-dimmed)',
               lineHeight: '1.6',
@@ -96,7 +96,7 @@ export default function ProjectsZenPage() {
 
           {/* Tech Stack */}
           {project.tech.length > 0 && (
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap mb-3">
               <span
                 className="text-xs"
                 style={{ color: 'var(--theme-text-dimmed)' }}
@@ -118,52 +118,35 @@ export default function ProjectsZenPage() {
             </div>
           )}
 
-          {/* Links and Tags */}
-          <div className="flex items-center gap-4 text-xs flex-wrap">
-            {/* External Links */}
-            {(project.github || project.demo) && (
-              <div className="flex items-center gap-3">
-                {project.github && (
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:underline"
-                    style={{ color: 'var(--accent-color)' }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    GitHub →
-                  </a>
-                )}
-                {project.demo && (
-                  <a
-                    href={project.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:underline"
-                    style={{ color: 'var(--accent-color)' }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    Live Demo →
-                  </a>
-                )}
-              </div>
-            )}
-
-            {/* Tags */}
-            {project.tags.length > 0 && (
-              <div className="flex items-center gap-2">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    style={{ color: 'var(--theme-text-dimmed)' }}
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* External Links */}
+          {(project.github || project.demo) && (
+            <div className="flex items-center gap-3 text-sm">
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+                  style={{ color: 'var(--accent-color)' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  GitHub →
+                </a>
+              )}
+              {project.demo && (
+                <a
+                  href={project.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+                  style={{ color: 'var(--accent-color)' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Live Demo →
+                </a>
+              )}
+            </div>
+          )}
         </div>
       )}
       />

@@ -1,383 +1,186 @@
 /**
  * Blog Content / Prose Styling
- * Engaging, professional, interactive blog experience
- * Inspired by Josh Comeau with smooth animations and visual depth
+ * Clean, professional, readable blog experience
+ * Inspired by mdxblog.io with focus on content
  */
 
-.blog-prose {
-  /* Beautiful sans-serif for readability */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+/* ============================================ */
+/* Base Prose Container */
+/* ============================================ */
 
-  /* Optimal reading width with breathing room */
-  max-width: 68ch;
-  font-size: 1.15rem;
-  line-height: 1.75;
+.blog-prose {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  max-width: 720px;
+  font-size: 1.125rem;
+  line-height: 1.8;
   color: var(--theme-text);
-  letter-spacing: -0.011em;
 }
 
 /* ============================================ */
-/* Typography Scale - Bold & Impactful */
+/* Typography - Clean Hierarchy */
 /* ============================================ */
 
 .blog-prose h1 {
-  font-size: 3.5rem;
-  line-height: 1.05;
-  font-weight: 900;
+  font-size: 2.5rem;
+  line-height: 1.2;
+  font-weight: 700;
   margin-top: 0;
-  margin-bottom: 2.5rem;
-  background: linear-gradient(
-    135deg,
-    var(--accent-color) 0%,
-    rgba(var(--accent-color-rgb), 0.7) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.03em;
-  position: relative;
+  margin-bottom: 1.5rem;
+  color: var(--theme-text);
+  letter-spacing: -0.02em;
 }
 
 .blog-prose h2 {
-  font-size: 2.5rem;
-  line-height: 1.15;
-  font-weight: 800;
-  margin-top: 5rem;
-  margin-bottom: 2rem;
+  font-size: 2rem;
+  line-height: 1.3;
+  font-weight: 700;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
   color: var(--theme-text);
-  letter-spacing: -0.02em;
-  position: relative;
-  padding-left: 1.5rem;
-}
-
-.blog-prose h2::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.25em;
-  width: 6px;
-  height: 1.5em;
-  background: linear-gradient(180deg, var(--accent-color), rgba(var(--accent-color-rgb), 0.4));
-  border-radius: 3px;
-  box-shadow: 0 0 12px rgba(var(--accent-color-rgb), 0.4);
+  letter-spacing: -0.01em;
 }
 
 .blog-prose h3 {
-  font-size: 1.875rem;
-  line-height: 1.25;
-  font-weight: 700;
-  margin-top: 3.5rem;
-  margin-bottom: 1.5rem;
-  color: var(--accent-color);
-}
-
-.blog-prose h4 {
   font-size: 1.5rem;
-  line-height: 1.35;
+  line-height: 1.4;
   font-weight: 600;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
   color: var(--theme-text);
 }
 
+.blog-prose h4 {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--theme-text);
+}
+
 .blog-prose p {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.75;
 }
 
-/* First paragraph - make it stand out */
-.blog-prose > p:first-of-type {
-  font-size: 1.25rem;
-  line-height: 1.7;
-  color: var(--theme-text);
-  margin-bottom: 2.5rem;
-}
-
 /* ============================================ */
-/* Links - Smooth, Playful Hover Effects */
+/* Links */
 /* ============================================ */
 
 .blog-prose a {
   color: var(--accent-color);
-  text-decoration: none;
-  position: relative;
-  font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.blog-prose a::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent-color), rgba(var(--accent-color-rgb), 0.3));
-  transform: scaleX(1);
-  transform-origin: bottom right;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.blog-prose a:hover::after {
-  transform: scaleX(0);
-  transform-origin: bottom left;
+  text-decoration: underline;
+  text-decoration-color: rgba(var(--accent-color-rgb), 0.4);
+  text-underline-offset: 2px;
+  transition: all 0.2s ease;
 }
 
 .blog-prose a:hover {
-  text-shadow: 0 0 8px rgba(var(--accent-color-rgb), 0.3);
+  text-decoration-color: var(--accent-color);
 }
 
 .blog-prose .heading-anchor {
   text-decoration: none;
-  font-weight: inherit;
-}
-
-.blog-prose .heading-anchor::after {
-  display: none;
 }
 
 /* ============================================ */
-/* Code Blocks - Professional with Copy Button */
-/* ============================================ */
-
-.blog-prose pre {
-  background: #1a1b26 !important;
-  border-radius: 16px;
-  padding: 2rem;
-  overflow-x: auto;
-  margin: 3rem 0;
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(var(--accent-color-rgb), 0.1);
-  line-height: 1.6;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.blog-prose pre:hover {
-  box-shadow:
-    0 16px 48px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(var(--accent-color-rgb), 0.3);
-  transform: translateY(-2px);
-}
-
-.blog-prose pre code {
-  background: transparent !important;
-  padding: 0 !important;
-  border-radius: 0;
-  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
-  font-size: 0.95rem;
-  color: inherit;
-  font-weight: normal;
-}
-
-/* Copy button for code blocks */
-.copy-button {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  padding: 0.5rem 1rem;
-  background: rgba(var(--accent-color-rgb), 0.15);
-  border: 1px solid rgba(var(--accent-color-rgb), 0.3);
-  border-radius: 8px;
-  color: var(--accent-color);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
-  z-index: 10;
-}
-
-.copy-button:hover {
-  background: rgba(var(--accent-color-rgb), 0.25);
-  border-color: var(--accent-color);
-  transform: scale(1.05);
-}
-
-.copy-button:active {
-  transform: scale(0.95);
-}
-
-/* Inline Code - Accent Themed with Glow */
-.blog-prose :not(pre) > code {
-  background: rgba(var(--accent-color-rgb), 0.15);
-  padding: 0.3em 0.6em;
-  border-radius: 6px;
-  font-size: 0.9em;
-  color: var(--accent-color);
-  font-weight: 700;
-  font-family: 'JetBrains Mono', 'SF Mono', Monaco, Consolas, monospace;
-  border: 1px solid rgba(var(--accent-color-rgb), 0.3);
-  box-shadow: 0 0 8px rgba(var(--accent-color-rgb), 0.1);
-  transition: all 0.2s ease;
-}
-
-.blog-prose :not(pre) > code:hover {
-  background: rgba(var(--accent-color-rgb), 0.25);
-  box-shadow: 0 0 12px rgba(var(--accent-color-rgb), 0.3);
-}
-
-/* ============================================ */
-/* Lists - Spacious & Easy to Scan */
+/* Lists */
 /* ============================================ */
 
 .blog-prose ul,
 .blog-prose ol {
-  margin: 2.5rem 0;
-  padding-left: 2.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
 }
 
 .blog-prose li {
-  margin: 1.25rem 0;
+  margin-bottom: 0.5rem;
   line-height: 1.75;
-  position: relative;
 }
 
-.blog-prose ul > li::marker {
-  color: var(--accent-color);
-  font-size: 1.2em;
+.blog-prose ul {
+  list-style-type: disc;
 }
 
-.blog-prose li p {
-  margin: 0.75rem 0;
-}
-
-.blog-prose li strong {
-  color: var(--accent-color);
-  font-weight: 700;
+.blog-prose ol {
+  list-style-type: decimal;
 }
 
 /* ============================================ */
-/* Blockquotes - Elegant Pull Quotes */
+/* Code - Inline and Blocks */
+/* ============================================ */
+
+/* Let CodeBlock component own fenced code block styling */
+/* Only style inline code here */
+.blog-prose :not(pre) > code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 0.9em;
+  background: rgba(var(--accent-color-rgb), 0.1);
+  border: 1px solid rgba(var(--accent-color-rgb), 0.2);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-color);
+}
+
+/* Remove Tailwind Typography backtick quotes */
+.blog-prose code::before,
+.blog-prose code::after {
+  content: none;
+}
+
+/* Code blocks are handled by CodeBlock component - don't interfere */
+.blog-prose pre {
+  /* CodeBlock wrapper handles all styling */
+}
+
+.blog-prose pre code {
+  /* Let syntax highlighter handle this */
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
+}
+
+/* ============================================ */
+/* Blockquotes */
 /* ============================================ */
 
 .blog-prose blockquote {
-  border-left: 4px solid var(--accent-color);
-  padding: 1.5rem 2rem;
-  margin: 3.5rem 0;
-  font-size: 1.2rem;
+  border-left: 3px solid var(--accent-color);
+  padding-left: 1.5rem;
+  margin: 2rem 0;
   font-style: italic;
-  background: linear-gradient(
-    90deg,
-    rgba(var(--accent-color-rgb), 0.08) 0%,
-    transparent 100%
-  );
-  border-radius: 0 12px 12px 0;
-  color: var(--theme-text);
-  position: relative;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-.blog-prose blockquote::before {
-  content: '"';
-  position: absolute;
-  top: -0.25em;
-  left: 0.5rem;
-  font-size: 4rem;
-  color: rgba(var(--accent-color-rgb), 0.2);
-  font-family: Georgia, serif;
-  line-height: 1;
-}
-
-.blog-prose blockquote p:last-child {
-  margin-bottom: 0;
-}
-
-/* ============================================ */
-/* Images & Figures - Engaging Visuals */
-/* ============================================ */
-
-.blog-prose figure {
-  margin: 4rem 0;
-}
-
-.blog-prose img {
-  border-radius: 16px;
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.2),
-    0 0 0 1px rgba(var(--accent-color-rgb), 0.1);
-  width: 100%;
-  height: auto;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.blog-prose img:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow:
-    0 20px 60px rgba(var(--accent-color-rgb), 0.3),
-    0 0 0 1px rgba(var(--accent-color-rgb), 0.3);
-}
-
-.blog-prose figcaption {
-  text-align: center;
-  font-size: 0.95rem;
-  margin-top: 1.5rem;
   color: var(--theme-text-dimmed);
-  font-style: italic;
 }
 
 /* ============================================ */
-/* Tables - Clean, Professional */
+/* Horizontal Rule */
+/* ============================================ */
+
+.blog-prose hr {
+  border: none;
+  border-top: 2px solid var(--theme-border);
+  margin: 3rem 0;
+}
+
+/* ============================================ */
+/* Tables */
 /* ============================================ */
 
 .blog-prose table {
   width: 100%;
   border-collapse: collapse;
-  margin: 3rem 0;
-  font-size: 0.95rem;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin: 2rem 0;
 }
 
 .blog-prose th,
 .blog-prose td {
-  padding: 1rem 1.5rem;
-  border: 1px solid rgba(var(--accent-color-rgb), 0.15);
+  padding: 0.75rem;
+  border: 1px solid var(--theme-border);
   text-align: left;
 }
 
 .blog-prose th {
-  background: rgba(var(--accent-color-rgb), 0.12);
-  font-weight: 700;
-  color: var(--accent-color);
-  border-bottom: 2px solid var(--accent-color);
-}
-
-.blog-prose tr:hover {
-  background: rgba(var(--accent-color-rgb), 0.05);
-}
-
-/* ============================================ */
-/* Horizontal Rules */
-/* ============================================ */
-
-.blog-prose hr {
-  border: none;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(var(--accent-color-rgb), 0.3),
-    transparent
-  );
-  margin: 5rem 0;
-  position: relative;
-}
-
-.blog-prose hr::after {
-  content: '◆';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--theme-bg);
-  padding: 0 1rem;
-  color: var(--accent-color);
-  font-size: 0.875rem;
+  background: rgba(var(--theme-surface-rgb), 0.5);
+  font-weight: 600;
 }
 
 /* ============================================ */
@@ -385,7 +188,7 @@
 /* ============================================ */
 
 .blog-prose strong {
-  font-weight: 700;
+  font-weight: 600;
   color: var(--theme-text);
 }
 
@@ -394,87 +197,36 @@
 }
 
 /* ============================================ */
-/* Scroll Reveal Animations */
-/* ============================================ */
-
-.reveal-target {
-  opacity: 0;
-  transform: translateY(30px);
-  transition:
-    opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.reveal-target.revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Stagger animation timing */
-.reveal-target:nth-child(1) { transition-delay: 0.05s; }
-.reveal-target:nth-child(2) { transition-delay: 0.1s; }
-.reveal-target:nth-child(3) { transition-delay: 0.15s; }
-.reveal-target:nth-child(4) { transition-delay: 0.2s; }
-.reveal-target:nth-child(5) { transition-delay: 0.25s; }
-
-/* ============================================ */
 /* Responsive Typography */
 /* ============================================ */
 
 @media (max-width: 768px) {
   .blog-prose {
-    font-size: 1.05rem;
+    font-size: 1rem;
     max-width: 100%;
   }
 
   .blog-prose h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 
   .blog-prose h2 {
-    font-size: 2rem;
-    margin-top: 3.5rem;
-    padding-left: 1.25rem;
+    font-size: 1.75rem;
+    margin-top: 2.5rem;
   }
 
   .blog-prose h3 {
-    font-size: 1.625rem;
+    font-size: 1.375rem;
+    margin-top: 2rem;
   }
 
   .blog-prose h4 {
-    font-size: 1.375rem;
-  }
-
-  .blog-prose > p:first-of-type {
     font-size: 1.125rem;
   }
 
   .blog-prose pre {
-    padding: 1.5rem;
-    font-size: 0.875rem;
-    margin: 2rem -1rem;
-    border-radius: 12px;
-  }
-
-  .blog-prose ul,
-  .blog-prose ol {
-    padding-left: 2rem;
-  }
-
-  .blog-prose blockquote {
-    padding: 1.25rem 1.5rem;
-    font-size: 1.05rem;
-    margin: 2.5rem 0;
-  }
-}
-
-/* Dark mode image optimization */
-@media (prefers-color-scheme: dark) {
-  .blog-prose img {
-    opacity: 0.92;
-  }
-
-  .blog-prose img:hover {
-    opacity: 1;
+    padding: 1rem;
+    margin: 1.5rem -1rem;
+    border-radius: 0;
   }
 }
