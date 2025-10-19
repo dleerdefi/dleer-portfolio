@@ -43,11 +43,15 @@ COPY --from=builder /app/public ./public
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-# Copy standalone build output
-# Handle Next.js 15's nested standalone structure
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/development/dleer-portfolio/* ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/development/dleer-portfolio/node_modules ./node_modules
+# Copy standalone server and dependencies
+# With outputFileTracingRoot set to project root, structure should be flat
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+
+# Copy static assets (CRITICAL: Must be from build root, not standalone)
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Copy content-collections generated files (REQUIRED for blog/project pages)
+COPY --from=builder --chown=nextjs:nodejs /app/.content-collections/generated ./.content-collections/generated
 
 # Switch to non-root user
 USER nextjs

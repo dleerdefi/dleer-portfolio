@@ -52,3 +52,8 @@ public/images/originals/
 
 # Documentation
 README.md
+*.md
+docs/
+
+# Content Collections Cache (rebuilt during build)
+.content-collections/cache/
