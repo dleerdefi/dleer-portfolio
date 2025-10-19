@@ -137,9 +137,9 @@ export async function POST(req: NextRequest) {
 
     // Send email using Resend API
     const { data, error } = await resend.emails.send({
-      // Use 'onboarding@resend.dev' for testing without custom domain
-      // Replace with 'contact@yourdomain.com' after domain verification
-      from: 'onboarding@resend.dev',
+      // Use environment variable for FROM address
+      // Falls back to noreply@ if not configured
+      from: process.env.RESEND_FROM_EMAIL || `noreply@${process.env.NEXT_PUBLIC_DOMAIN || 'dleer.com'}`,
       to: process.env.NEXT_PUBLIC_CONTACT_EMAIL!,
       replyTo: email,  // Allow direct reply to sender
       subject: `Portfolio Contact: ${name}`,
