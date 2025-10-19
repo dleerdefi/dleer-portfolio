@@ -44,8 +44,9 @@ RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
 # Copy standalone build output
-# Next.js standalone includes only necessary production files
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+# Handle Next.js 15's nested standalone structure
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/development/dleer-portfolio/* ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/development/dleer-portfolio/node_modules ./node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Switch to non-root user
