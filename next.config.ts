@@ -19,12 +19,12 @@ const nextConfig: NextConfig = {
         hostname: 'images.unsplash.com',
         pathname: '/**',
       },
-      // Add your CDN domain here when ready (e.g., R2/S3)
-      // {
-      //   protocol: 'https',
-      //   hostname: 'cdn.yourdomain.com',
-      //   pathname: '/**',
-      // },
+      // Cloudflare R2 CDN for portfolio images
+      {
+        protocol: 'https',
+        hostname: 'cdn.dleer.ai',
+        pathname: '/**',
+      },
     ],
   },
 };
