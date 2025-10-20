@@ -88,7 +88,8 @@ export function ZenList<T>({
       ref={containerRef}
       className={`min-h-screen ${className}`}
       style={{
-        backgroundColor: 'var(--theme-bg)',
+        // Remove backgroundColor - FramedPageLayout provides it
+        // backgroundColor: 'var(--theme-bg)',
         color: 'var(--theme-text)',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       }}
