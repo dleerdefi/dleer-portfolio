@@ -42,10 +42,21 @@ export function isCdnEnabled(): boolean {
 
 /**
  * Get thumbnail path for an image
- * @param imagePath - Original image path
+ * Handles both full URLs (from CDN) and relative paths
+ * @param imagePath - Original image path (can be full URL or relative)
  * @returns Thumbnail path
  */
 export function getThumbnailUrl(imagePath: string): string {
+  // Handle full URLs (CDN or local absolute paths)
+  // Prevents double-processing URLs that are already from getImageUrl()
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://') || imagePath.startsWith('/images/')) {
+    // Already a full URL or absolute path - manipulate directly
+    return imagePath
+      .replace(/\/images\/([^/]+\.webp)$/, '/images/thumbs/$1')  // Insert /thumbs/ before filename
+      .replace(/\.webp$/, '_thumb.webp');  // Add _thumb suffix
+  }
+
+  // Handle relative paths (for backward compatibility)
   const baseUrl = getImageUrl(imagePath);
   return baseUrl
     .replace('/images/', '/images/thumbs/')
