@@ -2,16 +2,12 @@
 # https://docs.railway.app/deploy/config-as-code
 
 # [build] section removed to allow Railway auto-detection (Railpack/Nixpacks)
-# Auto-detection properly injects NEXT_PUBLIC_* environment variables as build args
-# Custom Dockerfile (now Dockerfile.backup) failed to receive Railway service variables
-# despite correct ARG/ENV configuration per Railway documentation
+# Railpack automatically injects NEXT_PUBLIC_* environment variables at build time
+# Uses standard Next.js build (not standalone) with default "next start" command
 
 [deploy]
-# Use standalone server that Railpack builds
-# next.config.ts has output: 'standalone', so we must use the standalone server
-# Deployment logs warned: "next start" does not work with "output: standalone"
-# Railpack creates .next/standalone/server.js (not /app/server.js)
-startCommand = "node .next/standalone/server.js"
+# startCommand removed - using Railway's default "next start" for standard builds
+# Railpack handles the build and properly injects environment variables
 healthcheckPath = "/"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
