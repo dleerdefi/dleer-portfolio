@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { archLogoASCII, archLogoCompact, minimalLogo, dleerBlockLetters, dleerCompact } from '@/components/assets/archAscii';
+import { archLogoASCII, archLogoCompact, minimalLogo, dleerBlockLetters, dlBlockLetters } from '@/components/assets/archAscii';
 import { usePersonalInfo, useSystemInfo } from '@/lib/config';
 import { FONT_SIZES } from '@/lib/constants/typography';
 
@@ -30,7 +30,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
   // Switch ASCII art based on screen size and preference
   let asciiArt;
   if (logoType === 'dleer') {
-    asciiArt = windowWidth < 400 ? dleerCompact : dleerBlockLetters;
+    asciiArt = windowWidth < 400 ? dlBlockLetters : dleerBlockLetters;
   } else if (logoType === 'arch') {
     asciiArt = windowWidth < 400 ? archLogoCompact : archLogoASCII;
   } else {

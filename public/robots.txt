@@ -1,0 +1,9 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin/API routes
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://dleer.ai/sitemap.xml
