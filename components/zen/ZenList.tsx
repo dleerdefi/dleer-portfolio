@@ -88,26 +88,15 @@ export function ZenList<T>({
       ref={containerRef}
       className={`min-h-screen ${className}`}
       style={{
+        backgroundColor: 'var(--theme-bg)',
         color: 'var(--theme-text)',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       }}
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
-      {/* Background wrapper - forces stable GPU compositing to prevent artifacts */}
-      <div
-        style={{
-          backgroundColor: 'var(--theme-bg)',
-          minHeight: '100%',
-          position: 'relative',
-          zIndex: 2,
-          transform: 'translateZ(0)',  // Force GPU layer
-          willChange: 'transform',      // Hint browser about GPU usage
-          isolation: 'isolate',         // Create new stacking context
-        }}
-      >
-        {/* Header - zen flat style, no background/border */}
-        <div className="py-4 px-4 sm:px-6">
+      {/* Header - zen flat style, no background/border */}
+      <div className="py-4 px-4 sm:px-6">
           <div className="max-w-[720px]" style={{ margin: '0 auto' }}>
             <div className="flex items-center justify-between">
               <div>
@@ -193,24 +182,23 @@ export function ZenList<T>({
         </div>
 
         {/* Footer - item count, zen flat style */}
-        <div
-          className="fixed bottom-0 left-0 right-0 py-2 px-6 text-xs"
-          style={{
-            color: 'var(--theme-text-dimmed)',
-            zIndex: 1,
-            pointerEvents: 'none',
-          }}
-        >
-          <div className="max-w-[720px] flex justify-between" style={{ margin: '0 auto' }}>
+      <div
+        className="fixed bottom-0 left-0 right-0 py-2 px-6 text-xs"
+        style={{
+          color: 'var(--theme-text-dimmed)',
+          zIndex: 1,
+          pointerEvents: 'none',
+        }}
+      >
+        <div className="max-w-[720px] flex justify-between" style={{ margin: '0 auto' }}>
+          <span>
+            {items.length} {items.length === 1 ? 'item' : 'items'}
+          </span>
+          {items.length > 0 && (
             <span>
-              {items.length} {items.length === 1 ? 'item' : 'items'}
+              {activeIndex + 1} / {items.length}
             </span>
-            {items.length > 0 && (
-              <span>
-                {activeIndex + 1} / {items.length}
-              </span>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </div>
