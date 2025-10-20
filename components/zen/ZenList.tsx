@@ -186,6 +186,8 @@ export function ZenList<T>({
         className="fixed bottom-0 left-0 right-0 py-2 px-6 text-xs"
         style={{
           color: 'var(--theme-text-dimmed)',
+          zIndex: 1,
+          pointerEvents: 'none',
         }}
       >
         <div className="max-w-[720px] flex justify-between" style={{ margin: '0 auto' }}>
