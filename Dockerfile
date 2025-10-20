@@ -104,7 +104,7 @@ COPY . .
 # Build Next.js application
 # Generates standalone output for optimized production build
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build
+RUN npm run build  # Cache bust: 2025-01-20 - Force rebuild with Railway ARG/ENV variables
 
 # Stage 3: Runner (Production)
 FROM node:20-alpine AS runner
