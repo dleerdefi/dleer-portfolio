@@ -7,10 +7,11 @@
 # despite correct ARG/ENV configuration per Railway documentation
 
 [deploy]
-# startCommand removed - let Railpack use default "npm run start"
-# Railpack builds standard Next.js (not standalone), so "node server.js" fails
-# This also tests if Railpack auto-injects NEXT_PUBLIC_* env vars to solve CDN issue
-# If CDN works: Keep Railpack (simple). If not: Restore Dockerfile with diagnostics.
+# Use standalone server that Railpack builds
+# next.config.ts has output: 'standalone', so we must use the standalone server
+# Deployment logs warned: "next start" does not work with "output: standalone"
+# Railpack creates .next/standalone/server.js (not /app/server.js)
+startCommand = "node .next/standalone/server.js"
 healthcheckPath = "/"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
