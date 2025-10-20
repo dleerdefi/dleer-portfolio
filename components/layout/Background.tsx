@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useTheme } from '@/contexts/ThemeContext';
+import { getImageUrl } from '@/lib/image-paths';
 
 interface BackgroundProps {
   wallpaperUrl?: string;
@@ -18,7 +19,7 @@ const themeBackgrounds: Record<string, {
   scale: number;
 }> = {
   'theme-tokyo-night': {
-    url: '/images/purple-girl.webp',
+    url: getImageUrl('purple-girl.webp'),
     overlay: 'rgba(26, 27, 38, 0.5)',
     blur: '8px',
     brightness: 0.6,
@@ -26,7 +27,7 @@ const themeBackgrounds: Record<string, {
     scale: 1.1
   },
   'theme-nord': {
-    url: '/images/cool_rocks.webp',
+    url: getImageUrl('cool_rocks.webp'),
     overlay: 'rgba(46, 52, 64, 0.5)',
     blur: '6px',
     brightness: 0.7,
@@ -34,7 +35,7 @@ const themeBackgrounds: Record<string, {
     scale: 1.1
   },
   'theme-solarized-light': {
-    url: '/images/pastel-window.webp',
+    url: getImageUrl('pastel-window.webp'),
     overlay: 'rgba(253, 246, 227, 0.65)',
     blur: '4px',
     brightness: 0.95,

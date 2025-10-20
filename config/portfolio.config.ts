@@ -1,5 +1,6 @@
 import { PortfolioConfig } from './types';
 import { projectsData } from './projects.config';
+import { getImageUrl } from '@/lib/image-paths';
 
 // Main portfolio configuration
 // Replace values with your own information
@@ -14,7 +15,7 @@ export const portfolioConfig: PortfolioConfig = {
     contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "email@email.com",
     location: process.env.NEXT_PUBLIC_LOCATION || "Your Location",
     profilePhoto: {
-      src: process.env.NEXT_PUBLIC_PROFILE_PHOTO || "/images/profile/dleer-shinjuku.webp",
+      src: process.env.NEXT_PUBLIC_PROFILE_PHOTO || getImageUrl("profile/dleer-shinjuku.webp"),
       alt: "David in Tokyo",
       width: 1536,
       height: 2048,
@@ -25,7 +26,7 @@ export const portfolioConfig: PortfolioConfig = {
         iso: "32"
       },
       detectionVariant: {
-        src: "/images/profile/dleer-shinjuku-RF-DETR.webp",
+        src: getImageUrl("profile/dleer-shinjuku-RF-DETR.webp"),
         exif: {
           location: "Shinjuku, Tokyo",
           model: "RF-DETR",
@@ -473,7 +474,7 @@ Summary of key points and takeaways from the article.`
   },
 
   theme: {
-    wallpaper: process.env.NEXT_PUBLIC_WALLPAPER || "/images/rice-wallpaper.jpg",
+    wallpaper: process.env.NEXT_PUBLIC_WALLPAPER || getImageUrl("rice-wallpaper.jpg"),
     // Users can override theme colors if desired
     primaryColor: process.env.NEXT_PUBLIC_PRIMARY_COLOR,
     accentColor: process.env.NEXT_PUBLIC_ACCENT_COLOR

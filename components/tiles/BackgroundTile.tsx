@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { useTheme, themeBackgrounds } from '@/contexts/ThemeContext';
+import { getThumbnailUrl } from '@/lib/image-paths';
 
 interface BackgroundTileProps {
   isBlurred?: boolean;
@@ -16,11 +17,6 @@ const BackgroundTile: React.FC<BackgroundTileProps> = ({ isBlurred = false }) =>
   const currentIndex = theme.backgroundImage === null
     ? -1 // "NONE" option
     : currentBackgrounds.indexOf(theme.backgroundImage);
-
-  // Helper function to convert full image path to thumbnail path
-  const getThumbnailPath = (imagePath: string): string => {
-    return imagePath.replace('/images/', '/images/thumbs/').replace('.webp', '_thumb.webp');
-  };
 
   const handlePrevBackground = () => {
     if (currentIndex <= -1) {
@@ -91,7 +87,7 @@ const BackgroundTile: React.FC<BackgroundTileProps> = ({ isBlurred = false }) =>
             </span>
           ) : (
             <Image
-              src={getThumbnailPath(theme.backgroundImage)}
+              src={getThumbnailUrl(theme.backgroundImage)}
               alt="Background preview"
               fill
               quality={70}

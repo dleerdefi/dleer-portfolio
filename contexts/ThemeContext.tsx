@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { getImageUrl } from '@/lib/image-paths';
 
 // Theme preset types - Final three-tier system
 export type ThemePreset = 'solarized-light' | 'nord' | 'tokyo-night';
@@ -15,20 +16,20 @@ const themeDefaultAccents: Record<ThemePreset, AccentColor> = {
 // Background images for each theme preset
 export const themeBackgrounds: Record<ThemePreset, string[]> = {
   'tokyo-night': [
-    '/images/purple-girl.webp',
-    '/images/cat_anime-girl.webp',
-    '/images/shiny_purple.webp',
-    '/images/pixel_big_city.webp'
+    getImageUrl('purple-girl.webp'),
+    getImageUrl('cat_anime-girl.webp'),
+    getImageUrl('shiny_purple.webp'),
+    getImageUrl('pixel_big_city.webp')
   ],
   'nord': [
-    '/images/cool_rocks.webp',
-    '/images/lets_go_home.webp',
-    '/images/gradient-pb.webp'
+    getImageUrl('cool_rocks.webp'),
+    getImageUrl('lets_go_home.webp'),
+    getImageUrl('gradient-pb.webp')
   ],
   'solarized-light': [
-    '/images/pastel-window.webp',
-    '/images/yellow_kyoto.webp',
-    '/images/ign_colorful.webp'
+    getImageUrl('pastel-window.webp'),
+    getImageUrl('yellow_kyoto.webp'),
+    getImageUrl('ign_colorful.webp')
   ]
 };
 
