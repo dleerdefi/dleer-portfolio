@@ -55,17 +55,16 @@ export const FramedPageLayout: React.FC<FramedPageLayoutProps> = ({
       {/* Border frame with glass effects */}
       <ParallaxBorderFrame borderPadding={borderPadding} />
 
-      {/* Scrollable content container - must start at 0,0 so content can scroll through border zones */}
+      {/* Scrollable content container - positioned inside border frame */}
       <div
         ref={scrollContainerRef}
         tabIndex={0}
         className="fixed overflow-y-auto hide-scrollbar outline-none"
         style={{
-          top: '0',
-          left: '0',
-          right: '0',
-          bottom: '0',
-          padding: `${borderPadding}px`,
+          top: `${borderPadding}px`,
+          left: `${borderPadding}px`,
+          right: `${borderPadding}px`,
+          bottom: `${borderPadding}px`,
           zIndex: 2,
           overscrollBehavior: 'contain',
           WebkitOverflowScrolling: 'touch' as any
