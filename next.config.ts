@@ -26,6 +26,8 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+    // Configure quality values for Next.js 16 compatibility
+    qualities: [70, 85, 90, 100],
   },
 };
 
