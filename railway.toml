@@ -1,9 +1,10 @@
 # Railway configuration for Next.js deployment
 # https://docs.railway.app/deploy/config-as-code
 
-[build]
-builder = "DOCKERFILE"
-dockerfilePath = "Dockerfile"
+# [build] section removed to allow Railway auto-detection (Railpack/Nixpacks)
+# Auto-detection properly injects NEXT_PUBLIC_* environment variables as build args
+# Custom Dockerfile (now Dockerfile.backup) failed to receive Railway service variables
+# despite correct ARG/ENV configuration per Railway documentation
 
 [deploy]
 startCommand = "node server.js"
