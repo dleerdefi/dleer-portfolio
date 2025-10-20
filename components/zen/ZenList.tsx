@@ -88,118 +88,129 @@ export function ZenList<T>({
       ref={containerRef}
       className={`min-h-screen ${className}`}
       style={{
-        // Remove backgroundColor - FramedPageLayout provides it
-        // backgroundColor: 'var(--theme-bg)',
         color: 'var(--theme-text)',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       }}
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
-      {/* Header - zen flat style, no background/border */}
-      <div className="py-4 px-4 sm:px-6">
-        <div className="max-w-[720px]" style={{ margin: '0 auto' }}>
-          <div className="flex items-center justify-between">
-            <div>
-              <h1
-                className="text-3xl font-bold"
-                style={{
-                  color: 'var(--accent-color)',
-                  letterSpacing: '-0.02em',
-                }}
-              >
-                {title}
-              </h1>
-              {subtitle && (
-                <p
-                  className="text-sm mt-1"
-                  style={{ color: 'var(--theme-text-dimmed)' }}
+      {/* Background wrapper - forces stable GPU compositing to prevent artifacts */}
+      <div
+        style={{
+          backgroundColor: 'var(--theme-bg)',
+          minHeight: '100%',
+          position: 'relative',
+          zIndex: 2,
+          transform: 'translateZ(0)',  // Force GPU layer
+          willChange: 'transform',      // Hint browser about GPU usage
+          isolation: 'isolate',         // Create new stacking context
+        }}
+      >
+        {/* Header - zen flat style, no background/border */}
+        <div className="py-4 px-4 sm:px-6">
+          <div className="max-w-[720px]" style={{ margin: '0 auto' }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1
+                  className="text-3xl font-bold"
+                  style={{
+                    color: 'var(--accent-color)',
+                    letterSpacing: '-0.02em',
+                  }}
                 >
-                  {subtitle}
-                </p>
-              )}
-            </div>
+                  {title}
+                </h1>
+                {subtitle && (
+                  <p
+                    className="text-sm mt-1"
+                    style={{ color: 'var(--theme-text-dimmed)' }}
+                  >
+                    {subtitle}
+                  </p>
+                )}
+              </div>
 
-            {/* Keyboard hints */}
-            <div
-              className="hidden sm:flex items-center gap-4 text-xs"
-              style={{ color: 'var(--theme-text-dimmed)' }}
-            >
-              <span>j/k move</span>
-              <span>·</span>
-              <span>Enter open</span>
-              <span>·</span>
-              <span>Esc back</span>
+              {/* Keyboard hints */}
+              <div
+                className="hidden sm:flex items-center gap-4 text-xs"
+                style={{ color: 'var(--theme-text-dimmed)' }}
+              >
+                <span>j/k move</span>
+                <span>·</span>
+                <span>Enter open</span>
+                <span>·</span>
+                <span>Esc back</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* List Content */}
-      <div className="py-8 sm:py-12 px-4 sm:px-6">
-        <div className="max-w-[720px]" style={{ margin: '0 auto' }}>
-          {items.length === 0 ? (
-            <div
-              className="text-center py-12"
-              style={{ color: 'var(--theme-text-dimmed)' }}
-            >
-              <p>{emptyMessage}</p>
-            </div>
-          ) : (
-            <div>
-              {items.map((item, index) => {
-                const isSelected = index === activeIndex;
+        {/* List Content */}
+        <div className="py-8 sm:py-12 px-4 sm:px-6">
+          <div className="max-w-[720px]" style={{ margin: '0 auto' }}>
+            {items.length === 0 ? (
+              <div
+                className="text-center py-12"
+                style={{ color: 'var(--theme-text-dimmed)' }}
+              >
+                <p>{emptyMessage}</p>
+              </div>
+            ) : (
+              <div>
+                {items.map((item, index) => {
+                  const isSelected = index === activeIndex;
 
-                return (
-                  <div
-                    key={index}
-                    ref={getItemRef(index)}
-                    className="py-20 cursor-pointer transition-opacity duration-200"
-                    style={{
-                      borderBottom: '1px solid var(--theme-border)',
-                      opacity: isSelected ? 1 : 0.85,
-                      willChange: 'opacity',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.opacity = '1';
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isSelected) {
-                        e.currentTarget.style.opacity = '0.85';
-                      }
-                    }}
-                    onClick={() => onSelect(item, index)}
-                    role="button"
-                    tabIndex={-1}
-                    aria-label={`Item ${index + 1}`}
-                  >
-                    {renderItem(item, index, isSelected)}
-                  </div>
-                );
-              })}
-            </div>
-          )}
+                  return (
+                    <div
+                      key={index}
+                      ref={getItemRef(index)}
+                      className="py-20 cursor-pointer transition-opacity duration-200"
+                      style={{
+                        borderBottom: '1px solid var(--theme-border)',
+                        opacity: isSelected ? 1 : 0.85,
+                        // Removed willChange to reduce compositing complexity
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.opacity = '1';
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isSelected) {
+                          e.currentTarget.style.opacity = '0.85';
+                        }
+                      }}
+                      onClick={() => onSelect(item, index)}
+                      role="button"
+                      tabIndex={-1}
+                      aria-label={`Item ${index + 1}`}
+                    >
+                      {renderItem(item, index, isSelected)}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Footer - item count, zen flat style */}
-      <div
-        className="fixed bottom-0 left-0 right-0 py-2 px-6 text-xs"
-        style={{
-          color: 'var(--theme-text-dimmed)',
-          zIndex: 1,
-          pointerEvents: 'none',
-        }}
-      >
-        <div className="max-w-[720px] flex justify-between" style={{ margin: '0 auto' }}>
-          <span>
-            {items.length} {items.length === 1 ? 'item' : 'items'}
-          </span>
-          {items.length > 0 && (
+        {/* Footer - item count, zen flat style */}
+        <div
+          className="fixed bottom-0 left-0 right-0 py-2 px-6 text-xs"
+          style={{
+            color: 'var(--theme-text-dimmed)',
+            zIndex: 1,
+            pointerEvents: 'none',
+          }}
+        >
+          <div className="max-w-[720px] flex justify-between" style={{ margin: '0 auto' }}>
             <span>
-              {activeIndex + 1} / {items.length}
+              {items.length} {items.length === 1 ? 'item' : 'items'}
             </span>
-          )}
+            {items.length > 0 && (
+              <span>
+                {activeIndex + 1} / {items.length}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </div>
