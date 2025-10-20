@@ -290,6 +290,74 @@ Successfully refactored the monolithic 923 LOC globals.css:
    - Improved collaboration with clear module boundaries
    - No functional changes - identical styling output
 
+### Image Storage: CDN Configuration
+
+This project supports both local and CDN-based image storage for maximum flexibility:
+
+#### Option 1: Local Images (Default)
+- **How it works**: Images stored in `/public/images/`
+- **Pros**: Works out of the box, no setup required
+- **Cons**: Slower load times, uses server bandwidth
+- **Best for**: Development, small deployments, quick prototyping
+
+#### Option 2: CDN (Recommended for Production)
+- **How it works**: Images served from external CDN (Cloudflare R2, AWS S3, etc.)
+- **Pros**: Faster load times, reduced server bandwidth, better caching
+- **Cons**: Requires CDN setup and configuration
+- **Best for**: Production deployments, high traffic sites
+
+**Setup CDN (Cloudflare R2 example):**
+
+1. **Create R2 bucket** in Cloudflare dashboard:
+   - Name: `your-portfolio-assets`
+   - Location: Automatic (recommended)
+
+2. **Upload images** maintaining folder structure:
+   ```
+   /images/
+     /profile/
+     /thumbs/
+     /originals/
+     *.webp
+     *.png
+   ```
+
+3. **Connect custom domain** (e.g., `cdn.yourdomain.com`):
+   - In R2 bucket settings → Connect Domain
+   - Cloudflare creates DNS records automatically
+
+4. **Configure CORS policy** (required for cross-origin image loading):
+   ```json
+   [
+     {
+       "AllowedOrigins": [
+         "https://yourdomain.com",
+         "https://www.yourdomain.com",
+         "http://localhost:3000"
+       ],
+       "AllowedMethods": ["GET", "HEAD"],
+       "AllowedHeaders": ["*"],
+       "MaxAgeSeconds": 3600
+     }
+   ]
+   ```
+
+5. **Set environment variable**:
+   ```bash
+   # .env.local or Railway/Vercel settings
+   NEXT_PUBLIC_CDN_URL=https://cdn.yourdomain.com
+   ```
+
+6. **Redeploy** - Images automatically load from CDN!
+
+**Switching between Local and CDN:**
+- **Local → CDN**: Set `NEXT_PUBLIC_CDN_URL`, redeploy
+- **CDN → Local**: Remove `NEXT_PUBLIC_CDN_URL`, redeploy
+- **No code changes required** - the `lib/image-paths.ts` utility handles everything
+
+**For contributors/forks:**
+The project works immediately with local images. Setting up a CDN is completely optional.
+
 ### Future Enhancements (Planned)
 - [ ] MDX blog system integration
 - [ ] Project detail pages with live demos
@@ -297,6 +365,7 @@ Successfully refactored the monolithic 923 LOC globals.css:
 - [ ] More terminal effects (typing animation, matrix rain)
 - [x] Dark/light theme toggle (Tokyo Night/Nord dark, Solarized light) - COMPLETED
 - [x] Mobile parallax scrolling mode - COMPLETED
+- [x] CDN image storage support - COMPLETED
 - [ ] GitHub activity integration
 - [ ] Live code editing in portfolio
 - [ ] Vim-style keyboard navigation
