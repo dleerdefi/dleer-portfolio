@@ -9,10 +9,10 @@ import { CodeCopyButton } from '@/components/blog/CodeCopyButton';
 import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
 import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
 import { Admonition, Terminal, Window, Key, Figure } from '@/components/mdx';
+import { CodeBlock, InlineCode } from '@/components/mdx/Code';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import rehypeHighlight from 'rehype-highlight';
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -169,6 +169,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <MDXRemote
               source={blog.content}
               components={{
+                pre: CodeBlock,
+                code: (props) => {
+                  // Check if this code is inside a pre (fenced block)
+                  // If so, return plain code without InlineCode styling
+                  if ('className' in props && typeof props.className === 'string' && props.className.includes('language-')) {
+                    return <code {...props} />;
+                  }
+                  // Otherwise, it's inline code - use InlineCode styling
+                  return <InlineCode {...props} />;
+                },
                 Admonition,
                 Terminal,
                 Window,
@@ -189,7 +199,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         },
                       },
                     ],
-                    rehypeHighlight,
                   ],
                 },
               }}

@@ -88,9 +88,9 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
   };
 
   const categoryNames = {
-    systems: '🔧 Systems & Infrastructure',
-    product: '🧭 Product & Leadership',
-    experimental: '🛠 Experimental & Home Lab'
+    systems: 'Systems & Infrastructure',
+    product: 'Product & Leadership',
+    experimental: 'Experimental'
   };
 
   // Map MDX project data to navigation format

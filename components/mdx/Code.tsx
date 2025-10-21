@@ -24,29 +24,51 @@ export function CodeBlock(props: PreProps) {
   const className = child?.props?.className || '';
   const lang = (className.match(/language-([^\s]+)/)?.[1] ?? 'text').toLowerCase();
   const codeContent = child?.props?.children ?? '';
+  const codeText = props.__rawString__ ?? (typeof codeContent === 'string' ? codeContent : '');
 
   return (
-    <div className="group relative my-8 -mx-4 sm:mx-0">
+    <div
+      className="group relative my-8 rounded-xl overflow-hidden"
+      style={{
+        border: '1px solid rgba(var(--accent-color-rgb), 0.2)',
+      }}
+    >
+      {/* Header bar with language label and copy button */}
+      {lang !== 'text' && (
+        <div
+          className="flex items-center justify-between px-4 py-2"
+          style={{
+            backgroundColor: 'rgba(var(--accent-color-rgb), 0.08)',
+            borderBottom: '1px solid rgba(var(--accent-color-rgb), 0.2)',
+          }}
+        >
+          <span
+            className="text-xs font-mono font-medium uppercase tracking-wide"
+            style={{ color: 'var(--theme-text-dimmed)' }}
+          >
+            {lang}
+          </span>
+          <CopyButton text={codeText} inline />
+        </div>
+      )}
+
+      {/* Code content */}
       <pre
         {...props}
-        className="overflow-x-auto rounded-xl border-2 px-6 py-5 font-mono text-[15px] leading-7 shadow-lg"
+        className={`overflow-x-auto px-6 pb-5 font-mono text-[15px] leading-7 ${lang !== 'text' ? 'rounded-t-none' : 'rounded-xl py-5'}`}
         style={{
-          backgroundColor: 'rgba(var(--theme-surface-rgb), 0.8)',
-          borderColor: 'var(--theme-border)',
+          backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
           color: 'var(--theme-text)',
           tabSize: 2,
           maxWidth: '100%',
+          paddingTop: lang !== 'text' ? 0 : undefined, // Override global pre padding
+          marginTop: lang !== 'text' ? 0 : undefined, // Override global pre margin
+          marginBottom: lang !== 'text' ? 0 : undefined, // Override global pre margin
         }}
       />
-      <CopyButton text={props.__rawString__ ?? (typeof codeContent === 'string' ? codeContent : '')} />
-      {lang !== 'text' && (
-        <span
-          className="pointer-events-none absolute right-16 top-4 select-none text-[11px] font-mono font-medium uppercase tracking-wide"
-          style={{ color: 'var(--theme-text-dimmed)' }}
-        >
-          {lang}
-        </span>
-      )}
+
+      {/* Copy button for code blocks without language */}
+      {lang === 'text' && <CopyButton text={codeText} />}
     </div>
   );
 }
@@ -65,6 +87,8 @@ export function InlineCode(props: React.HTMLAttributes<HTMLElement>) {
         backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
         borderColor: 'rgba(var(--accent-color-rgb), 0.3)',
         color: 'var(--accent-color)',
+        boxDecorationBreak: 'clone',
+        WebkitBoxDecorationBreak: 'clone',
       }}
     />
   );
@@ -72,9 +96,9 @@ export function InlineCode(props: React.HTMLAttributes<HTMLElement>) {
 
 /**
  * CopyButton Component
- * Appears on hover over code blocks
+ * Simple text link for copying code - supports both inline (flex) and absolute positioning
  */
-function CopyButton({ text }: { text: string }) {
+function CopyButton({ text, inline = false }: { text: string; inline?: boolean }) {
   const [copied, setCopied] = React.useState(false);
 
   const handleCopy = async () => {
@@ -91,10 +115,8 @@ function CopyButton({ text }: { text: string }) {
     <button
       type="button"
       onClick={handleCopy}
-      className="absolute right-3 top-3 rounded border px-3 py-1.5 text-[11px] font-medium opacity-0 transition-all group-hover:opacity-100 hover:scale-105 active:translate-y-[0.5px]"
+      className={`text-xs font-mono transition-opacity hover:opacity-70 ${inline ? '' : 'absolute right-3 top-3'}`}
       style={{
-        backgroundColor: 'rgba(var(--accent-color-rgb), 0.15)',
-        borderColor: 'rgba(var(--accent-color-rgb), 0.3)',
         color: 'var(--accent-color)',
       }}
       aria-label={copied ? 'Copied!' : 'Copy code'}

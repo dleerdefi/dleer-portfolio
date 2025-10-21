@@ -79,9 +79,25 @@ export function ZenList<T>({
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Auto-focus this component on mount for immediate keyboard navigation
+  // Also add global keyboard listener to ensure navigation works even if focus is lost
   useEffect(() => {
     containerRef.current?.focus();
-  }, []);
+
+    // Global keyboard listener (works regardless of focus state)
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // Skip if user is typing in an input field
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        return;
+      }
+
+      // Convert native keyboard event to React keyboard event format
+      handleKeyDown(e as unknown as React.KeyboardEvent);
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [handleKeyDown]);
 
   return (
     <div
@@ -92,7 +108,6 @@ export function ZenList<T>({
         color: 'var(--theme-text)',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       }}
-      onKeyDown={handleKeyDown}
       tabIndex={0}
     >
       {/* Header - zen flat style, no background/border */}
@@ -135,6 +150,7 @@ export function ZenList<T>({
                 {/* Close button - always visible */}
                 <button
                   onClick={onExit}
+                  tabIndex={-1}
                   className="flex items-center justify-center w-8 h-8 border-2 hover:bg-opacity-10 transition-colors"
                   style={{
                     borderColor: 'var(--theme-border)',

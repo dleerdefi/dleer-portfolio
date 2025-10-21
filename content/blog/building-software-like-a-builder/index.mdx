@@ -9,7 +9,7 @@ status: "published"
 series: "Preconstruction Mindset"
 ---
 
-I didn't learn to ship software in a CS lab. I learned it on muddy jobsites, helping engineer a **$548 million medical campus** where hidden systems—med gas, reverse-osmosis lines, even pneumatic tubes—had to mesh perfectly. You think in dependencies and sequencing because the only alternative is chaos.
+I didn't learn to ship software in a CS lab. I learned it on muddy jobsites, helping engineer a **$548 million medical campus** where hidden systems like med gas, reverse-osmosis lines and pneumatic tubes—had to mesh perfectly. You learn to think in dependencies and coordination.
 
 <Figure
   src="/images/dleer-tower-crane.webp"
@@ -21,7 +21,7 @@ I didn't learn to ship software in a CS lab. I learned it on muddy jobsites, hel
 
 Years later, as a Chief of Product who regularly ships code, I operate the same way. I call it the **preconstruction mindset**: plan first with ruthless clarity, then execute in slices. It's the difference between "it works on my machine" and a clean deployment.
 
-## The Siren Song of "Vibe Coding"
+## On Vibe Coding
 
 AI makes it tempting to skip straight to prompting. You'll get **800 lines in minutes**, then spend the next **48 hours** spamming "pls fix" for errors in code you didn't design. **Velocity collapses by week two.**
 
@@ -29,11 +29,11 @@ The antidote is a short, explicit spec you and your coding agent both obey.
 
 ---
 
-## Phase 1: Preconstruction
+## Preconstruction
 
 Start with a short plan in a single text file. This is the **contract** for what you're building. Put it in your repository as `docs/SPEC.md` and treat it as the source of truth for you and your coding agent.
 
-### The Five-Step Planning Process
+### Five-Step Planning Process
 
 **1. Define the Goal**
 
@@ -115,7 +115,7 @@ Copy this template into `docs/SPEC.md` and fill it in before you write a single 
 
 ---
 
-## Phase 2: Construction
+## Construction
 
 Open your IDE, drop your spec into the project directory, and fire up your coding agent. The workflow is a tight loop:
 
@@ -146,7 +146,7 @@ If ❌ **fail** → agent debugs, or you adjust the spec.
 
 ---
 
-## Phase 3: Post-Construction
+## Post-Construction
 
 When a building is "finished," there's still work to do: **final inspections, owner training, and fixing all the small issues** found on the final walkthrough (the "punch list").
 
@@ -160,21 +160,14 @@ Reaching this stage is a massive win. **Having users who care enough to complain
 
 If you ignore deployment until the end, your app will never graduate from localhost. Use this checklist from day one:
 
-- ✅ **Dev Environment Mirrors Production** — Your local setup, ideally via Docker, uses the same base image and OS libraries as production.
-
-- ✅ **No Secrets in Git** — An `.env.example` is committed, but secrets only load from environment variables.
-
-- ✅ **Consistent Storage Layers** — Your data stores (Postgres, Redis, etc.) run identically across all environments via Docker Compose.
-
-- ✅ **Stateless and Scalable App** — The application is stateless. User uploads go to external object storage (S3, R2), not the container filesystem.
-
-- ✅ **Health Endpoints** — Your app includes `/health` (liveness) and `/ready` (readiness) endpoints for monitoring.
-
-- ✅ **Optimized, Multi-stage Dockerfile** — Assets are built in an initial stage; the final image contains only lean runtime code.
-
-- ✅ **Basic Telemetry** — The application logs essential metrics: request duration, error rates, for visibility after deployment.
-
-- ✅ **Simple Deploy Script** — You have a one-command script to deploy (e.g., `fly deploy` or a custom shell script).
+- **Dev Environment Mirrors Production** — Your local setup, ideally via Docker, uses the same base image and OS libraries as production.
+- **No Secrets in Git** — An `.env.example` is committed, but secrets only load from environment variables.
+- **Consistent Storage Layers** — Your data stores (Postgres, Redis, etc.) run identically across all environments via Docker Compose.
+- **Stateless and Scalable App** — The application is stateless. User uploads go to external object storage (S3, R2), not the container filesystem.
+- **Health Endpoints** — Your app includes `/health` (liveness) and `/ready` (readiness) endpoints for monitoring.
+- **Optimized, Multi-stage Dockerfile** — Assets are built in an initial stage; the final image contains only lean runtime code.
+- **Basic Telemetry** — The application logs essential metrics: request duration, error rates, for visibility after deployment.
+- **Simple Deploy Script** — You have a one-command script to deploy (e.g., `fly deploy` or a custom shell script).
 
 ---
 
@@ -200,5 +193,3 @@ Your unique domain expertise is your greatest advantage. The next wave of great 
 **With the right workflow, you have everything you need to build one of them.**
 
 ---
-
-*Part of the **Preconstruction Mindset** series. Written with Claude Code using the workflow described above.*

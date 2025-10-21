@@ -24,7 +24,7 @@ export function Figure({ src, alt, caption, width = 1200, height = 630 }: Figure
       </div>
       {caption && (
         <figcaption
-          className="mt-3 text-sm text-center italic"
+          className="mt-2 mb-4 text-sm text-center italic"
           style={{ color: 'var(--theme-text-dimmed)' }}
         >
           {caption}
