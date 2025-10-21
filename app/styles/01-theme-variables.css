@@ -65,8 +65,8 @@
   --color-surface-rgb: 22, 22, 30;
   --color-text-body: #c0caf5;     /* Body Text */
   --color-text-body-rgb: 192, 202, 245;
-  --color-text-header: #7aa2f7;   /* Header/Hero Text */
-  --color-text-header-rgb: 122, 162, 247;
+  --color-text-header: #BB9AF7;   /* Header/Hero Text */
+  --color-text-header-rgb: 187, 154, 247;
   --color-input-text: #c0caf5;    /* Input Field Text */
   --color-accent-1: #bb9af7;      /* Primary Accent */
   --color-accent-1-rgb: 187, 154, 247;
@@ -110,11 +110,11 @@
   --color-surface-rgb: 59, 66, 82;
   --color-text-body: #D8DEE9;      /* nord4 - Snow Storm */
   --color-text-body-rgb: 216, 222, 233;
-  --color-text-header: #88C0D0;    /* nord8 - Frost */
-  --color-text-header-rgb: 136, 192, 208;
+  --color-text-header: #6A8FF2;    /* Vibrant blue per spec */
+  --color-text-header-rgb: 106, 143, 242;
   --color-input-text: #ECEFF4;     /* nord6 - Snow Storm */
-  --color-accent-1: #81A1C1;       /* nord9 - Frost */
-  --color-accent-1-rgb: 129, 161, 193;
+  --color-accent-1: #6A8FF2;       /* Vibrant blue per spec */
+  --color-accent-1-rgb: 106, 143, 242;
 
   /* Legacy mappings for Nord */
   --theme-bg: var(--color-bg);
@@ -151,11 +151,11 @@
   --color-surface-rgb: 238, 232, 213;
   --color-text-body: #073642;      /* base02 - EMPHASIZED TEXT (11.5:1 contrast - exceptional readability) */
   --color-text-body-rgb: 7, 54, 66;
-  --color-text-header: #268bd2;    /* blue - Accent headers (7.5:1 contrast) */
-  --color-text-header-rgb: 38, 139, 210;
+  --color-text-header: #2368B3;    /* Darker blue per spec */
+  --color-text-header-rgb: 35, 104, 179;
   --color-input-text: #073642;     /* base02 - Input text (matches body for consistency) */
-  --color-accent-1: #d33682;       /* magenta - Primary accent */
-  --color-accent-1-rgb: 211, 54, 130;
+  --color-accent-1: #EC4899;       /* Pink per spec */
+  --color-accent-1-rgb: 236, 72, 153;
 
   /* Legacy mappings for Solarized Light */
   --theme-bg: var(--color-bg);
