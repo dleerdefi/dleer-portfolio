@@ -65,4 +65,5 @@ const ThemePresetTile: React.FC<ThemePresetTileProps> = ({ isBlurred = false }) 
   );
 };
 
-export default ThemePresetTile;
+// Memoize to prevent unnecessary re-renders
+export default React.memo(ThemePresetTile);

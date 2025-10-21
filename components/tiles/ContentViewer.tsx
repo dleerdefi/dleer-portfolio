@@ -55,4 +55,5 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
   );
 };
 
-export default ContentViewer;
+// Memoize to prevent unnecessary re-renders
+export default React.memo(ContentViewer);

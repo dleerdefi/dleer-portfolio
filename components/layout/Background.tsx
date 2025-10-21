@@ -138,7 +138,7 @@ const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
               src={displayedWallpaper}
               alt="Background wallpaper"
               fill
-              priority
+              loading="lazy"
               quality={85}
               sizes="100vw"
               onLoad={() => setImageLoaded(true)}

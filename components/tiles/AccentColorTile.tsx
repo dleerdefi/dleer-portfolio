@@ -58,4 +58,5 @@ const AccentColorTile: React.FC<AccentColorTileProps> = ({ isBlurred = false }) 
   );
 };
 
-export default AccentColorTile;
+// Memoize to prevent unnecessary re-renders
+export default React.memo(AccentColorTile);

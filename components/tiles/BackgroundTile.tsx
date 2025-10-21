@@ -127,4 +127,5 @@ const BackgroundTile: React.FC<BackgroundTileProps> = ({ isBlurred = false }) =>
   );
 };
 
-export default BackgroundTile;
+// Memoize to prevent unnecessary re-renders
+export default React.memo(BackgroundTile);

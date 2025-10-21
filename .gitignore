@@ -56,3 +56,5 @@ public/images/*.png
 public/images/*.jpg
 public/images/*.sh
 public/images/originals/
+
+docs/PERF-OPTIMIZATION-SPEC.md

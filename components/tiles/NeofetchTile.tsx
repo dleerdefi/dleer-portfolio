@@ -208,4 +208,5 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
   );
 };
 
-export default NeofetchTile;
+// Memoize to prevent unnecessary re-renders
+export default React.memo(NeofetchTile);

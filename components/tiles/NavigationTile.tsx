@@ -426,4 +426,5 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
   );
 };
 
-export default NavigationTile;
+// Memoize to prevent unnecessary re-renders
+export default React.memo(NavigationTile);

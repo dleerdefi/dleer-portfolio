@@ -314,8 +314,8 @@ export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return [...focusHistory.current];
   }, []);
 
-  // Context value
-  const value: FocusContextValue = {
+  // Memoize context value to prevent unnecessary re-renders
+  const value: FocusContextValue = React.useMemo(() => ({
     focusState,
     focusedTile: focusState.tile,
     activeContent: focusState.content,
@@ -332,7 +332,22 @@ export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     goBack,
     getFocusHistory,
     validateTransition
-  };
+  }), [
+    focusState,
+    setFocusedTile,
+    setActiveContent,
+    setFocus,
+    handleTabNavigation,
+    handleDirectionalNavigation,
+    handleContentNavigation,
+    handlePolybarNavigation,
+    requestScroll,
+    clearScrollRequest,
+    canGoBack,
+    goBack,
+    getFocusHistory,
+    validateTransition
+  ]);
 
   return (
     <FocusContext.Provider value={value}>

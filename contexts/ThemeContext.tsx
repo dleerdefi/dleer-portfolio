@@ -228,14 +228,15 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return accentColorMap[theme.accentColor];
   }, [theme.accentColor]);
 
-  const value: ThemeContextValue = {
+  // Memoize context value to prevent unnecessary re-renders
+  const value: ThemeContextValue = React.useMemo(() => ({
     theme,
     setThemePreset,
     setAccentColor,
     toggleBackgroundEffect,
     setBackgroundImage,
     getAccentHex
-  };
+  }), [theme, setThemePreset, setAccentColor, toggleBackgroundEffect, setBackgroundImage, getAccentHex]);
 
   return (
     <ThemeContext.Provider value={value}>
