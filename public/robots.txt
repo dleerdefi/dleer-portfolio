@@ -1,9 +1,12 @@
-# Allow all crawlers
+# robots.txt for dleer.ai
+# Allow all search engines to crawl the site
+
 User-agent: *
 Allow: /
 
-# Disallow admin/API routes
+# Disallow Next.js internals and API routes
+Disallow: /_next/
 Disallow: /api/
 
-# Sitemap
+# Sitemap for better indexing
 Sitemap: https://dleer.ai/sitemap.xml
