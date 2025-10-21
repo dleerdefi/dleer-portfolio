@@ -54,4 +54,5 @@ components.backup.*/
 # Image source files (only WebP in production)
 public/images/*.png
 public/images/*.jpg
+public/images/*.sh
 public/images/originals/
