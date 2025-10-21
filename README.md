@@ -5,6 +5,8 @@
 ![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38bdf8?style=flat-square&logo=tailwindcss)
+![Content Collections](https://img.shields.io/badge/Content_Collections-0.11-orange?style=flat-square)
+![Resend](https://img.shields.io/badge/Resend-6.1.2-blueviolet?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
 **Terminal-inspired portfolio with tiled window manager aesthetics and modern UX.**
@@ -72,8 +74,10 @@ Create `.env.local` from template and configure:
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `RESEND_API_KEY` | ✅ Yes | Resend API key for contact form ([resend.com](https://resend.com) - free tier: 3K emails/month) |
+| `RESEND_API_KEY` | ✅ Yes | Resend API key ([resend.com](https://resend.com) - free: 100 emails/day, 3K/month) |
+| `RESEND_FROM_EMAIL` | ✅ Yes | Verified domain email for Resend (e.g., `contact@dleer.ai`) |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | ✅ Yes | Email address to receive form submissions |
+| `NEXT_PUBLIC_CDN_URL` | Optional | Cloudflare R2 CDN URL (e.g., `https://cdn.dleer.ai`) |
 | `NEXT_PUBLIC_NAME` | Recommended | Your full name |
 | `NEXT_PUBLIC_TITLE` | Recommended | Your professional title |
 | `NEXT_PUBLIC_GITHUB_URL` | Recommended | GitHub profile URL |
@@ -81,6 +85,26 @@ Create `.env.local` from template and configure:
 | `NEXT_PUBLIC_TWITTER_URL` | Optional | Twitter/X profile URL |
 
 See [.env.example](.env.example) for complete list of 30+ customizable variables.
+
+### CDN Configuration (Optional)
+
+This project supports **Cloudflare R2** for image hosting:
+
+**Without CDN** (default):
+- Images served from `/public/images/`
+- Works out-of-the-box, no setup required
+
+**With CDN** (recommended for production):
+- Images served from Cloudflare R2
+- Faster load times, reduced server bandwidth
+- See [CLAUDE.md - Image Storage](CLAUDE.md#image-storage-cdn-configuration) for setup guide
+
+**Quick Setup:**
+1. Create Cloudflare R2 bucket
+2. Upload images maintaining `/images/` folder structure
+3. Connect custom domain (e.g., `cdn.dleer.ai`)
+4. Set `NEXT_PUBLIC_CDN_URL` in environment variables
+5. Deploy - images automatically load from CDN!
 
 ### Content Customization
 
@@ -99,12 +123,22 @@ See [CLAUDE.md](CLAUDE.md) for detailed architecture documentation.
 
 ### Railway (Recommended)
 
-One-click deployment with automatic Dockerfile detection:
+Auto-deployment with Railpack builder:
 
 1. Visit [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub**
 2. Select `dleer-portfolio` repository
-3. Add environment variables in **Variables** tab
-4. Railway auto-detects and deploys
+3. **Add environment variables** in **Variables** tab:
+   - `RESEND_API_KEY` (required)
+   - `RESEND_FROM_EMAIL` (required)
+   - `NEXT_PUBLIC_CONTACT_EMAIL` (required)
+   - `NEXT_PUBLIC_CDN_URL` (optional - for Cloudflare R2)
+   - See `.env.example` for complete list
+4. Railway auto-detects Next.js and deploys with Railpack
+
+**Features:**
+- Zero-config deployment (no Dockerfile needed)
+- Automatic NEXT_PUBLIC_* variable injection
+- Fast builds with intelligent caching
 
 [Detailed Railway Guide](docs/DEPLOYMENT.md#railway)
 
@@ -138,15 +172,20 @@ docker run -p 3000:3000 \
 **Framework**: Next.js 15.5.4 with App Router and Turbopack
 **Language**: TypeScript 5.0 (strict mode)
 **Styling**: Tailwind CSS v4 + Modular CSS architecture (11 modules)
-**Animation**: Framer Motion
-**Email**: Resend API v6.1.2
+**Content**: Content Collections + MDX (blog & projects)
+**Animation**: Framer Motion 12.23
+**Email**: Resend API 6.1.2 + React Email
+**CDN**: Cloudflare R2 (image storage & delivery)
+**Validation**: Zod 4.1 (schema validation)
 **State**: React Context API (Theme, Focus)
-**Icons**: React Icons + Custom ASCII art
+**Icons**: React Icons 5.5 + Custom ASCII art
 **Fonts**: JetBrains Mono, Geist, Geist Mono
 
 ### Key Features
 
 - **Modular CSS**: 11 focused stylesheets organized by concern
+- **MDX Content**: Blog and projects powered by Content Collections with syntax highlighting
+- **CDN Integration**: Cloudflare R2 for optimized image delivery with fallback to local
 - **Responsive**: Desktop (≥1024px) tiled layout, Mobile (<1024px) dual-mode
 - **Contact Security**: 5-layer spam protection (honeypot, rate limiting, validation)
 - **Theme System**: CSS variables with localStorage persistence
@@ -170,10 +209,14 @@ dleer-portfolio/
 │   ├── portfolio.config.ts # Main configuration
 │   ├── projects.config.ts  # Project definitions
 │   └── types.ts           # TypeScript types
+├── content/               # MDX content
+│   ├── blog/             # Blog posts (*.mdx)
+│   └── projects/         # Project pages (*.mdx)
 ├── contexts/              # React Context providers
 ├── hooks/                 # Custom React hooks
 ├── docs/                  # Documentation
-├── Dockerfile             # Multi-stage production build
+├── content-collections.ts # Content Collections config
+├── Dockerfile.backup      # Docker build (optional)
 └── railway.toml           # Railway deployment config
 ```
 
@@ -227,9 +270,11 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 ### Technologies
 
 - Built with [Next.js](https://nextjs.org/) by Vercel
+- Content managed with [Content Collections](https://content-collections.dev/)
 - Styled with [Tailwind CSS](https://tailwindcss.com/)
 - Animated with [Framer Motion](https://www.framer.com/motion/)
 - Emails powered by [Resend](https://resend.com/)
+- CDN hosted on [Cloudflare R2](https://www.cloudflare.com/developer-platform/r2/)
 
 ---
 
