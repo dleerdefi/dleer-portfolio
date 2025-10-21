@@ -11,8 +11,8 @@ interface FigureProps {
 
 export function Figure({ src, alt, caption, width = 1200, height = 630 }: FigureProps) {
   return (
-    <figure className="my-8 -mx-4 sm:mx-0">
-      <div className="rounded-lg overflow-hidden border-2" style={{ borderColor: 'var(--theme-border)' }}>
+    <figure className="my-8">
+      <div className="rounded-lg overflow-hidden">
         <Image
           src={src}
           alt={alt}

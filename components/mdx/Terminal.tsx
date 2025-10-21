@@ -22,7 +22,7 @@ export function Terminal({ cmd, children }: TerminalProps) {
         </div>
       )}
       <div
-        className="px-4 py-3 font-mono text-sm overflow-x-auto whitespace-pre-wrap"
+        className="px-4 py-3 font-mono text-sm overflow-x-auto whitespace-pre"
         style={{
           backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
           color: 'var(--theme-text)',

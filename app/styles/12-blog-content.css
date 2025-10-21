@@ -166,9 +166,8 @@
   line-height: 1.7;
   max-height: 500px;
   overflow-y: auto;
-  overflow-x: hidden;
-  white-space: pre-wrap;
-  word-break: break-word;
+  overflow-x: auto;
+  white-space: pre;
   tab-size: 2;
 }
 
@@ -267,6 +266,30 @@
 }
 
 /* ============================================ */
+/* Images */
+/* ============================================ */
+
+.blog-prose img {
+  display: block;
+  max-width: 55%;
+  height: auto;
+  margin: 2rem auto;
+  border-radius: 8px;
+}
+
+/* Figure component (images with captions) */
+.blog-prose figure {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Remove margin from figure's wrapper div */
+.blog-prose figure div {
+  margin: 0;
+}
+
+/* ============================================ */
 /* MDX Custom Components Spacing */
 /* ============================================ */
 
@@ -313,6 +336,14 @@
 
   .blog-prose h4 {
     font-size: 1.125rem;
+  }
+
+  .blog-prose img {
+    max-width: 100%;
+  }
+
+  .blog-prose figure {
+    max-width: 100%;
   }
 
   .blog-prose pre code {

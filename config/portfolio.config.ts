@@ -84,10 +84,6 @@ export const portfolioConfig: PortfolioConfig = {
     }
   ],
 
-  // Note: Skills array removed - was unused legacy code
-  // Skills are displayed in NeofetchTile (hardcoded) and technologies shown via AboutTechGrid
-  // If you need categorized skills, re-add this array and create a component to display it
-
   technologies: {
     items: [
       { name: "Python", icon: "SiPython" },
@@ -103,9 +99,6 @@ export const portfolioConfig: PortfolioConfig = {
   },
 
   projects: projectsData,
-
-  // Note: Blog posts moved to Content Collections (content/blog/*.mdx)
-  // Legacy blog array removed - see content-collections.ts for MDX-based blog system
 
   system: {
     github: {
@@ -152,9 +145,6 @@ export const portfolioConfig: PortfolioConfig = {
     ogImage: process.env.NEXT_PUBLIC_OG_IMAGE || getImageUrl("og-image.png"),
     twitterHandle: process.env.NEXT_PUBLIC_TWITTER_USERNAME || "@username"
   },
-
-  // Note: Theme config removed - theme system managed by ThemeContext (contexts/ThemeContext.tsx)
-  // Note: UI strings removed - all UI text is hardcoded in components for simplicity
 
   features: {
     blog: true,

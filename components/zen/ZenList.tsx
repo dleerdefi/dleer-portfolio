@@ -119,16 +119,31 @@ export function ZenList<T>({
                 )}
               </div>
 
-              {/* Keyboard hints */}
-              <div
-                className="hidden sm:flex items-center gap-4 text-xs"
-                style={{ color: 'var(--theme-text-dimmed)' }}
-              >
-                <span>j/k move</span>
-                <span>·</span>
-                <span>Enter open</span>
-                <span>·</span>
-                <span>Esc back</span>
+              <div className="flex items-center gap-4">
+                {/* Keyboard hints - desktop only */}
+                <div
+                  className="hidden sm:flex items-center gap-4 text-xs"
+                  style={{ color: 'var(--theme-text-dimmed)' }}
+                >
+                  <span>j/k move</span>
+                  <span>·</span>
+                  <span>Enter open</span>
+                  <span>·</span>
+                  <span>Esc back</span>
+                </div>
+
+                {/* Close button - always visible */}
+                <button
+                  onClick={onExit}
+                  className="flex items-center justify-center w-8 h-8 border-2 hover:bg-opacity-10 transition-colors"
+                  style={{
+                    borderColor: 'var(--theme-border)',
+                    color: 'var(--theme-text)',
+                  }}
+                  aria-label="Close and return home"
+                >
+                  ✕
+                </button>
               </div>
             </div>
           </div>
