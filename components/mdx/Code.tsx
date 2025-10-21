@@ -20,7 +20,7 @@ type PreProps = React.HTMLAttributes<HTMLPreElement> & {
 export function CodeBlock(props: PreProps) {
   // MDX yields: <pre><code class="language-ts">...</code></pre>
   // We extract the language from the child <code> element
-  const child = React.Children.only(props.children) as React.ReactElement<any>;
+  const child = React.Children.only(props.children) as React.ReactElement<{ className?: string; children?: React.ReactNode }>;
   const className = child?.props?.className || '';
   const lang = (className.match(/language-([^\s]+)/)?.[1] ?? 'text').toLowerCase();
   const codeContent = child?.props?.children ?? '';

@@ -41,8 +41,36 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Get CDN URL from env for dynamic preconnect
+  const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL;
+
   return (
     <html lang="en">
+      <head>
+        {/* Preconnect to CDN for faster image loading (only if CDN configured) */}
+        {cdnUrl && (
+          <>
+            <link rel="preconnect" href={new URL(cdnUrl).origin} crossOrigin="anonymous" />
+            <link rel="dns-prefetch" href={new URL(cdnUrl).origin} />
+          </>
+        )}
+
+        {/* Preload critical fonts to prevent FOIT (Flash of Invisible Text) */}
+        <link
+          rel="preload"
+          href="/fonts/JetBrainsMono-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/JetBrainsMono-Bold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="font-mono antialiased bg-term-bg text-term-text min-h-screen">
         <SubtleBlobBackground />
         <Providers>

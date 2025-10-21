@@ -48,7 +48,9 @@ export async function POST(req: NextRequest) {
     // LAYER 2: Honeypot Validation
     // If honeypot field has any value, it's a bot
     if (website && website.trim() !== '') {
-      console.log('Honeypot triggered by IP:', ip);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('Honeypot triggered by IP:', ip);
+      }
       return NextResponse.json(
         { error: 'Spam detected' },
         { status: 400 }
@@ -62,7 +64,9 @@ export async function POST(req: NextRequest) {
     const timeDiff = submissionTime - formRenderTime;
 
     if (timeDiff < 3000) {  // Less than 3 seconds
-      console.log('Submission too fast from IP:', ip, 'Time:', timeDiff, 'ms');
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('Submission too fast from IP:', ip, 'Time:', timeDiff, 'ms');
+      }
       return NextResponse.json(
         { error: 'Submission too fast. Please take your time.' },
         { status: 400 }
@@ -212,7 +216,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Success - we have a valid email ID
-    console.log('Email sent successfully:', data.id);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Email sent successfully:', data.id);
+    }
 
     return NextResponse.json({
       success: true,

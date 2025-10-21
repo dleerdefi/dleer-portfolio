@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFocusState, useFocusNavigation, ContentType } from '@/contexts/FocusContext';
-import { useUIStrings } from '@/lib/config';
 import { allProjects, allBlogs } from 'content-collections';
 import { FONT_SIZES } from '@/lib/constants/typography';
 
@@ -17,7 +16,6 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
   const router = useRouter();
   const { activeContent } = useFocusState();
   const { handleContentNavigation } = useFocusNavigation();
-  const uiStrings = useUIStrings();
 
   // Use content-collections instead of config
   const projects = allProjects;
@@ -113,13 +111,13 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
     tags: b.tags
   }));
 
-  const isActive = (type: string, data?: any) => {
+  const isActive = (type: string, data?: { slug: string }) => {
     if (activeContent.type === type) {
       if (data && activeContent.type === 'project') {
-        return (activeContent as any).data?.slug === data.slug;
+        return activeContent.data.slug === data.slug;
       }
       if (data && activeContent.type === 'blog') {
-        return (activeContent as any).data?.slug === data.slug;
+        return activeContent.data.slug === data.slug;
       }
       return true;
     }
@@ -138,7 +136,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
         style={{
           color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)',
           fontSize: FONT_SIZES.lg
-        }}>{uiStrings.navigation.rootPath}</div>
+        }}>Contents</div>
 
       <div className="touch-spacing">
         {/* About */}
@@ -420,7 +418,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
       <div className="mt-auto pt-4" style={{ color: 'var(--theme-text-dimmed)', fontSize: FONT_SIZES.sm }}>
         <div className="border-t pt-3" style={{ borderColor: 'rgba(var(--theme-text-rgb), 0.1)' }}>
           <div style={{ opacity: 0.8 }}>
-            {uiStrings.navigation.tabHint}
+            Tab to navigate between tiles
           </div>
         </div>
       </div>

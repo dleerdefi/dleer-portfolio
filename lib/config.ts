@@ -1,5 +1,5 @@
 import { portfolioConfig, getPortfolioConfig } from '@/config/portfolio.config';
-import { PortfolioConfig, Project, BlogPost, SocialLink, UIStrings } from '@/config/types';
+import { PortfolioConfig, Project, SocialLink } from '@/config/types';
 
 // Configuration utilities and helpers
 
@@ -18,13 +18,8 @@ export function usePersonalInfo() {
   return config.personal;
 }
 
-/**
- * Get skills from config
- */
-export function useSkills() {
-  const config = usePortfolioConfig();
-  return config.skills;
-}
+// Note: useSkills() removed - skills array deleted from config
+// Skills displayed in NeofetchTile (via config.system) and AboutTechGrid (via config.technologies)
 
 /**
  * Get technologies from config
@@ -58,21 +53,8 @@ export function useProject(id: string): Project | undefined {
   return projects.find(p => p.id === id);
 }
 
-/**
- * Get blog posts from config
- */
-export function useBlogPosts(): BlogPost[] {
-  const config = usePortfolioConfig();
-  return config.blog;
-}
-
-/**
- * Get a specific blog post by ID
- */
-export function useBlogPost(id: string): BlogPost | undefined {
-  const posts = useBlogPosts();
-  return posts.find(p => p.id === id);
-}
+// Note: useBlogPosts() and useBlogPost() removed - blog posts moved to Content Collections
+// Use `allBlogs` from 'content-collections' instead (see app/blog/[slug]/page.tsx)
 
 /**
  * Get system information for neofetch display
@@ -90,13 +72,7 @@ export function useSEOConfig() {
   return config.seo;
 }
 
-/**
- * Get theme configuration
- */
-export function useThemeConfig() {
-  const config = usePortfolioConfig();
-  return config.theme || {};
-}
+// Note: useThemeConfig() removed - theme managed by ThemeContext (contexts/ThemeContext.tsx)
 
 /**
  * Get feature flags
@@ -112,51 +88,8 @@ export function useFeatureFlags() {
   };
 }
 
-/**
- * Get UI strings configuration
- */
-export function useUIStrings(): UIStrings {
-  const config = usePortfolioConfig();
-  return config.uiStrings || {
-    buttons: {
-      viewGithub: "View on GitHub",
-      liveDemo: "Live Demo",
-      sendMessage: "Send Message"
-    },
-    placeholders: {
-      name: "John Doe",
-      email: "john@example.com",
-      message: "Your message here..."
-    },
-    headers: {
-      about: "About Me",
-      overview: "Overview",
-      techStack: "Technical Stack",
-      keyFeatures: "Key Features",
-      currentFocus: "Current Focus",
-      introduction: "Introduction",
-      conclusion: "Conclusion",
-      contact: "Contact"
-    },
-    labels: {
-      name: "Name:",
-      email: "Email:",
-      message: "Message:"
-    },
-    navigation: {
-      rootPath: "~/portfolio",
-      tabHint: "Tab to navigate between tiles"
-    },
-    tips: {
-      title: "Quick Tips:",
-      items: [
-        "• Click navigation items to view content",
-        "• Projects contain detailed technical information",
-        "• Blog posts share insights and tutorials"
-      ]
-    }
-  };
-}
+// Note: useUIStrings() removed - UI strings deleted from config
+// All UI text is hardcoded directly in components for simplicity
 
 /**
  * Format username for display (e.g., "dleer@portfolio")

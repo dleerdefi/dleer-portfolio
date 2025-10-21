@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { ContentType } from '@/contexts/FocusContext';
-import { useUIStrings } from '@/lib/config';
 
 interface BlogDetailContentProps {
   blog: any;
@@ -14,7 +13,6 @@ interface BlogDetailContentProps {
  * Displays individual blog post with navigation
  */
 export const BlogDetailContent: React.FC<BlogDetailContentProps> = ({ blog, onNavigate }) => {
-  const uiStrings = useUIStrings();
 
   return (
     <div className="space-y-6">
@@ -47,12 +45,12 @@ export const BlogDetailContent: React.FC<BlogDetailContentProps> = ({ blog, onNa
             <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
               {blog.excerpt || "Content coming soon..."}
             </p>
-            <h2 className="font-bold mb-3 mt-4" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>{uiStrings.headers.introduction}</h2>
+            <h2 className="font-bold mb-3 mt-4" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>Introduction</h2>
             <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
               Detailed explanation of the topic, with code examples and technical insights
               that demonstrate deep understanding of the subject matter.
             </p>
-            <h2 className="font-bold mb-3 mt-4" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>{uiStrings.headers.conclusion}</h2>
+            <h2 className="font-bold mb-3 mt-4" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>Conclusion</h2>
             <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
               Summary of key points and takeaways from the article.
             </p>

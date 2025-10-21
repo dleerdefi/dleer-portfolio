@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { useTheme, AccentColor, themeBackgrounds } from '@/contexts/ThemeContext';
 import { SolarizedIcon, NordIcon, TokyoNightIcon } from '@/components/icons/ThemeIcons';
 import { FONT_SIZES } from '@/lib/constants/typography';
@@ -150,7 +151,7 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
 
           {/* Preview */}
           <div
-            className="flex-1 h-12 rounded border-2 flex items-center justify-center overflow-hidden"
+            className="flex-1 h-12 rounded border-2 flex items-center justify-center overflow-hidden relative"
             style={{
               borderColor: 'rgba(var(--accent-color-rgb), 0.5)',
               backgroundColor: 'rgba(var(--theme-surface-rgb), 0.3)',
@@ -160,10 +161,13 @@ const ThemeTile: React.FC<ThemeTileProps> = ({ isBlurred = false }) => {
             {theme.backgroundImage === null ? (
               <span style={{ color: 'var(--theme-text-dimmed)' }}>NONE</span>
             ) : (
-              <img
+              <Image
                 src={theme.backgroundImage}
                 alt="Background preview"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="80px"
+                quality={70}
               />
             )}
           </div>

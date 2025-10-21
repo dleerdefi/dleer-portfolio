@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { FormField } from '@/components/ui/FormField';
 import { useContactFormValidation } from '@/hooks/useContactFormValidation';
-import { useUIStrings } from '@/lib/config';
 
 /**
  * Contact content component
@@ -15,7 +14,6 @@ const ContactContentComponent: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  const uiStrings = useUIStrings();
 
   // Contact form validation
   const { errors, validateAll, handleFieldBlur, clearErrors } = useContactFormValidation({
@@ -67,7 +65,7 @@ const ContactContentComponent: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(1.5rem, 1.5rem + 3cqi, 1.75rem)' }}>{uiStrings.headers.contact}</h1>
+      <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(1.5rem, 1.5rem + 3cqi, 1.75rem)' }}>Contact</h1>
 
       <form onSubmit={handleSubmit}>
         {/* Honeypot field - hidden from users, visible to bots */}
@@ -87,29 +85,29 @@ const ContactContentComponent: React.FC = () => {
         </div>
 
         <FormField
-          label={uiStrings.labels.name}
+          label="Name:"
           type="text"
           value={formData.name}
           onChange={(value) => setFormData({ ...formData, name: value })}
           onBlur={() => handleFieldBlur('name', formData.name)}
           error={errors.name}
           required
-          placeholder={uiStrings.placeholders.name}
+          placeholder="John Doe"
         />
 
         <FormField
-          label={uiStrings.labels.email}
+          label="Email:"
           type="email"
           value={formData.email}
           onChange={(value) => setFormData({ ...formData, email: value })}
           onBlur={() => handleFieldBlur('email', formData.email)}
           error={errors.email}
           required
-          placeholder={uiStrings.placeholders.email}
+          placeholder="john@example.com"
         />
 
         <FormField
-          label={uiStrings.labels.message}
+          label="Message:"
           type="textarea"
           value={formData.message}
           onChange={(value) => setFormData({ ...formData, message: value })}
@@ -119,7 +117,7 @@ const ContactContentComponent: React.FC = () => {
           rows={4}
           maxLength={5000}
           showCharCount
-          placeholder={uiStrings.placeholders.message}
+          placeholder="Your message here..."
         />
 
         <div style={{ marginTop: '12px' }}>
@@ -148,7 +146,7 @@ const ContactContentComponent: React.FC = () => {
               }
             }}
           >
-            {isSubmitting ? 'Sending...' : uiStrings.buttons.sendMessage}
+            {isSubmitting ? 'Sending...' : 'Send Message'}
           </button>
         </div>
 

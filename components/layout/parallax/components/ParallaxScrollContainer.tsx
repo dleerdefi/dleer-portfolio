@@ -45,7 +45,7 @@ export const ParallaxScrollContainer: React.FC<ParallaxScrollContainerProps> = (
         zIndex: 2,
         scrollBehavior: 'smooth',
         overscrollBehavior: 'contain',
-        WebkitOverflowScrolling: 'touch' as any
+        WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling']
       }}
       role="main"
       aria-label="Main content"

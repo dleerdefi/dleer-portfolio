@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { ContentType } from '@/contexts/FocusContext';
-import { useBlogPosts } from '@/lib/config';
+import { allBlogs } from 'content-collections';
 
 interface BlogOverviewContentProps {
   onNavigate?: (content: ContentType) => void;
@@ -13,7 +13,10 @@ interface BlogOverviewContentProps {
  * Displays list of all blog posts with interactive cards
  */
 export const BlogOverviewContent: React.FC<BlogOverviewContentProps> = ({ onNavigate }) => {
-  const blogPostsConfig = useBlogPosts();
+  // Get published blog posts from Content Collections, sorted by date (newest first)
+  const publishedBlogs = allBlogs
+    .filter(blog => blog.status === 'published')
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
     <div className="space-y-6">
@@ -22,23 +25,23 @@ export const BlogOverviewContent: React.FC<BlogOverviewContentProps> = ({ onNavi
         Technical articles, tutorials, and insights from my development journey.
       </p>
       <div className="space-y-4">
-        {blogPostsConfig.map((post) => {
+        {publishedBlogs.map((post) => {
           // Transform blog post to match navigation format
           const blogData = {
-            id: post.id,
-            name: post.filename.replace(/\.md$/i, ''),
+            id: post.slug,
+            name: post.slug,
             displayName: post.title,
             title: post.title,
             date: post.date,
             content: post.content,
-            excerpt: post.excerpt,
+            excerpt: post.summary,
             sections: post.content ?
-              (post.content.match(/^##\s+(.+)$/gm) || []).map(s => s.replace(/^##\s+/, '')) :
+              (post.content.match(/^##\s+(.+)$/gm) || []).map((s: string) => s.replace(/^##\s+/, '')) :
               []
           };
           return (
             <div
-              key={post.id}
+              key={post.slug}
               className="border-b pb-4 transition-colors cursor-pointer"
               style={{ borderColor: 'rgba(var(--accent-color-rgb), 0.2)' }}
               onMouseEnter={(e) => {
@@ -74,8 +77,14 @@ export const BlogOverviewContent: React.FC<BlogOverviewContentProps> = ({ onNavi
                 <h3 className="font-bold transition-colors" style={{ color: 'var(--theme-text)', fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>{post.title}</h3>
                 <span style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>{post.date}</span>
               </div>
-              <p className="desktop-only mb-2 transition-opacity" style={{ color: 'var(--theme-text)', opacity: 0.8, fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>{post.excerpt}</p>
-              <span style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(11px, 2cqw, 18px)' }}>{post.category}</span>
+              <p className="desktop-only mb-2 transition-opacity" style={{ color: 'var(--theme-text)', opacity: 0.8, fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>{post.summary}</p>
+              {post.tags && post.tags.length > 0 && (
+                <div className="flex gap-2">
+                  {post.tags.slice(0, 3).map((tag) => (
+                    <span key={tag} style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(11px, 2cqw, 18px)' }}>#{tag}</span>
+                  ))}
+                </div>
+              )}
             </div>
           );
         })}

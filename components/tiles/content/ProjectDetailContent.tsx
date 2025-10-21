@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { ContentType } from '@/contexts/FocusContext';
-import { useProjects, useUIStrings } from '@/lib/config';
+import { useProjects } from '@/lib/config';
 
 interface ProjectDetailContentProps {
   project: any;
@@ -15,7 +15,6 @@ interface ProjectDetailContentProps {
  */
 export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ project, onNavigate }) => {
   const projectsConfig = useProjects();
-  const uiStrings = useUIStrings();
 
   // Get full project data if we only have partial data
   const fullProject = projectsConfig.find(p => p.id === project.id) || project;
@@ -100,7 +99,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
         )}
 
         <div>
-          <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>{uiStrings.headers.overview}</h2>
+          <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>Overview</h2>
           <p className="leading-relaxed" style={{ color: 'var(--theme-text)', opacity: 0.9, fontSize: 'clamp(1.125rem, 1.125rem + 2cqi, 1.25rem)' }}>
             {fullProject.overview || "This project demonstrates advanced development practices with focus on security, efficiency, and scalability. Implemented using modern development tools and following industry best practices."}
           </p>
@@ -130,7 +129,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
         )}
 
         <div>
-          <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>{uiStrings.headers.keyFeatures}</h2>
+          <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>Key Features</h2>
           <ul className="space-y-1" style={{ color: 'var(--theme-text)', opacity: 0.9, fontSize: 'clamp(1.125rem, 1.125rem + 2cqi, 1.25rem)' }}>
             {(fullProject.features || [
               "Fully tested and documented codebase",
@@ -144,7 +143,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
         </div>
 
         <div>
-          <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>{uiStrings.headers.techStack}</h2>
+          <h2 className="font-bold mb-3" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>Technical Stack</h2>
           <code className="font-mono p-3 rounded-lg mt-2 border block" style={{ color: 'var(--theme-info)', backgroundColor: 'var(--theme-bg)', borderColor: 'var(--theme-border)', opacity: 0.5, fontSize: 'clamp(10px, 1.5cqw, 16px)' }}>
             {fullProject.techStack?.join(', ') || fullProject.techStackDisplay || 'Technologies not specified'}
           </code>
@@ -183,7 +182,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
               className="touch-target touch-feedback px-4 py-2 rounded hover:opacity-90 transition-all duration-200 inline-block"
               style={{ backgroundColor: 'var(--accent-color)', color: 'var(--theme-bg)', textDecoration: 'none', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}
             >
-              {uiStrings.buttons.viewGithub}
+              View on GitHub
             </a>
           )}
           {fullProject.demo && (
@@ -202,7 +201,7 @@ export const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ proj
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
             >
-              {uiStrings.buttons.liveDemo}
+              Live Demo
             </a>
           )}
           {fullProject.blogUrl && (

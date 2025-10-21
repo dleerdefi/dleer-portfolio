@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 import { withContentCollections } from '@content-collections/next';
 
+// Bundle analyzer (run with ANALYZE=true npm run build)
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const nextConfig: NextConfig = {
   // Configure remote image patterns for next/image optimization
   images: {
@@ -22,5 +27,5 @@ const nextConfig: NextConfig = {
   },
 };
 
-// withContentCollections must be the last plugin in the chain
-export default withContentCollections(nextConfig);
+// Chain plugins: bundleAnalyzer → contentCollections (order matters)
+export default withContentCollections(withBundleAnalyzer(nextConfig));

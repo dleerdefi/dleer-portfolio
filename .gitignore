@@ -34,8 +34,8 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
-
+.env.local
+.env
 # vercel
 .vercel
 
@@ -50,8 +50,8 @@ next-env.d.ts
 /inspo
 /archive
 components.backup.*/
-specs
 
-docs/DESKTOP_SCALING_REFACTOR_SPEC.md
-/Build Software Like a Builder.md
-/docs
+# Image source files (only WebP in production)
+public/images/*.png
+public/images/*.jpg
+public/images/originals/

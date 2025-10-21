@@ -1,4 +1,4 @@
-# Hyprland-Inspired Portfolio
+# David Leer's Portfolio
 
 <div align="center">
 
@@ -9,9 +9,11 @@
 ![Resend](https://img.shields.io/badge/Resend-6.1.2-blueviolet?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
-**Terminal-inspired portfolio with tiled window manager aesthetics and modern UX.**
+A production-ready developer portfolio built with Next.js 15, featuring a tiled window manager aesthetic inspired by Hyprland/Arch Linux. Showcases MDX-powered blog and projects, Cloudflare CDN integration, Resend contact form and parallax scrolling mobile layout. Deployed on Railway with zero-config Railpack builds.
 
-[Live Demo](#) • [Report Issue](https://github.com/dleerdefi/dleer-portfolio/issues)
+**Modern tech stack meets terminal aesthetics—designed for developers who appreciate both craft and performance.**
+
+[dleer.ai](https://dleer.ai) • [Report Issue](https://github.com/dleerdefi/dleer-portfolio/issues)
 
 </div>
 
@@ -19,12 +21,15 @@
 
 ## ✨ Features
 
-- **Desktop**: 4-tile Hyprland-style layout with keyboard navigation and workspace indicators
-- **Mobile**: Dual-mode support (Standard scrolling or Parallax depth effects)
-- **Themes**: 3 presets (Tokyo Night, Nord, Solarized) + 15 accent colors
-- **Contact**: Production-ready form with Resend API and multi-layer spam protection
-- **Architecture**: Next.js 15.5, TypeScript strict mode, modular CSS (11 focused modules)
-- **Deployment**: Docker, Railway, and Vercel ready with environment-based configuration
+- **Desktop Layout**: 6-tile Hyprland-inspired layout (Neofetch, Navigation, Content, Theme Preset, Accent Color, Background)
+- **Keyboard Navigation**: Vim-style hjkl movement + Tab cycling + workspace indicators via Polybar
+- **Mobile Experience**: Parallax scrolling with depth effects and scroll progress indicators
+- **Theme System**: 3 curated presets (Tokyo Night, Nord, Solarized Light) + 15 accent color swatches
+- **Content Management**: MDX-powered blog and projects with syntax highlighting and reading time
+- **Contact Form**: Production-ready Resend integration with 5-layer spam protection (honeypot, rate limiting, validation)
+- **CDN Integration**: Optional Cloudflare R2 for optimized image delivery with automatic fallback
+- **Modern Architecture**: Next.js 15.5 + TypeScript strict mode + modular CSS (11 focused modules under 200 LOC each)
+- **Zero-Config Deployment**: Railway + Railpack auto-detection with intelligent caching
 
 ---
 
@@ -140,8 +145,6 @@ Auto-deployment with Railpack builder:
 - Automatic NEXT_PUBLIC_* variable injection
 - Fast builds with intelligent caching
 
-[Detailed Railway Guide](docs/DEPLOYMENT.md#railway)
-
 ### Vercel
 
 ```bash
@@ -150,8 +153,6 @@ vercel
 ```
 
 Add environment variables via Vercel dashboard → Settings → Environment Variables.
-
-[Detailed Vercel Guide](docs/DEPLOYMENT.md#vercel)
 
 ### Docker (Self-Hosted)
 
@@ -163,7 +164,7 @@ docker run -p 3000:3000 \
   portfolio
 ```
 
-[Detailed Docker Guide](docs/DEPLOYMENT.md#docker)
+**Note:** Dockerfile is optional - Railway uses Railpack by default.
 
 ---
 
@@ -189,7 +190,6 @@ docker run -p 3000:3000 \
 - **Responsive**: Desktop (≥1024px) tiled layout, Mobile (<1024px) dual-mode
 - **Contact Security**: 5-layer spam protection (honeypot, rate limiting, validation)
 - **Theme System**: CSS variables with localStorage persistence
-- **Type Safety**: Strict TypeScript throughout with path aliases
 
 ---
 
@@ -226,7 +226,7 @@ dleer-portfolio/
 
 - **[CLAUDE.md](CLAUDE.md)** - Architecture, commands, and development guide
 - **[CONTACT_FORM_SPEC.md](docs/CONTACT_FORM_SPEC.md)** - Contact form implementation details
-- **[DEPLOYMENT.md](docs/DEPLOYMENT.md)** - Comprehensive deployment guides
+- **[CDN_DEPLOYMENT_SPEC.md](docs/CDN_DEPLOYMENT_SPEC.md)** - Cloudflare R2 CDN setup guide
 
 ---
 
@@ -283,16 +283,14 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 **David Leer**
 
 - **GitHub**: [@dleerdefi](https://github.com/dleerdefi)
-- **LinkedIn**: [dleer](https://linkedin.com/in/dleer)
 - **Twitter**: [@dleer_defi](https://x.com/dleer_defi)
-- **Email**: Contact via form on live site
 
 ---
 
 <div align="center">
 
-**Built with ❤️ and lots of [rice](https://www.reddit.com/r/unixporn/wiki/themeing/dictionary#wiki_rice)**
+**Built with <3 by [@dleerdefi](https://github.com/dleerdefi)**
 
-[⬆ Back to Top](#hyprland-inspired-portfolio)
+[⬆ Back to Top](#david-leers-portfolio)
 
 </div>

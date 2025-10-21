@@ -207,16 +207,16 @@ export interface UIStrings {
 export interface PortfolioConfig {
   personal: PersonalInfo;
   social: SocialLink[];
-  skills: SkillCategory[];
+  skills?: SkillCategory[]; // Optional - legacy field, can be removed
   technologies?: TechnologiesConfig;
   projects: Project[];
-  blog: BlogPost[];
+  blog?: BlogPost[]; // Optional - migrated to Content Collections (content/blog/*.mdx)
   system: SystemInfo;
   navigation?: NavigationSection[];
-  theme?: ThemeConfig;
+  theme?: ThemeConfig; // Optional - managed by ThemeContext
   seo: SEOConfig;
   ascii?: ASCIIArt[];
-  uiStrings?: UIStrings;
+  uiStrings?: UIStrings; // Optional - UI text hardcoded in components
   features?: {
     blog?: boolean;
     projects?: boolean;

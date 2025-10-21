@@ -68,7 +68,7 @@ export const FramedPageLayout: React.FC<FramedPageLayoutProps> = ({
           padding: `${borderPadding}px`,
           zIndex: 2,
           overscrollBehavior: 'contain',
-          WebkitOverflowScrolling: 'touch' as any
+          WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling']
         }}
       >
         {children}

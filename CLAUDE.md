@@ -20,11 +20,13 @@ npm run cleanup
 
 # Auto-cleanup before dev (configured in package.json)
 npm run dev  # automatically runs cleanup first
-```
 
-**Note**: No lint or typecheck scripts are currently configured in package.json. Consider adding:
-- `npm run lint` for code linting
-- `npm run typecheck` or `npx tsc --noEmit` for TypeScript type checking
+# Type checking
+npm run typecheck
+
+# Linting
+npm run lint
+```
 
 ## Project Architecture
 
@@ -64,61 +66,70 @@ The main `app/globals.css` file imports all modules in the correct cascade order
 #### Tiled Layout System
 The portfolio features a fixed tiled layout system that mimics Hyprland window manager with dual-mode mobile support:
 
-1. **LayoutManager** (`components/RicedLayout/LayoutManager.tsx`)
+1. **LayoutManager** (`components/layout/LayoutManager.tsx`)
    - Enhanced version with focus context integration
-   - Desktop: Fixed 4-tile layout (Neofetch, Navigation, Theme, Content)
+   - Desktop: Fixed 6-tile layout (Neofetch, Navigation, Content, Theme Preset, Accent Color, Background)
    - Mobile: Dual-mode support (Stacked or Parallax)
    - Manages focus state through FocusContext
    - Dynamic tile opacity based on focus and theme
    - Uniform 12px spacing throughout (uses inline styles for reliability)
    - Automatically switches to MobileParallaxLayout when parallax mode is enabled
 
-2. **Polybar** (`components/RicedLayout/Polybar.tsx`)
+2. **Polybar** (`components/layout/Polybar.tsx`)
    - Workspace-style navigation bar at the top
    - Shows active workspace with dot indicators
    - Displays tile count and current time
    - Mobile: Hamburger menu with slide-out navigation
    - Height: 36px (h-9)
 
-3. **NeofetchTile** (`components/RicedLayout/NeofetchTile.tsx`)
+3. **NeofetchTile** (`components/tiles/NeofetchTile.tsx`)
    - Top-left tile displaying system-like information
    - ASCII art logo
    - Professional info styled as system specs
    - Padding: p-6 for proper text spacing
 
-4. **NavigationTile** (`components/RicedLayout/NavigationTile.tsx`)
+4. **NavigationTile** (`components/tiles/NavigationTile.tsx`)
    - Bottom-left tile with file tree navigation
    - Expandable directories for projects and blog
    - Visual indicators for active selection
    - Tree-style connectors for file hierarchy
 
-5. **ContentViewer** (`components/RicedLayout/ContentViewer.tsx`)
+5. **ContentViewer** (`components/tiles/ContentViewer.tsx`)
    - Right tile for content display
    - Handles multiple content types (home, about, projects, blog, contact)
    - Terminal-style rendering with syntax highlighting
    - Responsive content layout
 
-6. **Background** (`components/RicedLayout/Background.tsx`)
+6. **ThemePresetTile** (`components/tiles/ThemePresetTile.tsx`)
+   - Theme preset switcher (Tokyo Night, Nord, Solarized Light)
+   - Visual preview of each theme's color palette
+   - Instant theme switching with smooth transitions
+
+7. **AccentColorTile** (`components/tiles/AccentColorTile.tsx`)
+   - 15 accent color swatches in responsive grid
+   - Real-time accent color preview
+   - Responsive touch targets (24-32px based on screen size)
+
+8. **BackgroundTile** (`components/tiles/BackgroundTile.tsx`)
+   - Background image selector with previews
+   - 3 curated images per theme + None option
+   - Background effect toggle (animated gradient orbs)
+   - Mobile mode toggle (Stacked vs Parallax) - visible only on mobile
+
+9. **Background** (`components/layout/Background.tsx`)
    - Animated gradient orbs
    - Creates glass morphism effect for tiles
    - Smooth, performant animations
-   - Toggleable via theme settings
+   - Toggleable via BackgroundTile settings
 
-7. **ThemeTile** (`components/RicedLayout/ThemeTile.tsx`)
-   - Theme preset switcher (Tokyo Night, Nord, Solarized Light)
-   - 15 accent color options in responsive grid
-   - Background effect toggle
-   - Mobile mode toggle (Stacked vs Parallax) - visible only on mobile
-   - Responsive touch targets (24-32px based on screen size)
-
-8. **MobileParallaxLayout** (`components/RicedLayout/MobileParallaxLayout.tsx`)
+10. **MobileParallaxLayout** (`components/layout/parallax/MobileParallaxLayout.tsx`)
    - Alternative mobile layout with parallax scrolling effects
    - Each tile has different scroll speeds for depth effect
    - Smooth transitions between tiles
    - Touch-optimized scrolling behavior
    - Activated via theme settings on mobile devices
 
-9. **ScrollProgress** (`components/RicedLayout/ScrollProgress.tsx`)
+11. **ScrollProgress** (`components/layout/parallax/ScrollProgress.tsx`)
    - Visual scroll position indicator for parallax mode
    - Shows current position in the scrollable content
    - Helps users understand their location in the parallax view
@@ -359,15 +370,12 @@ This project supports both local and CDN-based image storage for maximum flexibi
 The project works immediately with local images. Setting up a CDN is completely optional.
 
 ### Future Enhancements (Planned)
-- [ ] MDX blog system integration
-- [ ] Project detail pages with live demos
-- [ ] Command palette for keyboard navigation
+- [x] MDX blog system integration
+- [x] Project detail pages with live demos
 - [ ] More terminal effects (typing animation, matrix rain)
 - [x] Dark/light theme toggle (Tokyo Night/Nord dark, Solarized light) - COMPLETED
 - [x] Mobile parallax scrolling mode - COMPLETED
 - [x] CDN image storage support - COMPLETED
 - [ ] GitHub activity integration
-- [ ] Live code editing in portfolio
-- [ ] Vim-style keyboard navigation
-- [ ] Custom theme creator
+- [x] Vim-style keyboard navigation
 - [ ] Settings persistence (localStorage)
