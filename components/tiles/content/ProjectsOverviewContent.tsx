@@ -37,10 +37,19 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
       overview: project.overview,
       features: project.features,
       techStack: project.techStack,
+      techStackDisplay: project.techStackDisplay,
       category: project.category,
       role: project.role,
+      status: project.status,
+      visibility: project.visibility,
       metrics: project.metrics,
-      outcome: project.outcome
+      metricsSummary: project.metricsSummary,
+      outcome: project.outcome,
+      screenshots: project.screenshots,
+      github: project.github,
+      demo: project.demo,
+      videoUrl: project.videoUrl,
+      blogUrl: project.blogUrl
     };
 
     return (

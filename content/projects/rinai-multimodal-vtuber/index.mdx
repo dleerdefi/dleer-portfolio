@@ -16,42 +16,15 @@ featured: false
 
 Open-source AI VTuber combining real-time speech processing, avatar control, and desktop automation for autonomous 24/7 streaming. Built with Python, featuring Groq Whisper for ultra-fast STT, ElevenLabs TTS, and GraphRAG memory for context-aware interactions.
 
-Production system with **12+ GitHub stars** from the VTuber dev community, capable of **8+ hour autonomous streaming sessions** with **99.2% uptime** over 3 months of continuous operation.
+Production system with **12+ GitHub stars** from the VTuber dev community, capable of **8+ hour autonomous streaming sessions**.
 
-<Terminal cmd="streaming system architecture">
-┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│   YouTube    │─────▶│  Chat Agent  │─────▶│  VTube       │
-│   Chat API   │      │  (Python)    │      │  Studio API  │
-└──────────────┘      └──────────────┘      └──────────────┘
-       │                     ▼                      │
-       ▼              ┌──────────┐                  ▼
-  ┌──────────┐       │ GraphRAG │             ┌──────────┐
-  │ Twitter  │       │ Memory   │             │   OBS    │
-  │ API      │       └──────────┘             │ WebSocket│
-  └──────────┘                                └──────────┘
-</Terminal>
+<div className="image-grid">
 
-<Window title="Autonomous Streaming Features">
-```python
-# Real-time chat interaction with sentiment analysis
-chat_agent.monitor_youtube()
-  → responds to viewer questions
-  → highlights super chats
-  → executes !commands
+![VTuber UX Example](/images/projects/rinai-multimodal-vtuber/vtuber-ux-example.webp)
 
-# Automated social media presence
-twitter_scheduler.post()
-  → stream announcements
-  → clip sharing
-  → engagement tracking
+![System Architecture](/images/projects/rinai-multimodal-vtuber/vtuber-architecture.webp)
 
-# Voice-activated desktop control
-voice_commands.execute("tweet about stream")
-  → generates content
-  → posts with stream link
-  → updates OBS scenes
-```
-</Window>
+</div>
 
 **Links:**
 - [GitHub Repository →](https://github.com/dleerdefi/rinai-multimodal-vtuber)

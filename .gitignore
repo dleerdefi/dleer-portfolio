@@ -58,3 +58,5 @@ public/images/*.sh
 public/images/originals/
 
 docs/PERF-OPTIMIZATION-SPEC.md
+docs/PROJECT_CONTENT_OPTIMIZATION_SPEC.md
+scripts/

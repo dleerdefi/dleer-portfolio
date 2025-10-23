@@ -261,12 +261,33 @@
 /* Images */
 /* ============================================ */
 
+/* Images */
 .blog-prose img {
-  display: block;
-  max-width: 55%;
+  width: 100%;
   height: auto;
-  margin: 2rem auto;
   border-radius: 8px;
+  display: block;
+  margin: 2rem 0;
+}
+
+/* Image grid container (manually added in MDX) */
+.blog-prose .image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.blog-prose .image-grid img {
+  margin: 0;
+  width: 100%;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 768px) {
+  .blog-prose .image-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Figure component (images with captions) */

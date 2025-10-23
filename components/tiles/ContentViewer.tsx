@@ -3,7 +3,6 @@
 import React from 'react';
 import { useFocusState, ContentType } from '@/contexts/FocusContext';
 import { AboutContent } from './content/AboutContent';
-import { ProjectDetailContent } from './content/ProjectDetailContent';
 import { BlogDetailContent } from './content/BlogDetailContent';
 import { ContactContent } from './content/ContactContent';
 import { ProjectsOverviewContent } from './content/ProjectsOverviewContent';
@@ -16,6 +15,7 @@ interface ContentViewerProps {
 /**
  * Main content viewer component
  * Routes content types to appropriate specialized components
+ * Note: Projects navigate to MDX pages (/projects/[slug]), not rendered here
  */
 const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
   const { activeContent } = useFocusState();
@@ -27,8 +27,8 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
         return <AboutContent />;
 
       case 'project':
-        const project = (content as any).data;
-        return <ProjectDetailContent project={project} onNavigate={onNavigate} />;
+        // Projects route to MDX pages, should never reach here
+        return null;
 
       case 'blog':
         const blog = (content as any).data;

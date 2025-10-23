@@ -1,63 +1,45 @@
 import type { Project } from './types';
 
-// Project configurations with open source projects prioritized
+// Project configurations - Optimized with condensed descriptions
 export const projectsData: Project[] = [
   // === OPEN SOURCE PROJECTS (GitHub Available) ===
 
-  // 1. RinAI - Peak AI Agent Stack (Most sophisticated system)
+  // 1. RinAI - Agentic AI Companion
   {
     id: "peak-ai-agent-stack",
     name: "RinAI - Agentic AI Companion",
     filename: "peak-ai-agent-stack",
-    description: "Sophisticated AI companion with graph-based RAG and intelligent context management",
-    overview: "Advanced agentic companion leveraging GraphRAG with Neo4j, real-time tool orchestration, and dynamic LLM gateway. Features ~18,000 processed messages in graph database with parallel execution capabilities and automated conversation summarization.",
-    features: [
-      "Graph-based RAG with Neo4j (18,000+ messages)",
-      "Parallel execution of tools, RAG, and LLM calls",
-      "Dynamic LLM gateway supporting multiple providers",
-      "Intelligent context management with auto-summarization",
-      "Advanced web search using DeepSeek R1"
-    ],
+    description: "Advanced AI companion built with GraphRAG and Neo4j, processing 18,000+ messages with parallel tool execution and dynamic LLM routing across multiple providers. Features intelligent context management, automated conversation summarization, and real-time web search using DeepSeek R1 for sophisticated agentic workflows.",
+    metricsSummary: "18K+ messages • Multi-LLM support • Real-time parallel processing",
     techStack: ["Node.js", "Python", "Neo4j", "MongoDB", "LangChain"],
     techStackDisplay: "Node.js, Python, Neo4j, MongoDB, LangChain",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/peak-ai-agent-stack`,
+    screenshots: [
+      "frontend-interface.webp",
+      "neo4j-graph.webp",
+      "smart-context.webp",
+      "agent-stack-diagram.webp"
+    ],
     status: "production" as const,
     category: "systems",
     role: "built",
-    visibility: "open-source",
-    metrics: [
-      "18,000+ processed messages",
-      "Multi-LLM provider support",
-      "Real-time parallel processing"
-    ]
+    visibility: "open-source"
   },
 
-  // 2. LLM Security Auditor (Best concrete metrics)
+  // 2. LLM Security Auditor
   {
     id: "llm-security-auditor",
     name: "LLM Security Auditor",
     filename: "llm-security-auditor",
-    description: "Universal AI prompt auditing tool reducing jailbreak rates from 23% to 3%",
-    overview: "DSPy-powered security framework testing against 25+ attack categories aligned with OWASP LLM Top 10 2025. Cost-effective automated testing at ~$0.50 per audit compared to $1000s for manual testing. A public good tool for the AI community.",
-    features: [
-      "Automated jailbreak testing (25+ attack categories)",
-      "DSPy-powered prompt optimization",
-      "OWASP LLM Top 10 2025 aligned",
-      "Comprehensive security reports",
-      "Multi-model support (GPT-4o, Claude, local models)"
-    ],
+    description: "DSPy-powered security framework that reduces jailbreak success rates from 23% to 3% through automated testing against 25+ attack categories aligned with OWASP LLM Top 10 2025. Delivers comprehensive security audits at ~$0.50 per run compared to thousands for manual testing, making enterprise-grade security accessible as a public good.",
+    metricsSummary: "23% → 3% jailbreak rate • $0.50 vs $1000s • 25+ attack types",
     techStack: ["Python", "DSPy", "MLflow", "Docker"],
     techStackDisplay: "Python, DSPy, MLflow, Docker",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/llm-security-auditor`,
     status: "production" as const,
     category: "systems",
     role: "built",
-    visibility: "open-source",
-    metrics: [
-      "Jailbreak reduction: 23% → 3%",
-      "$0.50 per audit vs $1000s manual",
-      "25+ attack categories"
-    ]
+    visibility: "open-source"
   },
 
   // 3. Agent State Machine
@@ -65,56 +47,35 @@ export const projectsData: Project[] = [
     id: "agent-state-machine",
     name: "Agent State Machine",
     filename: "agent-state-machine",
-    description: "Hierarchical state machine with multi-tool integration and GraphRAG",
-    overview: "Streamlined version of RinAI focused on hierarchical state machine architecture for complex multi-turn interactions. Integrates multiple tools including Twitter, crypto tracking, weather, and NEAR Protocol transactions with GraphRAG memory system.",
-    features: [
-      "Hierarchical state machine for complex interactions",
-      "GraphRAG memory system with MongoDB",
-      "6+ tool integrations (Twitter, crypto, weather, NEAR)",
-      "Simple web-based chat interface",
-      "Optional Neo4j support for advanced graph operations"
-    ],
+    description: "Hierarchical state machine architecture for complex multi-turn AI interactions, integrating 6+ tools (Twitter, crypto tracking, weather, NEAR Protocol) with GraphRAG memory system. Streamlined framework built with MongoDB and optional Neo4j support, featuring a clean web interface for managing stateful agent conversations.",
+    metricsSummary: "6+ integrated tools • Hierarchical state management • MIT licensed",
     techStack: ["Python", "MongoDB", "Neo4j", "FastAPI"],
     techStackDisplay: "Python, MongoDB, Neo4j, FastAPI",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/agent-state-machine`,
     status: "production" as const,
     category: "systems",
     role: "built",
-    visibility: "open-source",
-    metrics: [
-      "6+ integrated tools",
-      "Hierarchical state management",
-      "MIT licensed framework"
-    ]
+    visibility: "open-source"
   },
 
-  // 4. RinAI Multimodal VTuber
+  // 4. RinAI VTuber & Desktop Agent
   {
     id: "rinai-multimodal-vtuber",
     name: "RinAI VTuber & Desktop Agent",
     filename: "rinai-multimodal-vtuber",
-    description: "Open-source AI VTuber with speech processing and streaming automation",
-    overview: "Combines real-time speech processing, VTube Studio integration, and desktop automation for autonomous streaming. Features Twitter scheduling, YouTube chat interaction, and extensible tool framework designed for 24/7 autonomous operation.",
-    features: [
-      "Real-time STT/TTS (Groq Whisper, 11Labs)",
-      "VTube Studio and OBS integration",
-      "Twitter automation and scheduling",
-      "YouTube chat interaction",
-      "GraphRAG memory system",
-      "Extensible tool framework"
-    ],
+    description: "Open-source AI VTuber combining real-time speech processing (Groq Whisper, 11Labs), VTube Studio integration, and desktop automation for autonomous 24/7 streaming. Features Twitter scheduling, YouTube chat interaction, GraphRAG memory, and extensible tool framework. Complete streaming automation stack with OBS integration and voice synthesis.",
+    metricsSummary: "12+ GitHub stars • Autonomous streaming • 98% Python",
     techStack: ["Python", "Node.js", "TypeScript", "FFmpeg", "VoiceMeeter"],
     techStackDisplay: "Python, Node.js, TypeScript, FFmpeg, VoiceMeeter",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/rinai-multimodal-vtuber`,
+    screenshots: [
+      "vtuber-ux-example.webp",
+      "vtuber-architecture.webp"
+    ],
     status: "production" as const,
     category: "experimental",
     role: "built",
-    visibility: "open-source",
-    metrics: [
-      "12+ GitHub stars",
-      "Autonomous streaming capable",
-      "98% Python codebase"
-    ]
+    visibility: "open-source"
   },
 
   // 5. AI VTuber Trading Battle
@@ -122,27 +83,15 @@ export const projectsData: Project[] = [
     id: "rin-streams",
     name: "AI VTuber Trading Battle",
     filename: "rin-streams",
-    description: "Dual AI VTubers engage in live trading battles driven by YouTube chat sentiment",
-    overview: "Revolutionary streaming system where AI VTubers Rin & Biscuit compete in real-time cryptocurrency trading battles. YouTube chat sentiment drives blockchain trades on Uniswap V3, creating a gamified intersection of AI, streaming, and DeFi. Features 30-second sentiment batch processing and synchronized avatar responses.",
-    features: [
-      "Dual AI VTubers with distinct personalities",
-      "Real-time sentiment-driven blockchain trading",
-      "30-second batch sentiment processing",
-      "User loyalty momentum system",
-      "Synchronized VTube Studio avatar control"
-    ],
+    description: "Revolutionary streaming system where dual AI VTubers (Rin & Biscuit) compete in live cryptocurrency trading battles driven by YouTube chat sentiment. Real-time sentiment analysis triggers blockchain trades on Uniswap V3 every 30 seconds, creating a gamified intersection of AI, streaming, and DeFi with synchronized avatar responses and user loyalty tracking.",
+    metricsSummary: "Sentiment-driven trading • Dual AI competition • Real blockchain integration",
     techStack: ["Python", "Node.js", "MongoDB", "Uniswap V3", "VTube Studio", "ElevenLabs"],
     techStackDisplay: "Python, Node.js, MongoDB, Uniswap V3, VTube Studio, ElevenLabs",
     github: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_HANDLE || 'dleerdefi'}/ai-vtuber-trading-battle`,
     status: "development" as const,
     category: "experimental",
     role: "built",
-    visibility: "open-source",
-    metrics: [
-      "Sentiment-driven trading system",
-      "Dual AI personality competition",
-      "Real blockchain integration"
-    ]
+    visibility: "open-source"
   },
 
   // === PROPRIETARY PROJECTS (Closed Source) ===
@@ -152,26 +101,14 @@ export const projectsData: Project[] = [
     id: "consumer-score-engine",
     name: "Consumer Score Engine",
     filename: "consumer-score-engine",
-    description: "Distributed scoring pipeline for DeFi user behavior analysis",
-    overview: "High-performance data pipeline that processes on-chain and social data to generate user scores. Built with microservices architecture for scalability and real-time processing capabilities.",
-    features: [
-      "Real-time data ingestion from multiple sources",
-      "Graph-based relationship modeling",
-      "ML-powered scoring algorithms",
-      "Horizontal scaling with Kafka",
-      "Sub-second query response times"
-    ],
+    description: "High-performance distributed scoring pipeline processing 2M+ daily transactions across 30K+ DeFi user accounts. Built with microservices architecture using Kafka, Neo4j, and ML-powered algorithms for real-time on-chain and social data ingestion. Graph-based relationship modeling enables sophisticated behavioral analysis at scale.",
+    metricsSummary: "2M+ daily transactions • 30K+ users • Real-time scoring",
     techStack: ["Python", "Kafka", "Neo4j", "Redis", "scikit-learn"],
     techStackDisplay: "Python, Kafka, Neo4j, Redis, scikit-learn",
     status: "production" as const,
     category: "systems",
     role: "built",
-    visibility: "proprietary",
-    metrics: [
-      "Processed 2M+ transactions daily",
-      "Analyzed 30K+ user accounts",
-      "Sub-100ms scoring latency"
-    ]
+    visibility: "proprietary"
   },
 
   // 7. Token Dynamics Simulator
@@ -179,26 +116,14 @@ export const projectsData: Project[] = [
     id: "token-economy-simulator",
     name: "Token Dynamics Simulator",
     filename: "token-economy-simulator",
-    description: "Advanced agent-based modeling platform for token launch dynamics and market behavior simulation",
-    overview: "Sophisticated agent-based simulation platform for modeling token economies and market dynamics. Features configurable stakeholder behaviors, automated market maker mechanics, and comprehensive Monte Carlo analysis. Used by major foundations and market makers for launch strategy and risk assessment.",
-    features: [
-      "Uniswap V2 AMM price discovery mechanics",
-      "Agent-based modeling with behavioral archetypes",
-      "Enhanced Market Maker (EMM) operations",
-      "Monte Carlo analysis (10-10,000 runs)",
-      "4-phase market lifecycle modeling"
-    ],
+    description: "Agent-based simulation platform modeling token economies and market dynamics using Uniswap V2 AMM mechanics with configurable stakeholder behaviors. Features Monte Carlo analysis (10-10,000 runs), Enhanced Market Maker operations, and 4-phase lifecycle modeling. Used by major foundations and market makers to model $500M+ in token economies and optimize launch strategies.",
+    metricsSummary: "$500M+ modeled • 100K+ simulations • Monte Carlo analysis",
     techStack: ["Python", "Streamlit", "Mesa", "NumPy", "Pandas", "Plotly"],
     techStackDisplay: "Python, Streamlit, Mesa, NumPy, Pandas, Plotly",
     status: "production" as const,
     category: "systems",
     role: "built",
-    visibility: "proprietary",
-    metrics: [
-      "Modeled $500M+ in token economies",
-      "Used by 10+ major foundations and market makers",
-      "100,000+ Monte Carlo simulations completed"
-    ]
+    visibility: "proprietary"
   },
 
   // 8. Kinsu Savings App
@@ -206,27 +131,15 @@ export const projectsData: Project[] = [
     id: "kinsu-savings",
     name: "Kinsu Savings App",
     filename: "kinsu-savings",
-    description: "DeFi savings aggregator built on ConsumerFi protocol",
-    overview: "Led the product vision and execution for a consumer-friendly DeFi savings application. Architected the system design and coordinated cross-functional teams from concept to launch.",
-    features: [
-      "Automated yield optimization",
-      "Multi-chain portfolio management",
-      "Risk assessment dashboard",
-      "One-click diversification strategies",
-      "Mobile-first responsive design"
-    ],
+    description: "Leading product vision and execution for a consumer-friendly DeFi savings aggregator. Architected multi-chain portfolio management with automated yield optimization, risk assessment dashboard, and one-click diversification strategies. Coordinated cross-functional teams from concept through development, preparing for public launch.",
+    metricsSummary: "Multi-chain support • Automated yield optimization • In development",
     techStack: ["React", "Web3.js", "Solidity", "The Graph", "Node.js"],
     techStackDisplay: "React, Web3.js, Solidity, The Graph, Node.js",
     demo: "https://kinsu.fi",
-    status: "production" as const,
+    status: "development" as const,
     category: "product",
     role: "led",
-    visibility: "proprietary",
-    metrics: [
-      "$10M+ TVL at peak",
-      "5,000+ active users",
-      "4.8/5 user satisfaction score"
-    ]
+    visibility: "proprietary"
   },
 
   // 9. Play-to-Airdrop Campaign System
@@ -234,54 +147,13 @@ export const projectsData: Project[] = [
     id: "play-to-airdrop",
     name: "Play-to-Airdrop Campaign System",
     filename: "play-to-airdrop",
-    description: "Gamified user acquisition and retention platform",
-    overview: "Designed and led the development of a gamified campaign system that increased protocol engagement through quest-based rewards and social mechanics.",
-    features: [
-      "Dynamic quest generation",
-      "Social referral tracking",
-      "Anti-sybil protection",
-      "Real-time leaderboards",
-      "Automated reward distribution"
-    ],
-    techStack: ["TypeScript", "Next.js", "PostgreSQL", "Redis", "Chainlink"],
-    techStackDisplay: "TypeScript, Next.js, PostgreSQL, Redis, Chainlink",
+    description: "Designed and led development of multi-chain gamified scoring platform that evaluates user accounts across X/Twitter, Farcaster, Discord, and on-chain wallets spanning Ethereum, Solana, NEAR Protocol, and 60+ EVM chains. Drives daily engagement through quests, sentiment-driven training questions, content sharing, and trading activities. Features real-time scoring, dynamic leaderboards, anti-sybil protection, and automated reward distribution with 50K+ active participants.",
+    metricsSummary: "50K+ participants • Multi-chain scoring • 60+ EVM chains",
+    techStack: ["TypeScript", "Next.js", "PostgreSQL", "Redis"],
+    techStackDisplay: "TypeScript, Next.js, PostgreSQL, Redis",
     status: "production" as const,
     category: "product",
     role: "architected",
-    visibility: "proprietary",
-    metrics: [
-      "50K+ participants",
-      "3x increase in protocol TVL",
-      "85% user retention after 30 days"
-    ]
-  },
-
-  // 10. Home Lab Infrastructure
-  {
-    id: "home-lab-infrastructure",
-    name: "Home Lab Network",
-    filename: "home-lab-network",
-    description: "Enterprise-grade home lab with GPU cluster and automation",
-    overview: "Designed and deployed a sophisticated home lab infrastructure featuring multiple servers, VLAN segmentation, GPU compute cluster, and comprehensive automation.",
-    features: [
-      "Proxmox virtualization cluster",
-      "VLAN-segmented security zones",
-      "4-node GPU compute cluster",
-      "Automated backup pipelines",
-      "Self-hosted AI inference endpoints"
-    ],
-    techStack: ["Proxmox", "pfSense", "Kubernetes", "Ansible", "TrueNAS"],
-    techStackDisplay: "Proxmox, pfSense, Kubernetes, Ansible, TrueNAS",
-    videoUrl: "https://youtube.com/watch?v=example2",
-    blogUrl: "/blog/home-lab-setup",
-    status: "production" as const,
-    category: "experimental",
-    role: "built",
-    visibility: "proprietary",
-    metrics: [
-      "99.99% uptime",
-      "50TB storage capacity",
-      "100+ containers running"
-    ]
+    visibility: "proprietary"
   }
 ];

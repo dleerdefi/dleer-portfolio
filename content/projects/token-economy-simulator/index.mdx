@@ -5,7 +5,7 @@ summary: "Advanced agent-based modeling platform for token launch dynamics and m
 date: "2024-05-20"
 updated: "2025-10-16"
 tags: ["defi", "simulation", "agent-based-modeling", "tokenomics", "monte-carlo"]
-tech: ["Python", "Streamlit", "Mesa", "NumPy", "Pandas", "Plotly"]
+tech: ["Python", "NumPy", "Pandas", "Plotly"]
 cover: ""
 status: "production"
 featured: false
@@ -13,22 +13,9 @@ featured: false
 
 ## Overview
 
-Agent-based simulation platform for modeling token economies with configurable stakeholder behaviors, AMM mechanics, and Monte Carlo analysis. Used by **10+ major foundations and market makers** to model **$500M+ in token economies** with **95% accuracy** in predicting 30-day price ranges.
+Agent-based simulation platform for modeling token economies with configurable stakeholder behaviors, AMM mechanics, and Monte Carlo analysis. Used by **10+ major foundations and market makers** to model **$300M+ in token economies** with **95% accuracy** in predicting 30-day price ranges.
 
 Features sophisticated agent archetypes (retail, whales, market makers, team/insiders), Uniswap V2 price discovery mechanics, and 4-phase market lifecycle modeling. Production tool that has **prevented $50M+ in launch failures** through comprehensive stress testing and scenario analysis.
-
-<Terminal cmd="simulation architecture">
-┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│   Agent      │─────▶│    Market    │─────▶│  Analytics   │
-│   Models     │      │    Engine    │      │  Dashboard   │
-└──────┬───────┘      └──────┬───────┘      └──────┬───────┘
-       │                     │                      │
-       ▼                     ▼                      ▼
-  ┌──────────┐          ┌──────────┐          ┌──────────┐
-  │  Mesa    │          │  NumPy   │          │ Streamlit│
-  │Framework │          │  Compute │          │   UI     │
-  └──────────┘          └──────────┘          └──────────┘
-</Terminal>
 
 <Window title="simulation_config.py">
 ```python

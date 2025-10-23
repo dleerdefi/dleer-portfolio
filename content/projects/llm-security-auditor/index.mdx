@@ -1,73 +1,35 @@
 ---
-title: "LLM Security Auditor"
+title: "LLM Security Testing & Research Toolkit"
 slug: "llm-security-auditor"
-summary: "Universal AI prompt auditing tool reducing jailbreak rates from 23% to 3%"
+summary: "Test LLM prompts against 219 research attacks. Build DSPy defenses (targeting 95-99% based on AegisLLM paper)"
 date: "2025-09-15"
 updated: "2025-10-16"
-tags: ["security", "ai", "dspy", "mlflow", "owasp"]
-tech: ["Python", "DSPy", "MLflow", "Docker"]
+tags: ["security", "ai", "dspy", "research", "attacks"]
+tech: ["Python", "DSPy", "MLflow", "Groq"]
 cover: ""
-status: "production"
+status: "development"
 github: "https://github.com/dleerdefi/llm-security-auditor"
 featured: true
 ---
 
 ## Overview
 
-DSPy-powered security framework testing against **25+ attack categories** aligned with OWASP LLM Top 10 2025. Achieves **jailbreak reduction from 23% to 3%** after implementing recommendations with **94% true positive rate** and less than 2% false positives. Cost-effective at **$0.50 per audit** vs $1000s for manual testing.
+Research toolkit for LLM security testing with **219 curated jailbreak attacks** validated against production systems. Completed **Phase 1: Attack Testing** (16.5% baseline success, multi-turn 1.48× stronger, model comparison). **Phase 2: Defense validation** in progress, targeting 95-99% blocking based on AegisLLM 2024 paper.
 
-Public good tool addressing critical security gaps in LLM applications through automated, comprehensive testing accessible to teams of all sizes. Used by **20+ AI companies** for security auditing, compliance verification, and continuous deployment gates.
+Built on 5 major 2024 research papers (Crescendo, AegisLLM, DefensiveTokens) with findings validated through extensive testing. **20+ GitHub stars** from security researchers and AI practitioners.
 
-<Terminal cmd="security testing flow">
-┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│  Test Suite  │─────▶│  DSPy Engine │─────▶│  LLM Under   │
-│  (25+ types) │      │  (Optimize)  │      │  Test        │
-└──────┬───────┘      └──────┬───────┘      └──────┬───────┘
-       │                     │                      │
-       ▼                     ▼                      ▼
-  ┌──────────┐          ┌──────────┐          ┌──────────┐
-  │ MLflow   │          │ Attack   │          │ Results  │
-  │ Tracking │          │ Patterns │          │ Analysis │
-  └──────────┘          └──────────┘          └──────────┘
-</Terminal>
+**Attack Testing Complete (Phase 1):**
+- 219 research attacks validated: 16.5% baseline success rate
+- Multi-turn architecture: 1.48× improvement over single-turn
+- DSPy attack generation tested: 7-11% (underperforms curated attacks)
+- Model comparison: Kimi K2 57% better than Llama 3.3
 
-<Window title="security_audit.py">
-```python
-from llm_security_auditor import SecurityAuditor, TestSuite
-
-# Initialize auditor with OWASP LLM Top 10 2025 tests
-auditor = SecurityAuditor(
-    target_url="https://your-api.com/chat",
-    auth_token="bearer YOUR_TOKEN"
-)
-
-# Run comprehensive security audit (25+ attack categories)
-results = await auditor.run_audit(
-    categories=[
-        "prompt_injection",       # LLM01: Prompt Injection
-        "data_exfiltration",      # LLM06: Sensitive Info Disclosure
-        "role_violation",         # LLM08: Excessive Agency
-        "indirect_injection",     # Multi-turn attack sequences
-        "document_poisoning",     # Indirect injection via docs
-    ],
-    severity="high"  # Focus on critical vulnerabilities
-)
-
-# Generate detailed security report
-report = auditor.generate_report(
-    format="pdf",
-    include_remediation=True,
-    compliance=["owasp", "gdpr"]
-)
-
-# Results: 23% → 3% jailbreak rate after fixes
-print(f"Vulnerabilities found: {results.vulnerability_count}")
-print(f"Risk score: {results.risk_score}/100")
-print(f"Audit cost: ${results.total_cost:.2f}")  # ~$0.50
-```
-</Window>
+**Defense Development Next (Phase 2):**
+- **Pattern-Based**: ✅ Validated - 70-80% blocking, ~1ms latency, FREE
+- **DSPy-Optimized**: ⚠️ In development - targeting 95-99% based on AegisLLM paper (99.76% reported)
+- Scripts created, large-scale validation pending
 
 **Links:**
 - [GitHub Repository →](https://github.com/dleerdefi/llm-security-auditor)
-- MIT License - Public good project for AI security
-- Full audit in under 10 minutes - Run on every deployment
+- [Research Findings](https://github.com/dleerdefi/llm-security-auditor/blob/main/docs/RESEARCH_FINDINGS.md) - Full citations to 5 papers
+- [Quick Start Guide](https://github.com/dleerdefi/llm-security-auditor/blob/main/QUICKSTART.md) - 25 min setup, test in 10 seconds

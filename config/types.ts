@@ -71,25 +71,33 @@ export interface Project {
   id: string;
   name: string;
   filename: string;
-  description: string;
-  longDescription?: string;
-  overview?: string;
-  features?: string[];
+  description: string; // Single 50-70 word paragraph (replaces overview + features)
   techStack: string[];
   techStackDisplay: string; // Formatted string for display
   github?: string;
   demo?: string;
   status?: 'production' | 'development' | 'archived';
 
-  // New fields for enhanced categorization
+  // Enhanced categorization
   category?: 'systems' | 'product' | 'experimental';
   role?: 'built' | 'architected' | 'led';
-  visibility?: 'open-source' | 'proprietary';  // For better project organization
-  metrics?: string[];  // e.g., ["Processed 2M+ transactions daily", "Modeled $300M+ token economies"]
-  outcome?: string;     // Brief outcome statement
-  videoUrl?: string;    // YouTube or other video embeds
-  blogUrl?: string;     // Link to detailed blog post
-  images?: string[];    // Screenshots, diagrams, etc.
+  visibility?: 'open-source' | 'proprietary';
+
+  // New: Condensed metrics (1-line summary)
+  metricsSummary?: string; // e.g., "18K+ messages • Multi-LLM support • Real-time parallel processing"
+
+  // Media
+  screenshots?: string[];   // Array of screenshot filenames (e.g., ["frontend-interface.webp", "neo4j-graph.webp"])
+  videoUrl?: string;        // YouTube or other video embeds
+  blogUrl?: string;         // Link to detailed blog post
+
+  // Legacy fields (deprecated, for backward compatibility)
+  longDescription?: string;
+  overview?: string;
+  features?: string[];
+  metrics?: string[];
+  outcome?: string;
+  images?: string[];
 }
 
 export interface BlogPost {

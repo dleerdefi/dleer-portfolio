@@ -16,36 +16,19 @@ featured: true
 
 Advanced agentic AI companion leveraging GraphRAG with Neo4j for knowledge modeling, parallel tool execution, and dynamic LLM gateway. Designed for 24/7 autonomous operation with intelligent context management and real-time web search capabilities powered by DeepSeek R1.
 
-Production system processing **18,000+ messages** in a knowledge graph with **sub-200ms latency** for cached queries and **99.8% uptime** over 6 months.
+Production system processing **18,000+ messages** in a knowledge graph. **45+ GitHub stars** from the AI development community.
 
-<Terminal cmd="system architecture">
-┌─────────────┐      ┌──────────────┐      ┌─────────────┐
-│   Gateway   │─────▶│  Tool Orch.  │─────▶│   Neo4j     │
-│   (LLMs)    │      │  (Parallel)  │      │   GraphRAG  │
-└─────────────┘      └──────────────┘      └─────────────┘
-       │                     │                      │
-       ▼                     ▼                      ▼
-  ┌─────────┐          ┌─────────┐           ┌─────────┐
-  │ Provider│          │  Tools  │           │ MongoDB │
-  │ Routing │          │  Layer  │           │ Docs    │
-  └─────────┘          └─────────┘           └─────────┘
-</Terminal>
+<div className="image-grid">
 
-<Window title="Agent Query Flow">
-```javascript
-// Parallel processing architecture
-const result = await Promise.all([
-  neo4j.semanticSearch(query),     // Graph traversal
-  mongodb.vectorSearch(query),      // Document retrieval
-  llmGateway.complete(context),     // LLM generation
-  toolOrchestrator.execute(tools)   // Tool execution
-]);
+![Frontend Interface](/images/projects/peak-ai-agent-stack/frontend-interface.webp)
 
-// Sub-200ms latency for cached queries
-// Automatic fallback across LLM providers
-// Real-time context compression
-```
-</Window>
+![Neo4j Knowledge Graph](/images/projects/peak-ai-agent-stack/neo4j-graph.webp)
+
+![Smart Context Management](/images/projects/peak-ai-agent-stack/smart-context.webp)
+
+![Agent Architecture](/images/projects/peak-ai-agent-stack/agent-stack-diagram.webp)
+
+</div>
 
 **Links:**
 - [GitHub Repository →](https://github.com/dleerdefi/peak-ai-agent-stack)

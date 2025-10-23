@@ -13,9 +13,9 @@ featured: false
 
 ## Overview
 
-High-performance data pipeline processing **2M+ transactions daily** across multiple chains to generate user scores for DeFi protocols. Built with microservices architecture featuring Apache Kafka for event streaming, Neo4j for graph relationships, and ML-powered scoring with **Sub-100ms latency**.
+High-performance data pipeline processing across multiple chains to generate user scores. Built with microservices architecture featuring Apache Kafka for event streaming, Neo4j for graph relationships, and ML-powered scoring.
 
-Proprietary system powering ConsumerFi's user acquisition and risk assessment, achieving **$10M+ in prevented fraud** through Sybil detection, **95% accuracy** in credit risk prediction, and **99.95% uptime** over 12 months of production deployment.
+Proprietary system powering ConsumerFi's user acquisition and ConsumerGraph inputs.
 
 <Terminal cmd="data pipeline architecture">
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
@@ -67,4 +67,3 @@ async def calculate_user_score(user_address: str) -> dict:
 **Links:**
 - Proprietary system developed for ConsumerFi
 - Case studies available for institutional clients
-- **Detected 2000+ Sybil accounts** preventing $500K+ fraud
