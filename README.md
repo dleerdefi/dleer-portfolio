@@ -28,7 +28,7 @@ A production-ready developer portfolio built with Next.js 15, featuring a tiled 
 - **Content Management**: MDX-powered blog and projects with syntax highlighting and reading time
 - **Contact Form**: Production-ready Resend integration with 5-layer spam protection (honeypot, rate limiting, validation)
 - **CDN Integration**: Optional Cloudflare R2 for optimized image delivery with automatic fallback
-- **Modern Architecture**: Next.js 15.5 + TypeScript strict mode + modular CSS (11 focused modules under 200 LOC each)
+- **Modern Architecture**: Next.js 15.5 + TypeScript strict mode + modular CSS (12 focused modules under 200 LOC each)
 - **Zero-Config Deployment**: Railway + Railpack auto-detection with intelligent caching
 
 ---
@@ -89,7 +89,7 @@ Create `.env.local` from template and configure:
 | `NEXT_PUBLIC_LINKEDIN_URL` | Optional | LinkedIn profile URL |
 | `NEXT_PUBLIC_TWITTER_URL` | Optional | Twitter/X profile URL |
 
-See [.env.example](.env.example) for complete list of 30+ customizable variables.
+See [.env.example](.env.example) for complete list of 49 customizable variables.
 
 ### CDN Configuration (Optional)
 
@@ -154,17 +154,6 @@ vercel
 
 Add environment variables via Vercel dashboard → Settings → Environment Variables.
 
-### Docker (Self-Hosted)
-
-```bash
-docker build -t portfolio .
-docker run -p 3000:3000 \
-  -e RESEND_API_KEY=your_key \
-  -e NEXT_PUBLIC_CONTACT_EMAIL=your@email.com \
-  portfolio
-```
-
-**Note:** Dockerfile is optional - Railway uses Railpack by default.
 
 ---
 
@@ -172,7 +161,7 @@ docker run -p 3000:3000 \
 
 **Framework**: Next.js 15.5.4 with App Router and Turbopack
 **Language**: TypeScript 5.0 (strict mode)
-**Styling**: Tailwind CSS v4 + Modular CSS architecture (11 modules)
+**Styling**: Tailwind CSS v4 + Modular CSS architecture (12 modules)
 **Content**: Content Collections + MDX (blog & projects)
 **Animation**: Framer Motion 12.23
 **Email**: Resend API 6.1.2 + React Email
@@ -184,7 +173,7 @@ docker run -p 3000:3000 \
 
 ### Key Features
 
-- **Modular CSS**: 11 focused stylesheets organized by concern
+- **Modular CSS**: 12 focused stylesheets organized by concern
 - **MDX Content**: Blog and projects powered by Content Collections with syntax highlighting
 - **CDN Integration**: Cloudflare R2 for optimized image delivery with fallback to local
 - **Responsive**: Desktop (≥1024px) tiled layout, Mobile (<1024px) dual-mode
@@ -199,7 +188,7 @@ docker run -p 3000:3000 \
 dleer-portfolio/
 ├── app/                    # Next.js App Router
 │   ├── api/contact/       # Contact form API endpoint
-│   ├── styles/            # 11 modular CSS files
+│   ├── styles/            # 12 modular CSS files
 │   └── globals.css        # CSS module imports
 ├── components/
 │   ├── layout/            # Desktop & mobile layouts
@@ -214,9 +203,16 @@ dleer-portfolio/
 │   └── projects/         # Project pages (*.mdx)
 ├── contexts/              # React Context providers
 ├── hooks/                 # Custom React hooks
+├── lib/                   # Utility libraries
+├── public/                # Static assets
+│   ├── fonts/            # Custom fonts
+│   └── images/           # Local images (CDN fallback)
+├── scripts/               # Build and utility scripts
 ├── docs/                  # Documentation
 ├── content-collections.ts # Content Collections config
-├── Dockerfile.backup      # Docker build (optional)
+├── next.config.ts         # Next.js configuration
+├── tailwind.config.ts     # Tailwind CSS config
+├── tsconfig.json          # TypeScript config
 └── railway.toml           # Railway deployment config
 ```
 
