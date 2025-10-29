@@ -133,38 +133,76 @@
 /* No CSS needed here - component handles all styling */
 
 /* ============================================ */
-/* Code Block Scrollbars - Low Profile */
+/* Theme-Aware Scrollbars - Universal Utility */
 /* ============================================ */
 
-/* Thin scrollbar for code blocks (Chrome, Safari, Edge) */
-.blog-prose pre::-webkit-scrollbar,
-.mdx-code-wrapper div::-webkit-scrollbar {
+/* Unified scrollbar styling for all MDX components and code blocks */
+/* Webkit browsers (Chrome, Safari, Edge) */
+.blog-prose .theme-scrollbar::-webkit-scrollbar,
+.blog-prose pre::-webkit-scrollbar {
   height: 6px;
   width: 6px;
 }
 
-.blog-prose pre::-webkit-scrollbar-track,
-.mdx-code-wrapper div::-webkit-scrollbar-track {
+.blog-prose .theme-scrollbar::-webkit-scrollbar-track,
+.blog-prose pre::-webkit-scrollbar-track {
   background: rgba(var(--theme-surface-rgb), 0.3);
   border-radius: 3px;
 }
 
-.blog-prose pre::-webkit-scrollbar-thumb,
-.mdx-code-wrapper div::-webkit-scrollbar-thumb {
+.blog-prose .theme-scrollbar::-webkit-scrollbar-thumb,
+.blog-prose pre::-webkit-scrollbar-thumb {
   background: rgba(var(--accent-color-rgb), 0.3);
   border-radius: 3px;
 }
 
-.blog-prose pre::-webkit-scrollbar-thumb:hover,
-.mdx-code-wrapper div::-webkit-scrollbar-thumb:hover {
+.blog-prose .theme-scrollbar::-webkit-scrollbar-thumb:hover,
+.blog-prose pre::-webkit-scrollbar-thumb:hover {
   background: rgba(var(--accent-color-rgb), 0.5);
 }
 
-/* Thin scrollbar for Firefox */
-.blog-prose pre,
-.mdx-code-wrapper div {
+/* Firefox */
+.blog-prose .theme-scrollbar,
+.blog-prose pre {
   scrollbar-width: thin;
   scrollbar-color: rgba(var(--accent-color-rgb), 0.3) rgba(var(--theme-surface-rgb), 0.3);
+}
+
+/* Scrollable code blocks - for long code snippets that need height constraints */
+.blog-prose .scrollable-code-block pre {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Allow parent to show scrollbars for scrollable code blocks */
+.blog-prose .scrollable-code-block {
+  overflow: visible !important;
+}
+
+/* ============================================ */
+/* Admonition Backgrounds - Theme-Aware */
+/* ============================================ */
+
+/* Background colors for Admonition component types */
+/* Using CSS classes instead of inline styles prevents hydration mismatches */
+.blog-prose .admonition-note {
+  background-color: rgba(var(--theme-info-rgb), 0.1);
+}
+
+.blog-prose .admonition-tip {
+  background-color: rgba(var(--theme-success-rgb), 0.1);
+}
+
+.blog-prose .admonition-warn {
+  background-color: rgba(var(--theme-warning-rgb), 0.1);
+}
+
+.blog-prose .admonition-error {
+  background-color: rgba(var(--theme-error-rgb), 0.1);
+}
+
+.blog-prose .admonition-info {
+  background-color: rgba(var(--theme-info-rgb), 0.1);
 }
 
 /* ============================================ */
@@ -237,6 +275,9 @@
   padding: 0.75rem;
   border: 1px solid var(--theme-border);
   text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .blog-prose th {
@@ -292,7 +333,7 @@
 
 /* Figure component (images with captions) */
 .blog-prose figure {
-  max-width: 100%;
+  /* max-width controlled by Figure component's size prop (small/medium/large/full) */
   margin-left: auto;
   margin-right: auto;
 }

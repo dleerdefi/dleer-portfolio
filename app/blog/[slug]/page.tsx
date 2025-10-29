@@ -8,7 +8,7 @@ import { ReadingProgress } from '@/components/blog/ReadingProgress';
 import { CodeCopyButton } from '@/components/blog/CodeCopyButton';
 import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
 import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
-import { Admonition, Terminal, Window, Key, Figure } from '@/components/mdx';
+import { Admonition, Terminal, Window, Key, Figure, Collapsible } from '@/components/mdx';
 import { CodeBlock, InlineCode } from '@/components/mdx/Code';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
@@ -179,11 +179,21 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   // Otherwise, it's inline code - use InlineCode styling
                   return <InlineCode {...props} />;
                 },
+                a: (props) => {
+                  const href = props.href || '';
+                  const isExternal = href.startsWith('http://') || href.startsWith('https://');
+
+                  if (isExternal) {
+                    return <a {...props} target="_blank" rel="noopener noreferrer" />;
+                  }
+                  return <a {...props} />;
+                },
                 Admonition,
                 Terminal,
                 Window,
                 Key,
                 Figure,
+                Collapsible,
               }}
               options={{
                 mdxOptions: {

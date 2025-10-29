@@ -55,7 +55,7 @@ export function CodeBlock(props: PreProps) {
       {/* Code content */}
       <pre
         {...props}
-        className={`overflow-x-auto px-6 pb-5 font-mono text-[15px] leading-7 ${lang !== 'text' ? 'rounded-t-none' : 'rounded-xl py-5'}`}
+        className={`theme-scrollbar overflow-x-auto px-6 pb-5 font-mono text-[15px] leading-7 ${lang !== 'text' ? 'rounded-t-none' : 'rounded-xl py-5'}`}
         style={{
           backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
           color: 'var(--theme-text)',

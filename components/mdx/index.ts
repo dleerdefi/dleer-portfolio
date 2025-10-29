@@ -4,5 +4,6 @@ export { Window } from './Window';
 export { Key } from './Key';
 export { Figure } from './Figure';
 export { CodeBlock, InlineCode } from './Code';
+export { Collapsible } from './Collapsible';
 
 export type { AdmonitionType } from './Admonition';

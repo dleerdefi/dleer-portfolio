@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import { ContentType } from '@/contexts/FocusContext';
+import { ContentType, BlogData } from '@/contexts/FocusContext';
 
 interface BlogDetailContentProps {
-  blog: any;
+  blog: BlogData;
   onNavigate?: (content: ContentType) => void;
 }
 
@@ -29,21 +29,21 @@ export const BlogDetailContent: React.FC<BlogDetailContentProps> = ({ blog, onNa
           Blog
         </span>
         <span style={{ color: 'var(--theme-text-dimmed)' }}>/</span>
-        <span style={{ color: 'var(--theme-text)' }}>{blog.displayName || blog.title}</span>
+        <span style={{ color: 'var(--theme-text)' }}>{blog.title}</span>
       </div>
 
       <div className="border-b pb-4" style={{ borderColor: 'var(--theme-border)', opacity: 0.3 }}>
         <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(1.75rem, 1.75rem + 4cqi, 2.25rem)' }}>{blog.title}</h1>
-        <p className="mt-1" style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>{blog.name}</p>
+        <p className="mt-1" style={{ color: 'var(--theme-text-dimmed)', fontSize: 'clamp(1rem, 1rem + 1.5cqi, 1.125rem)' }}>{blog.summary}</p>
       </div>
 
       <div className="prose prose-invert leading-relaxed space-y-4" style={{ color: 'var(--theme-text)', fontSize: 'clamp(1.125rem, 1.125rem + 2cqi, 1.25rem)' }}>
-        {blog.content ? (
-          <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+        {blog.html ? (
+          <div dangerouslySetInnerHTML={{ __html: blog.html }} />
         ) : (
           <>
             <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>
-              {blog.excerpt || "Content coming soon..."}
+              {blog.summary || "Content coming soon..."}
             </p>
             <h2 className="font-bold mb-3 mt-4" style={{ color: 'var(--accent-color)', opacity: 0.9, fontSize: 'clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem)' }}>Introduction</h2>
             <p style={{ color: 'var(--theme-text)', opacity: 0.9 }}>

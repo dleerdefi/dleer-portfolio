@@ -103,13 +103,8 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
     tags: p.tags
   }));
 
-  const blogItems = blogs.map(b => ({
-    slug: b.slug,
-    title: b.title,
-    date: b.date,
-    summary: b.summary,
-    tags: b.tags
-  }));
+  // Use full blog data from content-collections - it already has all required fields
+  const blogItems = blogs;
 
   const isActive = (type: string, data?: { slug: string }) => {
     if (activeContent.type === type) {
@@ -207,6 +202,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                   </div>
                   {projectsByCategory.systems.map((project, index) => {
                     const projData = projectItems.find(p => p.slug === project.slug);
+                    if (!projData) return null;
                     return (
                       <div
                         key={project.slug}
@@ -247,6 +243,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                   </div>
                   {projectsByCategory.product.map((project, index) => {
                     const projData = projectItems.find(p => p.slug === project.slug);
+                    if (!projData) return null;
                     return (
                       <div
                         key={project.slug}
@@ -287,6 +284,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                   </div>
                   {projectsByCategory.experimental.map((project, index) => {
                     const projData = projectItems.find(p => p.slug === project.slug);
+                    if (!projData) return null;
                     return (
                       <div
                         key={project.slug}

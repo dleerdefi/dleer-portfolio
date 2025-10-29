@@ -5,12 +5,75 @@ import React, { createContext, useContext, useState, useCallback, useRef, useEff
 // Type definitions for the focus management system
 export type TileType = 'neofetch' | 'navigation' | 'content' | 'themePreset' | 'accentColor' | 'background';
 
+// Blog and Project data types (from content-collections schema)
+export interface BlogData {
+  title: string;
+  slug: string;
+  summary: string;
+  date: string;
+  updated?: string;
+  tags: string[];
+  cover?: string;
+  status: 'draft' | 'published';
+  series?: string;
+  html: string;
+  url: string;
+  readingTime: string;
+  readingMinutes: number;
+  ogTitle: string;
+}
+
+// ProjectData supports both:
+// 1. MDX projects from content-collections (for detail pages)
+// 2. Config projects from portfolio.config (for overview navigation)
+export interface ProjectData {
+  // Common fields (both sources)
+  id?: string;
+  name?: string;
+  title?: string;
+  slug?: string;
+  description?: string;
+  summary?: string;
+  techStack?: string[];
+  tech?: string[];
+  github?: string;
+  demo?: string;
+  status?: string;
+
+  // Config-specific fields
+  displayName?: string;
+  overview?: string;
+  features?: string[];
+  techStackDisplay?: string;
+  category?: 'systems' | 'product' | 'experimental';
+  role?: 'built' | 'architected' | 'led';
+  visibility?: 'open-source' | 'proprietary';
+  metricsSummary?: string;
+  metrics?: string[];
+  outcome?: string;
+  screenshots?: string[];
+  videoUrl?: string;
+  blogUrl?: string;
+
+  // MDX-specific fields (content-collections)
+  date?: string;
+  updated?: string;
+  tags?: string[];
+  cover?: string;
+  featured?: boolean;
+  html?: string;
+  url?: string;
+  readingTime?: string;
+  readingMinutes?: number;
+  ogTitle?: string;
+}
+
 export type ContentType =
   | { type: 'home' }
   | { type: 'about' }
-  | { type: 'project'; data: any }
+  | { type: 'project'; data: ProjectData }
   | { type: 'projects-overview' }
-  | { type: 'blog'; data: any }
+  | { type: 'blog'; data: BlogData }
   | { type: 'blog-overview' }
   | { type: 'contact' };
 

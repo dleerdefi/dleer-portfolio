@@ -42,9 +42,13 @@
 
   /* Status colors */
   --theme-success: #9ece6a;
+  --theme-success-rgb: 158, 206, 106;
   --theme-warning: #e0af68;
+  --theme-warning-rgb: 224, 175, 104;
   --theme-error: #f7768e;
+  --theme-error-rgb: 247, 118, 142;
   --theme-info: #7dcfff;
+  --theme-info-rgb: 125, 207, 255;
 
   /* User-selectable accent color (overrides accent-1 when custom) */
   --accent-color: var(--color-accent-1);
@@ -90,11 +94,15 @@
   --theme-border-active: var(--color-accent-1);
   --theme-selection: #28344a;
   --theme-success: #9ece6a;
+  --theme-success-rgb: 158, 206, 106;
   --theme-success-alt: #73daca;
   --theme-warning: #e0af68;
+  --theme-warning-rgb: 224, 175, 104;
   --theme-warning-alt: #ff9e64;
   --theme-error: #f7768e;
+  --theme-error-rgb: 247, 118, 142;
   --theme-info: #7dcfff;
+  --theme-info-rgb: 125, 207, 255;
   --theme-cyan-alt: #2ac3de;
 
   /* Default accent for this theme */
@@ -133,9 +141,13 @@
   --theme-border: #4C566A;          /* nord3 - Polar Night */
   --theme-border-active: var(--color-accent-1);
   --theme-success: #A3BE8C;        /* nord14 - Aurora (Green) */
+  --theme-success-rgb: 163, 190, 140;
   --theme-warning: #EBCB8B;        /* nord13 - Aurora (Yellow) */
+  --theme-warning-rgb: 235, 203, 139;
   --theme-error: #BF616A;          /* nord11 - Aurora (Red) */
+  --theme-error-rgb: 191, 97, 106;
   --theme-info: #5E81AC;           /* nord10 - Frost */
+  --theme-info-rgb: 94, 129, 172;
 
   /* Default accent for this theme */
   --accent-color: var(--color-accent-1);
@@ -171,9 +183,13 @@
   --theme-border: #93a1a1;          /* base1 */
   --theme-border-active: var(--color-accent-1);
   --theme-success: #859900;        /* green */
+  --theme-success-rgb: 133, 153, 0;
   --theme-warning: #b58900;        /* yellow */
+  --theme-warning-rgb: 181, 137, 0;
   --theme-error: #dc322f;          /* red */
+  --theme-error-rgb: 220, 50, 47;
   --theme-info: #2aa198;           /* cyan */
+  --theme-info-rgb: 42, 161, 152;
 
   /* Default accent for this theme */
   --accent-color: var(--color-accent-1);

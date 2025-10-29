@@ -1,6 +1,6 @@
 import type { MDXComponents } from 'mdx/types';
 import { CodeBlock, InlineCode } from '@/components/mdx/Code';
-import { Admonition, Terminal, Window, Key, Figure } from '@/components/mdx';
+import { Admonition, Terminal, Window, Key, Figure, Collapsible } from '@/components/mdx';
 
 /**
  * MDX Components Mapping
@@ -37,12 +37,34 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     pre: (props) => <CodeBlock {...props} />,
 
+    // Custom link handling - external links open in new tab
+    a: (props) => {
+      const href = props.href || '';
+      const isExternal = href.startsWith('http://') || href.startsWith('https://');
+      const isHash = href.startsWith('#');
+
+      // External links open in new tab with security attributes
+      if (isExternal) {
+        return (
+          <a
+            {...props}
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        );
+      }
+
+      // Internal links and hash links stay in same window
+      return <a {...props} />;
+    },
+
     // Custom MDX components
     Admonition,
     Terminal,
     Window,
     Key,
     Figure,
+    Collapsible,
 
     ...components,
   };

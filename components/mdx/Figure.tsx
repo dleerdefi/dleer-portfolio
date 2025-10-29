@@ -7,11 +7,19 @@ interface FigureProps {
   caption?: string;
   width?: number;
   height?: number;
+  size?: 'small' | 'medium' | 'large' | 'full';
 }
 
-export function Figure({ src, alt, caption, width = 1200, height = 630 }: FigureProps) {
+const sizeStyles = {
+  small: 'max-w-[60%]',
+  medium: 'max-w-[75%]',
+  large: 'max-w-[90%]',
+  full: 'max-w-full',
+};
+
+export function Figure({ src, alt, caption, width = 1200, height = 630, size = 'full' }: FigureProps) {
   return (
-    <figure className="my-8">
+    <figure className={`mt-8 mb-12 mx-auto ${sizeStyles[size]}`}>
       <div className="rounded-lg overflow-hidden">
         <Image
           src={src}
@@ -24,7 +32,7 @@ export function Figure({ src, alt, caption, width = 1200, height = 630 }: Figure
       </div>
       {caption && (
         <figcaption
-          className="mt-2 mb-4 text-sm text-center italic"
+          className="mt-2 text-sm text-center italic"
           style={{ color: 'var(--theme-text-dimmed)' }}
         >
           {caption}

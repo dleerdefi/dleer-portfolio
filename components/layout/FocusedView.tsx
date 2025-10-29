@@ -53,37 +53,37 @@ const FocusedView: React.FC<FocusedViewProps> = ({ className = '' }) => {
     }
   };
 
-  // Map section to ContentType
-  const getContentType = (): ContentType => {
-    // If we have specific content data (individual project/blog), use it
-    if (contentData) {
-      if (section === 'projects') {
-        return { type: 'project', data: contentData };
-      } else if (section === 'blog') {
-        return { type: 'blog', data: contentData };
-      }
-    }
-
-    // Otherwise, show the overview
-    switch (section) {
-      case 'about':
-        return { type: 'about' };
-      case 'projects':
-        return { type: 'projects-overview' };
-      case 'blog':
-        return { type: 'blog-overview' };
-      default:
-        return { type: 'home' };
-    }
-  };
-
   // Sync FocusContext with ViewContext when in zen
   useEffect(() => {
     if (mode === 'zen') {
+      // Map section to ContentType inline
+      const getContentType = (): ContentType => {
+        // If we have specific content data (individual project/blog), use it
+        if (contentData) {
+          if (section === 'projects') {
+            return { type: 'project', data: contentData };
+          } else if (section === 'blog') {
+            return { type: 'blog', data: contentData };
+          }
+        }
+
+        // Otherwise, show the overview
+        switch (section) {
+          case 'about':
+            return { type: 'about' };
+          case 'projects':
+            return { type: 'projects-overview' };
+          case 'blog':
+            return { type: 'blog-overview' };
+          default:
+            return { type: 'home' };
+        }
+      };
+
       const contentType = getContentType();
       setActiveContent(contentType);
     }
-  }, [mode, section, contentData]);
+  }, [mode, section, contentData, setActiveContent]);
 
   // Reset to About when exiting zen mode (zen → tiled transition)
   useEffect(() => {

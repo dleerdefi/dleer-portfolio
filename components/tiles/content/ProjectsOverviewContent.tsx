@@ -3,6 +3,7 @@
 import React from 'react';
 import { ContentType } from '@/contexts/FocusContext';
 import { useProjects } from '@/lib/config';
+import { Project } from '@/config/types';
 
 interface ProjectsOverviewContentProps {
   onNavigate?: (content: ContentType) => void;
@@ -28,7 +29,7 @@ export const ProjectsOverviewContent: React.FC<ProjectsOverviewContentProps> = (
     experimental: 'Experimental & Home Lab'
   };
 
-  const renderProject = (project: any) => {
+  const renderProject = (project: Project) => {
     const projectData = {
       id: project.id,
       name: project.name,

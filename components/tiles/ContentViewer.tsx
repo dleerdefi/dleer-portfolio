@@ -31,7 +31,7 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
         return null;
 
       case 'blog':
-        const blog = (content as any).data;
+        const blog = content.data;
         return <BlogDetailContent blog={blog} onNavigate={onNavigate} />;
 
       case 'contact':

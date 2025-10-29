@@ -17,9 +17,10 @@ I didn't study software in a CS lab. I learned it on muddy jobsites, helping eng
   caption="Hanging the WSU flag on a tower crane at St. Michael Medical Center in Silverdale, WA"
   width={1032}
   height={1032}
+  size="medium"
 />
 
-Years later, as a Chief of Product who regularly ships code, I operate the same way. I call it the **preconstruction mindset**: plan first with ruthless clarity, then execute in slices. It's the difference between "it works on my machine" and a clean deployment.
+Years later, as a CPO who regularly ships code, I operate the same way. I call it the **preconstruction mindset**: plan first, then execute in slices. It's the difference between "it works on my machine" and a clean deployment.
 
 ## On Vibe Coding
 
@@ -35,19 +36,19 @@ Start with a short plan in a single text file. This is the **contract** for what
 
 ### Five-Step Planning Process
 
-**1. Define the Goal**
+#### 1. Define the Goal
 
 Open with the project's purpose in plain language: who it's for, the problem you're solving, and the signal of success. A non-technical friend should be able to repeat it back to you.
 
-**2. Describe the System**
+#### 2. Describe the System
 
 Nouns and verbs, plus boundaries. Be boring and explicit—ambiguity becomes rework.
 
-**3. Choose the Stack**
+#### 3. Choose the Stack
 
 Ask a frontier LLM for an end-to-end stack recommendation. Then, ask a *different* model to critique that recommendation, pointing out risks or missing pieces. Once you're comfortable, have your preferred model draft a full developer specification from the validated stack.
 
-**4. Pick Your AI Environment**
+#### 4. Pick Your AI Environment
 
 This is a big part of your tooling decision. You generally have three options:
 
@@ -55,7 +56,7 @@ This is a big part of your tooling decision. You generally have three options:
 - **Agentic IDEs (Cursor):** Less intimidating but are the shortest path to vibe-coding debt if you skip the spec.
 - **Terminal-first agents (Claude Code):** Pairs perfectly with a written spec, encouraging discrete steps and clean, reviewable outputs.
 
-**5. Define "Done"**
+#### 5. Define "Done"
 
 Create **measurable acceptance criteria** for each slice of work.
 
@@ -66,6 +67,8 @@ When changes occur, **update the SPEC first**, then the code. Never let the code
 ## A Spec You Can Steal
 
 Copy this template into `docs/SPEC.md` and fill it in before you write a single line of code.
+
+<div className="scrollable-code-block theme-scrollbar">
 
 ```markdown
 # Project Spec — TodoSync
@@ -112,6 +115,8 @@ Copy this template into `docs/SPEC.md` and fill it in before you write a single 
 ## 9. Environments
 - **.env.example:** `DATABASE_URL=...`, `REDIS_URL=...`, `GOOGLE_CLIENT_ID=...`
 ```
+
+</div>
 
 ---
 

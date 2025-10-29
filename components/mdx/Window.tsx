@@ -5,9 +5,11 @@ import React from 'react';
 interface WindowProps {
   title?: string;
   children: React.ReactNode;
+  scrollable?: boolean;
+  maxHeight?: string;
 }
 
-export function Window({ title, children }: WindowProps) {
+export function Window({ title, children, scrollable = false, maxHeight = '500px' }: WindowProps) {
   const [copied, setCopied] = React.useState(false);
 
   const handleCopy = async () => {
@@ -67,9 +69,11 @@ export function Window({ title, children }: WindowProps) {
         </div>
       )}
       <div
-        className="px-4 py-3 font-mono text-sm overflow-x-auto whitespace-pre"
+        className="theme-scrollbar px-4 py-3 font-mono text-sm overflow-x-auto whitespace-pre"
         style={{
           color: 'var(--theme-text)',
+          maxHeight: scrollable ? maxHeight : undefined,
+          overflowY: scrollable ? 'auto' : undefined,
         }}
       >
         {children}

@@ -26,19 +26,7 @@ export const BlogOverviewContent: React.FC<BlogOverviewContentProps> = ({ onNavi
       </p>
       <div className="space-y-4">
         {publishedBlogs.map((post) => {
-          // Transform blog post to match navigation format
-          const blogData = {
-            id: post.slug,
-            name: post.slug,
-            displayName: post.title,
-            title: post.title,
-            date: post.date,
-            content: post.content,
-            excerpt: post.summary,
-            sections: post.content ?
-              (post.content.match(/^##\s+(.+)$/gm) || []).map((s: string) => s.replace(/^##\s+/, '')) :
-              []
-          };
+          // Use the post data directly - it already matches BlogData type from content-collections
           return (
             <div
               key={post.slug}
@@ -70,7 +58,7 @@ export const BlogOverviewContent: React.FC<BlogOverviewContentProps> = ({ onNavi
               }}
               onClick={(e) => {
                 e.stopPropagation();
-                onNavigate?.({ type: 'blog', data: blogData });
+                onNavigate?.({ type: 'blog', data: post });
               }}
             >
               <div className="flex justify-between items-start mb-2">
