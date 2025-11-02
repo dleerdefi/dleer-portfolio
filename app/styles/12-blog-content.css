@@ -408,5 +408,58 @@
     max-width: 100%;
   }
 
+  /* Tables: prevent horizontal page scroll by making them scrollable within container */
+  .blog-prose table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--accent-color-rgb), 0.3) rgba(var(--theme-surface-rgb), 0.3);
+  }
+
+  .blog-prose table::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .blog-prose table::-webkit-scrollbar-track {
+    background: rgba(var(--theme-surface-rgb), 0.3);
+    border-radius: 3px;
+  }
+
+  .blog-prose table::-webkit-scrollbar-thumb {
+    background: rgba(var(--accent-color-rgb), 0.3);
+    border-radius: 3px;
+  }
+
+  .blog-prose table::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--accent-color-rgb), 0.5);
+  }
+
+  /* Ensure table structure displays properly when table has display: block */
+  .blog-prose thead,
+  .blog-prose tbody,
+  .blog-prose tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .blog-prose thead {
+    width: 100%;
+  }
+
+  .blog-prose tbody {
+    width: 100%;
+  }
+
+  /* Prevent cells from becoming too narrow */
+  .blog-prose th,
+  .blog-prose td {
+    min-width: 100px;
+    font-size: 0.875rem;
+    padding: 0.5rem;
+  }
+
   /* Code blocks styled by CodeBlock component - no mobile overrides needed */
 }
