@@ -225,20 +225,16 @@ If you're a solo builder using AI, steal the spec, run the loop, and deploy from
 
 ## Frequently Asked Questions
 
-<Collapsible title="Is Spec-Driven Development just a new name for waterfall?">
-No. The article explicitly states this is **not** a "500-page waterfall document". It is **Agile Specification-Driven Development**. The spec is treated as a "living document", and work is broken into small "Work Packages (1–2 days each)" that function like sprints. It combines the "continuous feedback" of Agile with the "risk mitigation" of construction.
-</Collapsible>
-
 <Collapsible title="What is 'vibe coding' and why is it so bad?">
 Vibe coding is an approach where you "kind of vaguely know what you want... so you just throw some code together until it feels right". It's a "prompt, paste, and hope" workflow. It's bad because it creates massive, hard-to-fix problems, including an 8-fold increase in code duplication, "overly complex" spaghetti code, and significant security time bombs.
 </Collapsible>
 
-<Collapsible title="How does a spec actually prevent AI-generated technical debt?">
-AI models, when used without direction, produce "non-optimal solution[s]" that get "copy-pasted" repeatedly. This creates massive code duplication and debt. A spec prevents this by acting as a "North Star" that separates the **"stable 'what'"** (the spec) from the **"flexible 'how'"** (the AI-generated code). The AI is given clear, unambiguous instructions for a small "work package," which dramatically lowers the probability of error.
+<Collapsible title="How does a spec prevent AI-generated technical debt?">
+AI models, when used without direction, produce "non-optimal solutions" that get "copy-pasted" repeatedly. This creates massive code duplication and debt. A spec prevents this by acting as a "North Star" that separates the **"stable 'what'"** (the spec) from the **"flexible 'how'"** (the AI-generated code). The AI is given clear, unambiguous instructions for a small "work package," which dramatically lowers the probability of error.
 </Collapsible>
 
 <Collapsible title="How does this workflow handle AI's security risks?">
-AI-generated code is known to "unconsciously reproduc[e] known vulnerabilities". The article identifies the "Lethal Trifecta" of risk as "Sensitive Data + Untrusted Content + External Communication". The SDD loop–where you spec, build, and verify–functions as a "constant risk assessment". It systematically manages risk by:
+AI-generated code is known to "unconsciously reproduce known vulnerabilities". The spec-driven development loop–where you spec, build, and verify–functions as a "constant risk assessment". It systematically manages risk by:
 
 1. **Lowering probability:** A clear spec reduces AI errors.
 2. **Lowering impact:** Small "work packages" isolate any errors.
@@ -255,7 +251,7 @@ This "LLM-as-reviewer" process helps you use AI to surface the very "unknowns" t
 </Collapsible>
 
 <Collapsible title="What tools are best for Spec-Driven Development?">
-The spec-driven mindset pairs best with tools built for it. The article recommends **"Terminal-first, Plan-then-Execute Agents (e.g., Claude Code)"** because they are "designed for this workflow". These tools "encourage you to review a plan *before* files are changed". While Agentic IDEs (like Cursor) are powerful, they "can be a short path to vibe-coding debt if you skip the spec".
+The spec-driven mindset pairs best with **terminal-first, Plan-then-Execute Agents (e.g., Claude Code)** because they encourage you to build a plan *before* any work starts.
 </Collapsible>
 
 ---
