@@ -28,14 +28,14 @@ export function Collapsible({
       {/* Header / Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-6 py-4 flex items-center justify-between transition-colors hover:bg-opacity-80"
+        className="w-full px-4 py-2.5 flex items-center justify-between transition-colors hover:bg-opacity-80"
         style={{
           backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
           borderBottom: isOpen ? '1px solid rgba(var(--accent-color-rgb), 0.2)' : 'none',
         }}
       >
         <span
-          className="font-bold text-sm uppercase tracking-wide"
+          className="font-semibold text-xs uppercase tracking-wider"
           style={{ color: 'var(--accent-color)' }}
         >
           {title}
@@ -54,7 +54,7 @@ export function Collapsible({
       {/* Content */}
       {isOpen && (
         <div
-          className="theme-scrollbar px-6 py-4 overflow-y-auto"
+          className="theme-scrollbar px-4 py-3 overflow-y-auto"
           style={{
             maxHeight,
             color: 'var(--theme-text)',

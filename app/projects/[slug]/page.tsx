@@ -9,7 +9,6 @@ import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
 import { Admonition, Terminal, Window, Key, Figure } from '@/components/mdx';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
 
 interface ProjectDetailPageProps {
@@ -220,16 +219,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                 mdxOptions: {
                   remarkPlugins: [remarkGfm],
                   rehypePlugins: [
-                    rehypeSlug,
-                    [
-                      rehypeAutolinkHeadings,
-                      {
-                        behavior: 'wrap',
-                        properties: {
-                          className: ['heading-anchor'],
-                        },
-                      },
-                    ],
+                    rehypeSlug, // Keep for heading IDs (allows direct linking)
                     rehypeHighlight,
                   ],
                 },

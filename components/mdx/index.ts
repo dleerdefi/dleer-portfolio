@@ -5,5 +5,6 @@ export { Key } from './Key';
 export { Figure } from './Figure';
 export { CodeBlock, InlineCode } from './Code';
 export { Collapsible } from './Collapsible';
+export { PostAudio } from './PostAudio';
 
 export type { AdmonitionType } from './Admonition';

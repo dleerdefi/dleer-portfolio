@@ -1,6 +1,6 @@
 import type { MDXComponents } from 'mdx/types';
 import { CodeBlock, InlineCode } from '@/components/mdx/Code';
-import { Admonition, Terminal, Window, Key, Figure, Collapsible } from '@/components/mdx';
+import { Admonition, Terminal, Window, Key, Figure, Collapsible, PostAudio } from '@/components/mdx';
 
 /**
  * MDX Components Mapping
@@ -65,6 +65,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     Key,
     Figure,
     Collapsible,
+    PostAudio,
 
     ...components,
   };

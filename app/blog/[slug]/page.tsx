@@ -8,11 +8,11 @@ import { ReadingProgress } from '@/components/blog/ReadingProgress';
 import { CodeCopyButton } from '@/components/blog/CodeCopyButton';
 import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
 import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
-import { Admonition, Terminal, Window, Key, Figure, Collapsible } from '@/components/mdx';
+import { Admonition, Terminal, Window, Key, Figure, Collapsible, PostAudio } from '@/components/mdx';
 import { CodeBlock, InlineCode } from '@/components/mdx/Code';
+import { AutoPostAudio } from '@/components/blog/AutoPostAudio';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -127,6 +127,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           className="max-w-[720px]"
           style={{ margin: '0 auto' }}
         >
+          {/* Audio Player */}
+          <AutoPostAudio slug={blog.slug} title={blog.title} className="mb-10" />
+
           {/* Title and metadata */}
           <header className="mb-12 pb-8 border-b-2" style={{ borderColor: 'var(--theme-border)' }}>
             <h1
@@ -194,21 +197,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 Key,
                 Figure,
                 Collapsible,
+                PostAudio,
               }}
               options={{
                 mdxOptions: {
                   remarkPlugins: [remarkGfm],
                   rehypePlugins: [
-                    rehypeSlug,
-                    [
-                      rehypeAutolinkHeadings,
-                      {
-                        behavior: 'wrap',
-                        properties: {
-                          className: ['heading-anchor'],
-                        },
-                      },
-                    ],
+                    rehypeSlug, // Keep for heading IDs (allows direct linking)
                   ],
                 },
               }}

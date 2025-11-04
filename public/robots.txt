@@ -1,12 +1,14 @@
 # robots.txt for dleer.ai
-# Allow all search engines to crawl the site
-
-User-agent: *
-Allow: /
+# Cloudflare manages User-agent rules above this line via Scrape Shield
+# Custom path blocks below
 
 # Disallow Next.js internals and API routes
 Disallow: /_next/
 Disallow: /api/
+
+# Disallow removed standalone pages (use tile system instead)
+Disallow: /about
+Disallow: /contact
 
 # Sitemap for better indexing
 Sitemap: https://dleer.ai/sitemap.xml

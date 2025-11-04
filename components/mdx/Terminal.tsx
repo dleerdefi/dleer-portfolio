@@ -70,9 +70,10 @@ export function Terminal({ cmd, children }: TerminalProps) {
         </div>
       )}
       <div
-        className="px-4 py-3 font-mono text-sm overflow-x-auto whitespace-pre"
+        className="theme-scrollbar px-3 sm:px-4 py-2 sm:py-3 font-mono text-sm whitespace-pre-wrap break-words"
         style={{
           color: 'var(--theme-text)',
+          overflowX: 'hidden',
         }}
       >
         {children}

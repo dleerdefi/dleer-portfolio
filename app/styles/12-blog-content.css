@@ -21,7 +21,9 @@
 /* Typography - Clean Hierarchy */
 /* ============================================ */
 
-.blog-prose h1 {
+/* Prevent heading styles from affecting MDX component content */
+.blog-prose > h1,
+.blog-prose :not(.mdx-code-wrapper) > h1 {
   font-size: 2.5rem;
   line-height: 1.2;
   font-weight: 700;
@@ -31,7 +33,8 @@
   letter-spacing: -0.02em;
 }
 
-.blog-prose h2 {
+.blog-prose > h2,
+.blog-prose :not(.mdx-code-wrapper) > h2 {
   font-size: 2rem;
   line-height: 1.3;
   font-weight: 700;
@@ -41,7 +44,8 @@
   letter-spacing: -0.01em;
 }
 
-.blog-prose h3 {
+.blog-prose > h3,
+.blog-prose :not(.mdx-code-wrapper) > h3 {
   font-size: 1.5rem;
   line-height: 1.4;
   font-weight: 600;
@@ -50,7 +54,8 @@
   color: var(--theme-text);
 }
 
-.blog-prose h4 {
+.blog-prose > h4,
+.blog-prose :not(.mdx-code-wrapper) > h4 {
   font-size: 1.25rem;
   line-height: 1.5;
   font-weight: 600;
@@ -70,18 +75,15 @@
 
 .blog-prose a {
   color: var(--accent-color);
-  text-decoration: underline;
-  text-decoration-color: rgba(var(--accent-color-rgb), 0.4);
-  text-underline-offset: 2px;
+  text-decoration: none !important;
   transition: all 0.2s ease;
 }
 
 .blog-prose a:hover {
+  text-decoration: underline !important;
   text-decoration-color: var(--accent-color);
-}
-
-.blog-prose .heading-anchor {
-  text-decoration: none;
+  text-decoration-style: solid !important;
+  text-underline-offset: 2px;
 }
 
 /* ============================================ */
@@ -205,6 +207,33 @@
   background-color: rgba(var(--theme-info-rgb), 0.1);
 }
 
+/* Prevent Admonition content from inheriting blog-prose base font-size */
+.blog-prose [class*="admonition-"] {
+  font-size: 0.875rem; /* 14px - matches intended text-sm */
+}
+
+/* Reset nested prose elements to inherit from Admonition container, not blog-prose */
+.blog-prose [class*="admonition-"] p,
+.blog-prose [class*="admonition-"] li,
+.blog-prose [class*="admonition-"] ul,
+.blog-prose [class*="admonition-"] ol,
+.blog-prose [class*="admonition-"] strong,
+.blog-prose [class*="admonition-"] a {
+  font-size: inherit;
+}
+
+/* Reset headings inside Admonition to match container size */
+.blog-prose [class*="admonition-"] h1,
+.blog-prose [class*="admonition-"] h2,
+.blog-prose [class*="admonition-"] h3,
+.blog-prose [class*="admonition-"] h4,
+.blog-prose [class*="admonition-"] h5,
+.blog-prose [class*="admonition-"] h6 {
+  font-size: inherit;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 /* ============================================ */
 /* Custom MDX Components - Strip Nested Styling */
 /* ============================================ */
@@ -236,6 +265,106 @@
   padding: 0;
   background: none;
   border: none;
+}
+
+/* Prevent MDX component containers from inheriting blog-prose base font-size */
+/* This ensures Window, Terminal, and Collapsible render at correct 14px on desktop */
+.blog-prose .mdx-code-wrapper {
+  font-size: 0.875rem; /* 14px - matches Tailwind text-sm */
+}
+
+/* Reset nested prose elements inside Window/Terminal to inherit from container */
+.blog-prose .mdx-code-wrapper p,
+.blog-prose .mdx-code-wrapper li,
+.blog-prose .mdx-code-wrapper ul,
+.blog-prose .mdx-code-wrapper ol,
+.blog-prose .mdx-code-wrapper strong,
+.blog-prose .mdx-code-wrapper a {
+  font-size: inherit;
+}
+
+/* Tighter list spacing inside Window/Terminal/Admonition components */
+.blog-prose .mdx-code-wrapper ol li,
+.blog-prose .mdx-code-wrapper ul li,
+.blog-prose [class*="admonition-"] li {
+  margin-bottom: 0.25rem !important; /* 4px - half of default 8px for tighter fit */
+}
+
+/* Remove paragraph margins inside list items in Window/Terminal (MDX creates <p> tags from blank lines) */
+.blog-prose .mdx-code-wrapper li p,
+.blog-prose [class*="admonition-"] li p {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* First/last list items should have no extra margin */
+.blog-prose .mdx-code-wrapper ol li:first-child,
+.blog-prose .mdx-code-wrapper ul li:first-child,
+.blog-prose [class*="admonition-"] li:first-child {
+  margin-top: 0;
+}
+
+.blog-prose .mdx-code-wrapper ol li:last-child,
+.blog-prose .mdx-code-wrapper ul li:last-child,
+.blog-prose [class*="admonition-"] li:last-child {
+  margin-bottom: 0;
+}
+
+/* Reset headings inside Window/Terminal to match container size */
+.blog-prose .mdx-code-wrapper h1,
+.blog-prose .mdx-code-wrapper h2,
+.blog-prose .mdx-code-wrapper h3,
+.blog-prose .mdx-code-wrapper h4,
+.blog-prose .mdx-code-wrapper h5,
+.blog-prose .mdx-code-wrapper h6 {
+  font-size: inherit;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* First heading in component should have no top margin */
+.blog-prose .mdx-code-wrapper h1:first-child,
+.blog-prose .mdx-code-wrapper h2:first-child,
+.blog-prose .mdx-code-wrapper h3:first-child,
+.blog-prose .mdx-code-wrapper h4:first-child {
+  margin-top: 0;
+}
+
+/* Tables inside components should inherit component font-size */
+.blog-prose .mdx-code-wrapper table {
+  font-size: inherit;
+}
+
+/* ============================================ */
+/* Collapsible Component Font Override */
+/* ============================================ */
+
+/* Prevent Collapsible content from inheriting blog-prose base font-size */
+/* Target the rounded-lg wrapper divs that aren't mdx-code-wrapper */
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper),
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) .theme-scrollbar {
+  font-size: 0.875rem; /* 14px */
+}
+
+/* Reset nested prose inside Collapsible to inherit from container */
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) p,
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) li,
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) ul,
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) ol,
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) strong,
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) a,
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) h1,
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) h2,
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) h3,
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) h4,
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) h5,
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) h6 {
+  font-size: inherit;
+}
+
+/* Tables inside Collapsible should also inherit */
+.blog-prose > div.my-6.rounded-lg:not(.mdx-code-wrapper) table {
+  font-size: inherit;
 }
 
 /* ============================================ */
@@ -334,6 +463,8 @@
 /* Figure component (images with captions) */
 .blog-prose figure {
   /* max-width controlled by Figure component's size prop (small/medium/large/full) */
+  margin-top: 2rem;        /* 32px - matches mt-8 */
+  margin-bottom: 3rem;     /* 48px - matches mb-12 */
   margin-left: auto;
   margin-right: auto;
 }
@@ -462,4 +593,32 @@
   }
 
   /* Code blocks styled by CodeBlock component - no mobile overrides needed */
+
+  /* MDX Components - Window & Terminal mobile wrapping */
+  .blog-prose .mdx-code-wrapper {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .blog-prose .mdx-code-wrapper > div:last-child {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Ensure horizontal scroll still works when content is too wide */
+  .blog-prose pre {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Reduce font size in code blocks for better mobile readability */
+  .blog-prose .mdx-code-wrapper {
+    font-size: 0.75rem; /* 12px */
+  }
+
+  /* Adjust PostAudio component for mobile */
+  .blog-prose .post-audio-player {
+    padding: 8px 12px !important;
+    gap: 8px !important;
+  }
 }

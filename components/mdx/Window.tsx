@@ -69,11 +69,12 @@ export function Window({ title, children, scrollable = false, maxHeight = '500px
         </div>
       )}
       <div
-        className="theme-scrollbar px-4 py-3 font-mono text-sm overflow-x-auto whitespace-pre"
+        className="theme-scrollbar px-3 sm:px-4 py-2 sm:py-3 font-mono text-sm whitespace-pre-wrap break-words"
         style={{
           color: 'var(--theme-text)',
           maxHeight: scrollable ? maxHeight : undefined,
           overflowY: scrollable ? 'auto' : undefined,
+          overflowX: 'hidden',
         }}
       >
         {children}

@@ -35,16 +35,7 @@ const blog = defineCollection({
     const html = await compileMarkdown(context, document, {
       remarkPlugins: [remarkGfm],
       rehypePlugins: [
-        rehypeSlug,
-        [
-          rehypeAutolinkHeadings,
-          {
-            behavior: 'wrap',
-            properties: {
-              className: ['heading-anchor'],
-            },
-          },
-        ],
+        rehypeSlug, // Keep for heading IDs (useful for direct links)
         rehypeHighlight, // Syntax highlighting for code blocks
       ],
     });
@@ -97,16 +88,7 @@ const projects = defineCollection({
     const html = await compileMarkdown(context, document, {
       remarkPlugins: [remarkGfm],
       rehypePlugins: [
-        rehypeSlug,
-        [
-          rehypeAutolinkHeadings,
-          {
-            behavior: 'wrap',
-            properties: {
-              className: ['heading-anchor'],
-            },
-          },
-        ],
+        rehypeSlug, // Keep for heading IDs (useful for direct links)
         rehypeHighlight, // Syntax highlighting for code blocks
       ],
     });

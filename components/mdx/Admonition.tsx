@@ -47,22 +47,24 @@ const admonitionConfig: Record<AdmonitionType, {
 };
 
 export function Admonition({ type = 'note', title, children }: AdmonitionProps) {
-  const config = admonitionConfig[type];
+  // Ensure we have a valid type, fallback to 'note' if not found
+  const safeType = admonitionConfig[type] ? type : 'note';
+  const config = admonitionConfig[safeType];
 
   return (
     <div
-      className={`my-6 rounded border-l-4 admonition-${type}`}
+      className={`my-6 rounded border-l-4 admonition-${safeType}`}
       style={{
         borderLeftColor: config.borderColor,
         paddingLeft: '20px',
         paddingRight: '20px',
         paddingTop: '16px',
-        paddingBottom: '16px',
+        paddingBottom: '12px',
       }}
     >
       {(title || config.defaultTitle) && (
         <div
-          className="font-bold mb-3 text-sm uppercase tracking-wide"
+          className="font-bold mb-2 text-sm uppercase tracking-wide"
           style={{ color: config.textColor }}
         >
           {title || config.defaultTitle}
