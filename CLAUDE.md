@@ -35,8 +35,8 @@ This is a **Next.js 15.5.4** portfolio application with App Router, designed as 
 ### Core Structure
 - **Framework**: Next.js 15+ with App Router and Turbopack
 - **Styling**: Tailwind CSS v4 (using @tailwindcss/postcss)
-  - **CSS Architecture**: Modular CSS with 11 focused stylesheets
-  - **Organization**: Each module under 200 LOC for maintainability
+  - **CSS Architecture**: Modular CSS with 12 focused stylesheets
+  - **Organization**: Each module under 650 LOC for maintainability
 - **TypeScript**: Strict mode enabled with path aliases (@/* mapped to root)
 - **Fonts**: Geist and Geist Mono from next/font/google, JetBrains Mono
 - **Theme**: Dynamic theme system with Tokyo Night, Nord, and Solarized Light presets
@@ -44,7 +44,7 @@ This is a **Next.js 15.5.4** portfolio application with App Router, designed as 
 
 ### CSS Architecture
 
-The application uses a modular CSS architecture with styles split into 11 focused modules:
+The application uses a modular CSS architecture with styles split into 12 focused modules:
 
 #### Module Structure (`app/styles/`)
 1. **01-theme-variables.css** (182 lines) - Theme presets & CSS custom properties
@@ -58,6 +58,7 @@ The application uses a modular CSS architecture with styles split into 11 focuse
 9. **09-utilities.css** (102 lines) - Responsive, spacing & touch utilities
 10. **10-mobile.css** (133 lines) - Mobile-specific optimizations & safe areas
 11. **11-glass-effects.css** (71 lines) - Glass morphism & visual effects
+12. **12-blog-content.css** (624 lines) - Blog prose styling, MDX components, figures, admonitions, code blocks
 
 The main `app/globals.css` file imports all modules in the correct cascade order.
 
@@ -133,6 +134,21 @@ The portfolio features a fixed tiled layout system that mimics Hyprland window m
    - Visual scroll position indicator for parallax mode
    - Shows current position in the scrollable content
    - Helps users understand their location in the parallax view
+
+#### MDX Components
+
+12. **PostAudio** (`components/mdx/PostAudio.tsx`)
+   - Blog post audio player with playback controls
+   - Speed adjustment (1x, 1.25x, 1.5x)
+   - Progress bar with seek functionality
+   - Download button for offline listening
+   - Analytics tracking (7 event types: play, pause, seek, speed change, download, complete, error)
+
+13. **AutoPostAudio** (`components/blog/AutoPostAudio.tsx`)
+   - Automatic audio detection for blog posts
+   - Checks for `/audio/blog/{slug}.mp3` files
+   - Auto-renders PostAudio component if audio exists
+   - No manual configuration needed per post
 
 ### Design System
 
@@ -369,9 +385,51 @@ This project supports both local and CDN-based image storage for maximum flexibi
 **For contributors/forks:**
 The project works immediately with local images. Setting up a CDN is completely optional.
 
+### Audio Integration
+
+Blog posts support optional audio narration with automatic detection and analytics tracking:
+
+#### How It Works
+
+1. **Auto-Detection**: Place MP3 file at `/public/audio/blog/{slug}.mp3` (e.g., `local-ai-prepping-2025.mp3`)
+2. **Auto-Render**: `AutoPostAudio` component checks for audio file existence and renders player if found
+3. **No Configuration**: No manual setup needed in MDX files - completely automatic
+
+#### Audio Player Features
+
+- **Playback Controls**: Play/pause, seek, progress bar
+- **Speed Adjustment**: 1x, 1.25x, 1.5x playback speeds
+- **Download**: Offline listening support
+- **Time Display**: Current position and total duration
+- **Responsive**: Mobile-optimized touch targets
+
+#### Analytics Events (7 Types)
+
+The audio system dispatches CustomEvents for analytics integration:
+
+```typescript
+trackAudioPlay({ postSlug, src, positionSeconds })
+trackAudioPause({ postSlug, src, positionSeconds })
+trackAudioSeek({ postSlug, fromSeconds, toSeconds })
+trackAudioSpeedChange({ postSlug, speed })
+trackAudioDownload({ postSlug, src })
+trackAudioComplete({ postSlug, src })
+trackAudioError({ postSlug, src, error })
+```
+
+**Optional Google Analytics Integration:**
+Call `initAudioAnalytics()` in app initialization to forward events to GA4.
+
+#### Current Audio Assets
+
+- 4 blog posts with audio (~3MB each, 12MB total)
+- Format: MP3, 64 kbps, 24 kHz mono
+- Stored: `/public/audio/blog/` (CDN-ready)
+
 ### Future Enhancements (Planned)
 - [x] MDX blog system integration
 - [x] Project detail pages with live demos
+- [x] Blog post audio narration with analytics - COMPLETED
 - [ ] More terminal effects (typing animation, matrix rain)
 - [x] Dark/light theme toggle (Tokyo Night/Nord dark, Solarized light) - COMPLETED
 - [x] Mobile parallax scrolling mode - COMPLETED

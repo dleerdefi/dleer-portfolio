@@ -26,6 +26,7 @@ A production-ready developer portfolio built with Next.js 15, featuring a tiled 
 - **Mobile Experience**: Parallax scrolling with depth effects and scroll progress indicators
 - **Theme System**: 3 curated presets (Tokyo Night, Nord, Solarized Light) + 15 accent color swatches
 - **Content Management**: MDX-powered blog and projects with syntax highlighting and reading time
+- **Audio Narration**: Blog post audio with auto-detection, playback controls, and analytics tracking
 - **Contact Form**: Production-ready Resend integration with 5-layer spam protection (honeypot, rate limiting, validation)
 - **CDN Integration**: Optional Cloudflare R2 for optimized image delivery with automatic fallback
 - **Modern Architecture**: Next.js 15.5 + TypeScript strict mode + modular CSS (12 focused modules under 200 LOC each)
@@ -165,6 +166,7 @@ Add environment variables via Vercel dashboard → Settings → Environment Vari
 **Content**: Content Collections + MDX (blog & projects)
 **Animation**: Framer Motion 12.23
 **Email**: Resend API 6.1.2 + React Email
+**Audio**: HTML5 Audio API + Custom analytics (7 event types)
 **CDN**: Cloudflare R2 (image storage & delivery)
 **Validation**: Zod 4.1 (schema validation)
 **State**: React Context API (Theme, Focus)
@@ -205,6 +207,7 @@ dleer-portfolio/
 ├── hooks/                 # Custom React hooks
 ├── lib/                   # Utility libraries
 ├── public/                # Static assets
+│   ├── audio/blog/       # Blog post audio files (MP3)
 │   ├── fonts/            # Custom fonts
 │   └── images/           # Local images (CDN fallback)
 ├── scripts/               # Build and utility scripts
