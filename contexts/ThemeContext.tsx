@@ -96,10 +96,25 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     backgroundImage: themeBackgrounds['tokyo-night'][0]  // Default to first bg of theme
   });
 
-  // Load saved preferences on mount
+  // Load saved preferences on mount (desktop only)
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
+    // Skip localStorage loading on mobile - always use Tokyo Night defaults
+    const isMobile = window.innerWidth < 1024;
+
+    if (isMobile) {
+      // Force Tokyo Night theme for mobile
+      setTheme({
+        preset: 'tokyo-night',
+        accentColor: 'purple',  // Will be overridden by cyan in useEnforceMobileTheme
+        backgroundEffect: true,
+        backgroundImage: themeBackgrounds['tokyo-night'][0]
+      });
+      return;
+    }
+
+    // Desktop: load from localStorage as usual
     const loadedPreset = (localStorage.getItem(STORAGE_KEYS.preset) as ThemePreset) || 'tokyo-night';
     const loadedBgEffect = localStorage.getItem(STORAGE_KEYS.backgroundEffect);
     const loadedBgImage = localStorage.getItem(`${STORAGE_KEYS.backgroundImagePrefix}${loadedPreset}`);
@@ -180,6 +195,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Set theme preset - resets accent to theme default per spec
   const setThemePreset = useCallback((preset: ThemePreset) => {
+    // Prevent theme changes on mobile
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      return;
+    }
+
     const defaultAccent = themeDefaultAccents[preset];
 
     // Load saved background for this theme, or use first as default
@@ -199,6 +219,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Set accent color
   const setAccentColor = useCallback((color: AccentColor) => {
+    // Prevent accent changes on mobile
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      return;
+    }
+
     setTheme(prev => ({ ...prev, accentColor: color }));
     localStorage.setItem(STORAGE_KEYS.accent, color);
   }, []);

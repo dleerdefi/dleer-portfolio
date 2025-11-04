@@ -15,7 +15,7 @@ series: "Preconstruction Mindset"
 
 ## The Jobsite and the Codebase
 
-I didn't learn to ship software in a CS lab. I learned it on muddy jobsites, helping engineer a **$548 million medical campus**. My job was to make sure the hidden systems–medical gas, reverse-osmosis lines, even pneumatic tubes–would mesh perfectly within the concrete and steel. On a project of that scale, you think in dependencies and sequencing because the only alternative is chaos.
+I didn't learn to ship software in a CS lab. I learned it on muddy construction sites, helping engineer a **$548 million medical campus**. My job was to make sure the hidden systems–medical gas, reverse-osmosis lines, even pneumatic tubes–would mesh perfectly within the concrete and steel. You learn to think in dependencies and sequencing because the only alternative is chaos.
 
 <Figure
   src="/images/dleer-tower-crane.webp"
@@ -27,19 +27,17 @@ I didn't learn to ship software in a CS lab. I learned it on muddy jobsites, hel
 />
 
 Years later, as a Chief of Product who regularly ships code using AI, I operate the same way.
-I call it the **preconstruction mindset**: plan first with ruthless clarity, then execute in slices.
+I call it the **preconstruction mindset**: plan first, then execute in slices.
 
-In the construction industry, the "preconstruction" phase is formally recognized as ["the backbone of any construction project"](https://www.letsbuild.com/blog/what-is-preconstruction-and-why-its-important). It's a defined discipline for ["risk mitigation, cost control, project planning, and quality assurance"](https://www.procore.com/library/preconstruction-software). It's the phase where all stakeholders align on the scope, budget, and schedule specifically to ["identify potential roadblocks"](https://www.autodesk.com/solutions/preconstruction-software) *before* a single foundation is poured.
+In the construction industry, the "preconstruction" phase is recognized as ["the backbone of any construction project"](https://www.letsbuild.com/blog/what-is-preconstruction-and-why-its-important). It's a defined discipline for ["risk mitigation, cost control, project planning, and quality assurance"](https://www.procore.com/library/preconstruction-software). It's the phase where all stakeholders align on the scope, budget, and schedule specifically to identify potential roadblocks *before* a single foundation is poured.
 
 As I've applied construction's rigor to software, I've watched the construction industry start to apply software's flexibility to its own planning. New research highlights how construction teams are ["applying the Agile methodology in the pre-construction phase"](https://www.mdpi.com/2075-5309/14/11/3551) to "enhance flexibility and collaboration" and "adapt quickly to evolving project requirements".
 
-This creates a powerful feedback loop. Construction's rigor provides the *discipline* modern software development desperately needs. Software's iteration (Agile) provides the *flexibility* complex engineering projects demand.
+This creates a powerful feedback loop. Construction's rigor provides the *discipline* AI-led software development desperately needs. Software's iteration (Agile) provides the *flexibility* complex engineering projects demand.
 
-My "preconstruction mindset," therefore, is the synthesis of both. It's not a rigid, "waterfall" plan. It is a rigorous *but flexible* planning discipline designed to de-risk complexity. It's the pivot from *coder* to *project manager*, and it's the single most important skill for building with AI. It's the difference between "it works on my machine" and a clean, resilient deployment.
+My "preconstruction mindset" is a synthesis of both. It's the pivot from *coder* to *project manager*, and it's the single most important skill for building with AI.
 
 ## The Siren Song of "Vibe Coding"
-
-And then, AI came for the code.
 
 Generative AI makes it dangerously tempting to adopt the *wrong* workflow. Andrej Karpathy, a founding member of OpenAI, gave this a name:
 
@@ -57,7 +55,7 @@ The *real* bottlenecks are clarifying requirements and reviewing code. Vibe codi
 
 This isn't just a process problem; it's a *skills* problem. The temptation is to use AI as a magic black box, which creates a [dangerous trifecta: developers produce more vulnerabilities, feel more confident, and fix fewer of them](https://cset.georgetown.edu/wp-content/uploads/CSET-Cybersecurity-Risks-of-AI-Generated-Code.pdf).
 
-But this isn't a failure of AI; it's a failure of *method*. The real bottleneck isn't the AI, it's the human-in-the-loop failing to provide direction. The skills that made a good "coder" (like typing speed) are being automated. The skills that make a good *builder*–like planning, risk assessment, and review–are now more valuable than ever.
+But this isn't a failure of AI; it's a failure of *method*. The real bottleneck isn't the AI, it's the human-in-the-loop failing to provide direction. The skills that make a good *builder*–like planning, risk assessment, and review–are now more valuable than ever.
 
 ## The Cost: A Mountain of AI-Generated Debt
 
@@ -111,24 +109,16 @@ This separation allows you to iterate *on the spec*–the "what"–and let the A
 
 This shift to "plan-then-execute" is revolutionary because it reframes the developer's job as a *project manager*. Your value is no longer in typing, but in defining the *what* and verifying the *how*.
 
-But this presents a new challenge. As my construction experience taught me, a good project manager *must* have a strong understanding of what they are managing. If you don't have a technical CS background, you will face a wall of "unknown unknowns".
+But this presents a new challenge. A good project manager *must* have a strong understanding of what they are managing. If you don't have a technical CS background, you will face a wall of "unknown unknowns".
 
 Here, we can use AI to build the plan *itself*. A powerful technique is to use LLMs in an "adversarial" or "critique" framework:
 
 1. **Generate:** Ask one agent (e.g., Claude) to generate a full technical spec for your goal.
 2. **Critique:** Ask a *different* agent (e.g., GPT-4o) to act as a cynical, senior-level "reviewer" and find every flaw, risk, and missing piece in that spec.
 
-This "LLM-as-reviewer" process is how you use AI to surface the very "unknowns" that would otherwise sink your project.
-
-This is *not* a return to a 500-page waterfall document. Look at my spec template below. It's a simple markdown document. It includes "Work Packages (1–2 days each)"–those are *sprints*. My central rule–"When changes occur, *update the SPEC first*, then the code"–makes the spec a *living document*, not a rigid plan.
-
-This is **Agile Specification-Driven Development**. It combines the continuous feedback and refinement of Agile with the "preconstruction risk mitigation" of a builder. It is the workflow that lets you build fast *and* build right.
+This "LLM-as-reviewer" process uses AI to surface the very "unknowns" that would otherwise sink your project.
 
 ## Phase 1: Preconstruction
-
-Here is the antidote. Before you pick your tools, define your plan.
-
-### Picking Your Tools
 
 The spec-driven mindset pairs best with tools built for it. You have a few options:
 
@@ -189,7 +179,7 @@ Copy this template into `docs/SPEC.md` in your repository. Fill it in before you
 
 ## Phase 2: Construction (The Loop)
 
-With your SPEC.md in the repo, you're ready for construction. This isn't a "fire and forget" prompt. It's a tight, disciplined loop.
+With your SPEC.md in the repo, you're ready for construction. Now, it's time to follow a tight, disciplined loop.
 
 <Terminal>
 # 1. Create a branch for one slice (e.g., feature/M1-auth)
