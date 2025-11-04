@@ -39,7 +39,7 @@ My "preconstruction mindset" is a synthesis of both. It's the pivot from *coder*
 
 ## The Siren Song of "Vibe Coding"
 
-Generative AI makes it dangerously tempting to adopt the *wrong* workflow. Andrej Karpathy, a founding member of OpenAI, gave this a name:
+Generative AI makes it dangerously tempting to adopt the *wrong* workflow. Andrej Karpathy gave this a name:
 
 <Admonition type="warning" title="Vibe Coding">
 **Vibe coding:** when you kind of vaguely know what you want but not really, so you just throw some code together until it feels right.
@@ -51,38 +51,9 @@ This is the **Illusion of Velocity**.
 
 A McKinsey study claimed developers using generative AI can complete coding tasks up to twice as fast. But this speed is deceptive. As *The Pragmatic Engineer*'s Gergely Orosz points out, the speed of typing out code has never been the bottleneck for software development.
 
-The *real* bottlenecks are clarifying requirements and reviewing code. Vibe coding doesn't solve these bottlenecks; it just moves them and makes them worse. The delay simply shifts elsewhere—when senior developers are overwhelmed reviewing AI-generated code that is architecturally unsound. Your "48 hours spamming 'pls fix'" *is* the new bottleneck.
+The *real* bottlenecks are clarifying requirements and reviewing code. Vibe coding doesn't solve these bottlenecks; it just moves them and makes them worse.
 
-This isn't just a process problem; it's a *skills* problem. The temptation is to use AI as a magic black box, which creates a [dangerous trifecta: developers produce more vulnerabilities, feel more confident, and fix fewer of them](https://cset.georgetown.edu/wp-content/uploads/CSET-Cybersecurity-Risks-of-AI-Generated-Code.pdf).
-
-But this isn't a failure of AI; it's a failure of *method*. The real bottleneck isn't the AI, it's the human-in-the-loop failing to provide direction. The skills that make a good *builder*–like planning, risk assessment, and review–are now more valuable than ever.
-
-## The Cost: A Mountain of AI-Generated Debt
-
-When you let "vibe coding" drive your project, the result is a mountain of AI-generated debt, created at a speed I've never witnessed before.
-
-<Admonition type="error" title="Technical Debt Crisis">
-**"I don't think I have ever seen so much technical debt being created in such a short period of time during my 35-year career in technology,"** –API evangelist Kin Lane.
-</Admonition>
-
-This isn't just a feeling. A [2024 GitClear analysis of 211 million lines of code](https://leaddev.com/technical-direction/how-ai-generated-code-accelerates-technical-debt) found staggering evidence:
-
-* It tracked an **8-fold increase** in code duplication.
-* It showed that ["code reuse is dying," with "copy-pasted lines exceed[ing] moved lines"](https://leaddev.com/technical-direction/how-ai-generated-code-accelerates-technical-debt) for the first time.
-
-This is the direct result of vibe coding. A developer prompts for a feature. An AI, trained on public repos, provides a non-optimal solution that *works* in isolation. The developer pastes it in. Another developer, working on a similar feature, does the same.
-Instead of one, clean, reusable module, the team now has eight duplicated, overly complex blocks of spaghetti code. *That* is the technical debt that will grind your project to a halt.
-
-It's not just messy; it's a security time bomb.
-
-<Admonition type="error" title="Security Risks">
-* Research from Veracode shows that **45% of AI-generated code samples fail security tests**.
-* A Stanford study confirms AI-generated code ["contains security bugs"](https://www.legitsecurity.com/aspm-knowledge-base/ai-code-generation-benefits-and-risks).
-</Admonition>
-
-The AI, trained on vast repositories of public code, is unconsciously reproducing known vulnerabilities and risks introducing the very SQL injection, XSS attacks, and data leaks that a human expert would know to prevent.
-
-Worse, as AI agents become more autonomous, we face what Martin Fowler's colleague Korny Sietsma calls the ["Lethal Trifecta": **Sensitive Data + Untrusted Content + External Communication**](https://martinfowler.com/articles/agentic-ai-security.html). An agentic IDE given access to your codebase, your secrets, and the internet *is* this trifecta. An attacker can use "untrusted content"–like a prompt injection hidden in a file–to instruct the LLM to ["leak sensitive data"](https://martinfowler.com/articles/agentic-ai-security.html).
+But this isn't a failure of AI; it's a failure of *method*. It's the human-in-the-loop failing to provide direction. The skills that make a good *builder*–like planning, risk assessment, and review–are now more valuable than ever.
 
 ## The Antidote: Spec-Driven Development
 
