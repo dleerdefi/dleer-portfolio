@@ -1,21 +1,17 @@
 ---
 title: "Building Software Like a Builder"
 slug: "building-software-like-a-builder"
-summary: "Stop 'vibe coding.' Use a 'preconstruction mindset' to harness agentic AI and ship software that actually works. Templates and checklists inside."
+summary: "Stop vibe coding. Merge a 'preconstruction mindset' with spec-driven development and harness agentic AI to ship software that actually works. Templates and checklists inside."
 date: "2025-10-17"
-updated: "2025-11-03"
+updated: "2025-11-04"
 tags: ["engineering", "ai", "workflow", "spec-driven-development"]
 status: "published"
 series: "Preconstruction Mindset"
 ---
 
-<Admonition type="info" title="The Core Insight">
-**The preconstruction mindset**: plan first with ruthless clarity, then execute in slices. It's the pivot from *coder* to *project manager*, and it's the single most important skill for building with AI.
-</Admonition>
+## The $548 Million Lesson
 
-## The Jobsite and the Codebase
-
-I didn't learn to ship software in a CS lab. I learned it on muddy construction sites, helping engineer a **$548 million medical campus**. My job was to make sure the hidden systems–medical gas, reverse-osmosis lines, even pneumatic tubes–would mesh perfectly within the concrete and steel. You learn to think in dependencies and sequencing because the only alternative is chaos.
+I learned to ship software on a muddy construction in Silverdale, Washington.
 
 <Figure
   src="/images/dleer-tower-crane.webp"
@@ -26,233 +22,199 @@ I didn't learn to ship software in a CS lab. I learned it on muddy construction 
   size="medium"
 />
 
-Years later, as a Chief of Product who regularly ships code using AI, I operate the same way.
-I call it the **preconstruction mindset**: plan first, then execute in slices.
+That medical campus was built on a budget of $548 million. My job was coordinating the invisible systems like reverse osmosis pipes, pneumatic tubes, redundant power—that would keep people alive. You learn fast that "we'll figure it out later" kills budgets. And patients.
 
-In the construction industry, the "preconstruction" phase is recognized as ["the backbone of any construction project"](https://www.letsbuild.com/blog/what-is-preconstruction-and-why-its-important). It's a defined discipline for ["risk mitigation, cost control, project planning, and quality assurance"](https://www.procore.com/library/preconstruction-software). It's the phase where all stakeholders align on the scope, budget, and schedule specifically to identify potential roadblocks *before* a single foundation is poured.
+Today, as a Chief of Product who ships production code using AI, I watch developers make the exact mistake that would've gotten me fired from that jobsite: starting work without a plan.
 
-As I've applied construction's rigor to software, I've watched the construction industry start to apply software's flexibility to its own planning. New research highlights how construction teams are ["applying the Agile methodology in the pre-construction phase"](https://www.mdpi.com/2075-5309/14/11/3551) to "enhance flexibility and collaboration" and "adapt quickly to evolving project requirements".
+Andrej Karpathy has a name for it: ["vibe coding."](https://twitter.com/karpathy/status/1627065535914086401) You kinda sorta know what you want, so you prompt an AI, get 800 lines of code in seconds, then spend two days debugging code you didn't design and don't understand.
 
-This creates a powerful feedback loop. Construction's rigor provides the *discipline* AI-led software development desperately needs. Software's iteration (Agile) provides the *flexibility* complex engineering projects demand.
+It's the coding equivalent of pouring foundation before checking if you're building on sand.
 
-My "preconstruction mindset" is a synthesis of both. It's the pivot from *coder* to *project manager*, and it's the single most important skill for building with AI.
+The fix isn't avoiding AI. It's bringing the **preconstruction mindset** to software. In construction, [preconstruction is sacred](https://www.letsbuild.com/blog/what-is-preconstruction-and-why-its-important)—it's where you catch the $10 problems before they become $10 million lawsuits. It's where every trade aligns on exactly what gets built, in what order, with what materials.
 
-## The Siren Song of "Vibe Coding"
+This approach is formally referred to as Spec-Driven Development. Anthropic built it into Claude Code. [GitHub calls it](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/) "the golden workflow." [Martin Fowler's site](https://martinfowler.com/articles/exploring-gen-ai/to-vibe-or-not-vibe.html) dedicated 5,000 words to it.
 
-Generative AI makes it dangerously tempting to adopt the *wrong* workflow. Andrej Karpathy gave this a name:
+## The Vibe Coding Epidemic
 
-<Admonition type="warning" title="Vibe Coding">
-**Vibe coding:** when you kind of vaguely know what you want but not really, so you just throw some code together until it feels right.
-</Admonition>
+Last month, a founder messaged me in panic. His Next.js app—built in two weeks with Cursor's help—just generated a $3,100 Vercel bill. For a todo app with 200 users.
 
-It's "artistic sketching", or as I've seen it, "prompt, paste, and hope". You'll get 800 lines of code in minutes, then spend the next 48 hours spamming "pls fix" for errors in code you didn't design and don't understand.
+The culprit? His AI-generated code:
+- Image optimization on every request (not cached)
+- API routes fetching entire tables into memory
+- No pagination—loading all records for every user
+- A sitemap.xml regenerating dynamically (378,000 requests = massive bandwidth)
 
-This is the **Illusion of Velocity**.
+"But it works perfectly on localhost!" he said.
 
-A McKinsey study claimed developers using generative AI can complete coding tasks up to twice as fast. But this speed is deceptive. As *The Pragmatic Engineer*'s Gergely Orosz points out, the speed of typing out code has never been the bottleneck for software development.
+This is vibe coding's **illusion of velocity**. McKinsey claims AI makes developers 2x faster at "coding tasks." But speed was never the bottleneck. [Gergely Orosz nails it](https://newsletter.pragmaticengineer.com/p/ai-tooling): the real bottlenecks are clarifying requirements and reviewing code.
 
-The *real* bottlenecks are clarifying requirements and reviewing code. Vibe coding doesn't solve these bottlenecks; it just moves them and makes them worse.
+Vibe coding makes both worse.
 
-But this isn't a failure of AI; it's a failure of *method*. It's the human-in-the-loop failing to provide direction. The skills that make a good *builder*–like planning, risk assessment, and review–are now more valuable than ever.
+When you prompt-paste-and-pray, you're not building—you're accumulating. Every prompt creates new code that might work but doesn't fit. GitLab found AI-assisted projects have [7-8x more code duplication](https://about.gitlab.com/blog/2024/06/20/measuring-the-productivity-impact-of-ai-on-software-development/). Google's research shows AI reproduces [known vulnerabilities in 16% of generated functions](https://arxiv.org/abs/2211.03622).
 
-## The Antidote: Spec-Driven Development
+The scariest part? It feels productive. You're "shipping features." You're "moving fast." But you're building on quicksand. That founder moved to a $5/month VPS. Same app, 600x cheaper.
 
-The antidote to vibe coding is a short, explicit spec. This isn't just a good idea; it's the *intended workflow* for the most powerful agentic tools. Anthropic's Claude Code, for example, is built on a "plan, then execute" strategy. You explicitly ask for a plan, review it, and *then* give the agent the green light to build.
+He rebuilt with a spec. Took three days.
 
-My "preconstruction mindset" has a formal name for this: **Spec-Driven Development (SDD)**. It is being called the ["golden workflow of AI coding"](https://medium.com/@shenli3514/spec-driven-development-sdd-is-the-future-of-software-engineering-85b258cea241).
+On a construction site, we have a saying: "Measure twice, cut once." In software, we've inverted it: "Generate infinitely, debug forever."
 
-Birgitta Böckeler, writing for Martin Fowler's site, defines it perfectly:
+There's a better way.
 
-<Admonition type="tip" title="Spec-Driven Development">
-**Spec-driven development means writing a 'spec' before writing code with AI ('documentation first'). [The spec becomes the source of truth for the human and the AI](https://martinfowler.com/articles/exploring-gen-ai/to-vibe-or-not-vibe.html)**.
-</Admonition>
+## Think Like a Project Manager
 
-This simple process tames the chaos of prompt-driven vibe coding. The spec acts as a "North Star" for the AI agent, allowing it to take on larger tasks without getting lost.
+In construction, preconstruction isn't optional—it's where [80% of the project's success is determined](https://www.procore.com/library/preconstruction-software). Before anyone touches a hammer, we:
 
-The core benefit, as the GitHub blog explains, is [**"separating the stable 'what' from the flexible 'how'"**](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/).
+- Define success (blueprints, not vibes)
+- Identify dependencies (concrete before framing)
+- Anticipate failures (what if it rains for two weeks?)
+- Lock the scope (change orders cost millions)
 
-* The **"what"** is the *intent*: the user's problem, the business goal.
-* The **"how"** is the *implementation*: the tech stack, the API contracts, the database schema.
+This is exactly what your AI needs.
 
-This separation allows you to iterate *on the spec*–the "what"–and let the AI handle the "expensive rewrites" of the "how".
+[Birgitta Böckeler](https://martinfowler.com/articles/exploring-gen-ai/to-vibe-or-not-vibe.html), writing for Martin Fowler, calls it Spec-Driven Development: **"The spec becomes the source of truth for the human and the AI."** Not prompts. Not chat history. A spec.
 
-### Bridging the "Unknown Unknowns" (for non-coders)
+Here's the insight construction taught me: specs aren't about perfection—they're about permissions. When every trade has the same blueprint, the electrician knows exactly where they can drill without hitting plumbing. The spec gives permission to work independently without coordination overhead.
 
-This shift to "plan-then-execute" is revolutionary because it reframes the developer's job as a *project manager*. Your value is no longer in typing, but in defining the *what* and verifying the *how*.
+Same with AI. A good spec separates the stable "what" from the flexible "how":
 
-But this presents a new challenge. A good project manager *must* have a strong understanding of what they are managing. If you don't have a technical CS background, you will face a wall of "unknown unknowns".
+- **The "what"**: User needs auth. Tasks sync across devices.
+- **The "how"**: NextAuth vs Clerk. Postgres vs MySQL. REST vs GraphQL.
 
-Here, we can use AI to build the plan *itself*. A powerful technique is to use LLMs in an "adversarial" or "critique" framework:
+Lock the "what" in a spec. Let AI iterate on the "how."
 
-1. **Generate:** Ask one agent (e.g., Claude) to generate a full technical spec for your goal.
-2. **Critique:** Ask a *different* agent (e.g., GPT-4o) to act as a cynical, senior-level "reviewer" and find every flaw, risk, and missing piece in that spec.
+Instead of "build me an app," you give AI a bounded problem: "Implement M1 from the spec: Google auth that persists sessions and returns user data at /api/me."
 
-This "LLM-as-reviewer" process uses AI to surface the very "unknowns" that would otherwise sink your project.
+The AI can't wander. Can't over-engineer. Can't create eight different auth patterns. It has one job, clearly defined, with acceptance criteria.
 
-## Phase 1: Preconstruction
+The construction industry has learned this lesson the hard way. The Sydney Opera House was supposed to cost $7 million and take four years. Without proper preconstruction, it cost $102 million and took 14 years.
 
-The spec-driven mindset pairs best with tools built for it. You have a few options:
+Your zero-to-production journey doesn't need to be your Sydney Opera House.
 
-* **Agentic IDEs (e.g., Cursor):** Powerful, but can be a short path to vibe-coding debt if you skip the spec.
-* **Terminal-first, Plan-then-Execute Agents (e.g., Claude Code):** These tools are *designed* for this workflow. They encourage you to review a plan *before* files are changed, which pairs perfectly with a written spec.
-
-### The Spec
-
-Copy this template into `docs/SPEC.md` in your repository. Fill it in before you write a single line of code. Treat it as the contract for what you, and your AI, are building. This is the spec I use.
+## The Spec Template That Ships
 
 <Window title="docs/SPEC.md">
 
 # Project Spec
 
-## 1. Goal
+## Goal
 * **For:** Busy people who lose track of tasks
 * **Problem:** Tasks scattered across devices; no fast, reliable sync
-* **Success:** TTI < 2s, task ops < 150ms, p50 sync < 800ms, DAU > 100 by week 2
+* **Success:** TTI &lt; 2s, task ops &lt; 150ms, p50 sync &lt; 800ms, DAU &gt; 100 by week 2
 
-## 2. System Components
-* **Entities:** User \{ id, email \}, Task \{ id, userId, title, status, dueAt \}, List \{ id, userId, name \}
+## System Components
+* **Entities:** User `{ id, email }`, Task `{ id, userId, title, status, dueAt }`, List `{ id, userId, name }`
 * **Actions:** auth:signInWithGoogle, task:create|edit|complete, list:create|share
 * **Boundaries:** Web (Next.js) / API (FastAPI) / DB (Postgres) / Cache (Redis)
 
-## 3. Constraints
+## Constraints
 * **Stack:** Next.js + FastAPI + Postgres + Redis; Auth via OAuth (Google)
-* **Libraries:** Auth (NextAuth), ORM (Prisma/SQLModel), Logging (Pino/Stdlib), Telemetry (OTLP)
-* **Non-negotiables:** API contracts documented in openapi.yaml; migrations versioned
+* **Libraries:** Auth (NextAuth), ORM (Prisma/SQLModel), Logging (Pino), Telemetry (OTLP)
+* **Non-negotiables:** API contracts in openapi.yaml; migrations versioned
 
-## 4. Acceptance Criteria (examples)
-* **Complete Task:** Clicking "Complete" moves task to Done within **1s**; API returns **200**; UI optimistic-updates and reconciles on server response.
-* **Sync:** Creating a task on device A shows on device B within **800ms** (p50) during a 2-device test.
+## Acceptance Criteria (examples)
+* **Complete Task:** Click moves task to Done in &lt;1s; API returns 200; UI reconciles
+* **Sync:** New task on device A shows on device B within 800ms (p50)
 
-## 5. Work Packages (1–2 days each)
-* **M1:** Auth + User model (Google sign-in persists session; /me returns user)
-* **M2:** Tasks CRUD (create/edit/complete works; unit tests for service layer)
-* **M3:** Realtime sync (2-device test meets p50 < 800ms)
-* **M4:** Share read-only list links (public route guarded, no edit leaks)
+## Work Packages (1–2 days each)
+* **M1:** Auth + User model (Google sign-in, session persists, /me endpoint)
+* **M2:** Tasks CRUD (create/edit/complete works; unit tests pass)
+* **M3:** Realtime sync (2-device test meets p50 &lt; 800ms)
+* **M4:** Share links (public route guarded, no edit access)
 
-## 6. Risks
-* **Auth vendor lock-in** → Wrap auth in an internal adapter; keep user schema portable.
+## Risks
+* **Auth vendor lock-in** → Wrap auth in adapter; keep schema portable
 
-## 7. Open Questions
-* Roles (admin/editor) needed?
-* Offline first? If yes, queue + reconcile strategy.
-
-## 8. Repo Layout
-* apps/web
-* apps/api
-* packages/ui
-* infra/docker
-* docs/SPEC.md
-
-## 9. Environments
-* **.env.example:** DATABASE_URL=..., REDIS_URL=..., GOOGLE_CLIENT_ID=...
+## Open Questions
+* Roles needed? Offline-first required?
 
 </Window>
 
-## Phase 2: Construction (The Loop)
+The magic isn't the template. It's the discipline. When you force yourself to write "API returns 200 with user object within 150ms," you're forced to think about performance before writing code. When you document "OAuth only, no password storage," you prevent AI from creating security holes.
 
-With your SPEC.md in the repo, you're ready for construction. Now, it's time to follow a tight, disciplined loop.
+Most importantly, when your spec says "M1: Auth" and your code does auth, you can ship it. No scope creep. No "while we're at it." No vibe-driven drift.
 
-<Terminal>
-# 1. Create a branch for one slice (e.g., feature/M1-auth)
-git checkout -b feature/M1-auth
+## The Three-Phase Loop That Works
 
-# 2. Give your spec to your coding agent and ask it to build *only that slice*
-# Agent reads docs/SPEC.md and implements M1
+### Phase 1: Spec It (Preconstruction)
 
-# 3. Run the acceptance checks to verify the work
-npm run build && npm run test
-
-# 4. If anything needs to change, update the spec first, then the code
-
-# 5. Commit small and often
-git add . && git commit -m "feat: implement M1 auth"
-</Terminal>
-
-This loop redefines the human's job. Your value is no longer *typing*; it's *verifying*. This is critical because, as AI experts will tell you:
-
-<Admonition type="warning" title="Critical Understanding">
-**[LLMs are NOT compilers... they are inferrers. A compiler takes a structured input and produces a repeatable, predictable output. LLMs do not do that](https://martinfowler.com/articles/exploring-gen-ai/i-still-care-about-the-code.html)**.
-</Admonition>
-
-Because AI is a non-deterministic "inferrer," you *must* perform a constant risk assessment for every line of code it produces. My loop *is* that risk assessment. It systematically manages all three risk factors:
-
-* **Probability:** You *lower* the probability of AI error by giving it a clear, unambiguous spec.
-* **Impact:** You *lower* the impact of an error by building in small, isolated "work packages."
-* **Detectability:** You *maximize* your ability to detect errors by running "acceptance checks" against the spec.
-
-## Phase 3: Post-Construction (The Punch List)
-
-When a building is "finished," there's still work to do: final inspections, owner training, and fixing all the small issues found on the final walkthrough. We call this the "punch list."
-
-Shipping an MVP is the same. Once real users arrive, you learn what's broken, what's slow, and what features are actually valuable. The work becomes a steady rhythm of fixing bugs, measuring performance, and turning feature requests into clear stories in your spec.
-
-Reaching this stage is a massive win.
+Don't touch your IDE. Open a markdown file. Write what success looks like:
+- Who's the user?
+- What's their problem?
+- What does "working" mean? (Specific. Measurable. "Task creates in &lt;150ms" not "fast")
+- What are the work packages? (1-2 day chunks)
+- What breaks the build? (Security, performance, compatibility)
 
 <Admonition type="tip">
-**Having users who care enough to complain about your product is the best possible outcome for a builder.**
+**Pro tip for non-technical founders:** Use AI against itself. Get Claude to write a spec, then ask GPT-4 to tear it apart like a cynical staff engineer. The fight between AIs surfaces your unknown unknowns.
 </Admonition>
 
-## Appendix: Deploy from Day Zero
+### Phase 2: Build It (Construction)
 
-On the jobsite, you don't build a $500M hospital and *then* ask the city for permits. Deployment, like regulatory compliance, must be planned from day one.
+This is where discipline pays off:
 
-If you ignore deployment until the end, your app will never graduate from localhost. Use this checklist from day zero.
+<Terminal>
+# Branch per package
+git checkout -b feature/M1-auth
 
-<Collapsible title="Deployment Checklist">
+# Give AI the spec + only that package
+# "Implement M1 from SPEC.md: Google auth with session persistence"
 
-* **A dev environment that mirrors production.** Your local setup, ideally run via Docker, must use the same base image and OS libraries as your production environment. This prevents mismatches and is the industry standard.
-* **No secrets in Git.** An .env.example file is committed, but real secrets are only ever loaded from environment variables. This is a fundamental security control.
-* **Consistent storage layers.** Your data stores (Postgres, Redis, etc.) run identically across all environments, managed locally with Docker Compose.
-* **A stateless and scalable app.** The application is designed to be stateless. Any persistent files (like user uploads) are written to external object storage (like S3), not the container's filesystem. This is non-negotiable for modern, cloud-native hosting.
-* **Health endpoints are implemented.** Your app includes /health (liveness) and /ready (readiness) endpoints. Hosting platforms like Kubernetes *require* these to manage your app and enable zero-downtime deploys.
-* **An optimized, multi-stage Dockerfile.** Assets are built in an initial stage, and the final image contains only the lean, necessary runtime code.
-* **Basic telemetry is included.** The application logs essential metrics, such as request duration and error rates. This enables the "ongoing monitoring" that feeds your "punch list".
-* **A simple, repeatable deploy script.** You have a one-command script (e.g., fly deploy or a custom shell script) to deploy your application. This is the foundation of Continuous Delivery.
+# Review every file (you're the building inspector)
 
-</Collapsible>
+# Test the acceptance criteria
+npm run test:auth
 
-## Conclusion: The Builder's Advantage
+# Commit small, commit often
+git add . && git commit -m "feat: implement M1 auth per spec"
+</Terminal>
 
-AI *is* changing the landscape. The skills are shifting from pure technical implementation to strategic project management. As Gergely Orosz says, AI will not replace you but will make you more productive—you must constantly learn.
+The risk management here is deliberate:
+- **Lower probability**: Clear specs = less AI confusion
+- **Lower impact**: Small packages = isolated failures
+- **Higher detectability**: Acceptance criteria = immediate feedback
 
-The preconstruction mindset *is* the workflow for learning. It's how you harness the power of AI without inheriting its chaos. It's how you stay in control.
+When building that medical campus, we didn't install all plumbing then all electrical. We built in vertical slices—one floor, all trades, fully functional. Same principle here.
 
-Your unique domain expertise is your greatest advantage. The next wave of great applications will come from people outside the tech bubble who understand real-world problems. With the right workflow, you have everything you need to build one of them.
+### Phase 3: Ship It (Post-Construction)
 
-If you're a solo builder using AI, steal the spec, run the loop, and deploy from day one.
+The "punch list" phase. Real users find real problems:
+- That button that's invisible on mobile
+- The query that takes 3 seconds with real data
+- The feature nobody actually uses
 
----
+This is victory. Users who care enough to complain are users who want you to succeed. Their annoyance is your roadmap.
 
-## Frequently Asked Questions
+<Admonition type="warning">
+**Critical insight:** Don't debug vibe code. You'll never understand it well enough. If user feedback reveals fundamental problems, spec the fix and rebuild that slice. It's faster than archaeology.
+</Admonition>
 
-<Collapsible title="What is 'vibe coding' and why is it so bad?">
-Vibe coding is an approach where you "kind of vaguely know what you want... so you just throw some code together until it feels right". It's a "prompt, paste, and hope" workflow. It's bad because it creates massive, hard-to-fix problems, including an 8-fold increase in code duplication, "overly complex" spaghetti code, and significant security time bombs.
-</Collapsible>
+The Sydney Opera House metaphor breaks down here. Software isn't concrete—you can rebuild a component in hours, not years. But only if you built it with a spec the first time.
 
-<Collapsible title="How does a spec prevent AI-generated technical debt?">
-AI models, when used without direction, produce "non-optimal solutions" that get "copy-pasted" repeatedly. This creates massive code duplication and debt. A spec prevents this by acting as a "North Star" that separates the **"stable 'what'"** (the spec) from the **"flexible 'how'"** (the AI-generated code). The AI is given clear, unambiguous instructions for a small "work package," which dramatically lowers the probability of error.
-</Collapsible>
+## What Actually Changes
 
-<Collapsible title="How does this workflow handle AI's security risks?">
-AI-generated code is known to "unconsciously reproduce known vulnerabilities". The spec-driven development loop–where you spec, build, and verify–functions as a "constant risk assessment". It systematically manages risk by:
+I learned this the hard way with my first Cursor project. The tool had just launched, and I was intoxicated—full-stack apps were finally within reach. No plan beyond "build a chat app." Just weeks of frantic vibe coding.
 
-1. **Lowering probability:** A clear spec reduces AI errors.
-2. **Lowering impact:** Small "work packages" isolate any errors.
-3. **Maximizing detectability:** You run "acceptance checks" to verify every slice of work.
-</Collapsible>
+The first days felt euphoric. Firebase auth? Working. Database? Connected. WebSockets? Somehow functioning. I was 99% done.
 
-<Collapsible title="What if I'm not technical? How can I write a spec?">
-This is a common challenge caused by "unknown unknowns". The article proposes using an **"adversarial" or "critique" framework** with AI itself.
+Then deployment hit.
 
-1. **Generate:** Ask one AI (e.g., Claude) to generate a full technical spec for your goal.
-2. **Critique:** Ask a *different* AI (e.g., GPT-4o) to act as a "cynical, senior-level 'reviewer'" and find every flaw, risk, and missing piece in that spec.
+What worked perfectly on localhost became an impossible puzzle in production. I burned through hundreds of dollars in Cursor credits, spent another month untangling routes, fixing what vibe coding had created. The app that took two weeks to "build" took six weeks to actually ship.
 
-This "LLM-as-reviewer" process helps you use AI to surface the very "unknowns" that would otherwise sink your project.
-</Collapsible>
+The breakthrough came with Claude Code's plan-then-execute architecture. Suddenly, the pattern clicked: specs aren't bureaucracy—they're blueprints. Now when I build:
 
-<Collapsible title="What tools are best for Spec-Driven Development?">
-The spec-driven mindset pairs best with **terminal-first, Plan-then-Execute Agents (e.g., Claude Code)** because they encourage you to build a plan *before* any work starts.
-</Collapsible>
+- **Deployment works first time** (requirements defined upfront)
+- **Features ship in days, not months** (work packages = predictable scope)
+- **Every line has purpose** (spec requirement = code existence)
+
+But here's the real change: you stop being afraid of your codebase. Even if you don't technically "understand" every line the AI generates, you understand why it exists. When changes are needed, you update the spec first, then the code follows.
+
+The AI becomes a master craftsman working from your blueprints, not a chaos generator following vibes.
+
+The construction industry figured this out decades ago. Now they're applying our agile methods to their preconstruction phase. We should return the favor and apply their planning rigor to our AI workflows.
+
+Your domain expertise—the problems you understand better than any Silicon Valley engineer—is your advantage. With the right workflow, you can build solutions that matter.
+
+Stop vibe coding. Start building.
 
 ---
 

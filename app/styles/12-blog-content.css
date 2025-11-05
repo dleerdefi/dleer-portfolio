@@ -463,14 +463,19 @@
 /* Figure component (images with captions) */
 .blog-prose figure {
   /* max-width controlled by Figure component's size prop (small/medium/large/full) */
-  margin-top: 2rem;        /* 32px - matches mt-8 */
-  margin-bottom: 3rem;     /* 48px - matches mb-12 */
+  margin-top: 1.5rem;      /* 24px - reasonable spacing from content above */
+  margin-bottom: 1.5rem;   /* 24px - reasonable spacing to content below */
   margin-left: auto;
   margin-right: auto;
 }
 
 /* Remove margin from figure's wrapper div */
 .blog-prose figure div {
+  margin: 0;
+}
+
+/* Remove margin from images inside figures (they have captions) */
+.blog-prose figure img {
   margin: 0;
 }
 

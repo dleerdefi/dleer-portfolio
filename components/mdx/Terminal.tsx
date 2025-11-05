@@ -70,7 +70,7 @@ export function Terminal({ cmd, children }: TerminalProps) {
         </div>
       )}
       <div
-        className="theme-scrollbar px-3 sm:px-4 py-2 sm:py-3 font-mono text-sm whitespace-pre-wrap break-words"
+        className="theme-scrollbar px-3 sm:px-4 pt-2 pb-1.5 sm:pt-3 sm:pb-2 font-mono text-sm whitespace-pre-wrap break-words"
         style={{
           color: 'var(--theme-text)',
           overflowX: 'hidden',
