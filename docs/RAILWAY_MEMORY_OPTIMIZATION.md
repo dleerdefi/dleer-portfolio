@@ -312,38 +312,103 @@ risk of another deploy debugging session.
 
 ### Option B: Offload image resizing to Cloudflare (removes sharp from the server)
 
-Images already come from `cdn.dleer.ai` (R2 behind Cloudflare). With
-Cloudflare **Image Transformations** enabled on the `dleer.ai` zone, a Next.js
-custom loader can request resized images straight from Cloudflare's edge.
-`/_next/image` and sharp then never run on Railway.
+Images already come from `cdn.dleer.ai` (R2 bucket on the `dleer.ai`
+Cloudflare zone). With Cloudflare **Image Transformations** enabled on that
+zone, a Next.js custom loader can request resized images straight from
+Cloudflare's edge, so `/_next/image` and sharp never run on Railway.
 
-- Expected: server memory near the ~150–200 MB floor regardless of image
-  traffic, faster image delivery from Cloudflare's edge cache, and less
-  Railway egress.
-- Cost: Cloudflare includes a monthly allowance of free unique
-  transformations (5,000/month at the time of writing; verify in the
-  Cloudflare dashboard). This site's few dozen images × a handful of
-  widths fits well inside that.
-- Sketch:
-  ```ts
-  // next.config.ts
-  images: { loader: 'custom', loaderFile: './lib/cloudflare-image-loader.ts' }
+**Measured RAM saving (on top of the tuned start command): ~52 MB, from
+223 MB to 171 MB** with the same traffic minus `/_next/image`; sharp never
+loads. That's roughly $0.50/month, so **this is mainly a speed upgrade,
+not a cost one**:
 
-  // lib/cloudflare-image-loader.ts
-  export default function cloudflareLoader({ src, width, quality }: {
-    src: string; width: number; quality?: number;
-  }) {
-    const cdn = process.env.NEXT_PUBLIC_CDN_URL;
-    if (!cdn || !src.startsWith(cdn)) return src; // local/dev fallback
-    const path = src.slice(cdn.length);
-    return `${cdn}/cdn-cgi/image/width=${width},quality=${quality ?? 75},format=auto${path}`;
-  }
-  ```
-- Prerequisites and caveats: enable Image Transformations for the zone in
-  Cloudflare (Images → Transformations). Make sure the local fallback still
-  works for forks without a CDN. Test the background, profile photo, and
-  MDX `Figure` images. **Not tested in this audit**, because the CDN wasn't
-  reachable from the test environment.
+- Images are served from the Cloudflare location nearest each visitor
+  instead of a single Railway container fetching, resizing, and returning
+  them.
+- `format=auto` serves AVIF to browsers that support it (Next.js only
+  serves WebP by default).
+- No cold re-optimization after deploys. Railway's container filesystem,
+  including `.next/cache/images`, is wiped on every deploy.
+
+**Expected usage.** About 10 wallpapers × 8 widths, about 10 thumbnails ×
+up to 16 widths, 2 profile photos × up to 16 widths, plus blog/project
+figures. That's at most ~300–450 unique transformations a month, and
+realistically 100–200, since browsers only fetch the widths they need. The
+Free plan includes 5,000/month. Repeat requests for the same variant within
+a month count once, and `format=auto` counts as a single transformation.
+
+**Setup order (dashboard first, then code):**
+
+1. Cloudflare dashboard → **Images → Transformations** → enable for the
+   `dleer.ai` zone. Keep sources restricted to the same zone (the default).
+   Don't enable "any origin".
+2. Verify one URL by hand. It should return a ~640 px image with a
+   `cf-resized` response header:
+   `https://cdn.dleer.ai/cdn-cgi/image/width=640,quality=85,format=auto/images/shiny_purple.webp`
+3. Only then ship the loader. Before transformations are enabled,
+   `/cdn-cgi/image/` URLs won't resize.
+
+**Implementation notes:**
+
+- With `loader: 'custom'`, Next.js **disables `/_next/image` entirely**
+  (it returns 404). The loader therefore has to handle every `next/image`
+  source, not just CDN URLs.
+- Blog `Figure` components and project screenshots use **local
+  `/images/...` paths** in the MDX. The loader should map those onto the CDN
+  (the bucket mirrors `/images/`). First confirm those files exist in R2.
+- Project MDX uses plain Markdown images (`![](...)`). These currently
+  render as raw `<img>` tags at **full resolution from Railway** (for
+  example a 3185 px, 231 KB screenshot), bypassing both the CDN and the
+  optimizer. Mapping the MDX `img` component through the same loader is an
+  easy page-weight win.
+- Apply the custom loader only when `NEXT_PUBLIC_CDN_URL` is set, so forks
+  and local dev without a CDN keep Next's default optimizer.
+- Add `onerror=redirect`. If a transformation fails (including after the
+  Free-plan limit, error 9422), Cloudflare redirects to the original image
+  instead of breaking it.
+- `images.qualities` and `minimumCacheTTL` only apply to the default
+  loader. They become inert (harmless) once this ships.
+
+Sketch:
+
+```ts
+// next.config.ts
+images: {
+  ...(process.env.NEXT_PUBLIC_CDN_URL
+    ? { loader: 'custom', loaderFile: './lib/cloudflare-image-loader.ts' }
+    : {}),
+  // ...existing remotePatterns, qualities, minimumCacheTTL
+}
+
+// lib/cloudflare-image-loader.ts
+const CDN = process.env.NEXT_PUBLIC_CDN_URL!;
+
+export default function cloudflareLoader({ src, width, quality }: {
+  src: string; width: number; quality?: number;
+}) {
+  // Map CDN URLs and local /images/* paths onto the CDN host
+  const path = src.startsWith(CDN) ? src.slice(CDN.length)
+    : src.startsWith('/images/') ? src
+    : null;
+  if (!path) return src; // anything else: serve as-is
+  const opts = `width=${width},quality=${quality ?? 75},format=auto,onerror=redirect`;
+  return `${CDN}/cdn-cgi/image/${opts}${path}`;
+}
+```
+
+**Risks:**
+
+- *Quota abuse.* Anyone can request arbitrary widths of your images, and
+  each one counts toward the monthly allowance. On the Free plan you are
+  never billed: past 5,000, new variants fall back to the originals via
+  `onerror=redirect`. Avoid upgrading to Images Paid without a rate-limit
+  rule on `/cdn-cgi/image/`, since overage is billed there.
+- *Encoder differences.* Cloudflare's output at a given quality won't be
+  byte-identical to sharp's. Spot-check the backgrounds and profile photo.
+- *Old `/_next/image?...` URLs* (for example, ones indexed by image search)
+  will 404 after the switch.
+- *Rollback:* revert the loader commit. The default optimizer comes back
+  immediately.
 
 ### Option C: Static hosting (eliminates the Railway service)
 
