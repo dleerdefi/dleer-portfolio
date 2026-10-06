@@ -226,6 +226,7 @@ dleer-portfolio/
 - **[CLAUDE.md](CLAUDE.md)** - Architecture, commands, and development guide
 - **[CONTACT_FORM_SPEC.md](docs/CONTACT_FORM_SPEC.md)** - Contact form implementation details
 - **[CDN_DEPLOYMENT_SPEC.md](docs/CDN_DEPLOYMENT_SPEC.md)** - Cloudflare R2 CDN setup guide
+- **[RAILWAY_MEMORY_OPTIMIZATION.md](docs/RAILWAY_MEMORY_OPTIMIZATION.md)** - Railway RAM audit, tuning, and optional further savings
 
 ---
 

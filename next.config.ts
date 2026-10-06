@@ -24,6 +24,9 @@ const nextConfig: NextConfig = {
     ],
     // Configure quality values for Next.js 16 compatibility
     qualities: [70, 85, 90, 100],
+    // Keep optimized images cached for 4 hours (the Next.js 16 default) instead
+    // of 60s, so sharp isn't re-run in the background on nearly every visit
+    minimumCacheTTL: 14400,
   },
 };
 
