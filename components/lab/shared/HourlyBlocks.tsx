@@ -7,6 +7,8 @@ export interface HourlyRow {
   label?: React.ReactNode;
   color: string;
   values: number[];
+  /** The printed total, when it is not the sum of the bars (the digest's 24 h totals). */
+  total?: number;
 }
 
 /**
@@ -34,7 +36,7 @@ export function HourlyBlocks({
       )}
       <tbody>
         {rows.map((row) => {
-          const total = row.values.reduce((a, v) => a + v, 0);
+          const total = row.total ?? row.values.reduce((a, v) => a + v, 0);
           return (
             <tr key={row.key}>
               {row.label !== undefined && (
