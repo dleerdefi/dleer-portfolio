@@ -43,7 +43,7 @@ This is a **Next.js 15.5.4** portfolio application with App Router, designed as 
 ### Core Structure
 - **Framework**: Next.js 15+ with App Router and Turbopack
 - **Styling**: Tailwind CSS v4 (using @tailwindcss/postcss)
-  - **CSS Architecture**: Modular CSS with 12 focused stylesheets
+  - **CSS Architecture**: Modular CSS with 13 focused stylesheets
   - **Organization**: Each module under 650 LOC for maintainability
 - **TypeScript**: Strict mode enabled with path aliases (@/* mapped to root)
 - **Fonts**: Geist and Geist Mono from next/font/google, JetBrains Mono
@@ -52,7 +52,7 @@ This is a **Next.js 15.5.4** portfolio application with App Router, designed as 
 
 ### CSS Architecture
 
-The application uses a modular CSS architecture with styles split into 12 focused modules:
+The application uses a modular CSS architecture with styles split into 13 focused modules:
 
 #### Module Structure (`app/styles/`)
 1. **01-theme-variables.css** (182 lines) - Theme presets & CSS custom properties
@@ -67,6 +67,7 @@ The application uses a modular CSS architecture with styles split into 12 focuse
 10. **10-mobile.css** (133 lines) - Mobile-specific optimizations & safe areas
 11. **11-glass-effects.css** (71 lines) - Glass morphism & visual effects
 12. **12-blog-content.css** (624 lines) - Blog prose styling, MDX components, figures, admonitions, code blocks
+13. **13-lab.css** (106 lines) - Lab (`~/lab`): attack-category colors per preset, `--lab-*` tokens, shared lab classes
 
 The main `app/globals.css` file imports all modules in the correct cascade order.
 

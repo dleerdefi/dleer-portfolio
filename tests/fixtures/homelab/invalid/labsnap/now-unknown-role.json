@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-01T17:30:15Z",
+  "interval_s": 30,
+  "stale_after_s": 120,
+  "lab": {
+    "power_w": 1028.5,
+    "energy_kwh_24h": 24.14,
+    "hosts_up": 3,
+    "hosts_expected": 3
+  },
+  "hosts": [
+    {
+      "role": "storage",
+      "up": true,
+      "power_w": 231.4,
+      "cpu_ratio": 0.1234,
+      "mem_ratio": 0.7123,
+      "inlet_c": 22.0
+    },
+    {
+      "role": "gpu",
+      "up": true,
+      "power_w": 384.2,
+      "cpu_ratio": 0.0712,
+      "mem_ratio": 0.4101,
+      "inlet_c": 24.0
+    },
+    {
+      "role": "apps",
+      "up": true,
+      "power_w": 412.9,
+      "cpu_ratio": 0.0533,
+      "mem_ratio": 0.1862,
+      "inlet_c": 23.0
+    }
+  ],
+  "gpus": [
+    {
+      "role": "truenas",
+      "index": 0,
+      "util_ratio": 0.12,
+      "mem_ratio": 0.0871,
+      "power_w": 28.4,
+      "temp_c": 45.0
+    },
+    {
+      "role": "gpu",
+      "index": 0,
+      "util_ratio": 0.37,
+      "mem_ratio": 0.6125,
+      "power_w": 64.2,
+      "temp_c": 52.0
+    },
+    {
+      "role": "gpu",
+      "index": 1,
+      "util_ratio": 0.0,
+      "mem_ratio": 0.0281,
+      "power_w": 17.9,
+      "temp_c": 38.0
+    }
+  ],
+  "storage": null,
+  "media": {
+    "streams": 2,
+    "transcodes": 1
+  }
+}

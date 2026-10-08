@@ -1,0 +1,35 @@
+# Checks for the ~/lab views (docs/lab/LAB_UI_SPEC.md §11). GitHub-hosted runners only: this
+# repo is public, and self-hosted runners must never run code from strangers' pull requests.
+name: lab
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # There is no lockfile (package-lock.json is ignored), as on Railway.
+      - run: npm install --no-audit --no-fund
+      # The flag off is what production builds today.
+      - name: build (flag off)
+        run: npm run build
+      # The build generates the content-collections types the typecheck needs.
+      - name: build (lab on, demo data)
+        run: npm run build
+        env:
+          NEXT_PUBLIC_FEATURE_LAB: 'true'
+          LAB_DEMO_DATA: 'true'
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
