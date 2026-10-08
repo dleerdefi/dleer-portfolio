@@ -1,12 +1,17 @@
 'use client';
 
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { useFocusState, ContentType } from '@/contexts/FocusContext';
 import { AboutContent } from './content/AboutContent';
 import { BlogDetailContent } from './content/BlogDetailContent';
 import { ContactContent } from './content/ContactContent';
 import { ProjectsOverviewContent } from './content/ProjectsOverviewContent';
 import { BlogOverviewContent } from './content/BlogOverviewContent';
+
+// Lab views load on demand, so no lab code is in the home bundle (docs/lab/LAB_UI_SPEC.md §3)
+const LabTelemetryTile = dynamic(() => import('@/components/lab/telemetry/TelemetryTile'), { ssr: false });
+const LabThreatsTile = dynamic(() => import('@/components/lab/threats/ThreatsTile'), { ssr: false });
 
 interface ContentViewerProps {
   onNavigate?: (content: ContentType) => void;
@@ -42,6 +47,12 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
 
       case 'blog-overview':
         return <BlogOverviewContent onNavigate={onNavigate} />;
+
+      case 'lab-telemetry':
+        return <LabTelemetryTile onNavigate={onNavigate} />;
+
+      case 'lab-threats':
+        return <LabThreatsTile onNavigate={onNavigate} />;
 
       default:
         return null;

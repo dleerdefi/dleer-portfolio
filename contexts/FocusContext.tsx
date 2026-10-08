@@ -75,7 +75,9 @@ export type ContentType =
   | { type: 'projects-overview' }
   | { type: 'blog'; data: BlogData }
   | { type: 'blog-overview' }
-  | { type: 'contact' };
+  | { type: 'contact' }
+  | { type: 'lab-telemetry' }
+  | { type: 'lab-threats' };
 
 export interface FocusState {
   tile: TileType;
@@ -136,7 +138,7 @@ const transitionRules = {
 
   // Content tile can show any content type
   content: {
-    validContent: ['home', 'about', 'projects-overview', 'blog-overview', 'contact', 'project', 'blog']
+    validContent: ['home', 'about', 'projects-overview', 'blog-overview', 'contact', 'project', 'blog', 'lab-telemetry', 'lab-threats']
   },
 
   // Theme control tiles don't change content
@@ -324,6 +326,9 @@ export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         break;
       case 'contact':
         content = { type: 'contact' };
+        break;
+      case 'lab':
+        content = { type: 'lab-telemetry' };
         break;
       default:
         return;

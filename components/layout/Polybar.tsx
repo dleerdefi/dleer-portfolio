@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFocusState } from '@/contexts/FocusContext';
 import { useView } from '@/contexts/ViewContext';
+import { useFeatureFlags } from '@/lib/config';
 
 interface PolybarProps {
   onNavigate: (section: string) => void;
@@ -12,6 +13,7 @@ const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
   const [time, setTime] = useState<Date | null>(null);
   const { activeContent } = useFocusState();
   const { mode, section } = useView();
+  const features = useFeatureFlags();
 
   useEffect(() => {
     // Set initial time after mount to avoid hydration mismatch
@@ -24,6 +26,7 @@ const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
     { id: 'about', label: 'about', icon: '●' },
     { id: 'projects', label: 'projects', icon: '●' },
     { id: 'blog', label: 'blog', icon: '●' },
+    ...(features.lab ? [{ id: 'lab', label: 'lab', icon: '●' }] : []),
     { id: 'contact', label: 'contact', icon: '●' },
   ];
 
@@ -39,6 +42,8 @@ const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
     if (workspace === 'projects' && activeContent.type === 'projects-overview') return true;
     // Check for blog section (legacy - shouldn't happen with zen-only)
     if (workspace === 'blog' && activeContent.type === 'blog-overview') return true;
+    // Lab: either lab view
+    if (workspace === 'lab' && activeContent.type.startsWith('lab-')) return true;
     return false;
   };
 

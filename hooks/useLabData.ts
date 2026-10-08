@@ -9,6 +9,8 @@ export interface LabData<P> {
   error: boolean;
   /** Server clock minus local clock (from the response's Date and Age headers), or null. */
   serverOffsetMs: number | null;
+  /** Local time the payload arrived, for ages that tick between polls. */
+  receivedAt: number | null;
 }
 
 /**
@@ -17,7 +19,12 @@ export interface LabData<P> {
  * `periodMs`. One AbortController per request. A network failure keeps the last payload.
  */
 export function useLabData<P>(url: string, periodMs: number, { enabled = true } = {}): LabData<P> {
-  const [data, setData] = useState<LabData<P>>({ payload: null, error: false, serverOffsetMs: null });
+  const [data, setData] = useState<LabData<P>>({
+    payload: null,
+    error: false,
+    serverOffsetMs: null,
+    receivedAt: null,
+  });
   const lastFetch = useRef(0);
 
   useEffect(() => {
@@ -44,7 +51,7 @@ export function useLabData<P>(url: string, periodMs: number, { enabled = true } 
         const payload = (await res.json()) as P;
         if (disposed || current.signal.aborted) return;
         reportFromPayload(url, payload);
-        setData({ payload, error: false, serverOffsetMs: serverOffset(res) });
+        setData({ payload, error: false, serverOffsetMs: serverOffset(res), receivedAt: Date.now() });
       } catch {
         if (disposed || current.signal.aborted) return;
         setData((prev) => ({ ...prev, error: true }));

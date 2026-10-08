@@ -1,9 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { archLogoASCII, archLogoCompact, minimalLogo, dleerBlockLetters, dlBlockLetters } from '@/components/assets/archAscii';
-import { usePersonalInfo, useSystemInfo } from '@/lib/config';
+import { usePersonalInfo, useSystemInfo, useFeatureFlags } from '@/lib/config';
 import { FONT_SIZES } from '@/lib/constants/typography';
+
+// Lab rows load on demand and fetch after first paint (docs/lab/LAB_UI_SPEC.md §3)
+const NeofetchLabRows = dynamic(() => import('@/components/lab/home/NeofetchLabRows'), { ssr: false });
 
 interface NeofetchTileProps {
   isBlurred?: boolean;
@@ -14,6 +18,7 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
   const [windowWidth, setWindowWidth] = useState(1024);
   const personal = usePersonalInfo();
   const system = useSystemInfo();
+  const features = useFeatureFlags();
 
   useEffect(() => {
     // Set initial width
@@ -191,6 +196,9 @@ const NeofetchTile: React.FC<NeofetchTileProps> = ({ isBlurred = false, layout =
               {system.tiktok.followers && <span style={{ color: 'rgba(var(--theme-text-dimmed), 0.8)' }}> ({system.tiktok.followers})</span>}
             </div>
           )}
+
+          {/* Lab rows (behind NEXT_PUBLIC_FEATURE_LAB; desktop tiles only) */}
+          {features.lab && layout === 'tile' && <NeofetchLabRows isBlurred={isBlurred} />}
 
           <div className="pt-1 flex gap-1">
             <span className={`w-3 h-3 inline-block rounded-sm transition-all duration-300 ${isBlurred ? 'opacity-50' : 'opacity-100'}`} style={{backgroundColor: 'var(--theme-bg)'}}></span>

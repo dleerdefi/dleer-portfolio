@@ -1,9 +1,8 @@
 import 'server-only';
+import { labEnabled } from './flag';
 
 // Shared by the /api/lab/* route handlers: the flag gate and the JSON response with the
 // cache headers of LAB_UI_SPEC.md §5. Handlers read nothing from the request.
-
-export const labEnabled = () => process.env.NEXT_PUBLIC_FEATURE_LAB === 'true';
 
 export const CACHE = {
   status: {
