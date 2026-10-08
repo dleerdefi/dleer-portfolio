@@ -9,7 +9,7 @@ const M = { top: 10, right: 84, bottom: 26, left: 56 };
 /**
  * One measure on one y-axis: recessive grid, three x labels, an end label with the latest value,
  * a hover crosshair and tooltip. Focusable: arrow keys move the crosshair (Shift: an hour),
- * Home and End jump. `null` breaks the line.
+ * Home and End jump; Escape is left to the page (it closes framed pages). `null` breaks the line.
  */
 export function LineChart({
   values,
@@ -59,7 +59,7 @@ export function LineChart({
     if (e.key in keys) {
       e.preventDefault();
       move(keys[e.key]);
-    } else if (e.key === 'Escape') setCursor(null);
+    }
   };
   const onPointer = (e: React.PointerEvent<SVGSVGElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
