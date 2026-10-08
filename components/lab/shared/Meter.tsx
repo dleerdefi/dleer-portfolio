@@ -20,17 +20,29 @@ export function Meter({
   valueWidth?: string;
 }) {
   const pct = value === null ? 0 : value > 0 ? Math.max(2, Math.min(100, value * 100)) : 0;
+  // width="100%": the bar fills whatever its cell leaves after the printed value
+  const fill = width === '100%';
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6em', whiteSpace: 'nowrap' }}>
+    <span
+      style={{
+        display: fill ? 'flex' : 'inline-flex',
+        width: fill ? '100%' : undefined,
+        alignItems: 'center',
+        gap: '0.6em',
+        whiteSpace: 'nowrap',
+      }}
+    >
       <span
         aria-hidden="true"
         style={{
           display: 'inline-block',
-          width,
+          width: fill ? undefined : width,
+          flex: fill ? '1 1 auto' : undefined,
+          minWidth: fill ? '2rem' : undefined,
           height: '0.55em',
           background: 'var(--lab-track)',
           position: 'relative',
-          flexShrink: 0,
+          flexShrink: fill ? 1 : 0,
         }}
       >
         <span style={{ position: 'absolute', inset: 0, width: `${pct}%`, background: color }} />

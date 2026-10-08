@@ -49,17 +49,21 @@ export function CategoryLegend({
               gap: '0.6em',
               justifyContent: variant === 'chips' ? 'flex-start' : 'space-between',
               minHeight: variant === 'grid' ? 44 : 36,
-              padding: '0.35em 0.75em',
+              padding: variant === 'grid' ? '0.35em 0.6em' : '0.35em 0.75em',
               border: '1px solid var(--theme-border)',
               background: on ? 'rgba(var(--theme-surface-rgb), 0.6)' : 'transparent',
               color: 'var(--theme-text)',
               font: 'inherit',
+              // phones: a smaller size, and the count may drop to a second line on the narrowest
+              fontSize: variant === 'grid' ? '0.8125rem' : undefined,
+              flexWrap: variant === 'grid' ? 'wrap' : undefined,
+              rowGap: 0,
               cursor: 'pointer',
               opacity: on ? 1 : 0.45,
               textDecoration: on ? 'none' : 'line-through',
             }}
           >
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6em' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: variant === 'grid' ? '0.45em' : '0.6em' }}>
               <Swatch category={c} />
               {c}
             </span>

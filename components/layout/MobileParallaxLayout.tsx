@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState, useCallback } from 'react';
-import { usePersonalInfo, useSocialLinks } from '@/lib/config';
+import { usePersonalInfo, useSocialLinks, useFeatureFlags } from '@/lib/config';
 import { allProjects, allBlogs } from 'content-collections';
 import Background from '@/components/layout/Background';
 import ScrollProgress from '@/components/ui/ScrollProgress';
@@ -22,6 +22,7 @@ import { ParallaxTechSection } from './parallax/sections/ParallaxTechSection';
 import { ParallaxProjectsSection } from './parallax/sections/ParallaxProjectsSection';
 import { ParallaxBlogSection } from './parallax/sections/ParallaxBlogSection';
 import { ParallaxContactSection } from './parallax/sections/ParallaxContactSection';
+import { ParallaxLabSection } from './parallax/sections/ParallaxLabSection';
 
 /**
  * MobileParallaxLayout Component
@@ -35,6 +36,7 @@ const MobileParallaxLayout: React.FC = () => {
   const projects = allProjects;
   const blogPosts = allBlogs.filter(blog => blog.status === 'published');
   const socialLinks = useSocialLinks();
+  const features = useFeatureFlags();
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const scrollRef = useRef<HTMLDivElement>(null!);
@@ -49,6 +51,7 @@ const MobileParallaxLayout: React.FC = () => {
     { id: 'technologies', title: 'Technologies' },
     { id: 'projects', title: 'Projects' },
     { id: 'blog', title: 'Blog' },
+    ...(features.lab ? [{ id: 'lab', title: 'Lab' }] : []),
     { id: 'contact', title: 'Contact' }
   ];
 
@@ -123,6 +126,9 @@ const MobileParallaxLayout: React.FC = () => {
             }))}
           />
         );
+
+      case 'lab':
+        return <ParallaxLabSection />;
 
       case 'contact':
         return (

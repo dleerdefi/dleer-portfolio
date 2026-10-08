@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
 import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
-import { LabFramedHeader } from '@/components/lab/LabFramedHeader';
 import TelemetryPage from '@/components/lab/telemetry/TelemetryPage';
 import { getPortfolioConfig } from '@/config/portfolio.config';
 import { labEnabled } from '@/lib/lab/flag';
@@ -28,7 +27,6 @@ export default function LabTelemetryRoute() {
     <>
       <EscKeyHandler returnPath="/" />
       <FramedPageLayout>
-        <LabFramedHeader current="telemetry" />
         <TelemetryPage />
       </FramedPageLayout>
     </>

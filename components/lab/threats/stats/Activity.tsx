@@ -41,8 +41,12 @@ export function Cves({ d }: { d: DigestLive }) {
         <thead>
           <tr>
             <th scope="col">id</th>
-            <th scope="col" className="lab-num">hits</th>
-            <th scope="col" className="lab-num">sources</th>
+            <th scope="col" className="lab-num">
+              hits
+            </th>
+            <th scope="col" className="lab-num">
+              sources
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -71,46 +75,49 @@ export function Cves({ d }: { d: DigestLive }) {
 export function Malware({ d, nowMs }: { d: DigestLive; nowMs: number }) {
   return (
     <StatBox caption="malware pushed" empty={d.malware.length === 0} style={{ gridColumn: '1 / -1' }}>
-      <table className="lab-table" style={table}>
-        <thead>
-          <tr>
-            <th scope="col">sha256</th>
-            <th scope="col">via</th>
-            <th scope="col">first seen</th>
-            <th scope="col">
-              <span className="sr-only">lookups</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {d.malware.map((m) => {
-            const ok = SHA256.test(m.sha256);
-            return (
-              <tr key={m.sha256}>
-                <th scope="row" title={m.sha256} style={{ color: 'var(--theme-text)' }}>
-                  {m.sha256.slice(0, 12)}
-                </th>
-                <td>{m.via}</td>
-                <td className="lab-text-2" style={{ whiteSpace: 'nowrap' }}>
-                  {fmtAge((nowMs - Date.parse(m.first_seen)) / 1000)}
-                </td>
-                <td style={{ whiteSpace: 'nowrap' }}>
-                  {ok && (
-                    <>
-                      <a href={`https://www.virustotal.com/gui/file/${m.sha256}`} {...ext}>
-                        VirusTotal
-                      </a>{' '}
-                      <a href={`https://bazaar.abuse.ch/sample/${m.sha256}/`} {...ext}>
-                        MalwareBazaar
-                      </a>
-                    </>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {/* on narrow screens the table scrolls inside its box, never the page */}
+      <div style={{ overflowX: 'auto' }}>
+        <table className="lab-table" style={table}>
+          <thead>
+            <tr>
+              <th scope="col">sha256</th>
+              <th scope="col">via</th>
+              <th scope="col">first seen</th>
+              <th scope="col">
+                <span className="sr-only">lookups</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {d.malware.map((m) => {
+              const ok = SHA256.test(m.sha256);
+              return (
+                <tr key={m.sha256}>
+                  <th scope="row" title={m.sha256} style={{ color: 'var(--theme-text)' }}>
+                    {m.sha256.slice(0, 12)}
+                  </th>
+                  <td>{m.via}</td>
+                  <td className="lab-text-2" style={{ whiteSpace: 'nowrap' }}>
+                    {fmtAge((nowMs - Date.parse(m.first_seen)) / 1000)}
+                  </td>
+                  <td>
+                    {ok && (
+                      <span style={{ display: 'inline-flex', flexWrap: 'wrap', columnGap: '0.75em' }}>
+                        <a href={`https://www.virustotal.com/gui/file/${m.sha256}`} {...ext}>
+                          VirusTotal
+                        </a>
+                        <a href={`https://bazaar.abuse.ch/sample/${m.sha256}/`} {...ext}>
+                          MalwareBazaar
+                        </a>
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </StatBox>
   );
 }
@@ -127,8 +134,8 @@ export function AiAgents({ d }: { d: DigestLive }) {
         </span>
       </p>
       <p className="lab-text-2" style={{ margin: 0 }}>
-        Sessions that followed an instruction planted where only an AI agent would act on it. Likely: it also
-        answered at machine speed.
+        Sessions that followed an instruction planted where only an AI agent would act on it. Likely: it also answered
+        at machine speed.
       </p>
     </StatBox>
   );

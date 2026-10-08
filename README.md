@@ -68,6 +68,7 @@ npm run build      # Production build
 npm run start      # Start production server
 npm run typecheck  # TypeScript validation
 npm run lint       # Code linting
+npm test           # Unit tests (Vitest)
 ```
 
 ---
@@ -111,6 +112,32 @@ This project supports **Cloudflare R2** for image hosting:
 3. Connect custom domain (e.g., `cdn.dleer.ai`)
 4. Set `NEXT_PUBLIC_CDN_URL` in environment variables
 5. Deploy - images automatically load from CDN!
+
+### Lab (Optional)
+
+`~/lab` adds two live views of a homelab: **telemetry** (servers' power, load, temperatures and
+GPUs, with 24 h charts) and a **threat map** (a honeypot's attacks on a 3D globe, a live feed and
+24 h statistics; no IP addresses anywhere). The homelab pushes small JSON documents to a private
+Cloudflare R2 bucket; the site reads them server-side with a read-only token, validates them and
+renders them in the active theme. They appear in the nav tile, the polybar, neofetch, the
+mobile home page, and at `/lab` and `/lab/threats`.
+
+It is **off by default**. With the flag off the site is unchanged and the lab routes return 404.
+
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_FEATURE_LAB` | `true` turns the lab on. Inlined at build time: redeploy after changing it |
+| `LAB_DEMO_DATA` | `true` serves bundled synthetic documents instead of R2 (local dev, previews, forks); wins over the `R2_*` settings |
+| `R2_ACCOUNT_ID`, `R2_LAB_BUCKET`, `R2_LAB_READ_KEY_ID`, `R2_LAB_READ_SECRET` | server-side only: an Object Read only token for the bucket the documents are pushed to |
+
+Try it without any credentials:
+
+```bash
+NEXT_PUBLIC_FEATURE_LAB=true LAB_DEMO_DATA=true npm run dev
+```
+
+The specification, the data contracts the views consume and the approved designs are in
+[docs/lab/](docs/lab/README.md).
 
 ### Content Customization
 
@@ -227,6 +254,7 @@ dleer-portfolio/
 - **[CONTACT_FORM_SPEC.md](docs/CONTACT_FORM_SPEC.md)** - Contact form implementation details
 - **[CDN_DEPLOYMENT_SPEC.md](docs/CDN_DEPLOYMENT_SPEC.md)** - Cloudflare R2 CDN setup guide
 - **[RAILWAY_MEMORY_OPTIMIZATION.md](docs/RAILWAY_MEMORY_OPTIMIZATION.md)** - Railway RAM audit, tuning, and optional further savings
+- **[docs/lab/](docs/lab/README.md)** - `~/lab`: homelab telemetry and the honeypot threat map (optional, behind a flag)
 
 ---
 
