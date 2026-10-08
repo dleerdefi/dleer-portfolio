@@ -45,7 +45,7 @@ export default function ThreatsPage() {
         <div className={`lab-page${d.state === 'delayed' ? ' lab-dim' : ''}`}>
           <div className="lab-threats-grid">
             <div className="lab-threats-globe">
-              <GlobeSlot d={d} size="min(100%, 440px)" />
+              <GlobeSlot d={d} maxSize={440} labels="full" subscribe={feed.subscribe} hidden={hidden} />
               {!t.replaying && d.state === 'live' && <FeedPaused />}
               <CategoryLegend
                 variant="chips"
