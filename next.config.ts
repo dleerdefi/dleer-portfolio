@@ -28,6 +28,11 @@ const nextConfig: NextConfig = {
     // of 60s, so sharp isn't re-run in the background on nearly every visit
     minimumCacheTTL: 14400,
   },
+  // ~/lab (docs/lab): only when the flag is on at build time, an empty list otherwise
+  async redirects() {
+    if (process.env.NEXT_PUBLIC_FEATURE_LAB !== 'true') return [];
+    return [{ source: '/lab/telemetry', destination: '/lab', permanent: true }];
+  },
 };
 
 // Chain plugins: bundleAnalyzer → contentCollections (order matters)

@@ -1,0 +1,106 @@
+/* ================================================= */
+/* Lab (~/lab): category colors and shared tokens    */
+/* ================================================= */
+/* Lab: attack-category colors per preset and a few shared tokens.
+   The lab has no theme settings of its own; it follows the site's preset and accent. */
+
+/* Tokyo Night also on :root: the mobile parallax layout sets className="tokyo-night"
+   (no theme- prefix), so only the :root defaults apply there. */
+:root,
+.theme-tokyo-night {
+  --lab-recon: #737aa2;
+  --lab-brute-force: #7aa2f7;
+  --lab-web-exploit: #e0af68;
+  --lab-intrusion: #2ac3de;
+  --lab-malware: #f7768e;
+  --lab-ai-agent: #73daca;
+}
+
+.theme-nord {
+  --lab-recon: #7B88A1;
+  --lab-brute-force: #81A1C1;
+  --lab-web-exploit: #EBCB8B;
+  --lab-intrusion: #5E81AC;
+  --lab-malware: #BF616A;
+  --lab-ai-agent: #8FBCBB;
+}
+
+.theme-solarized-light {
+  --lab-recon: #93a1a1;
+  --lab-brute-force: #268bd2;
+  --lab-web-exploit: #b58900;
+  --lab-intrusion: #2aa198;
+  --lab-malware: #dc322f;
+  --lab-ai-agent: #6c71c4;
+}
+
+:root {
+  --lab-text-2: rgba(var(--theme-text-rgb), 0.72);
+  --lab-track: rgba(var(--accent-color-rgb), 0.18);
+  --lab-bin: rgba(var(--theme-text-rgb), 0.55);
+}
+
+/* ---- shared lab classes ------------------------- */
+
+.lab-root {
+  color: var(--theme-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.lab-text-2 {
+  color: var(--lab-text-2);
+}
+
+/* delayed: values greyed, kept readable */
+.lab-dim {
+  opacity: 0.55;
+}
+
+.lab-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.1em 0.55em;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
+.lab-badge-demo {
+  border-style: dashed;
+  border-color: var(--lab-text-2);
+  color: var(--theme-text);
+}
+
+.lab-link {
+  color: var(--accent-color);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.lab-link:hover {
+  opacity: 0.85;
+}
+
+.lab-focus:focus-visible,
+.lab-link:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.lab-table th {
+  font-weight: 400;
+  color: var(--lab-text-2);
+  text-align: left;
+}
+
+.lab-table th,
+.lab-table td {
+  padding: 0.3em 0.75em 0.3em 0;
+  vertical-align: middle;
+}
+
+.lab-table .lab-num {
+  text-align: right;
+  white-space: nowrap;
+}

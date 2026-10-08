@@ -151,7 +151,9 @@ export const portfolioConfig: PortfolioConfig = {
     projects: true,
     contact: true,
     about: true,
-    neofetch: true
+    neofetch: true,
+    // ~/lab: homelab telemetry and the honeypot threat map (docs/lab). Inlined at build time.
+    lab: process.env.NEXT_PUBLIC_FEATURE_LAB === 'true'
   }
 };
 

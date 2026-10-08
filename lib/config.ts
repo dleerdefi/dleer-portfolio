@@ -84,7 +84,8 @@ export function useFeatureFlags() {
     projects: true,
     contact: true,
     about: true,
-    neofetch: true
+    neofetch: true,
+    lab: false
   };
 }
 

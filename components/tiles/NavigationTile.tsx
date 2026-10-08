@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useFocusState, useFocusNavigation, ContentType } from '@/contexts/FocusContext';
 import { allProjects, allBlogs } from 'content-collections';
 import { FONT_SIZES } from '@/lib/constants/typography';
+import { useFeatureFlags } from '@/lib/config';
+import { LabDirectory } from './nav/LabDirectory';
 
 interface NavigationTileProps {
   onContentSelect?: (content: ContentType) => void;
@@ -16,6 +18,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
   const router = useRouter();
   const { activeContent } = useFocusState();
   const { handleContentNavigation } = useFocusNavigation();
+  const features = useFeatureFlags();
 
   // Use content-collections instead of config
   const projects = allProjects;
@@ -389,6 +392,9 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
             </div>
           )}
         </div>
+
+        {/* Lab Directory (behind NEXT_PUBLIC_FEATURE_LAB) */}
+        {features.lab && <LabDirectory activeType={activeContent.type} onSelect={(content, e) => handleSelect(content, e)} />}
 
         {/* Contact */}
         <div
