@@ -222,3 +222,76 @@ section.lab-page {
     display: inline-flex;
   }
 }
+
+/* ---- the globe ---------------------------------- */
+
+.lab-globe-marker {
+  position: relative;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.lab-globe-dot {
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-color);
+}
+
+.lab-globe-marker.is-down .lab-globe-dot {
+  background: transparent;
+  border: 2px solid var(--theme-text-dimmed);
+}
+
+.lab-globe-label {
+  position: absolute;
+  left: 12px;
+  top: -0.8em;
+  white-space: nowrap;
+  font-size: 12px;
+  padding: 1px 6px;
+  border: 1px solid var(--accent-color);
+  background: rgba(var(--theme-bg-rgb), 0.85);
+  color: var(--theme-text);
+}
+
+.lab-globe-marker.is-sensor .lab-globe-label {
+  left: 0;
+  top: -2.3em;
+  transform: translateX(-50%);
+}
+
+.lab-globe .float-tooltip-kap {
+  font: 12px/1.5 inherit;
+  color: var(--theme-text);
+  background: var(--theme-surface);
+  border: 1px solid var(--theme-border);
+  border-radius: 0;
+  padding: 4px 8px;
+}
+
+.lab-globe-button {
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid var(--theme-border);
+  background: transparent;
+  color: var(--theme-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.lab-globe-button.is-primary {
+  border: 2px solid var(--accent-color);
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.lab-globe-button:disabled {
+  border-color: var(--theme-border);
+  color: var(--lab-text-2);
+  cursor: not-allowed;
+}

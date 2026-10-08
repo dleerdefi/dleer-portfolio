@@ -47,7 +47,7 @@ export default function ThreatsTile(_props: { onNavigate?: (content: ContentType
         <div className={d.state === 'delayed' ? 'lab-dim' : undefined} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', fontSize: FONT_SIZES.xs }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 45%) minmax(0, 1fr)', gap: '1.5rem', alignItems: 'start' }}>
             <div>
-              <GlobeSlot d={d} size="min(100%, 360px)" />
+              <GlobeSlot d={d} maxSize={360} labels="short" subscribe={feed.subscribe} hidden={hidden} />
               {!t.replaying && d.state === 'live' && <FeedPaused />}
             </div>
             <div>
