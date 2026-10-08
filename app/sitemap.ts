@@ -53,7 +53,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Lab pages, only when the lab is on (docs/lab)
   const labPages: MetadataRoute.Sitemap = labEnabled()
-    ? [{ url: `${siteUrl}/lab`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.6 }]
+    ? [
+        { url: `${siteUrl}/lab`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.6 },
+        { url: `${siteUrl}/lab/threats`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.6 },
+      ]
     : [];
 
   return [...staticPages, ...blogPages, ...projectPages, ...labPages];
