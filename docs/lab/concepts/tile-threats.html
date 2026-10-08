@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en" data-preset="tokyo-night">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Lab concept: Content tile: ~/lab/threats</title>
+<!-- Concept mockup for docs/lab. Demo data from the dleer-homelab golden examples. Open with
+     #preset=nord&accent=teal to switch, as the site's theme tiles would. -->
+<style>
+@font-face { font-family: "JetBrains Mono"; src: url("../../../public/fonts/JetBrainsMono-Regular.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "JetBrains Mono"; src: url("../../../public/fonts/JetBrainsMono-Bold.woff2") format("woff2"); font-weight: 700; }
+body { margin: 0; background: #111; }
+:root[data-preset="tokyo-night"] { --theme-bg: #1a1b26; --theme-bg-rgb: 26, 27, 38; --theme-surface: #16161e; --theme-surface-rgb: 22, 22, 30; --theme-text: #c0caf5; --theme-text-rgb: 192, 202, 245; --theme-primary: #bb9af7; --theme-text-dimmed: #565f89; --theme-text-muted: #414868; --theme-border: #414868; --theme-success: #9ece6a; --theme-warning: #e0af68; --theme-error: #f7768e; --theme-info: #7dcfff; --lab-recon: #737aa2; --lab-brute-force: #7aa2f7; --lab-web-exploit: #e0af68; --lab-intrusion: #2ac3de; --lab-malware: #f7768e; --lab-ai-agent: #73daca }
+:root[data-preset="nord"] { --theme-bg: #2E3440; --theme-bg-rgb: 46, 52, 64; --theme-surface: #3B4252; --theme-surface-rgb: 59, 66, 82; --theme-text: #D8DEE9; --theme-text-rgb: 216, 222, 233; --theme-primary: #6A8FF2; --theme-text-dimmed: #88C0D0; --theme-text-muted: #81A1C1; --theme-border: #4C566A; --theme-success: #A3BE8C; --theme-warning: #EBCB8B; --theme-error: #BF616A; --theme-info: #5E81AC; --lab-recon: #7B88A1; --lab-brute-force: #81A1C1; --lab-web-exploit: #EBCB8B; --lab-intrusion: #5E81AC; --lab-malware: #BF616A; --lab-ai-agent: #8FBCBB }
+:root[data-preset="solarized-light"] { --theme-bg: #fdf6e3; --theme-bg-rgb: 253, 246, 227; --theme-surface: #eee8d5; --theme-surface-rgb: 238, 232, 213; --theme-text: #073642; --theme-text-rgb: 7, 54, 66; --theme-primary: #2368B3; --theme-text-dimmed: #586e75; --theme-text-muted: #657b83; --theme-border: #93a1a1; --theme-success: #859900; --theme-warning: #b58900; --theme-error: #dc322f; --theme-info: #2aa198; --lab-recon: #93a1a1; --lab-brute-force: #268bd2; --lab-web-exploit: #b58900; --lab-intrusion: #2aa198; --lab-malware: #dc322f; --lab-ai-agent: #6c71c4 }
+</style>
+</head>
+<body>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; background: var(--theme-bg); color: var(--theme-text); font-family: 'JetBrains Mono', ui-monospace, monospace; display: flex; flex-direction: column; overflow: hidden">
+<div style="height: 36px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; background: rgba(var(--theme-surface-rgb), 0.8); border-bottom: 2px solid rgba(var(--accent-color-rgb), 0.3); font-size: 12px">
+<div style="display: flex; gap: 8px; align-items: center"><span style="color: var(--accent-color); font-weight: 700">[DLEER]</span><span style="color: var(--theme-text-dimmed)">portfolio</span></div>
+<nav aria-label="Workspaces" style="display: flex; gap: 16px"><a href="#" style="display: flex; gap: 4px; text-decoration: none; color: var(--theme-text-dimmed)"><span style="color: var(--theme-text-muted)">●</span>about</a><a href="#" style="display: flex; gap: 4px; text-decoration: none; color: var(--theme-text-dimmed)"><span style="color: var(--theme-text-muted)">●</span>projects</a><a href="#" style="display: flex; gap: 4px; text-decoration: none; color: var(--theme-text-dimmed)"><span style="color: var(--theme-text-muted)">●</span>blog</a><a href="#" aria-current="page" style="display: flex; gap: 4px; text-decoration: none; color: var(--accent-color)"><span style="color: var(--accent-color)">●</span>lab</a><a href="#" style="display: flex; gap: 4px; text-decoration: none; color: var(--theme-text-dimmed)"><span style="color: var(--theme-text-muted)">●</span>contact</a></nav>
+<span style="color: var(--theme-text)">19:05</span>
+</div>
+<div style="flex: 1; min-height: 0; display: flex; gap: 12px; padding: 12px">
+<div style="width: calc(50% - 6px); display: flex; flex-direction: column; gap: 12px">
+<section style="box-sizing: border-box; background: rgba(var(--theme-surface-rgb), 0.6); border: 1px solid rgba(var(--accent-color-rgb), 0.3);  overflow: hidden; height: calc(40% - 6px)"><div style="padding: 24px; height: 100%; box-sizing: border-box"><div style="display: flex; gap: 24px; align-items: center; height: 100%">
+<pre style="margin: 0; color: var(--accent-color); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; line-height: 1.15">██████╗ ██╗     ███████╗███████╗██████╗
+██╔══██╗██║     ██╔════╝██╔════╝██╔══██╗
+██║  ██║██║     █████╗  █████╗  ██████╔╝
+██║  ██║██║     ██╔══╝  ██╔══╝  ██╔══██╗
+██████╔╝███████╗███████╗███████╗██║  ██║
+╚═════╝ ╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝</pre>
+<div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 1.5">
+<div style="font-weight: 700"><span style="color: var(--theme-success)">dleer</span>@<span style="color: var(--theme-info)">portfolio</span></div>
+<div style="color: var(--theme-text-dimmed)">---------------</div>
+<div><span style="color: var(--theme-primary); font-weight: 700">GitHub</span>: <a href="#" style="color: var(--accent-color); text-decoration: none">dleerdefi</a></div>
+<div><span style="color: var(--theme-primary); font-weight: 700">Lab</span>: 1,029 W · 3/3 hosts <span style="color: var(--theme-success)" aria-label="live">●</span></div>
+<div><span style="color: var(--theme-primary); font-weight: 700">Honeypot</span>: 15.4k events/24h · 31 countries</div>
+<div style="display: flex; gap: 6px; margin-top: 6px"><span style="width: 12px; height: 12px; background: var(--theme-bg)"></span><span style="width: 12px; height: 12px; background: var(--theme-error)"></span><span style="width: 12px; height: 12px; background: var(--theme-success)"></span><span style="width: 12px; height: 12px; background: var(--theme-warning)"></span><span style="width: 12px; height: 12px; background: var(--accent-color)"></span><span style="width: 12px; height: 12px; background: var(--theme-info)"></span><span style="width: 12px; height: 12px; background: var(--theme-primary)"></span><span style="width: 12px; height: 12px; background: var(--theme-text)"></span></div>
+</div></div></div></section>
+<div style="flex: 1; min-height: 0; display: flex; gap: 12px">
+<section style="box-sizing: border-box; background: rgba(var(--theme-surface-rgb), 0.6); border: 1px solid rgba(var(--accent-color-rgb), 0.3);  overflow: hidden; flex: 0 0 calc(70% - 6px)"><div style="padding: 24px"><div style="font-size: 18px; line-height: 1.7">
+<div style="color: var(--theme-primary); font-weight: 700; font-size: 22px; margin-bottom: 8px">Contents</div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 8px; margin-left: 0px; "><span><span style="color: var(--accent-color)">├──</span> About</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 8px; margin-left: 0px; "><span><span style="color: var(--accent-color)">├──</span> Projects/</span><span style="color: var(--accent-color)">▶</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 8px; margin-left: 0px; "><span><span style="color: var(--accent-color)">├──</span> Blog/</span><span style="color: var(--accent-color)">▶</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 8px; margin-left: 0px; "><span><span style="color: var(--accent-color)">├──</span> Lab/</span><span style="color: var(--accent-color)">▼</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 8px; margin-left: 24px; "><span><span style="color: var(--accent-color)">├──</span> telemetry</span><span style="color: var(--theme-success); font-weight: 400; font-size: 14px">● live</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 8px; margin-left: 24px; background: rgba(var(--accent-color-rgb), 0.2); color: var(--accent-color); font-weight: 700;"><span><span style="color: var(--accent-color)">└──</span> threats</span><span style="color: var(--theme-success); font-weight: 400; font-size: 14px">● live</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 8px; margin-left: 0px; "><span><span style="color: var(--accent-color)">└──</span> Contact</span></div>
+<div style="margin-top: 18px; padding-top: 10px; border-top: 1px solid rgba(var(--theme-text-rgb), 0.1); color: var(--theme-text-dimmed); font-size: 14px">Tab to navigate between tiles</div>
+</div></div></section>
+<div style="flex: 0 0 calc(30% - 6px); display: flex; flex-direction: column; gap: 12px">
+<section style="box-sizing: border-box; background: rgba(var(--theme-surface-rgb), 0.6); border: 1px solid rgba(var(--accent-color-rgb), 0.3);  overflow: hidden; height: 72px"><div style="padding: 12px; font-size: 13px; color: rgba(var(--theme-text-rgb), 0.72)">theme<div style="color: var(--theme-text); margin-top: 4px">__PRESET_NAME__</div></div></section>
+<section style="box-sizing: border-box; background: rgba(var(--theme-surface-rgb), 0.6); border: 1px solid rgba(var(--accent-color-rgb), 0.3);  overflow: hidden; height: 150px"><div style="padding: 12px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px"><span data-accent-swatch="#f43f5e" style="height: 18px; background: #f43f5e; "></span><span data-accent-swatch="#ec4899" style="height: 18px; background: #ec4899; "></span><span data-accent-swatch="#d946ef" style="height: 18px; background: #d946ef; "></span><span data-accent-swatch="#a855f7" style="height: 18px; background: #a855f7; "></span><span data-accent-swatch="#8b5cf6" style="height: 18px; background: #8b5cf6; "></span><span data-accent-swatch="#6366f1" style="height: 18px; background: #6366f1; "></span><span data-accent-swatch="#3b82f6" style="height: 18px; background: #3b82f6; "></span><span data-accent-swatch="#0ea5e9" style="height: 18px; background: #0ea5e9; "></span><span data-accent-swatch="#06b6d4" style="height: 18px; background: #06b6d4; "></span><span data-accent-swatch="#14b8a6" style="height: 18px; background: #14b8a6; "></span><span data-accent-swatch="#10b981" style="height: 18px; background: #10b981; "></span><span data-accent-swatch="#22c55e" style="height: 18px; background: #22c55e; "></span><span data-accent-swatch="#84cc16" style="height: 18px; background: #84cc16; "></span><span data-accent-swatch="#f59e0b" style="height: 18px; background: #f59e0b; "></span><span data-accent-swatch="#f97316" style="height: 18px; background: #f97316; "></span></div></section>
+<section style="box-sizing: border-box; background: rgba(var(--theme-surface-rgb), 0.6); border: 1px solid rgba(var(--accent-color-rgb), 0.3);  overflow: hidden; flex: 1"><div style="padding: 12px; font-size: 13px; color: rgba(var(--theme-text-rgb), 0.72)">background</div></section>
+</div>
+</div></div>
+<section style="box-sizing: border-box; background: rgba(var(--theme-surface-rgb), 0.92); border: 1px solid var(--accent-color); box-shadow: 0 25px 50px -12px rgba(var(--accent-color-rgb), 0.3); overflow: hidden; width: calc(50% - 6px)"><div style="padding: 24px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px"><header style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap">
+<h1 style="margin: 0; font-size: 26px; font-weight: 700; color: var(--accent-color)"><span aria-hidden="true">❯</span> ~/lab/threats</h1>
+<div style="display: flex; gap: 8px; align-items: center"><span style="display: inline-flex; gap: 6px; align-items: center; border: 1px solid var(--theme-success); color: var(--theme-success); padding: 2px 8px; font-size: 13px; white-space: nowrap"><span aria-hidden="true">●</span><span style="color: var(--theme-text)">live <span style="color: rgba(var(--theme-text-rgb), 0.72)">42 s ago</span></span></span><span style="display: inline-flex; gap: 6px; align-items: center; border: 1px dashed rgba(var(--theme-text-rgb), 0.72); color: rgba(var(--theme-text-rgb), 0.72); padding: 2px 8px; font-size: 13px; white-space: nowrap"><span aria-hidden="true">◇</span><span style="color: var(--theme-text)">demo data</span></span></div>
+</header>
+<p style="margin: 0; font-size: 16px; line-height: 1.5; color: rgba(var(--theme-text-rgb), 0.72)">A honeypot I run on a small cloud VM. Every arc is a real attack from the last few minutes. No IP addresses are shown.</p>
+<div style="display: flex; gap: 18px; align-items: center">
+<div style="position: relative; width: 300px; height: 300px; flex-shrink: 0"><img src="assets/globe-tokyo-night.svg" alt="" style="width: 300px; height: 300px; display: block"><span aria-hidden="true" style="position: absolute; left: 41.9%; top: 35%; width: 8.7%; height: 8.7%; transform: translate(-50%, -50%); box-sizing: border-box; border: 1.5px solid rgba(var(--accent-color-rgb), 0.15); border-radius: 50%"></span><span aria-hidden="true" style="position: absolute; left: 41.9%; top: 35%; width: 5.7%; height: 5.7%; transform: translate(-50%, -50%); box-sizing: border-box; border: 1.5px solid rgba(var(--accent-color-rgb), 0.28); border-radius: 50%"></span><span aria-hidden="true" style="position: absolute; left: 41.9%; top: 35%; width: 3.4%; height: 3.4%; transform: translate(-50%, -50%); box-sizing: border-box; border: 1.5px solid rgba(var(--accent-color-rgb), 0.45); border-radius: 50%"></span><span aria-hidden="true" style="position: absolute; left: 41.9%; top: 35%; width: 1.7%; height: 1.7%; transform: translate(-50%, -50%); background: var(--accent-color); border-radius: 50%"></span><span aria-hidden="true" style="position: absolute; left: 63.6%; top: 38.5%; width: 5.3%; height: 5.3%; transform: translate(-50%, -50%); box-sizing: border-box; border: 1.5px solid rgba(var(--accent-color-rgb), 0.18); border-radius: 50%"></span><span aria-hidden="true" style="position: absolute; left: 63.6%; top: 38.5%; width: 3%; height: 3%; transform: translate(-50%, -50%); box-sizing: border-box; border: 1.5px solid rgba(var(--accent-color-rgb), 0.32); border-radius: 50%"></span><span aria-hidden="true" style="position: absolute; left: 63.6%; top: 38.5%; width: 1.4%; height: 1.4%; transform: translate(-50%, -50%); background: var(--accent-color); border-radius: 50%"></span><span style="position: absolute; left: calc(41.9% - 12px); top: calc(35% - 34px); transform: translateX(-100%); font-size: 12px; color: var(--theme-text); background: var(--theme-bg); border: 1px solid rgba(var(--accent-color-rgb), 0.5); padding: 2px 6px; white-space: nowrap">us-west honeypot</span><span style="position: absolute; left: calc(63.6% + 14px); top: calc(38.5% - 8px); font-size: 12px; color: var(--theme-text); background: var(--theme-bg); border: 1px solid rgba(var(--accent-color-rgb), 0.5); padding: 2px 6px; white-space: nowrap">dleer.ai</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 14px; color: rgba(var(--theme-text-rgb), 0.72)">last 24 h · tap to filter</div>
+<button type="button" aria-pressed="true" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--theme-border); color: var(--theme-text); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 15px; padding: 6px 10px; cursor: pointer; text-align: left; min-height: 36px; width: 100%">
+<span style="display: flex; gap: 8px; align-items: center"><span aria-hidden="true" style="display: inline-block; width: 11px; height: 11px; background: var(--lab-recon); flex-shrink: 0"></span>recon</span><span style="color: rgba(var(--theme-text-rgb), 0.72); font-variant-numeric: tabular-nums">9,234</span>
+</button><button type="button" aria-pressed="true" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--theme-border); color: var(--theme-text); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 15px; padding: 6px 10px; cursor: pointer; text-align: left; min-height: 36px; width: 100%">
+<span style="display: flex; gap: 8px; align-items: center"><span aria-hidden="true" style="display: inline-block; width: 11px; height: 11px; background: var(--lab-brute-force); flex-shrink: 0"></span>brute_force</span><span style="color: rgba(var(--theme-text-rgb), 0.72); font-variant-numeric: tabular-nums">5,088</span>
+</button><button type="button" aria-pressed="true" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--theme-border); color: var(--theme-text); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 15px; padding: 6px 10px; cursor: pointer; text-align: left; min-height: 36px; width: 100%">
+<span style="display: flex; gap: 8px; align-items: center"><span aria-hidden="true" style="display: inline-block; width: 11px; height: 11px; background: var(--lab-web-exploit); flex-shrink: 0"></span>web_exploit</span><span style="color: rgba(var(--theme-text-rgb), 0.72); font-variant-numeric: tabular-nums">887</span>
+</button><button type="button" aria-pressed="true" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--theme-border); color: var(--theme-text); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 15px; padding: 6px 10px; cursor: pointer; text-align: left; min-height: 36px; width: 100%">
+<span style="display: flex; gap: 8px; align-items: center"><span aria-hidden="true" style="display: inline-block; width: 11px; height: 11px; background: var(--lab-intrusion); flex-shrink: 0"></span>intrusion</span><span style="color: rgba(var(--theme-text-rgb), 0.72); font-variant-numeric: tabular-nums">168</span>
+</button><button type="button" aria-pressed="true" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--theme-border); color: var(--theme-text); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 15px; padding: 6px 10px; cursor: pointer; text-align: left; min-height: 36px; width: 100%">
+<span style="display: flex; gap: 8px; align-items: center"><span aria-hidden="true" style="display: inline-block; width: 11px; height: 11px; background: var(--lab-malware); flex-shrink: 0"></span>malware</span><span style="color: rgba(var(--theme-text-rgb), 0.72); font-variant-numeric: tabular-nums">66</span>
+</button><button type="button" aria-pressed="true" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--theme-border); color: var(--theme-text); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 15px; padding: 6px 10px; cursor: pointer; text-align: left; min-height: 36px; width: 100%">
+<span style="display: flex; gap: 8px; align-items: center"><span aria-hidden="true" style="display: inline-block; width: 11px; height: 11px; background: var(--lab-ai-agent); flex-shrink: 0"></span>ai_agent</span><span style="color: rgba(var(--theme-text-rgb), 0.72); font-variant-numeric: tabular-nums">4</span>
+</button>
+</div></div>
+<div style="display: flex; gap: 14px; flex: 1; min-height: 0">
+<section aria-label="Live feed" style="flex: 1.25; min-width: 0; background: var(--theme-bg); border: 1px solid var(--theme-border); padding: 12px 14px; display: flex; flex-direction: column; gap: 5px; overflow: hidden">
+<div style="font-size: 14px; color: rgba(var(--theme-text-rgb), 0.72); margin-bottom: 2px">$ journalctl -u honeynet -f</div>
+<div style="display: flex; gap: 10px; align-items: center; white-space: nowrap; font-size: 15px; font-variant-numeric: tabular-nums">
+<span style="color: rgba(var(--theme-text-rgb), 0.72)">19:04:30</span>
+<span style="display: inline-flex; gap: 6px; align-items: center; width: 12.5ch"><span aria-hidden="true" style="display: inline-block; width: 10px; height: 10px; background: var(--lab-recon); flex-shrink: 0"></span><span>recon</span></span>
+
+<span style="width: 6ch" title="China">CN</span>
+
+</div><div style="display: flex; gap: 10px; align-items: center; white-space: nowrap; font-size: 15px; font-variant-numeric: tabular-nums">
+<span style="color: rgba(var(--theme-text-rgb), 0.72)">19:04:30</span>
+<span style="display: inline-flex; gap: 6px; align-items: center; width: 12.5ch"><span aria-hidden="true" style="display: inline-block; width: 10px; height: 10px; background: var(--lab-brute-force); flex-shrink: 0"></span><span>brute_force</span></span>
+
+<span style="width: 6ch" title="France">FR</span>
+
+</div><div style="display: flex; gap: 10px; align-items: center; white-space: nowrap; font-size: 15px; font-variant-numeric: tabular-nums">
+<span style="color: rgba(var(--theme-text-rgb), 0.72)">19:04:30</span>
+<span style="display: inline-flex; gap: 6px; align-items: center; width: 12.5ch"><span aria-hidden="true" style="display: inline-block; width: 10px; height: 10px; background: var(--lab-recon); flex-shrink: 0"></span><span>recon</span></span>
+
+<span style="width: 6ch" title="France">FR</span>
+
+</div><div style="display: flex; gap: 10px; align-items: center; white-space: nowrap; font-size: 15px; font-variant-numeric: tabular-nums">
+<span style="color: rgba(var(--theme-text-rgb), 0.72)">19:04:40</span>
+<span style="display: inline-flex; gap: 6px; align-items: center; width: 12.5ch"><span aria-hidden="true" style="display: inline-block; width: 10px; height: 10px; background: var(--lab-brute-force); flex-shrink: 0"></span><span>brute_force</span></span>
+
+<span style="width: 6ch" title="Singapore">SG</span>
+
+</div><div style="display: flex; gap: 10px; align-items: center; white-space: nowrap; font-size: 15px; font-variant-numeric: tabular-nums">
+<span style="color: rgba(var(--theme-text-rgb), 0.72)">19:04:40</span>
+<span style="display: inline-flex; gap: 6px; align-items: center; width: 12.5ch"><span aria-hidden="true" style="display: inline-block; width: 10px; height: 10px; background: var(--lab-web-exploit); flex-shrink: 0"></span><span>web_exploit</span></span>
+
+<span style="width: 6ch" title="Vietnam">VN</span>
+
+</div><div style="display: flex; gap: 10px; align-items: center; white-space: nowrap; font-size: 15px; font-variant-numeric: tabular-nums">
+<span style="color: rgba(var(--theme-text-rgb), 0.72)">19:04:40</span>
+<span style="display: inline-flex; gap: 6px; align-items: center; width: 12.5ch"><span aria-hidden="true" style="display: inline-block; width: 10px; height: 10px; background: var(--lab-brute-force); flex-shrink: 0"></span><span>brute_force</span></span>
+
+<span style="width: 6ch" title="United States">US <span style="color: rgba(var(--theme-text-rgb), 0.72)">×2</span></span>
+
+</div><div style="display: flex; gap: 10px; align-items: center; white-space: nowrap; font-size: 15px; font-variant-numeric: tabular-nums">
+<span style="color: rgba(var(--theme-text-rgb), 0.72)">19:04:40</span>
+<span style="display: inline-flex; gap: 6px; align-items: center; width: 12.5ch"><span aria-hidden="true" style="display: inline-block; width: 10px; height: 10px; background: var(--lab-web-exploit); flex-shrink: 0"></span><span>web_exploit</span></span>
+
+<span style="width: 6ch" title="Germany">DE</span>
+
+</div><div style="display: flex; gap: 10px; align-items: center; white-space: nowrap; font-size: 15px; font-variant-numeric: tabular-nums">
+<span style="color: rgba(var(--theme-text-rgb), 0.72)">19:04:50</span>
+<span style="display: inline-flex; gap: 6px; align-items: center; width: 12.5ch"><span aria-hidden="true" style="display: inline-block; width: 10px; height: 10px; background: var(--lab-recon); flex-shrink: 0"></span><span>recon</span></span>
+
+<span style="width: 6ch" title="Russia">RU</span>
+
+</div>
+</section>
+<section aria-label="Summary" style="flex: 1; min-width: 0; border: 1px solid var(--theme-border); padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; font-size: 15px">
+<div style="display: flex; justify-content: space-between"><span style="color: rgba(var(--theme-text-rgb), 0.72)">events</span><span style="font-variant-numeric: tabular-nums">15,447</span></div><div style="display: flex; justify-content: space-between"><span style="color: rgba(var(--theme-text-rgb), 0.72)">sources</span><span style="font-variant-numeric: tabular-nums">1,143</span></div><div style="display: flex; justify-content: space-between"><span style="color: rgba(var(--theme-text-rgb), 0.72)">countries</span><span style="font-variant-numeric: tabular-nums">31</span></div><div style="display: flex; justify-content: space-between"><span style="color: rgba(var(--theme-text-rgb), 0.72)">ai agents</span><span style="font-variant-numeric: tabular-nums">4 / 2</span></div>
+<div style="color: rgba(var(--theme-text-rgb), 0.72); margin-top: 4px; font-size: 14px">events / hour, 24 h</div>
+<div aria-hidden="true" style="font-size: 15px; letter-spacing: 0; color: var(--accent-color); line-height: 1; white-space: nowrap">▅▅▇█▇███▅▅▅▆▅▅▅▄▅▅▅▅▅▅█▃</div>
+<a href="#" style="margin-top: auto; font-size: 14px; color: var(--accent-color)">full page → /lab/threats</a>
+</section></div>
+<footer style="font-size: 13px; color: rgba(var(--theme-text-rgb), 0.72)">IP geolocation by <a href="https://db-ip.com" style="color: rgba(var(--theme-text-rgb), 0.72)">DB-IP</a>, CC BY 4.0 · Network data by <a href="https://ipinfo.io" style="color: rgba(var(--theme-text-rgb), 0.72)">IPinfo</a>, CC BY-SA 4.0</footer></div></section>
+</div></div>
+<script>
+const PRESETS = {"tokyo-night":{"name":"Tokyo Night","accent":"#a855f7"},"nord":{"name":"Nord","accent":"#3b82f6"},"solarized-light":{"name":"Solarized Light","accent":"#ec4899"}};
+const ACCENTS = {"rose":"#f43f5e","pink":"#ec4899","fuchsia":"#d946ef","purple":"#a855f7","violet":"#8b5cf6","indigo":"#6366f1","blue":"#3b82f6","sky":"#0ea5e9","cyan":"#06b6d4","teal":"#14b8a6","emerald":"#10b981","green":"#22c55e","lime":"#84cc16","amber":"#f59e0b","orange":"#f97316"};
+function apply() {
+  const q = new URLSearchParams(location.hash.slice(1));
+  const preset = PRESETS[q.get('preset')] ? q.get('preset') : 'tokyo-night';
+  const accent = ACCENTS[q.get('accent')] || q.get('accentHex') || PRESETS[preset].accent;
+  const root = document.documentElement;
+  root.dataset.preset = preset;
+  root.style.setProperty('--accent-color', accent);
+  const n = parseInt(accent.slice(1), 16);
+  root.style.setProperty('--accent-color-rgb', [(n >> 16) & 255, (n >> 8) & 255, n & 255].join(', '));
+  document.querySelectorAll('img[src*="globe-"]').forEach((img) => { img.src = 'assets/globe-' + preset + '.svg'; });
+  document.body.innerHTML = document.body.innerHTML.replaceAll('__PRESET_NAME__', PRESETS[preset].name).replaceAll('__ACCENT__', accent);
+  document.querySelectorAll('[data-accent-swatch]').forEach((s) => { s.style.outline = s.dataset.accentSwatch.toLowerCase() === accent.toLowerCase() ? '2px solid var(--theme-text)' : ''; s.style.outlineOffset = '1px'; });
+}
+apply();
+</script>
+</body>
+</html>

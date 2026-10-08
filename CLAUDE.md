@@ -28,6 +28,14 @@ npm run typecheck
 npm run lint
 ```
 
+## Lab (`~/lab`, in progress)
+
+Live homelab telemetry and a honeypot threat map, behind `NEXT_PUBLIC_FEATURE_LAB`. Before
+touching anything lab-related, read [docs/lab/README.md](docs/lab/README.md): the spec set, the
+approved concepts, and how to read the private `dleerdefi/dleer-homelab` repo whose data
+contracts it consumes. Never copy homelab addresses, secrets or bucket names into this public
+repo, and never add routes outside `/lab` and `/api/lab/` for it.
+
 ## Project Architecture
 
 This is a **Next.js 15.5.4** portfolio application with App Router, designed as a Hyprland/Arch Linux rice-inspired website with a tiled window manager aesthetic.
