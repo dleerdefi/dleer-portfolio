@@ -31,16 +31,16 @@ In `dleerdefi/dleer-homelab`:
 
 | What | Path | Where it is today |
 |---|---|---|
-| Contract (the source of truth) | `docs/threats-contract.md` | `main` (PR #10); PR #11 adds that `cc` may be `null` |
+| Contract (the source of truth) | `docs/threats-contract.md` | `main` (PR #10, with PR #11's note that `cc` may be `null`) |
 | Honeynet build spec | `docs/honeynet-spec.md` | `main`; PRs #11–#14 each refine it |
 | Decision record | `docs/decisions/0002-honeynet-sensor-off-site.md` | `main` |
-| JSON Schemas | `stacks/honeynet/threatsnap/threatsnap/schemas/threats.v1.schema.json`, `threats-live.v1.schema.json` | PR #11 (`claude/threatsnap`) |
-| Golden examples | `stacks/honeynet/threatsnap/examples/threats.v1.json`, `threats-live.v1.json` | PR #11 |
-| Invalid examples | `stacks/honeynet/threatsnap/examples/invalid/*.json` (15 files) | PR #11 |
-| Producer, constants | `stacks/honeynet/threatsnap/threatsnap/contract.py`, `validate.py`, README | PR #11 |
+| JSON Schemas | `stacks/honeynet/threatsnap/threatsnap/schemas/threats.v1.schema.json`, `threats-live.v1.schema.json` | `main` (PR #11) |
+| Golden examples | `stacks/honeynet/threatsnap/examples/threats.v1.json`, `threats-live.v1.json` | `main` (PR #11) |
+| Invalid examples | `stacks/honeynet/threatsnap/examples/invalid/*.json` (15 files) | `main` (PR #11) |
+| Producer, constants | `stacks/honeynet/threatsnap/threatsnap/contract.py`, `validate.py`, README | `main` (PR #11) |
 | Honeytoken Worker | `workers/honeytokens/` | PR #13 (`claude/honeytokens-worker`) |
 
-Until those PRs merge, read them from their branches (`git show origin/claude/threatsnap:<path>`).
+PR #11 merged on 2026-10-08. For the still-open PRs (#12–#14), read files from their branches (`git show origin/<branch>:<path>`).
 
 | Object | Rewritten | Max size (compact JSON) | Route |
 |---|---|---|---|
@@ -296,17 +296,28 @@ tiles must return the GPU to idle.
 document covers 15 minutes in 10 s buckets and is refreshed every 60 s; playing it back on a
 delay keeps the globe moving between polls.
 
-- **Delay.** Events play at `window_start + t + DELAY`, with `DELAY = 300 s`. The budget: a
-  bucket is first settled (below) in a document generated 70–130 s after the bucket starts; that
-  document can then wait up to 20 s in the server's memory cache, up to 60 s at the edge
-  (`s-maxage=30` plus `stale-while-revalidate=30`, LAB_UI_SPEC.md §5) and up to one poll
-  interval (60 s) in the browser: 270 s in the worst case, about 150 s typically. Measure with
-  real data and adjust only with the cache headers in view.
+- **Ingest lag.** Events reach threatsnap late. The sensor writes one gzipped file per minute,
+  and its uploader moves a file to R2 once it has been idle for 90 s, checking every 60 s
+  (homelab PR #12: "data reaches R2 about 3 minutes after the event"). threatsnap then ingests
+  every 60 s. So a sensor event can first appear in a live document up to about 4.5 minutes after
+  it happened. Honeytoken hits are written per hit and arrive within seconds. A bucket scheduled
+  before its events arrive is lost to the high-water mark, so the settle lag must exceed the
+  ingest lag.
+- **Settled buckets.** A bucket is settled when `bucket_start + 10 s ≤ generated_at − SETTLE_S`.
+  Only settled buckets are scheduled. `SETTLE_S = 300` until the homelab has measured the real
+  lag in its phase 1 live checks; then use that p95, rounded up to 30 s.
+- **Delay.** Events play at `window_start + t + DELAY`, with `DELAY = SETTLE_S + 240` (540 s
+  for now). A bucket is first settled in a document generated `SETTLE_S + 10` to
+  `SETTLE_S + 70` s after it starts. That document can then wait up to 20 s in the server's memory
+  cache, up to 60 s at the edge (`s-maxage=30` plus `stale-while-revalidate=30`, LAB_UI_SPEC.md
+  §5) and up to one poll interval (60 s) in the browser. That is `SETTLE_S + 210` s in the worst
+  case, plus a 30 s margin. Keep `SETTLE_S` and `DELAY` as two named constants in one place, and
+  change them only with the cache headers in view.
+- **Copy follows the delay.** While `DELAY` is at most 300 s the framing says "Every arc is a
+  real attack from the last few minutes"; above that it says "from the last ten minutes".
 - **Clock.** Use the server's time, not the visitor's: estimate it from each live response's
   `Date` header plus its `Age` header (set by the edge cache), and keep the offset to the local
   clock. Fall back to the local clock if the headers are missing.
-- **Settled buckets.** A bucket is settled when `bucket_start + 10 s ≤ generated_at − 60 s`
-  (late uploads can still add to recent buckets). Only settled buckets are scheduled.
 - **High-water mark.** Keep the latest scheduled bucket start; from each new document schedule
   only settled buckets after it. Nothing is ever scheduled twice, and late additions to played
   buckets are not replayed. This also works in demo mode, where the fixture is rebased on every

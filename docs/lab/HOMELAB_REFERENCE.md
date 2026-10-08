@@ -66,9 +66,9 @@ branch until it merges (`git show origin/<branch>:<path>`).
 | 4 | `stacks/monitoring/labsnap/labsnap/contract.py`, `README.md` | every published key; how labsnap fails closed | `main` |
 | 5 | `stacks/monitoring/prometheus/rules/public.rules.yml` | the `public:*` recording rules: the only series labsnap may publish | `main` |
 | 6 | `stacks/monitoring/grafana/dashboards/lab/public-preview.json` | what is public, as a dashboard (§4) | `main` |
-| 7 | `docs/threats-contract.md` | threats contract: enums, filters, freshness, "never published" | `main`; PR #11 adds `cc` may be `null` |
+| 7 | `docs/threats-contract.md` | threats contract: enums, filters, freshness, "never published" | `main` |
 | 8 | `docs/honeynet-spec.md`, `docs/decisions/0002-honeynet-sensor-off-site.md` | how the honeynet works and why; phase 5 points at this spec | `main`; PRs #11–#14 refine it |
-| 9 | `stacks/honeynet/threatsnap/README.md`, `threatsnap/contract.py`, `threatsnap/validate.py`, `threatsnap/schemas/*.json`, `examples/` | the threat schemas, golden and invalid examples, size caps, the IP-shape scan | PR #11 (`claude/threatsnap`) |
+| 9 | `stacks/honeynet/threatsnap/README.md`, `threatsnap/contract.py`, `threatsnap/validate.py`, `threatsnap/schemas/*.json`, `examples/` | the threat schemas, golden and invalid examples, size caps, the IP-shape scan | `main` (PR #11) |
 | 10 | `workers/honeytokens/wrangler.toml`, `README.md` | the routes the honeytoken Worker owns on dleer.ai (§7) | PR #13 (`claude/honeytokens-worker`) |
 | 11 | `docs/roadmap.md` | phase 1b (labsnap goes public, the flag stays off for a week) and the redirects | `main`; PR #14 updates it |
 
@@ -134,19 +134,23 @@ What matters for the UI:
 - **AI-agent detection** follows Palisade Research's LLM Agent Honeypot approach: a planted
   instruction only an LLM agent would follow, and a timing check. Describe it in one sentence at
   most; never name the canary or the route.
+- **Sensor events arrive late.** The sensor ships one file per minute through an rclone
+  uploader (Vector's S3 sink cannot write to R2), so its events reach R2 about 3 minutes after
+  they happen, and threatsnap ingests every 60 s. Honeytoken hits arrive within seconds. The
+  globe's replay must wait longer than this lag ([THREATS_VIEW.md §6](THREATS_VIEW.md#6-replay-clock));
+  the homelab measures the real figure in its phase 1 live checks.
 
 Status on 2026-10-08:
 
 | PR | Branch | What | State |
 |---|---|---|---|
 | #10 | `claude/honeynet-spec` | build spec, threats contract, ADR 0002 | merged |
-| #11 | `claude/threatsnap` | threatsnap, schemas, golden and invalid examples, alerts, CI | open |
-| #12 | `claude/honeynet-sensor` | the sensor (Cowrie, decoy, nftables, Vector) | open |
+| #11 | `claude/threatsnap` | threatsnap, schemas, golden and invalid examples, alerts, CI | merged as `7502490` (branch deleted) |
+| #12 | `claude/honeynet-sensor` | the sensor (Cowrie, decoy, nftables, Vector, rclone uploader) | open |
 | #13 | `claude/honeytokens-worker` | the honeytoken Worker | open |
 | #14 | `claude/honeynet-docs` | architecture, roadmap, projects, README updates | open |
 
-Check the current state before relying on a path. If #11 changes a schema or example after you
-vendor it, re-sync (§6).
+Check the current state before relying on a path; merged files are on `main`.
 
 ---
 
@@ -167,8 +171,10 @@ secrets: the invalid examples use only documentation addresses (`203.0.113.0/24`
 
 `lib/lab/fixtures/MANIFEST.json` records, for every copied file: the homelab path, the branch,
 the commit SHA it was copied from, and its sha256. A test recomputes the hashes, so a hand edit
-fails CI. When this spec was written the sources were `main` at `79227c3` (labsnap) and
-`claude/threatsnap` at `acecedd` (threatsnap).
+fails CI. The fixtures were first copied from `main` at `79227c3` (labsnap) and
+`claude/threatsnap` at `acecedd` (threatsnap). PR #11 merged that commit unchanged as `main`
+`7502490` and its branch is gone, so the manifest should name `main` at `7502490` for the
+threatsnap files (the sha256 values do not change).
 
 **Sync procedure** (when a homelab PR changes an example or a schema):
 
