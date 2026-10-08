@@ -19,15 +19,15 @@
     {
       "path": "lib/lab/fixtures/threats.v1.json",
       "source": "stacks/honeynet/threatsnap/examples/threats.v1.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "b1391a1ed0e560f34b0e53e1ca31eca2de22c9b44ef9936fbc7a884e30735956"
     },
     {
       "path": "lib/lab/fixtures/threats-live.v1.json",
       "source": "stacks/honeynet/threatsnap/examples/threats-live.v1.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "a95a33f354cfd6d97c5211d820744dbe3e849989bd1dee61fef0f424fbb7d97c"
     },
     {
@@ -117,106 +117,106 @@
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-bad-cve-id.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-bad-cve-id.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "82bfbe507f016fe682cfd5ce1f6d4af4b4bcee5cd592db60c7853ae7ab9f5915"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-credential-email.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-credential-email.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "97958f1bd052c058614e677e6af1f1a866a601b287148f07e9a870b3999ec067"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-credential-one-source.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-credential-one-source.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "911ce17a2014a7c62d920b0511e6ecd45438f64cb85b4ff4a3d08fa3e1e13cba"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-ip-in-label.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-ip-in-label.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "9a8b48027172a56bf82e04e4bf4b50cca613c6234b43828129fcc9574dc6a187"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-ipv6-in-asn-name.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-ipv6-in-asn-name.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "3081661d004c2d6aa2dae92961f1b536e6c493ad195cb366b97ab648088891b6"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-live-offset-outside-window.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-live-offset-outside-window.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "1105a6cb56a29d24c44d38ceabcdecb3dae1e514e5b9c86c0dea682da8814a4e"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-live-source-address.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-live-source-address.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "074b637334f36ecc03c23843c00bb3daf4b320cb7b9ad5e0790e67053472eabf"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-live-too-many-events.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-live-too-many-events.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "7f5cd657b8effb7d0fd09d9e4cb77b13f31c471b7d4bc24bdb8c59c74dc1fe79"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-live-unknown-service.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-live-unknown-service.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "f0ac92d43722d26fefe3fae583abedc02d6ee24e5adcf863a960f314f44f9aa0"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-missing-behavior.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-missing-behavior.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "4032c354c7dd64b5f57b57667f45a3c56d19234cd8afde77d1bb2b6cdbc09ad7"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-nan.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-nan.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "d055defd93d7385234f8d9d9736c6d155b8fecfb77caf72c43ecac5d578621f4"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-null-count.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-null-count.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "9391e4bbe1b49aa6706397e699ed167ce52001ba5427f13948b7f2f030a49f5c"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-oversized.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-oversized.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "cb0b6895c227ce7f33f5832f780eb3a7c3a2a48859d731a719658f0f2d9407a2"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-unknown-category.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-unknown-category.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "0324ac603499e889411d3937b8347f927a5b884d089ded991477811dab72fa31"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-unknown-key.json",
       "source": "stacks/honeynet/threatsnap/examples/invalid/threats-unknown-key.json",
-      "branch": "claude/threatsnap",
-      "commit": "acecedd8f0c4359cd1c419bf725aaa630af9b443",
+      "branch": "main",
+      "commit": "75024903587e8c78484ce03a7519501ac9e2eaa7",
       "sha256": "02fa3a8996a59dac07c791cb7303da68efea54e769ff908bc0a71a2d6e207a44"
     }
   ]

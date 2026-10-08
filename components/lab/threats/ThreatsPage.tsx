@@ -9,6 +9,7 @@ import { LabStatusBadge } from '@/components/lab/shared/LabStatusBadge';
 import { useNarrow } from '@/components/lab/shared/useNarrow';
 import { CategoryLegend, toggleHidden } from './CategoryLegend';
 import { FeedPaused, GlobeSlot } from './GlobeSlot';
+import { REPLAY_RECENCY } from './ReplayClock';
 import { ThreatFeed } from './ThreatFeed';
 import { ThreatsPhone } from './ThreatsPhone';
 import { AiAgents, Behaviors, Cves, Malware, Signatures } from './stats/Activity';
@@ -46,8 +47,8 @@ export default function ThreatsPage() {
           badgeSize="0.875rem"
         />
         <p className="lab-text-2" style={{ margin: 0 }}>
-          A honeypot I run on a small cloud VM, plus decoy paths on this site. Every arc is a real attack from the last
-          few minutes. No IP addresses are shown.
+          A honeypot I run on a small cloud VM, plus decoy paths on this site. Every arc is a real attack from{' '}
+          {REPLAY_RECENCY}. No IP addresses are shown.
         </p>
 
         {t.view === 'loading' && <LabStateLine>loading…</LabStateLine>}

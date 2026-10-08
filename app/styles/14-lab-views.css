@@ -158,9 +158,17 @@ section.lab-page {
   color: var(--theme-text);
 }
 
+/* The web target sits a few degrees south of the sensor, so their labels go on the outer sides
+   of the pair, the sensor's above its dot and the web's below, and never meet as the globe turns. */
 .lab-globe-marker.is-sensor .lab-globe-label {
   left: 0;
   top: -2.3em;
+  transform: translateX(-50%);
+}
+
+.lab-globe-marker.is-web .lab-globe-label {
+  left: 0;
+  top: 9px;
   transform: translateX(-50%);
 }
 

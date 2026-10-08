@@ -9,6 +9,7 @@ import { LabHeader, LabStateLine } from '@/components/lab/shared/LabHeader';
 import { LabAttribution } from '@/components/lab/shared/LabAttribution';
 import { CategoryLegend, toggleHidden } from './CategoryLegend';
 import { FeedPaused, GlobeSlot } from './GlobeSlot';
+import { REPLAY_RECENCY } from './ReplayClock';
 import { ThreatFeed } from './ThreatFeed';
 import { TileSummary } from './stats/Summary';
 import { useReplayFeed } from './useReplayFeed';
@@ -36,8 +37,8 @@ export default function ThreatsTile(_props: { onNavigate?: (content: ContentType
         badgeSize={FONT_SIZES.xs}
       />
       <p className="lab-text-2" style={{ margin: 0, fontSize: FONT_SIZES.sm }}>
-        A honeypot I run on a small cloud VM. Every arc is a real attack from the last few minutes. No IP addresses
-        are shown.
+        A honeypot I run on a small cloud VM. Every arc is a real attack from {REPLAY_RECENCY}. No IP addresses are
+        shown.
       </p>
 
       {t.view === 'loading' && <LabStateLine>loading…</LabStateLine>}
