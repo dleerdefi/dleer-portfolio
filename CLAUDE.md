@@ -26,15 +26,38 @@ npm run typecheck
 
 # Linting
 npm run lint
+
+# Unit tests (Vitest, tests/lab)
+npm test
+
+# The lab with bundled demo data (no credentials needed)
+NEXT_PUBLIC_FEATURE_LAB=true LAB_DEMO_DATA=true npm run dev
 ```
 
-## Lab (`~/lab`, in progress)
+On a fresh checkout `npm run typecheck` needs the content-collections types that a build (or
+`npm run dev`) generates first.
 
-Live homelab telemetry and a honeypot threat map, behind `NEXT_PUBLIC_FEATURE_LAB`. Before
-touching anything lab-related, read [docs/lab/README.md](docs/lab/README.md): the spec set, the
-approved concepts, and how to read the private `dleerdefi/dleer-homelab` repo whose data
-contracts it consumes. Never copy homelab addresses, secrets or bucket names into this public
-repo, and never add routes outside `/lab` and `/api/lab/` for it.
+## Lab (`~/lab`)
+
+Live homelab telemetry and a honeypot threat map, behind `NEXT_PUBLIC_FEATURE_LAB` (off by
+default; with it off the site is unchanged and the lab routes 404). Before touching anything
+lab-related, read [docs/lab/README.md](docs/lab/README.md): the spec set, the approved concepts,
+and how to read the private `dleerdefi/dleer-homelab` repo whose data contracts it consumes.
+Never copy homelab addresses, secrets or bucket names into this public repo, and never add
+routes outside `/lab` and `/api/lab/` for it.
+
+| Where | What |
+|---|---|
+| `lib/lab/` | Zod mirrors of the four producer schemas, freshness, the read-only R2 client, cached loaders with the IP-shape scan, demo mode (`LAB_DEMO_DATA=true`), the summary, names and formatting |
+| `lib/lab/fixtures/`, `tests/fixtures/homelab/` | verbatim homelab golden and invalid examples; `MANIFEST.json` pins source commit and sha256 (re-sync per `docs/lab/HOMELAB_REFERENCE.md` §6, never hand-edit) |
+| `app/api/lab/*` | `status`, `status/history`, `threats`, `threats/live`, `summary`: GET only, validated payloads, §5 cache headers |
+| `hooks/useLabData.ts`, `lib/lab/status-store.ts`, `hooks/useLabColors.ts` | polling, the shared live/delayed/offline store, concrete theme colors for the globe |
+| `components/lab/shared/` | `LabStatusBadge`, `Meter`, `Sparkline`, `LineChart`, `HourlyBlocks`, `Swatch`, `LabAttribution`, `Value`, `LabHeader` |
+| `components/lab/telemetry/`, `components/lab/threats/` | the tiles (`lab-telemetry`, `lab-threats`), the framed pages `/lab` and `/lab/threats`, their phone layouts, `ReplayClock`, the feed, stats, legend, and the lazy globe (`ThreatGlobe`, `globe-setup`, `globe-layers`) |
+| entry points | `nav/LabDirectory.tsx` in the nav tile, the polybar `lab` workspace, `home/NeofetchLabRows.tsx`, `parallax/sections/ParallaxLabSection.tsx` |
+
+Lab colors come only from CSS variables (`13-lab.css`); `null` renders as a dash; the globe chunk
+loads only when a threats view shows it (on phones, after a tap).
 
 ## Project Architecture
 
@@ -43,7 +66,7 @@ This is a **Next.js 15.5.4** portfolio application with App Router, designed as 
 ### Core Structure
 - **Framework**: Next.js 15+ with App Router and Turbopack
 - **Styling**: Tailwind CSS v4 (using @tailwindcss/postcss)
-  - **CSS Architecture**: Modular CSS with 13 focused stylesheets
+  - **CSS Architecture**: Modular CSS with 14 focused stylesheets
   - **Organization**: Each module under 650 LOC for maintainability
 - **TypeScript**: Strict mode enabled with path aliases (@/* mapped to root)
 - **Fonts**: Geist and Geist Mono from next/font/google, JetBrains Mono
@@ -52,7 +75,7 @@ This is a **Next.js 15.5.4** portfolio application with App Router, designed as 
 
 ### CSS Architecture
 
-The application uses a modular CSS architecture with styles split into 13 focused modules:
+The application uses a modular CSS architecture with styles split into 14 focused modules:
 
 #### Module Structure (`app/styles/`)
 1. **01-theme-variables.css** (182 lines) - Theme presets & CSS custom properties
@@ -68,6 +91,7 @@ The application uses a modular CSS architecture with styles split into 13 focuse
 11. **11-glass-effects.css** (71 lines) - Glass morphism & visual effects
 12. **12-blog-content.css** (624 lines) - Blog prose styling, MDX components, figures, admonitions, code blocks
 13. **13-lab.css** (106 lines) - Lab (`~/lab`): attack-category colors per preset, `--lab-*` tokens, shared lab classes
+14. **14-lab-views.css** (216 lines) - Lab layouts: the framed `/lab` pages, the globe's markers and tooltip, phone tweaks
 
 The main `app/globals.css` file imports all modules in the correct cascade order.
 
@@ -254,6 +278,11 @@ The theme system uses CSS variables that update based on the selected preset:
 2. Add handling in `ContentViewer.tsx`
 3. Update navigation items in `NavigationTile.tsx`
 4. Add polybar navigation if needed
+
+Content types today: `home`, `about`, `project`, `projects-overview`, `blog`, `blog-overview`,
+`contact`, and behind the lab flag `lab-telemetry` and `lab-threats`. Large or optional views
+(like the lab's) load with `next/dynamic` in `ContentViewer`, and their entries in the nav tile
+live in their own files (`components/tiles/nav/`), so the big tiles only get the hooks.
 
 #### Working with Themes
 1. **Add new theme preset**:
