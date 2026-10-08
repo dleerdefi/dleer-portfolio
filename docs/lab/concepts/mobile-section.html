@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" data-preset="tokyo-night">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=390">
+<title>Lab concept: Mobile: Lab section on the home page</title>
+<!-- Concept mockup for docs/lab. Demo data from the dleer-homelab golden examples. Open with
+     #preset=nord&accent=teal to switch, as the site's theme tiles would. -->
+<style>
+@font-face { font-family: "JetBrains Mono"; src: url("../../../public/fonts/JetBrainsMono-Regular.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "JetBrains Mono"; src: url("../../../public/fonts/JetBrainsMono-Bold.woff2") format("woff2"); font-weight: 700; }
+body { margin: 0; background: #111; }
+:root[data-preset="tokyo-night"] { --theme-bg: #1a1b26; --theme-bg-rgb: 26, 27, 38; --theme-surface: #16161e; --theme-surface-rgb: 22, 22, 30; --theme-text: #c0caf5; --theme-text-rgb: 192, 202, 245; --theme-primary: #bb9af7; --theme-text-dimmed: #565f89; --theme-text-muted: #414868; --theme-border: #414868; --theme-success: #9ece6a; --theme-warning: #e0af68; --theme-error: #f7768e; --theme-info: #7dcfff; --lab-recon: #737aa2; --lab-brute-force: #7aa2f7; --lab-web-exploit: #e0af68; --lab-intrusion: #2ac3de; --lab-malware: #f7768e; --lab-ai-agent: #73daca }
+:root[data-preset="nord"] { --theme-bg: #2E3440; --theme-bg-rgb: 46, 52, 64; --theme-surface: #3B4252; --theme-surface-rgb: 59, 66, 82; --theme-text: #D8DEE9; --theme-text-rgb: 216, 222, 233; --theme-primary: #6A8FF2; --theme-text-dimmed: #88C0D0; --theme-text-muted: #81A1C1; --theme-border: #4C566A; --theme-success: #A3BE8C; --theme-warning: #EBCB8B; --theme-error: #BF616A; --theme-info: #5E81AC; --lab-recon: #7B88A1; --lab-brute-force: #81A1C1; --lab-web-exploit: #EBCB8B; --lab-intrusion: #5E81AC; --lab-malware: #BF616A; --lab-ai-agent: #8FBCBB }
+:root[data-preset="solarized-light"] { --theme-bg: #fdf6e3; --theme-bg-rgb: 253, 246, 227; --theme-surface: #eee8d5; --theme-surface-rgb: 238, 232, 213; --theme-text: #073642; --theme-text-rgb: 7, 54, 66; --theme-primary: #2368B3; --theme-text-dimmed: #586e75; --theme-text-muted: #657b83; --theme-border: #93a1a1; --theme-success: #859900; --theme-warning: #b58900; --theme-error: #dc322f; --theme-info: #2aa198; --lab-recon: #93a1a1; --lab-brute-force: #268bd2; --lab-web-exploit: #b58900; --lab-intrusion: #2aa198; --lab-malware: #dc322f; --lab-ai-agent: #6c71c4 }
+</style>
+</head>
+<body>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: var(--theme-bg); color: var(--theme-text); font-family: 'JetBrains Mono', ui-monospace, monospace; padding: 16px; overflow: hidden; position: relative">
+<div style="position: absolute; inset: 16px; border: 2px solid var(--accent-color); pointer-events: none"></div>
+<div style="padding: 24px 16px 0">
+<div style="color: rgba(var(--theme-text-rgb), 0.72); font-size: 13px; padding: 0 8px">… end of Blog section</div>
+<div style="height: 1px; background: rgba(var(--accent-color-rgb), 0.2); margin: 20px 8px"></div>
+<div style="padding: 8px 8px 0; display: flex; flex-direction: column; gap: 18px">
+<h2 style="margin: 0; font-size: 30px; font-weight: 700; color: var(--accent-color)">Lab</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.55; color: rgba(var(--theme-text-rgb), 0.72)">My homelab and the honeypot I run, live.</p>
+<a href="#" style="display: flex; flex-direction: column; gap: 10px; text-decoration: none; color: var(--theme-text); border: 1px solid var(--theme-border); padding: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 16px; font-weight: 700">~/lab</span><span style="display: inline-flex; gap: 6px; align-items: center; border: 1px solid var(--theme-success); color: var(--theme-success); padding: 2px 8px; font-size: 11px; white-space: nowrap"><span aria-hidden="true">●</span><span style="color: var(--theme-text)">live</span></span></div>
+<div style="display: flex; justify-content: space-between; align-items: flex-end"><div style="font-size: 34px; font-weight: 700; line-height: 1">1,029<span style="font-size: 16px; font-weight: 400"> W</span></div><div style="font-size: 12px; color: rgba(var(--theme-text-rgb), 0.72); text-align: right">24.1 kWh / 24 h<br>3/3 hosts up</div></div>
+<svg aria-hidden="true" width="290" height="40" viewBox="0 0 290 40" style="display: block; overflow: visible"><path d="M1.0 40L1.0 21.8L5.0 20.9L9.0 21.0L13.0 21.4L17.0 21.2L21.0 20.8L25.0 21.1L29.0 19.2L33.0 13.5L37.0 13.7L41.0 14.1L45.0 14.2L49.0 14.1L53.0 17.8L57.0 21.5L61.0 21.7L65.0 21.5L69.0 21.8L73.0 22.2L77.0 22.3L81.0 21.9L85.0 23.5L89.0 23.3L93.0 23.5L97.0 23.7L101.0 24.6L105.0 25.0L109.0 24.6L113.0 24.8L117.0 24.7L121.0 25.4L125.0 26.1L129.0 27.1L133.0 26.6L137.0 26.4L141.0 27.2L145.0 26.0L149.0 26.5L153.0 19.4L157.0 11.4L161.0 5.9L165.0 2.1L169.0 2.0L173.0 5.3L177.0 9.9L181.0 17.7L185.0 26.3L189.0 27.6L193.0 27.8L197.0 27.2L197.0 40Z" style="fill: var(--accent-color); fill-opacity: 0.1"></path><path d="M205.0 40L205.0 27.1L209.0 26.5L213.0 27.2L217.0 27.0L221.0 26.2L225.0 26.2L229.0 26.0L233.0 25.4L237.0 25.7L241.0 25.3L245.0 24.2L249.0 24.2L253.0 23.9L257.0 23.5L261.0 22.5L265.0 23.1L269.0 22.3L273.0 22.2L277.0 22.1L281.0 22.2L285.0 21.6L289.0 21.6L289.0 40Z" style="fill: var(--accent-color); fill-opacity: 0.1"></path><path d="M1.0 21.8L5.0 20.9L9.0 21.0L13.0 21.4L17.0 21.2L21.0 20.8L25.0 21.1L29.0 19.2L33.0 13.5L37.0 13.7L41.0 14.1L45.0 14.2L49.0 14.1L53.0 17.8L57.0 21.5L61.0 21.7L65.0 21.5L69.0 21.8L73.0 22.2L77.0 22.3L81.0 21.9L85.0 23.5L89.0 23.3L93.0 23.5L97.0 23.7L101.0 24.6L105.0 25.0L109.0 24.6L113.0 24.8L117.0 24.7L121.0 25.4L125.0 26.1L129.0 27.1L133.0 26.6L137.0 26.4L141.0 27.2L145.0 26.0L149.0 26.5L153.0 19.4L157.0 11.4L161.0 5.9L165.0 2.1L169.0 2.0L173.0 5.3L177.0 9.9L181.0 17.7L185.0 26.3L189.0 27.6L193.0 27.8L197.0 27.2M205.0 27.1L209.0 26.5L213.0 27.2L217.0 27.0L221.0 26.2L225.0 26.2L229.0 26.0L233.0 25.4L237.0 25.7L241.0 25.3L245.0 24.2L249.0 24.2L253.0 23.9L257.0 23.5L261.0 22.5L265.0 23.1L269.0 22.3L273.0 22.2L277.0 22.1L281.0 22.2L285.0 21.6L289.0 21.6" style="fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round"></path></svg>
+<span style="color: var(--accent-color); font-size: 13px">open telemetry →</span></a>
+<a href="#" style="display: flex; flex-direction: column; gap: 10px; text-decoration: none; color: var(--theme-text); border: 1px solid var(--theme-border); padding: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 16px; font-weight: 700">~/lab/threats</span><span style="display: inline-flex; gap: 6px; align-items: center; border: 1px solid var(--theme-success); color: var(--theme-success); padding: 2px 8px; font-size: 11px; white-space: nowrap"><span aria-hidden="true">●</span><span style="color: var(--theme-text)">live</span></span></div>
+<div style="font-size: 13px"><b style="font-size: 22px">15,447</b> <span style="color: rgba(var(--theme-text-rgb), 0.72)">events in 24 h from</span> <b>31</b> <span style="color: rgba(var(--theme-text-rgb), 0.72)">countries</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px; font-size: 12px"><div style="display: flex; gap: 8px; align-items: center"><span aria-hidden="true" style="display: inline-block; width: 8px; height: 8px; background: var(--lab-recon); flex-shrink: 0"></span><span style="width: 12ch">recon</span><span style="flex: 1; height: 6px; background: rgba(var(--accent-color-rgb), 0.15); position: relative"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: 100%; background: var(--lab-recon)"></span></span><span style="width: 5ch; text-align: right; color: rgba(var(--theme-text-rgb), 0.72)">9,234</span></div><div style="display: flex; gap: 8px; align-items: center"><span aria-hidden="true" style="display: inline-block; width: 8px; height: 8px; background: var(--lab-brute-force); flex-shrink: 0"></span><span style="width: 12ch">brute_force</span><span style="flex: 1; height: 6px; background: rgba(var(--accent-color-rgb), 0.15); position: relative"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: 55%; background: var(--lab-brute-force)"></span></span><span style="width: 5ch; text-align: right; color: rgba(var(--theme-text-rgb), 0.72)">5,088</span></div><div style="display: flex; gap: 8px; align-items: center"><span aria-hidden="true" style="display: inline-block; width: 8px; height: 8px; background: var(--lab-web-exploit); flex-shrink: 0"></span><span style="width: 12ch">web_exploit</span><span style="flex: 1; height: 6px; background: rgba(var(--accent-color-rgb), 0.15); position: relative"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: 10%; background: var(--lab-web-exploit)"></span></span><span style="width: 5ch; text-align: right; color: rgba(var(--theme-text-rgb), 0.72)">887</span></div></div>
+<span style="color: var(--accent-color); font-size: 13px">open the threat map →</span></a>
+</div>
+<div style="height: 1px; background: rgba(var(--accent-color-rgb), 0.2); margin: 28px 8px 16px"></div>
+<div style="font-size: 30px; font-weight: 700; color: var(--accent-color); padding: 0 8px">Contact</div>
+</div></div>
+<script>
+const PRESETS = {"tokyo-night":{"name":"Tokyo Night","accent":"#a855f7"},"nord":{"name":"Nord","accent":"#3b82f6"},"solarized-light":{"name":"Solarized Light","accent":"#ec4899"}};
+const ACCENTS = {"rose":"#f43f5e","pink":"#ec4899","fuchsia":"#d946ef","purple":"#a855f7","violet":"#8b5cf6","indigo":"#6366f1","blue":"#3b82f6","sky":"#0ea5e9","cyan":"#06b6d4","teal":"#14b8a6","emerald":"#10b981","green":"#22c55e","lime":"#84cc16","amber":"#f59e0b","orange":"#f97316"};
+function apply() {
+  const q = new URLSearchParams(location.hash.slice(1));
+  const preset = PRESETS[q.get('preset')] ? q.get('preset') : 'tokyo-night';
+  const accent = ACCENTS[q.get('accent')] || q.get('accentHex') || PRESETS[preset].accent;
+  const root = document.documentElement;
+  root.dataset.preset = preset;
+  root.style.setProperty('--accent-color', accent);
+  const n = parseInt(accent.slice(1), 16);
+  root.style.setProperty('--accent-color-rgb', [(n >> 16) & 255, (n >> 8) & 255, n & 255].join(', '));
+  document.querySelectorAll('img[src*="globe-"]').forEach((img) => { img.src = 'assets/globe-' + preset + '.svg'; });
+  document.body.innerHTML = document.body.innerHTML.replaceAll('__PRESET_NAME__', PRESETS[preset].name).replaceAll('__ACCENT__', accent);
+  document.querySelectorAll('[data-accent-swatch]').forEach((s) => { s.style.outline = s.dataset.accentSwatch.toLowerCase() === accent.toLowerCase() ? '2px solid var(--theme-text)' : ''; s.style.outlineOffset = '1px'; });
+}
+apply();
+</script>
+</body>
+</html>
