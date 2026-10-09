@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { DELAY_MS, ReplayClock, type ClockDeps, type LiveDocIn, type ReplayEvent } from '@/components/lab/threats/ReplayClock';
+import {
+  DELAY_MS,
+  ReplayClock,
+  SETTLE_S,
+  type ClockDeps,
+  type LiveDocIn,
+  type ReplayEvent,
+} from '@/components/lab/threats/ReplayClock';
 import { golden } from './helpers';
 
 const iso = (ms: number) => new Date(ms).toISOString().replace(/\.\d{3}Z$/, 'Z');
@@ -57,14 +64,34 @@ function setup(start: number, isVisible?: (c: string) => boolean) {
 
 const T0 = Date.parse('2026-10-07T19:05:00Z');
 const everyBucket = Array.from({ length: 90 }, (_, i) => i * 10);
+/** The offset of the newest settled bucket in a 900 s document. */
+const lastSettled = 900 - SETTLE_S - 10;
 
 describe('ReplayClock', () => {
-  it('schedules only settled buckets: start + 10 s ≤ generated_at − 60 s', () => {
+  it('schedules only settled buckets: start + 10 s ≤ generated_at − SETTLE_S', () => {
     const { replay, clock, fired } = setup(T0);
     replay.ingest(doc(T0, everyBucket), 'live');
     clock.advance(DELAY_MS + 120_000);
     const latest = Math.max(...fired.map((f) => f.e.bucketStart));
-    expect(latest).toBe(T0 - 900_000 + 830_000); // t = 830 is the last settled bucket
+    expect(latest).toBe(T0 - 900_000 + lastSettled * 1000);
+  });
+
+  it('still plays a bucket whose events arrive 4.5 min late (the sensor ingest lag)', () => {
+    const { replay, clock, fired } = setup(T0);
+    const B = T0 + 30_000; // the late bucket's start
+    const at = (generated: number): LiveDocIn => {
+      const d = doc(generated, everyBucket);
+      // the sensor's event shows up only in documents generated 270 s or more after it happened
+      if (generated >= B + 270_000) d.events.push({ ...d.events[0], t: (B - (generated - 900_000)) / 1000, cat: 'exploit' });
+      return d;
+    };
+    replay.ingest(at(T0), 'live');
+    for (let i = 1; i <= 8; i++) {
+      clock.advance(60_000);
+      replay.ingest(at(T0 + i * 60_000), 'live');
+    }
+    clock.advance(B + DELAY_MS + 30_000 - clock.now());
+    expect(fired.some((f) => f.e.bucketStart === B && f.e.cat === 'exploit')).toBe(true);
   });
 
   it('never schedules an event twice across overlapping documents', () => {
@@ -99,13 +126,13 @@ describe('ReplayClock', () => {
   it('drops events more than 5 s overdue when they arrive', () => {
     const { replay, clock, fired } = setup(T0);
     replay.ingest(doc(T0, everyBucket), 'live');
-    // a document that is late: its newest settled buckets are already 60 s past their play time
-    clock.advance(DELAY_MS + 200_000);
+    // a document generated at T0 + 120 s that arrives late: its newest settled bucket
+    // (T0 − SETTLE_S − 10 s + 120 s) was due 60 s ago, so none of its new buckets may fire
+    clock.advance(DELAY_MS - SETTLE_S * 1000 + 180_000);
     const before = fired.length;
     replay.ingest(doc(T0 + 120_000, everyBucket), 'live');
-    clock.advance(1);
-    const late = fired.slice(before).filter((f) => f.at - f.e.fireAt > 5_000);
-    expect(late).toEqual([]);
+    clock.advance(30_000);
+    expect(fired.length).toBe(before);
   });
 
   it('warm-starts: the 30 s before playback over about 3 s, and 8 events into the feed', () => {
@@ -142,7 +169,8 @@ describe('ReplayClock', () => {
     let showRecon = false;
     const { replay, clock, fired } = setup(T0, (c) => c !== 'recon' || showRecon);
     replay.ingest(doc(T0, everyBucket), 'live');
-    clock.advance(DELAY_MS - 120_000);
+    // the last scheduled bucket plays about DELAY − SETTLE_S after T0; stop a minute before it
+    clock.advance(DELAY_MS - SETTLE_S * 1000 - 60_000);
     expect(fired).toHaveLength(0);
     showRecon = true; // toggled back on after scheduling
     clock.advance(60_000);
@@ -153,9 +181,11 @@ describe('ReplayClock', () => {
     const { replay, clock, fired } = setup(T0);
     replay.ingest(doc(T0, everyBucket), 'live');
     clock.advance(60_000);
-    replay.ingest(doc(T0 + 60_000, [800, 800, 800, 800, 800]), 'live');
+    // a bucket that the second document newly settles, past the first one's high-water mark
+    const t = lastSettled - 10;
+    replay.ingest(doc(T0 + 60_000, [t, t, t, t, t]), 'live');
     clock.advance(DELAY_MS + 60_000);
-    const bucket = fired.filter((f) => f.e.bucketStart === T0 + 60_000 - 900_000 + 800_000);
+    const bucket = fired.filter((f) => f.e.bucketStart === T0 + 60_000 - 900_000 + t * 1000);
     expect(bucket).toHaveLength(5);
     const offsets = bucket.map((f) => f.e.fireAt - f.e.bucketStart - DELAY_MS);
     expect(Math.min(...offsets)).toBeGreaterThanOrEqual(0);

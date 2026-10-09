@@ -3,9 +3,19 @@
 
 import type { LabState } from '@/lib/lab/types';
 
-export const DELAY_MS = 300_000;
+// Sensor events reach threatsnap up to about 4.5 min late (one file a minute, uploaded once idle
+// for 90 s, ingested every 60 s), so a bucket counts as settled only SETTLE_S after it ends; a
+// bucket scheduled earlier would lose its late events to the high-water mark. SETTLE_S stays at
+// 300 until the homelab measures the real lag (then its p95, rounded up to 30 s). DELAY covers
+// settling, the caches (20 s server, 60 s edge) and one 60 s poll, plus 30 s of margin. Change
+// either only with the cache headers in view (THREATS_VIEW.md §6).
+export const SETTLE_S = 300;
+export const DELAY_S = SETTLE_S + 240;
+export const DELAY_MS = DELAY_S * 1000;
+/** The framing copy follows the delay: "Every arc is a real attack from …". */
+export const REPLAY_RECENCY = DELAY_S <= 300 ? 'the last few minutes' : 'the last ten minutes';
+const SETTLE_MS = SETTLE_S * 1000;
 const BUCKET_MS = 10_000;
-const SETTLE_MS = 60_000;
 const MAX_LATE_MS = 5_000;
 const WARM_SPAN_MS = 30_000;
 const WARM_PLAY_MS = 3_000;

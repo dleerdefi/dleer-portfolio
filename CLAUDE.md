@@ -91,7 +91,7 @@ The application uses a modular CSS architecture with styles split into 14 focuse
 11. **11-glass-effects.css** (71 lines) - Glass morphism & visual effects
 12. **12-blog-content.css** (624 lines) - Blog prose styling, MDX components, figures, admonitions, code blocks
 13. **13-lab.css** (106 lines) - Lab (`~/lab`): attack-category colors per preset, `--lab-*` tokens, shared lab classes
-14. **14-lab-views.css** (216 lines) - Lab layouts: the framed `/lab` pages, the globe's markers and tooltip, phone tweaks
+14. **14-lab-views.css** (224 lines) - Lab layouts: the framed `/lab` pages, the globe's markers and tooltip, phone tweaks
 
 The main `app/globals.css` file imports all modules in the correct cascade order.
 
