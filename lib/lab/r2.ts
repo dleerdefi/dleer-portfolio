@@ -45,13 +45,15 @@ export async function getObject(key: LabKey, maxBytes: number): Promise<R2Result
   } catch (err) {
     return { ok: false, reason: isTimeout(err) ? 'timeout' : 'network' };
   }
+  // Never await a cancel: under Next.js's fetch the body can be one branch of a tee(), whose
+  // cancel() settles only once the other branch is cancelled too, so awaiting it hangs the route.
   if (res.status !== 200) {
-    await res.body?.cancel().catch(() => {});
+    void res.body?.cancel().catch(() => {});
     return { ok: false, reason: 'status', status: res.status };
   }
   const declared = Number(res.headers.get('content-length'));
   if (Number.isFinite(declared) && declared > maxBytes) {
-    await res.body?.cancel().catch(() => {});
+    void res.body?.cancel().catch(() => {});
     return { ok: false, reason: 'oversize' };
   }
   try {
@@ -73,7 +75,7 @@ async function readCapped(res: Response, maxBytes: number): Promise<string | nul
     if (done) break;
     size += value.byteLength;
     if (size > maxBytes) {
-      await reader.cancel().catch(() => {});
+      void reader.cancel().catch(() => {});
       return null;
     }
     chunks.push(value);

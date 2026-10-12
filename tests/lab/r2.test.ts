@@ -58,6 +58,30 @@ describe('getObject', () => {
     expect(await getObject('v1/now.json', 1024)).toEqual({ ok: false, reason: 'oversize' });
   });
 
+  // Next.js's fetch can hand a route one branch of a tee()d body, and cancelling one tee branch
+  // only settles once the other branch is cancelled too. Awaiting that cancel hung every lab
+  // route whose document was missing (404) or too large.
+  const teed = (chunk: Uint8Array) =>
+    new ReadableStream<Uint8Array>({ pull: (c) => c.enqueue(chunk) }).tee()[0];
+
+  it('does not wait for a non-200 body to finish cancelling', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(teed(new TextEncoder().encode('<Error/>')), { status: 404 })));
+    expect(await getObject('v1/threats.json', 1024)).toEqual({ ok: false, reason: 'status', status: 404 });
+  }, 2000);
+
+  it('does not wait for an oversize body to finish cancelling', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(teed(new Uint8Array(10)), { status: 200, headers: { 'content-length': '2048' } })),
+    );
+    expect(await getObject('v1/now.json', 1024)).toEqual({ ok: false, reason: 'oversize' });
+  }, 2000);
+
+  it('does not wait for a body that grows past the cap to finish cancelling', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(teed(new Uint8Array(600)), { status: 200 })));
+    expect(await getObject('v1/now.json', 1024)).toEqual({ ok: false, reason: 'oversize' });
+  }, 2000);
+
   it('times out', async () => {
     vi.stubGlobal(
       'fetch',
