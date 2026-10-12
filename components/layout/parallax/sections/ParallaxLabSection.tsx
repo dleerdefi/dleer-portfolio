@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useLabData } from '@/hooks/useLabData';
+import { labThreatsEnabled } from '@/lib/lab/flag';
 import { fmtCount, fmtInt, fmtKwh } from '@/lib/lab/format';
 import { categoryVar } from '@/lib/lab/names';
 import { CATEGORIES, type LabSummary } from '@/lib/lab/types';
@@ -37,6 +38,8 @@ const card: React.CSSProperties = {
 /**
  * The mobile home page's Lab section, between Blog and Contact (concept mobile-section): one
  * card links to /lab, one to /lab/threats. Data from /api/lab/summary only; no globe here.
+ * The threats card is left out while the threat map is off, or once a summary arrives without
+ * a threats block.
  */
 export const ParallaxLabSection: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -44,6 +47,7 @@ export const ParallaxLabSection: React.FC = () => {
   const { payload, receivedAt } = useLabData<LabSummary>('/api/lab/summary', 300_000, { enabled: near });
   const tel = payload?.telemetry;
   const thr = payload?.threats;
+  const showThreats = labThreatsEnabled() && (payload === null || thr !== undefined);
 
   return (
     <div ref={ref} className="p-6 lab-root" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -51,7 +55,7 @@ export const ParallaxLabSection: React.FC = () => {
         Lab
       </h2>
       <p className="lab-text-2" style={{ margin: 0 }}>
-        My homelab and the honeypot I run, live.
+        {showThreats ? 'My homelab and the honeypot I run, live.' : 'My homelab, live.'}
       </p>
 
       <Link href="/lab" style={card} className="lab-focus">
@@ -78,25 +82,27 @@ export const ParallaxLabSection: React.FC = () => {
         <span style={{ color: 'var(--accent-color)' }}>open telemetry →</span>
       </Link>
 
-      <Link href="/lab/threats" style={card} className="lab-focus">
-        <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' }}>
-          <span className="font-bold">~/lab/threats</span>
-          {thr && <LabStatusBadge state={thr.state} compact style={{ fontSize: '0.8rem' }} />}
-        </span>
-        {thr?.state === 'offline' && <span>honeynet offline</span>}
-        {thr && thr.state !== 'offline' && thr.by_category && (
-          <span className={thr.state === 'delayed' ? 'lab-dim' : undefined} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-            <span>
-              <span style={{ fontSize: '1.5rem' }}>{fmtInt(thr.events)}</span>{' '}
-              <span className="lab-text-2">
-                events in 24 h from <b style={{ color: 'var(--theme-text)' }}>{fmtInt(thr.countries)}</b> countries
-              </span>
-            </span>
-            <TopCategories counts={thr.by_category} />
+      {showThreats && (
+        <Link href="/lab/threats" style={card} className="lab-focus">
+          <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' }}>
+            <span className="font-bold">~/lab/threats</span>
+            {thr && <LabStatusBadge state={thr.state} compact style={{ fontSize: '0.8rem' }} />}
           </span>
-        )}
-        <span style={{ color: 'var(--accent-color)' }}>open the threat map →</span>
-      </Link>
+          {thr?.state === 'offline' && <span>honeynet offline</span>}
+          {thr && thr.state !== 'offline' && thr.by_category && (
+            <span className={thr.state === 'delayed' ? 'lab-dim' : undefined} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              <span>
+                <span style={{ fontSize: '1.5rem' }}>{fmtInt(thr.events)}</span>{' '}
+                <span className="lab-text-2">
+                  events in 24 h from <b style={{ color: 'var(--theme-text)' }}>{fmtInt(thr.countries)}</b> countries
+                </span>
+              </span>
+              <TopCategories counts={thr.by_category} />
+            </span>
+          )}
+          <span style={{ color: 'var(--accent-color)' }}>open the threat map →</span>
+        </Link>
+      )}
     </div>
   );
 };

@@ -28,6 +28,11 @@ const nextConfig: NextConfig = {
     // of 60s, so sharp isn't re-run in the background on nearly every visit
     minimumCacheTTL: 14400,
   },
+  // The threat map's flag is always defined at build time ('false' when unset), so the build
+  // inlines it and drops the threats branches from the home bundle (docs/lab/LAB_UI_SPEC.md §3)
+  env: {
+    NEXT_PUBLIC_FEATURE_LAB_THREATS: process.env.NEXT_PUBLIC_FEATURE_LAB_THREATS === 'true' ? 'true' : 'false',
+  },
   // ~/lab (docs/lab): only when the flag is on at build time, an empty list otherwise
   async redirects() {
     if (process.env.NEXT_PUBLIC_FEATURE_LAB !== 'true') return [];

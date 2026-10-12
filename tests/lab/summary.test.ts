@@ -60,4 +60,13 @@ describe('buildSummary', () => {
     expect(t.telemetry.power_24h).toBeUndefined();
     expect(t.telemetry.power_w).toBe(1028.5);
   });
+
+  it('has no threats block, and takes demo from telemetry alone, without a digest (threat map off)', () => {
+    const s = buildSummary(now, history, null);
+    expect('threats' in s).toBe(false);
+    expect(s.demo).toBeUndefined();
+    expect(s.telemetry.state).toBe('live');
+    expect(buildSummary({ ...now, demo: true }, history, null).demo).toBe(true);
+    expect(buildSummary({ state: 'offline' }, { state: 'offline' }, null)).toEqual({ telemetry: { state: 'offline' } });
+  });
 });

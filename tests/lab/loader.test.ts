@@ -50,7 +50,7 @@ describe('loader', () => {
     ['an oversized body', { ok: false, reason: 'oversize' }],
     ['invalid JSON', body('{"schema_version": 1,')],
     ['NaN', body(nowText.replace('1028.5', 'NaN'))],
-    ['a Zod failure', body(nowText.replace('"storage": null', '"storage": "full"'))],
+    ['a Zod failure', body(JSON.stringify({ ...JSON.parse(nowText), storage: 'full' }))],
   ])('is offline on %s', async (_name, result) => {
     const { load, log } = setup(result);
     expect(await load()).toEqual({ state: 'offline' });

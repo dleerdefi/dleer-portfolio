@@ -52,7 +52,8 @@ const ContentViewer: React.FC<ContentViewerProps> = ({ onNavigate }) => {
         return <LabTelemetryTile onNavigate={onNavigate} />;
 
       case 'lab-threats':
-        return <LabThreatsTile onNavigate={onNavigate} />;
+        // read directly so the build folds it (see LabDirectory); lab views render only with the lab on
+        return process.env.NEXT_PUBLIC_FEATURE_LAB_THREATS === 'true' ? <LabThreatsTile onNavigate={onNavigate} /> : null;
 
       default:
         return null;

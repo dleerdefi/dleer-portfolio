@@ -123,17 +123,21 @@ renders them in the active theme. They appear in the nav tile, the polybar, neof
 mobile home page, and at `/lab` and `/lab/threats`.
 
 It is **off by default**. With the flag off the site is unchanged and the lab routes return 404.
+The threat map has its own flag: with only `NEXT_PUBLIC_FEATURE_LAB` on, the lab is telemetry
+only (no `/lab/threats`, no threats entries anywhere, and the threats documents are never read).
 
 | Variable | Description |
 |----------|-------------|
 | `NEXT_PUBLIC_FEATURE_LAB` | `true` turns the lab on. Inlined at build time: redeploy after changing it |
+| `NEXT_PUBLIC_FEATURE_LAB_THREATS` | `true` adds the threat map; it only counts while `NEXT_PUBLIC_FEATURE_LAB` is on. Inlined at build time |
 | `LAB_DEMO_DATA` | `true` serves bundled synthetic documents instead of R2 (local dev, previews, forks); wins over the `R2_*` settings |
 | `R2_ACCOUNT_ID`, `R2_LAB_BUCKET`, `R2_LAB_READ_KEY_ID`, `R2_LAB_READ_SECRET` | server-side only: an Object Read only token for the bucket the documents are pushed to |
 
 Try it without any credentials:
 
 ```bash
-NEXT_PUBLIC_FEATURE_LAB=true LAB_DEMO_DATA=true npm run dev
+NEXT_PUBLIC_FEATURE_LAB=true LAB_DEMO_DATA=true npm run dev                                   # telemetry only
+NEXT_PUBLIC_FEATURE_LAB=true NEXT_PUBLIC_FEATURE_LAB_THREATS=true LAB_DEMO_DATA=true npm run dev # and the threat map
 ```
 
 The specification, the data contracts the views consume and the approved designs are in

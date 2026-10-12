@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { HistoryDoc, NowDoc } from '@/lib/lab/schemas/telemetry';
 import { demoHistory } from '@/lib/lab/demo/history';
+import { fmtTB } from '@/lib/lab/format';
 import { golden, invalid, compactBytes } from './helpers';
 
 // TELEMETRY_VIEW.md §7, against the vendored homelab examples.
@@ -8,6 +9,15 @@ import { golden, invalid, compactBytes } from './helpers';
 describe('golden examples', () => {
   it('parses now.v1.json', () => {
     expect(NowDoc.safeParse(golden('now.v1.json')).success).toBe(true);
+  });
+
+  it('carries the summed data pools in storage, and accepts storage: null', () => {
+    const now = NowDoc.parse(golden('now.v1.json'));
+    expect(now.storage).not.toBeNull();
+    expect(fmtTB(now.storage!.used_bytes)).toBe('38.6');
+    expect(fmtTB(now.storage!.total_bytes)).toBe('50.3');
+    // null while TrueNAS isn't reporting
+    expect(NowDoc.safeParse({ ...(golden('now.v1.json') as object), storage: null }).success).toBe(true);
   });
 
   it('parses history.v1.json', () => {

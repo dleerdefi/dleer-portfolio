@@ -30,7 +30,8 @@ npm run lint
 # Unit tests (Vitest, tests/lab)
 npm test
 
-# The lab with bundled demo data (no credentials needed)
+# The lab with bundled demo data (no credentials needed); add
+# NEXT_PUBLIC_FEATURE_LAB_THREATS=true for the threat map
 NEXT_PUBLIC_FEATURE_LAB=true LAB_DEMO_DATA=true npm run dev
 ```
 
@@ -40,7 +41,9 @@ On a fresh checkout `npm run typecheck` needs the content-collections types that
 ## Lab (`~/lab`)
 
 Live homelab telemetry and a honeypot threat map, behind `NEXT_PUBLIC_FEATURE_LAB` (off by
-default; with it off the site is unchanged and the lab routes 404). Before touching anything
+default; with it off the site is unchanged and the lab routes 404). The threat map has a second
+flag, `NEXT_PUBLIC_FEATURE_LAB_THREATS` (off by default, only counts while the lab is on): gate
+any threats entry point on `labThreatsEnabled()` from `lib/lab/flag.ts`. Before touching anything
 lab-related, read [docs/lab/README.md](docs/lab/README.md): the spec set, the approved concepts,
 and how to read the private `dleerdefi/dleer-homelab` repo whose data contracts it consumes.
 Never copy homelab addresses, secrets or bucket names into this public repo, and never add

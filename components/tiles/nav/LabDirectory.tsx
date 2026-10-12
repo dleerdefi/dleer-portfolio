@@ -10,7 +10,8 @@ const reset: React.CSSProperties = { background: 'none', border: 0, font: 'inher
 
 /**
  * `Lab/` in the nav tile, between `Blog/` and `Contact`. Clicking it opens the telemetry view;
- * the arrow toggles `telemetry` and `threats`, which open their views in the content tile.
+ * the arrow toggles `telemetry` and `threats` (only `telemetry` while the threat map is off),
+ * which open their views in the content tile.
  * Each child shows its view's status glyph once a lab fetch has reported it.
  */
 export function LabDirectory({
@@ -29,10 +30,13 @@ export function LabDirectory({
   }, [inLab]);
   const expanded = open;
 
-  const children: { type: 'lab-telemetry' | 'lab-threats'; label: string; state?: LabState }[] = [
-    { type: 'lab-telemetry', label: 'telemetry', state: status.telemetry },
-    { type: 'lab-threats', label: 'threats', state: status.threats },
-  ];
+  const telemetry = { type: 'lab-telemetry' as const, label: 'telemetry', state: status.telemetry };
+  // Rendered only while the lab is on, so the threats flag alone decides. Read directly (not via
+  // labThreatsEnabled) so the build folds it and the home bundle carries no threats entry.
+  const children: { type: 'lab-telemetry' | 'lab-threats'; label: string; state?: LabState }[] =
+    process.env.NEXT_PUBLIC_FEATURE_LAB_THREATS === 'true'
+      ? [telemetry, { type: 'lab-threats', label: 'threats', state: status.threats }]
+      : [telemetry];
 
   return (
     <div>
