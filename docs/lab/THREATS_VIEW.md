@@ -300,14 +300,16 @@ delay keeps the globe moving between polls.
   and its uploader moves a file to R2 once it has been idle for 90 s, checking every 60 s
   (homelab PR #12: "data reaches R2 about 3 minutes after the event"). threatsnap then ingests
   every 60 s. So a sensor event can first appear in a live document up to about 4.5 minutes after
-  it happened. Honeytoken hits are written per hit and arrive within seconds. A bucket scheduled
-  before its events arrive is lost to the high-water mark, so the settle lag must exceed the
-  ingest lag.
+  it happened. Measured on 2026-10-12 (20 probes to the live sensor, timed to their first
+  appearance in `threats-live.json`): p50 204 s, p95 269 s, max 282 s. Honeytoken hits are
+  written per hit and arrive within seconds. A bucket scheduled before its events arrive is lost
+  to the high-water mark, so the settle lag must exceed the ingest lag.
 - **Settled buckets.** A bucket is settled when `bucket_start + 10 s ≤ generated_at − SETTLE_S`.
-  Only settled buckets are scheduled. `SETTLE_S = 300` until the homelab has measured the real
-  lag in its phase 1 live checks; then use that p95, rounded up to 30 s.
-- **Delay.** Events play at `window_start + t + DELAY`, with `DELAY = SETTLE_S + 240` (540 s
-  for now). A bucket is first settled in a document generated `SETTLE_S + 10` to
+  Only settled buckets are scheduled. `SETTLE_S = 270`: the homelab's measured p95 (269 s on
+  2026-10-12, 20 probes), rounded up to 30 s. Honeytoken hits skip the sensor's file and upload
+  stages, so they arrive sooner and are covered too.
+- **Delay.** Events play at `window_start + t + DELAY`, with `DELAY = SETTLE_S + 240` (510 s).
+  A bucket is first settled in a document generated `SETTLE_S + 10` to
   `SETTLE_S + 70` s after it starts. That document can then wait up to 20 s in the server's memory
   cache, up to 60 s at the edge (`s-maxage=30` plus `stale-while-revalidate=30`, LAB_UI_SPEC.md
   §5) and up to one poll interval (60 s) in the browser. That is `SETTLE_S + 210` s in the worst
