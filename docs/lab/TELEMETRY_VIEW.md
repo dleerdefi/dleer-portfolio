@@ -5,8 +5,7 @@ Part of the [lab UI spec](LAB_UI_SPEC.md). Concepts: `tile-telemetry`, `page-lab
 
 Three Dell PowerEdge servers, read by Prometheus at home and pushed by **labsnap** as two JSON
 documents. The allowlist is labsnap's `contract.py` (every key it may publish); the homelab's
-"Public preview" Grafana dashboard draws the same series, minus the reserved `storage` and
-`media` fields ([HOMELAB_REFERENCE.md §4](HOMELAB_REFERENCE.md#4-dashboards)). This view shows
+"Public preview" Grafana dashboard draws the same series, minus the reserved `media` field ([HOMELAB_REFERENCE.md §4](HOMELAB_REFERENCE.md#4-dashboards)). This view shows
 those keys and nothing else.
 
 ## Contents
@@ -61,8 +60,18 @@ Shared pieces: `timestamp` = `/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/`; `ratio`
 | `lab` | `{ power_w: number 0–10000 \| null, energy_kwh_24h: number 0–250 \| null, hosts_up: int 0–3, hosts_expected: literal 3 }` |
 | `hosts` | exactly three, in order: `z.tuple([host('storage'), host('gpu'), host('apps')])`, where `host(role) = { role: z.literal(role), up: boolean, power_w: number 0–3000 \| null, cpu_ratio: ratio, mem_ratio: ratio, inlet_c: number −10–70 \| null }` |
 | `gpus` | 0–8 of `{ role, index: int 0–7, util_ratio: ratio, mem_ratio: ratio, power_w: number 0–500 \| null, temp_c: number 0–120 \| null }`. The producer sorts them by role then index; do not enforce the order, look GPUs up by `role:index` |
-| `storage` | `{ used_bytes: int 0–1e15, total_bytes: int 0–1e15 } \| null`; `null` until the homelab's TrueNAS collector feeds labsnap |
+| `storage` | `{ used_bytes: int 0–1e15, total_bytes: int 0–1e15 } \| null`: the NAS's TrueNAS data pools summed into one figure (below); `null` while TrueNAS isn't reporting |
 | `media` | `{ streams: int 0–100 \| null, transcodes: int 0–100 \| null } \| null`; reserved for Plex, `null` while Plex is not monitored (the golden example has `{2, 1}`) |
+
+**`storage`** follows the homelab's `docs/status-contract.md` (homelab PR #16):
+
+- The TrueNAS data pools on the `storage` host, summed: `total_bytes` is the pools' size and
+  `used_bytes` their allocated space, as `zpool list` reports them (SIZE and ALLOC), not dataset
+  quotas. ZFS sits on PERC virtual disks without RAID-Z, so the total is within about 1 % of
+  usable space.
+- The boot pool is left out; it holds the NAS's operating system, not files.
+- Both or nothing: `null` while TrueNAS isn't reporting (never `0`). Exact integer bytes;
+  divide by 10¹² for TB. Not in `history.json`.
 
 ### `history.json`
 
@@ -160,7 +169,7 @@ Concept `page-lab`. Max content width as other framed pages; at ≥ 1024 px:
    on the first line; current watts large with `power` caption and the host's 24 h power
    sparkline beside it (all three cards share one y-domain); `cpu` meter + % + 24 h cpu
    sparkline (domain 0–1); `mem` meter + %; `inlet 22 °C`. When `storage` is not null, the T430
-   card adds `pool` with a meter and `41.2 / 72.0 TB` (decimal TB, one decimal). When `media` is
+   card adds `pool` with a meter and `38.6 / 50.3 TB` (decimal TB, one decimal). When `media` is
    not null, it adds `plex  2 streams · 1 transcoding`.
 7. **GPU table** (full width): `gpu`, `in` (host short name), `util` (meter + %), `vram` (meter
    + %), `power`, `temp`, `util, 24 h` (sparkline, domain 0–1, same for every row).
@@ -201,7 +210,7 @@ unknown. From `/api/lab/summary`.
 | `hosts[i].up === false` | the row or card dimmed to 50 %, `○ down` in `--theme-error` beside the name, values as dashes |
 | `lab.hosts_up < hosts_expected` | `hosts 2/3 up` with `◐` in the warning color |
 | `gpus` empty | the GPU table is omitted |
-| `storage` / `media` `null` | their lines are omitted (not dashed: they are reserved fields) |
+| `storage` / `media` `null` | their lines are omitted, not dashed (`storage` is `null` while TrueNAS isn't reporting; `media` is reserved) |
 | history offline | charts and sparklines replaced by `history unavailable` (`--lab-text-2`) |
 | history gap (`null` entries) | a break in every line, never a drop to zero |
 | delayed | values at 55 % opacity, badge `◐ delayed as of N min ago` |

@@ -2,7 +2,8 @@ import 'server-only';
 import { labEnabled } from './flag';
 
 // Shared by the /api/lab/* route handlers: the flag gate and the JSON response with the
-// cache headers of LAB_UI_SPEC.md §5. Handlers read nothing from the request.
+// cache headers of LAB_UI_SPEC.md §5. Handlers read nothing from the request. The threats
+// routes pass labThreatsEnabled as their gate.
 
 export const CACHE = {
   status: {
@@ -34,8 +35,9 @@ export function notFound(): Response {
 export async function labResponse(
   load: () => Promise<object>,
   cache: { ok: string; offline: string },
+  enabled: () => boolean = labEnabled,
 ): Promise<Response> {
-  if (!labEnabled()) return notFound();
+  if (!enabled()) return notFound();
   const payload = await load();
   return new Response(JSON.stringify(payload), {
     status: 200,

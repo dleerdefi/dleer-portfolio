@@ -83,7 +83,7 @@ The homelab's Grafana dashboards are in `stacks/monitoring/grafana/dashboards/`:
 
 | Dashboard | Use for this site |
 |---|---|
-| `lab/public-preview.json` ("Public preview: what dleer.ai shows") | **What is public, drawn.** Every panel queries only `public:*` series, the same ones labsnap publishes; the authoritative key list is labsnap's `contract.py`. The dashboard lacks only the reserved `storage` and `media` fields. The telemetry view is this dashboard redrawn in the site's style |
+| `lab/public-preview.json` ("Public preview: what dleer.ai shows") | **What is public, drawn.** Every panel queries only `public:*` series, the same ones labsnap publishes; the authoritative key list is labsnap's `contract.py`. Since homelab PR #16 it has a "Storage pool" stat; it lacks only the reserved `media` field. The telemetry view is this dashboard redrawn in the site's style |
 | `lab/server-hardware.json`, `lab/ci-runners.json`, the pinned community dashboards | private operations views (fans, voltages, disks, runners, exporters). Read them for context if useful; **never** reproduce their data or panels on the site |
 
 How the public-preview panels map to the telemetry view:
@@ -173,8 +173,9 @@ secrets: the invalid examples use only documentation addresses (`203.0.113.0/24`
 the commit SHA it was copied from, and its sha256. A test recomputes the hashes, so a hand edit
 fails CI. The fixtures were first copied from `main` at `79227c3` (labsnap) and
 `claude/threatsnap` at `acecedd` (threatsnap). PR #11 merged that commit unchanged as `main`
-`7502490` and its branch is gone, so the manifest should name `main` at `7502490` for the
-threatsnap files (the sha256 values do not change).
+`7502490` and its branch is gone, so the manifest names `main` at `7502490` for the threatsnap
+files (the sha256 values did not change). `now.v1.json` was re-synced from `main` at `ba74e7e`
+(homelab PR #16, `storage` filled).
 
 **Sync procedure** (when a homelab PR changes an example or a schema):
 

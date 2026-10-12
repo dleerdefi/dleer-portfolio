@@ -34,7 +34,10 @@ export const MALWARE_VIA = ['scp', 'sftp', 'upload'] as const;
 export const ROLES = ['storage', 'gpu', 'apps'] as const;
 export type Role = (typeof ROLES)[number];
 
-/** `/api/lab/summary`: a few numbers for the home page, never a full document. */
+/**
+ * `/api/lab/summary`: a few numbers for the home page, never a full document. `threats` is
+ * absent while the threat map is off (NEXT_PUBLIC_FEATURE_LAB_THREATS); consumers hide it then.
+ */
 export interface LabSummary {
   demo?: true;
   telemetry: {
@@ -46,7 +49,7 @@ export interface LabSummary {
     hosts_expected?: number;
     power_24h?: (number | null)[];
   };
-  threats: {
+  threats?: {
     state: LabState;
     age_s?: number;
     events?: number;

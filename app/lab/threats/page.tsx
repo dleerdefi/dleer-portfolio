@@ -5,7 +5,7 @@ import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
 import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
 import ThreatsPage from '@/components/lab/threats/ThreatsPage';
 import { getPortfolioConfig } from '@/config/portfolio.config';
-import { labEnabled } from '@/lib/lab/flag';
+import { labThreatsEnabled } from '@/lib/lab/flag';
 
 const title = 'Lab: threat map';
 const description = 'Where attacks on my honeypot come from, live, by type. No IP addresses are shown.';
@@ -20,9 +20,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-/** /lab/threats: the framed threat-map page (THREATS_VIEW.md §4.2). `threats.dleer.ai` redirects here. */
+/**
+ * /lab/threats: the framed threat-map page (THREATS_VIEW.md §4.2). `threats.dleer.ai` redirects
+ * here. A 404 unless both the lab and the threat map are on.
+ */
 export default function LabThreatsRoute() {
-  if (!labEnabled()) notFound();
+  if (!labThreatsEnabled()) notFound();
   return (
     <>
       <EscKeyHandler returnPath="/" />

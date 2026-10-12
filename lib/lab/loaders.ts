@@ -1,4 +1,5 @@
 import 'server-only';
+import { labThreatsEnabled } from './flag';
 import { createLoader } from './load';
 import { demoDigest, demoHistoryDoc, demoLive, demoNow } from './demo/rebase';
 import { HistoryDoc, NowDoc } from './schemas/telemetry';
@@ -46,16 +47,21 @@ export const loadLive = createLoader({
   demo: demoLive,
 });
 
+/** With the threat map off, threats.json is not even read and the summary has no threats block. */
 export async function loadSummary(): Promise<LabSummary> {
-  const [now, history, digest] = await Promise.all([loadNow(), loadHistory(), loadDigest()]);
+  const [now, history, digest] = await Promise.all([
+    loadNow(),
+    loadHistory(),
+    labThreatsEnabled() ? loadDigest() : null,
+  ]);
   return buildSummary(now, history, digest);
 }
 
-/** Pure: the summary from the three payloads. */
+/** Pure: the summary from the three payloads; no digest (threat map off), no threats block. */
 export function buildSummary(
   now: LabPayload<NowDoc>,
   history: LabPayload<HistoryDoc>,
-  digest: LabPayload<DigestDoc>,
+  digest: LabPayload<DigestDoc> | null,
 ): LabSummary {
   const telemetry: LabSummary['telemetry'] =
     now.state === 'offline'
@@ -69,8 +75,9 @@ export function buildSummary(
           hosts_expected: now.lab.hosts_expected,
           ...(history.state === 'offline' ? {} : { power_24h: downsample(history.lab.power_w) }),
         };
-  const threats: LabSummary['threats'] =
-    digest.state === 'offline'
+  const threats: LabSummary['threats'] = !digest
+    ? undefined
+    : digest.state === 'offline'
       ? { state: 'offline' }
       : {
           state: digest.state,
@@ -80,8 +87,8 @@ export function buildSummary(
           countries: digest.totals.countries,
           by_category: digest.totals.by_category,
         };
-  const demo = [now, history, digest].some((p) => p.state !== 'offline' && p.demo);
-  return { ...(demo ? { demo: true as const } : {}), telemetry, threats };
+  const demo = [now, history, digest].some((p) => p && p.state !== 'offline' && p.demo);
+  return { ...(demo ? { demo: true as const } : {}), telemetry, ...(threats ? { threats } : {}) };
 }
 
 /** The last 288 points averaged in threes (96 points); a window containing a null stays null. */

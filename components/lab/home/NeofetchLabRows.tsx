@@ -25,7 +25,8 @@ function useAfterIdle(): boolean {
 /**
  * The neofetch tile's two lab rows, from /api/lab/summary: `Lab: 1,029 W · 3/3 hosts ●` and
  * `Honeypot: 15.4k events/24h · 31 countries`. A row is hidden while its state is offline or
- * unknown; clicking it opens its view in the content tile.
+ * unknown, and the Honeypot row while the summary has no threats block (threat map off);
+ * clicking a row opens its view in the content tile.
  */
 export default function NeofetchLabRows({ isBlurred }: { isBlurred: boolean }) {
   const idle = useAfterIdle();
@@ -60,7 +61,7 @@ export default function NeofetchLabRows({ isBlurred }: { isBlurred: boolean }) {
           <HostsGlyph up={tel.hosts_up} expected={tel.hosts_expected} state={tel.state} />
         </button>
       )}
-      {threats.state !== 'offline' && threats.events !== undefined && (
+      {threats && threats.state !== 'offline' && threats.events !== undefined && (
         <button type="button" className="lab-focus hover:underline" style={row} onClick={open('lab-threats')}>
           <span className="font-bold" style={label}>Honeypot</span>: {fmtCount(threats.events)} events/24h ·{' '}
           {fmtInt(threats.countries)} countries

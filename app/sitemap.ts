@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { allBlogs, allProjects } from 'content-collections';
-import { labEnabled } from '@/lib/lab/flag';
+import { labEnabled, labThreatsEnabled } from '@/lib/lab/flag';
 
 /**
  * Dynamic sitemap generation for SEO
@@ -51,13 +51,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  // Lab pages, only when the lab is on (docs/lab)
-  const labPages: MetadataRoute.Sitemap = labEnabled()
-    ? [
-        { url: `${siteUrl}/lab`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.6 },
-        { url: `${siteUrl}/lab/threats`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.6 },
-      ]
-    : [];
+  // Lab pages, only when the lab is on, and /lab/threats only with the threat map (docs/lab)
+  const labPages: MetadataRoute.Sitemap = [
+    ...(labEnabled() ? [{ url: `${siteUrl}/lab`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.6 }] : []),
+    ...(labThreatsEnabled()
+      ? [{ url: `${siteUrl}/lab/threats`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.6 }]
+      : []),
+  ];
 
   return [...staticPages, ...blogPages, ...projectPages, ...labPages];
 }

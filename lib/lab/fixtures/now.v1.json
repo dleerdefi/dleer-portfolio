@@ -61,7 +61,10 @@
       "temp_c": 38.0
     }
   ],
-  "storage": null,
+  "storage": {
+    "used_bytes": 38551113072640,
+    "total_bytes": 50319836839936
+  },
   "media": {
     "streams": 2,
     "transcodes": 1

@@ -24,11 +24,17 @@ jobs:
       # The flag off is what production builds today.
       - name: build (flag off)
         run: npm run build
-      # The build generates the content-collections types the typecheck needs.
-      - name: build (lab on, demo data)
+      - name: build (lab on, threat map off, demo data)
         run: npm run build
         env:
           NEXT_PUBLIC_FEATURE_LAB: 'true'
+          LAB_DEMO_DATA: 'true'
+      # The build generates the content-collections types the typecheck needs.
+      - name: build (lab and threat map on, demo data)
+        run: npm run build
+        env:
+          NEXT_PUBLIC_FEATURE_LAB: 'true'
+          NEXT_PUBLIC_FEATURE_LAB_THREATS: 'true'
           LAB_DEMO_DATA: 'true'
       - run: npm run typecheck
       - run: npm run lint

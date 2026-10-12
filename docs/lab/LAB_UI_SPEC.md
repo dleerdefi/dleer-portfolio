@@ -99,6 +99,25 @@ threatsnap ──PUT v1/threats.json  5 min ─►                              
 
 All entry points are hidden when `features.lab` is false.
 
+**The threat map has its own flag**, `NEXT_PUBLIC_FEATURE_LAB_THREATS` (`labThreatsEnabled()` in
+`lib/lab/flag.ts`). It is off by default and counts only while the lab is on, so telemetry can go
+public first. With it off the lab is telemetry only:
+
+- `/lab/threats`, `/api/lab/threats` and `/api/lab/threats/live` return 404, and the sitemap lists
+  only `/lab`.
+- `Lab/` in the nav tile lists only `telemetry`; `/lab` shows no tabs; `ContentViewer` renders
+  nothing for `lab-threats`.
+- Hidden: the honeypot teaser on `/lab` and its phone layout, the telemetry tile's
+  `honeypot: … →` footer link, the neofetch `Honeypot` row and the mobile Lab section's threats
+  card (its intro reads `My homelab, live.`).
+- `/api/lab/summary` has no `threats` block and does not read `threats.json`; every consumer
+  treats a missing block as hidden.
+- No threats or globe chunk is ever requested. The polybar has no threats state of its own: its
+  `lab` workspace lights up for any `lab-` view, and `lab-threats` cannot be opened.
+- `next.config.ts` always defines the flag at build time (`'false'` when unset). The two checks in
+  the home bundle (`LabDirectory`, `ContentViewer`) read `process.env.NEXT_PUBLIC_FEATURE_LAB_THREATS`
+  directly so the build folds them: the home bundle carries no threats entry and does not grow.
+
 | Place | Change | Concept |
 |---|---|---|
 | `config/portfolio.config.ts`, `config/types.ts`, `lib/config.ts` | `features.lab: process.env.NEXT_PUBLIC_FEATURE_LAB === 'true'`; add `lab?: boolean` to the type and `lab: false` to the `useFeatureFlags()` fallback | — |
@@ -109,17 +128,17 @@ All entry points are hidden when `features.lab` is false.
 | `components/layout/LayoutManager.tsx` | nothing new: `handlePolybarNavigate` already passes sections other than projects and blog to `handlePolybarNavigation` | — |
 | `components/tiles/NeofetchTile.tsx` | two rows after the social rows: `Lab: 1,029 W · 3/3 hosts ●` and `Honeypot: 15.4k events/24h · 31 countries`, from `/api/lab/summary` (first fetch after first paint, then every 5 min while visible; §6). A row is hidden while its state is offline or unknown. Clicking a row opens its view in the content tile | `tile-*` |
 | `app/lab/page.tsx` | framed telemetry page (`/lab`) | `page-lab` |
-| `app/lab/threats/page.tsx` | framed threats page (`/lab/threats`) | `page-threats` |
+| `app/lab/threats/page.tsx` | framed threats page (`/lab/threats`); `notFound()` unless the threat map is on too | `page-threats` |
 | `next.config.ts` | `redirects()`: `/lab/telemetry` → `/lab` (permanent), returned only when `NEXT_PUBLIC_FEATURE_LAB === 'true'` at build time (an empty list otherwise) | — |
 | `components/layout/MobileParallaxLayout.tsx` | a `lab` section between `blog` and `contact` (`ParallaxLabSection.tsx` in `parallax/sections/`) with two cards linking to `/lab` and `/lab/threats` | `mobile-section` |
-| `app/sitemap.ts` | `/lab` and `/lab/threats` when the flag is on | — |
+| `app/sitemap.ts` | `/lab` when the lab is on; `/lab/threats` only when the threat map is on too | — |
 | Zen mode | nothing: `enterZen` is only reachable from inside `FocusedView` today, so zen is dormant | — |
 
 Framed pages follow `app/projects/[slug]/page.tsx`: a server component with `generateMetadata`,
 `notFound()` when the flag is off, `<EscKeyHandler returnPath="/" />`, `<FramedPageLayout>`, and a
 header row with `← Back` (to `/`), a two-tab switcher (`telemetry` → `/lab`, `threats` →
-`/lab/threats`, the current one marked with `aria-current="page"` and the accent border) and an
-`esc closes` hint. The page body is a client component. Metadata: title `Lab: telemetry` /
+`/lab/threats`, the current one marked with `aria-current="page"` and the accent border; no tabs
+while the threat map is off) and an `esc closes` hint. The page body is a client component. Metadata: title `Lab: telemetry` /
 `Lab: threat map`, a one-sentence description, the site's existing OG image.
 
 Below 1024 px the site always renders `MobileParallaxLayout` (`LayoutManager.tsx`: "Mobile
@@ -338,19 +357,22 @@ home page never downloads a full digest:
   telemetry: { state: LabState; age_s?: number; power_w?: number | null; energy_kwh_24h?: number | null;
                hosts_up?: number; hosts_expected?: number;
                power_24h?: (number | null)[] },   // history lab.power_w: the last 288 points, averaged in 3s → 96 points; a window with a null stays null
-  threats:   { state: LabState; age_s?: number; events?: number; sources?: number; countries?: number;
-               by_category?: Record<Category, number> }
+  threats?:  { state: LabState; age_s?: number; events?: number; sources?: number; countries?: number;
+               by_category?: Record<Category, number> }   // absent while the threat map is off
 }
 ```
 
 Built from `loadNow`, `loadHistory` and `loadDigest`; each block carries only its state when
-offline. `power_24h` is omitted when history is not live or delayed.
+offline. `power_24h` is omitted when history is not live or delayed. With the threat map off
+(§3) `loadDigest` is not called and `threats` is absent; consumers treat a missing block as
+hidden.
 
 ### Route handlers
 
 - `GET` only, `export const dynamic = 'force-dynamic'` (the memory cache does the work). No query
   parameters are read.
-- Flag off (`process.env.NEXT_PUBLIC_FEATURE_LAB !== 'true'`): `404`, empty body.
+- Flag off (`process.env.NEXT_PUBLIC_FEATURE_LAB !== 'true'`): `404`, empty body. The two threats
+  routes also return `404` while the threat map is off (`NEXT_PUBLIC_FEATURE_LAB_THREATS !== 'true'`).
 - `Content-Type: application/json`. `Cache-Control`:
 
 | Route | live / delayed | offline |
@@ -515,6 +537,13 @@ the latest patch of the same line if newer:
 | `vitest` | `5.0.3` | devDependency | unit tests (needs Node ≥ 22.12) |
 | `@types/topojson-client` | `3.1.5` | devDependency | types |
 
+**`vitest` is also pinned in `overrides`**, to the same version: keep the two equal when bumping
+it. Without the override, a fresh install (no lockfile, as on CI and Railway) crashes with npm 10's
+`Cannot read properties of null (reading 'edgesOut')` as soon as a newer vitest is published:
+vite 8's optional peer `@vitejs/devtools-vitest` asks for `vitest@*`, npm resolves that to the
+newest release, and its exact `@vitest/*` peers conflict with the pinned one (first seen
+2026-10-12, when vitest 5.0.4 came out).
+
 Do not add a chart library: the charts are small SVG components (§7). Do not add new files under
 `scripts/` (that folder is in `.gitignore`).
 
@@ -537,8 +566,12 @@ Add to `.env.example`:
 
 ```bash
 # Lab (optional). Off by default; forks can ignore everything below.
-# NEXT_PUBLIC_* values are inlined at build time: redeploy after changing the flag.
+# NEXT_PUBLIC_* values are inlined at build time: redeploy after changing a flag.
 NEXT_PUBLIC_FEATURE_LAB=false
+
+# The threat map (/lab/threats and every threats entry point). Only counts while the lab is on;
+# with it off the lab is telemetry only and threats.json is never read.
+NEXT_PUBLIC_FEATURE_LAB_THREATS=false
 
 # Serve the bundled synthetic documents instead of reading R2 (local dev, previews, forks)
 LAB_DEMO_DATA=false
@@ -551,7 +584,13 @@ R2_LAB_READ_SECRET="YOUR_R2_READ_SECRET"
 ```
 
 The real values exist only in Railway's variables (David). README gets a short "Lab (optional)"
-section: what it is, the flag, demo mode, the variables, and a link to `docs/lab/`.
+section: what it is, the two flags, demo mode, the variables, and a link to `docs/lab/`.
+
+| `NEXT_PUBLIC_FEATURE_LAB` | `NEXT_PUBLIC_FEATURE_LAB_THREATS` | The site |
+|---|---|---|
+| off | either | unchanged; every lab route 404 |
+| on | off (default) | telemetry only: `/lab` and the telemetry entry points; threats routes 404 |
+| on | on | telemetry and the threat map |
 
 ---
 
@@ -567,7 +606,7 @@ screenshots in all three presets, budget numbers). Build every phase against dem
 | **3. Threats without the globe** | the threats tile and `/lab/threats` with stats, legend, feed (replayed on the clock), badges, attribution, and the globe placeholder | Every stats block from the golden digest; filters work on the feed; delayed and offline states |
 | **4. Globe** | `ThreatGlobe`, `globe-layers.ts`, `ReplayClock` wired to arcs, rings, targets, theme colors, pause/dispose, reduced motion, mobile tap-to-load | Budgets in §8 measured and recorded; switching views frees the context; no globe requests on `/` |
 | **5. Mobile and polish** | `ParallaxLabSection`, mobile layouts of both pages, README section, CLAUDE.md updates (content types, CSS module list, lab components) | Phone widths 360–430 px: no horizontal scroll, globe only after tap, smooth parallax scrolling |
-| **6. Go live (David)** | Railway: the four `R2_*` values and `NEXT_PUBLIC_FEATURE_LAB=true`, redeploy. Cloudflare: the cache rule (§5). Homelab: `status.dleer.ai` → `dleer.ai/lab` and `threats.dleer.ai` → `dleer.ai/lab/threats` redirects (homelab roadmap). Watch Railway metrics for 24 h | The homelab roadmap keeps the flag off until labsnap has run cleanly for a week; threatsnap starts in dry run, so the threats view stays offline until its first real publish |
+| **6. Go live (David)** | In two steps. **6a, telemetry:** Railway: the four `R2_*` values and `NEXT_PUBLIC_FEATURE_LAB=true`, with `NEXT_PUBLIC_FEATURE_LAB_THREATS` unset, redeploy. Cloudflare: the cache rule (§5). Homelab: `status.dleer.ai` → `dleer.ai/lab` (homelab roadmap). Watch Railway metrics for 24 h. **6b, threat map, later:** `NEXT_PUBLIC_FEATURE_LAB_THREATS=true`, redeploy; then `threats.dleer.ai` → `dleer.ai/lab/threats` | 6a: the homelab roadmap keeps the flag off until labsnap has run cleanly for a week. 6b: threatsnap starts in dry run, so turn the threat map on only after its first real publish |
 
 **Stop and ask David** before: setting or changing any Railway or Cloudflare setting, turning
 the flag on anywhere but local and preview builds, adding a dependency not listed in §11,
@@ -593,6 +632,9 @@ Manual:
 
 - [ ] Flag off: visually and functionally identical to `main`; `/lab`, `/lab/threats` and
       `/api/lab/*` return 404; no lab requests anywhere.
+- [ ] Lab on, threat map off: no threats entry anywhere (nav, tabs, teaser, footer link,
+      neofetch, mobile card); `/lab/threats` and the two threats routes return 404; the summary
+      has no `threats` block; no threats or globe chunk is requested, on desktop or phone.
 - [ ] Demo mode with no `R2_*` variables: every view renders with the `◇ demo data` badge.
 - [ ] Each preset and at least three accents: every lab color changes live, including the globe;
       Solarized Light stays readable.

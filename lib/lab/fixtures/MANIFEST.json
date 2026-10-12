@@ -6,8 +6,8 @@
       "path": "lib/lab/fixtures/now.v1.json",
       "source": "stacks/monitoring/labsnap/examples/now.v1.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "548228d7462db7303459e109108962d5c2b924b6efec97c9338f0a51639345af"
+      "commit": "ba74e7e0210b8f4d2b6e4410623011e000108434",
+      "sha256": "d3a33aba851f302813c24ec6bf7adf61ba9e56ad08c8e6806b738aeb5bbbdd38"
     },
     {
       "path": "lib/lab/fixtures/history.v1.json",
