@@ -50,5 +50,8 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "5.0.3"
+  },
+  "overrides": {
+    "vitest": "5.0.3"
   }
 }

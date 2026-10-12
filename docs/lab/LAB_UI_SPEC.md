@@ -537,6 +537,13 @@ the latest patch of the same line if newer:
 | `vitest` | `5.0.3` | devDependency | unit tests (needs Node ≥ 22.12) |
 | `@types/topojson-client` | `3.1.5` | devDependency | types |
 
+**`vitest` is also pinned in `overrides`**, to the same version: keep the two equal when bumping
+it. Without the override, a fresh install (no lockfile, as on CI and Railway) crashes with npm 10's
+`Cannot read properties of null (reading 'edgesOut')` as soon as a newer vitest is published:
+vite 8's optional peer `@vitejs/devtools-vitest` asks for `vitest@*`, npm resolves that to the
+newest release, and its exact `@vitest/*` peers conflict with the pinned one (first seen
+2026-10-12, when vitest 5.0.4 came out).
+
 Do not add a chart library: the charts are small SVG components (§7). Do not add new files under
 `scripts/` (that folder is in `.gitignore`).
 
