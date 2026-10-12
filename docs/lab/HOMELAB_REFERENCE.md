@@ -135,10 +135,11 @@ What matters for the UI:
   instruction only an LLM agent would follow, and a timing check. Describe it in one sentence at
   most; never name the canary or the route.
 - **Sensor events arrive late.** The sensor ships one file per minute through an rclone
-  uploader (Vector's S3 sink cannot write to R2), so its events reach R2 about 3 minutes after
-  they happen, and threatsnap ingests every 60 s. Honeytoken hits arrive within seconds. The
-  globe's replay must wait longer than this lag ([THREATS_VIEW.md §6](THREATS_VIEW.md#6-replay-clock));
-  the homelab measures the real figure in its phase 1 live checks.
+  uploader (Vector's S3 sink cannot write to R2), so its events reach R2 about 3½ minutes after
+  they happen (measured p50 204 s, p95 269 s), and threatsnap ingests every 60 s. Honeytoken
+  hits arrive within seconds. The globe's replay must wait longer than this lag
+  ([THREATS_VIEW.md §6](THREATS_VIEW.md#6-replay-clock)); the homelab measured it in its phase 1
+  live checks (2026-10-12, 20 probes).
 
 Status on 2026-10-08:
 
