@@ -959,9 +959,40 @@ user agent and touch, on a build with the threat map on.
 | `/lab`, `/lab/threats` | 97 / 100, 96 / 100 | 97 / 100, 97 / 100 |
 | desktop: `/` with the threat map on, a post (a11y) | 96, 93 | 100, 100 |
 
-Left for later: on desktop the Nord and Solarized Light presets draw some accent-colored text
-under 4.5:1 (the greeting, section titles, status chips, neofetch keys; approximate, the tiles
-are glass over a wallpaper). Phones never use them while Q3 stands; a theme pass can lift them.
+**Follow-up: contrast on every preset (2026-10-13).** Phase 6 left the desktop presets' accent
+text for a theme pass. Lighthouse gave Tokyo Night 100 for accessibility, but axe cannot see
+through the glass tiles and reports their text as "needs review", so the pass started with a
+measurement that can: `docs/audit/contrast.mjs` records every visible text run's color and boxes,
+hides all text, screenshots, and compares each run with the worst 10 % of the pixels behind it, on
+every preset with each of its wallpapers (the home page with its stage views and the tray's
+popovers, every framed page scrolled through), and optionally with each of the 15 accents.
+
+- **The measurement before:** 3,666 of 11,462 text runs under 4.5:1 (3:1 large): Tokyo Night 897,
+  Nord 1,195, Solarized Light 1,574, the worst at 1.2:1. All three presets failed, Tokyo Night
+  included. The causes: unfocused tiles dimmed their text to 70 %; the raw accent was the
+  color of 52 text rules (links, headings, the contents tree, the polybar, code); Nord's and
+  Solarized's glass let their wallpapers through as mid-tones; Nord's header blue and red,
+  Solarized's blue, green, yellow and cyan were too close to their backgrounds; the polybar's
+  grey was a Tokyo Night token the other presets never set; and the 404 page was Next's
+  default, white, with the site's light text on it (1.4:1 to 1.6:1).
+- **`--accent-text`** (01-theme-variables.css) is the accent as text: its CIELAB lightness
+  clamped per preset (`lch(from var(--accent-color) max(l, 74) min(c, 55) h)` on Tokyo Night,
+  L* 79 on Nord, at most 35 on Solarized Light). L* follows luminance, so one bound fits every
+  hue and any of the 15 accents reads; browsers without relative colors get a mix toward white
+  or black. Every text use of the accent moved to it, and so did the fills with text on them
+  (the Send button, the photo's tag). `--accent-color` stays for borders, fills and tints.
+- **Unfocused tiles are no longer dimmed;** focus shows in the border, the shadow and the glass.
+  Nord's unfocused glass went from 0.4 to 0.7 and Solarized's from 0.6 to 0.9, the polybar's from
+  0.8 to 0.92; Tokyo Night's stays at 0.25. The contents tree's highlight tint is 0.1 (0.05 on
+  Solarized, where a tint darkens what is behind the accent text).
+- **Preset colors,** each the same hue moved in CIELAB lightness to read at 4.5:1: Nord's text
+  nord4 to nord5, header and primary #6A8FF2 to #98B9FF, error #BF616A to #FD99A0, info #5E81AC
+  to #9CBFED; Solarized's primary #2368B3 to #065CA6, green #859900 to #4b6100, yellow #b58900
+  to #765200 (no yellow reads on cream), red #dc322f to #bc0019, cyan #2aa198 to #006861. The
+  polybar uses the 0.72 secondary text; card paths went from 0.6 to 0.72.
+- **A themed 404** (`app/not-found.tsx`): a framed page like `/projects`, in the visitor's preset.
+- **The measurement after:** 0 of 11,436 runs fail, and 0 of 14,700 with each of the 15 accents
+  on every wallpaper; phones (Tokyo Night) too. The desktop lab tile still fits at every size.
 
 ### Phase 7: the GPU, visible (G1 and G5 consumer side)
 
@@ -1056,7 +1087,15 @@ AUDIT_BASE=http://localhost:3111 AUDIT_OUT=./audit-out node docs/audit/audit-sho
 # Lighthouse, mobile, on the same server
 npx lighthouse http://localhost:3111/ --preset=perf --form-factor=mobile --screenEmulation.mobile \
   --throttling-method=simulate --output=json --output-path=./audit-out/lh-home.json
+
+# text contrast as rendered, every preset and wallpaper (ACCENTS=all: also the 15 accents;
+# VP=390x844: a phone); exits 1 on a failure
+AUDIT_BASE=http://localhost:3111 node docs/audit/contrast.mjs
 ```
+
+Lighthouse's accessibility score covers Tokyo Night only, and axe cannot see through the desktop
+tiles' glass; `contrast.mjs` measures the pixels behind each text run instead (the follow-up after
+phase 6).
 
 Keep `playwright-core` and `lighthouse` out of `package.json`; they are audit tools, not
 dependencies, and the CI job does not run them.
