@@ -73,6 +73,42 @@ section.lab-page {
   min-width: 0;
 }
 
+/* The lab health line, the NAS / CI blocks inside a host card, the transcoding tag */
+.lab-health {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.lab-subblock {
+  margin-top: 0.75rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--theme-border);
+}
+
+.lab-subblock-title {
+  margin: 0 0 0.4rem;
+  font-size: 0.85em;
+}
+
+.lab-rate {
+  min-width: 6.5em;
+  white-space: nowrap;
+}
+
+.lab-tag {
+  margin-left: 0.5em;
+  padding: 0 0.4em;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  font-size: 0.8em;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.lab-tag-line .lab-tag {
+  margin-left: 0;
+}
+
 .lab-threats-grid {
   display: grid;
   grid-template-columns: minmax(0, 27.5rem) minmax(0, 1fr);

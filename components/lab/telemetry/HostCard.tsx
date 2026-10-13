@@ -3,17 +3,19 @@ import { Meter } from '@/components/lab/shared/Meter';
 import { Sparkline } from '@/components/lab/shared/Sparkline';
 import { Value } from '@/components/lab/shared/Value';
 import type { Domain } from '@/lib/lab/chart';
-import { DASH, fmtCelsius, fmtInt, fmtTB } from '@/lib/lab/format';
+import { DASH, fmtCelsius, fmtDeltaC, fmtInt, fmtTB, withUnit } from '@/lib/lab/format';
 import { HOSTS } from '@/lib/lab/names';
 import type { NowDoc } from '@/lib/lab/schemas/telemetry';
+import { CiBlock, NasBlock, airflowDelta } from './LabExtras';
 import { Down } from './TelemetryTables';
 
 type Host = NowDoc['hosts'][number];
 
 /**
  * One server on /lab: name and job, watts with its 24 h power sparkline (shared domain across
- * the three cards), cpu meter and sparkline (0–1), mem, inlet; on the T430 the storage pool and
- * Plex lines when those reserved fields are filled.
+ * the three cards), cpu meter and sparkline (0–1), mem, inlet, exhaust with the airflow Δt (where
+ * the BMC has an exhaust sensor), fan, PSU input; on the T430 the NAS block (or the bare pool line)
+ * and Plex, on the R720xd the CI block, each only when its section is reported.
  */
 export function HostCard({
   host,
@@ -22,6 +24,10 @@ export function HostCard({
   powerDomain,
   storage,
   media,
+  nas,
+  nas24h,
+  ci,
+  ciBusy24h,
 }: {
   host: Host;
   power24h: (number | null)[] | null;
@@ -29,6 +35,10 @@ export function HostCard({
   powerDomain: Domain | null;
   storage?: NowDoc['storage'];
   media?: NowDoc['media'];
+  nas?: NowDoc['nas'];
+  nas24h?: { read: (number | null)[]; write: (number | null)[] } | null;
+  ci?: NowDoc['ci'];
+  ciBusy24h?: (number | null)[] | null;
 }) {
   const up = host.up;
   const name = HOSTS[host.role];
@@ -63,7 +73,22 @@ export function HostCard({
         </dd>
         <dt className="lab-text-2">inlet</dt>
         <dd>{fmtCelsius(v(host.inlet_c))}</dd>
-        {storage && (
+        {host.exhaust_c !== null && (
+          <>
+            <dt className="lab-text-2">exhaust</dt>
+            <dd>
+              {fmtCelsius(v(host.exhaust_c))}
+              <span className="lab-text-2" title="airflow: exhaust minus inlet">
+                Δt {fmtDeltaC(v(airflowDelta(host)))}
+              </span>
+            </dd>
+          </>
+        )}
+        <dt className="lab-text-2">fan</dt>
+        <dd>{withUnit(v(host.fan_rpm), 'rpm')}</dd>
+        <dt className="lab-text-2">psu in</dt>
+        <dd className="lab-text-2">{withUnit(v(host.psu_in_v), 'V')}</dd>
+        {storage && !nas && (
           <>
             <dt className="lab-text-2">pool</dt>
             <dd>
@@ -88,6 +113,8 @@ export function HostCard({
           </>
         )}
       </dl>
+      <NasBlock nas={nas ?? null} storage={storage ?? null} read24h={nas24h?.read ?? null} write24h={nas24h?.write ?? null} />
+      <CiBlock ci={ci ?? null} busy24h={ciBusy24h ?? null} />
     </article>
   );
 }

@@ -11,6 +11,29 @@ describe('golden examples', () => {
     expect(NowDoc.safeParse(golden('now.v1.json')).success).toBe(true);
   });
 
+  it('carries the public telemetry added in homelab PR #28', () => {
+    const now = NowDoc.parse(golden('now.v1.json'));
+    expect(now.lab).toMatchObject({ energy_cost_usd_24h: 4.96, vms_running: 6, targets_up: 27, alerts_firing: 0, disks_healthy: 20 });
+    expect(now.hosts[0].exhaust_c).toBeNull(); // the T430's BMC has no exhaust sensor
+    expect(now.hosts[2]).toMatchObject({ fan_rpm: 6500, exhaust_c: 51, psu_in_v: 116 });
+    expect(now.gpus[0]).toMatchObject({ role: 'storage', enc_ratio: 0.31, dec_ratio: 0.12 });
+    expect(now.nas).toMatchObject({ pool_healthy: true, read_bytes_s: 12500000, arc_hit_ratio: 0.9991 });
+    expect(now.ci).toMatchObject({ runners_online: 14, runners_total: 22, busy_hours_24h: 6.4 });
+    const history = HistoryDoc.parse(golden('history.v1.json'));
+    expect(history.gpus[0].enc_ratio).toHaveLength(history.points);
+    expect(history.nas!.read_bytes_s).toHaveLength(history.points);
+    expect(history.ci!.runners_busy).toHaveLength(history.points);
+  });
+
+  it('accepts nas and ci as null, and requires the keys, as the producer does', () => {
+    const doc = golden('now.v1.json') as Record<string, unknown>;
+    expect(NowDoc.safeParse({ ...doc, nas: null, ci: null }).success).toBe(true);
+    const { nas: _nas, ...withoutNas } = doc;
+    expect(NowDoc.safeParse(withoutNas).success).toBe(false);
+    const h = golden('history.v1.json') as Record<string, unknown>;
+    expect(HistoryDoc.safeParse({ ...h, nas: null, ci: null }).success).toBe(true);
+  });
+
   it('carries the summed data pools in storage, and accepts storage: null', () => {
     const now = NowDoc.parse(golden('now.v1.json'));
     expect(now.storage).not.toBeNull();
@@ -64,6 +87,23 @@ describe('history series length', () => {
     expect(HistoryDoc.safeParse(doc).success).toBe(false);
   });
 
+  it('checks the new series too (nas, ci, GPU encoder)', () => {
+    type Doc = {
+      nas: { write_bytes_s: unknown[] };
+      ci: { runners_busy: unknown[] };
+      gpus: { enc_ratio: unknown[] }[];
+    };
+    for (const cut of [
+      (d: Doc) => d.nas.write_bytes_s.pop(),
+      (d: Doc) => d.ci.runners_busy.pop(),
+      (d: Doc) => d.gpus[0].enc_ratio.pop(),
+    ]) {
+      const doc = golden('history.v1.json') as Doc;
+      cut(doc);
+      expect(HistoryDoc.safeParse(doc).success).toBe(false);
+    }
+  });
+
   it('fails when points disagrees with every series', () => {
     const doc = golden('history.v1.json') as { points: number };
     doc.points = 14;
@@ -91,11 +131,15 @@ describe('demo history', () => {
     expect(later.hosts).toEqual(doc.hosts);
   });
 
+
   it('has one null gap in every series', () => {
     const all = [
       doc.lab.power_w,
       ...doc.hosts.flatMap((h) => [h.power_w, h.cpu_ratio]),
-      ...doc.gpus.flatMap((g) => [g.util_ratio, g.power_w]),
+      ...doc.gpus.flatMap((g) => [g.util_ratio, g.power_w, g.enc_ratio]),
+      doc.nas!.read_bytes_s,
+      doc.nas!.write_bytes_s,
+      doc.ci!.runners_busy,
       doc.media!.streams,
     ];
     for (const s of all) expect(s.filter((v) => v === null)).toHaveLength(1);
@@ -112,7 +156,11 @@ describe('demo history', () => {
     now.gpus.forEach((g, i) => {
       expect(last(doc.gpus[i].util_ratio)).toBe(g.util_ratio);
       expect(last(doc.gpus[i].power_w)).toBe(g.power_w);
+      expect(last(doc.gpus[i].enc_ratio)).toBe(g.enc_ratio);
     });
+    expect(last(doc.nas!.read_bytes_s)).toBe(now.nas!.read_bytes_s);
+    expect(last(doc.nas!.write_bytes_s)).toBe(now.nas!.write_bytes_s);
+    expect(last(doc.ci!.runners_busy)).toBe(now.ci!.runners_busy);
     expect(last(doc.media!.streams)).toBe(now.media!.streams);
   });
 

@@ -176,7 +176,9 @@ fails CI. The fixtures were first copied from `main` at `79227c3` (labsnap) and
 `claude/threatsnap` at `acecedd` (threatsnap). PR #11 merged that commit unchanged as `main`
 `7502490` and its branch is gone, so the manifest names `main` at `7502490` for the threatsnap
 files (the sha256 values did not change). `now.v1.json` was re-synced from `main` at `ba74e7e`
-(homelab PR #16, `storage` filled).
+(homelab PR #16, `storage` filled), then every labsnap example (both golden files and the 12
+invalid ones) from `main` at `6e4473a` (homelab PR #28: cost, lab health counts, airflow, PSU
+input, GPU video engines, `nas`, `ci`).
 
 **Sync procedure** (when a homelab PR changes an example or a schema):
 
