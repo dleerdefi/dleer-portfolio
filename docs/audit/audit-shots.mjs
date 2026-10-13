@@ -81,7 +81,13 @@ for (const vp of viewports) {
     await page.screenshot({ path: path.join(OUT, `${name}.png`), fullPage: vp.mobile });
     if (vp.mobile && route === '/') {
       for (const frac of [0.25, 0.5, 0.75]) {
-        await page.evaluate((f) => { const el = document.querySelector('[role="main"], main') || document.scrollingElement; const max = el.scrollHeight - el.clientHeight; el.scrollTop = max * f; window.scrollTo(0, max * f); }, frac);
+        // The phone layout scrolled a container before phase 2 and scrolls the document since:
+        // scroll whichever of the two overflows
+        await page.evaluate((f) => {
+          const inner = document.querySelector('[role="main"], main');
+          const el = inner && inner.scrollHeight > inner.clientHeight ? inner : document.scrollingElement;
+          el.scrollTop = (el.scrollHeight - el.clientHeight) * f;
+        }, frac);
         await page.waitForTimeout(600);
         await page.screenshot({ path: path.join(OUT, `${name}-scroll${Math.round(frac * 100)}.png`) });
       }
