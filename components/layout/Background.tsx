@@ -1,94 +1,33 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import { useTheme } from '@/contexts/ThemeContext';
-import { getImageUrl } from '@/lib/image-paths';
+import { useTheme, type ThemePreset } from '@/contexts/ThemeContext';
+import { BLURRED_WALLPAPERS } from '@/lib/wallpapers.generated';
 
-interface BackgroundProps {
-  wallpaperUrl?: string;
-}
-
-// Theme-specific background configurations
-const themeBackgrounds: Record<string, {
-  url: string;
-  overlay: string;
-  blur: string;
-  brightness: number;
-  contrast: number;
-  scale: number;
-}> = {
-  'theme-tokyo-night': {
-    url: getImageUrl('purple-girl.webp'),
-    overlay: 'rgba(26, 27, 38, 0.5)',
-    blur: '8px',
-    brightness: 0.6,
-    contrast: 1.1,
-    scale: 1.1
-  },
-  'theme-nord': {
-    url: getImageUrl('cool_rocks.webp'),
-    overlay: 'rgba(46, 52, 64, 0.5)',
-    blur: '6px',
-    brightness: 0.7,
-    contrast: 1.05,
-    scale: 1.1
-  },
-  'theme-solarized-light': {
-    url: getImageUrl('pastel-window.webp'),
-    overlay: 'rgba(253, 246, 227, 0.65)',
-    blur: '4px',
-    brightness: 0.95,
-    contrast: 0.95,
-    scale: 1.1
-  }
+// Per-preset treatment of the wallpaper. The blur is baked into the files
+// (scripts/build-wallpapers.mjs), so only cheap color filters remain in CSS.
+const WALLPAPER_FX: Record<ThemePreset, { overlay: string; brightness: number; contrast: number }> = {
+  'tokyo-night': { overlay: 'rgba(26, 27, 38, 0.5)', brightness: 0.6, contrast: 1.1 },
+  nord: { overlay: 'rgba(46, 52, 64, 0.5)', brightness: 0.7, contrast: 1.05 },
+  'solarized-light': { overlay: 'rgba(253, 246, 227, 0.65)', brightness: 0.95, contrast: 0.95 },
 };
 
-const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
+/** 'https://cdn.dleer.ai/images/purple-girl.webp' or '/images/purple-girl.webp' -> 'purple-girl' */
+function wallpaperName(url: string): string {
+  return url.split('/').pop()?.replace(/\.[a-z0-9]+$/i, '') ?? '';
+}
+
+/**
+ * The animated backdrop behind every layout: the preset's gradient, the chosen wallpaper
+ * (pre-blurred, a few KB, from lib/wallpapers.generated.ts), its color overlay, orbs, grid,
+ * noise, vignette and stars. The preset comes from ThemeContext; a stored wallpaper that has no
+ * pre-blurred copy shows the gradient alone.
+ */
+const Background: React.FC = () => {
   const { theme } = useTheme();
-  const [currentTheme, setCurrentTheme] = useState<string>('theme-tokyo-night');
-  const [displayedWallpaper, setDisplayedWallpaper] = useState<string | null>(null);
-  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
-
-  useEffect(() => {
-    // Detect current theme from document root class
-    const detectTheme = () => {
-      const root = document.documentElement;
-      const themeClass = Array.from(root.classList).find(cls => cls.startsWith('theme-'));
-      if (themeClass && themeBackgrounds[themeClass]) {
-        setCurrentTheme(themeClass);
-      }
-    };
-
-    detectTheme();
-
-    // Watch for theme changes
-    const observer = new MutationObserver(detectTheme);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-
-    return () => observer.disconnect();
-  }, []);
-
-  const bgConfig = themeBackgrounds[currentTheme] || themeBackgrounds['theme-tokyo-night'];
-
-  // Use backgroundImage from theme context, fallback to wallpaperUrl prop, then bgConfig.url
-  const activeWallpaper = wallpaperUrl || theme.backgroundImage || bgConfig.url;
-  const showWallpaper = theme.backgroundImage !== null || wallpaperUrl !== undefined;
-
-  // Reset loading state when image changes
-  useEffect(() => {
-    setImageLoaded(false);
-  }, [displayedWallpaper]);
-
-  // Update displayed wallpaper when active wallpaper changes
-  // Uses CSS transition for smooth crossfade (respects z-index stacking)
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    if (displayedWallpaper !== activeWallpaper) {
-      setDisplayedWallpaper(activeWallpaper);
-    }
-  }, [activeWallpaper, displayedWallpaper]);
+  const fx = WALLPAPER_FX[theme.preset];
+  const wallpaper = theme.backgroundImage ? BLURRED_WALLPAPERS[wallpaperName(theme.backgroundImage)] : undefined;
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
@@ -98,42 +37,28 @@ const Background: React.FC<BackgroundProps> = ({ wallpaperUrl }) => {
         style={{
           backgroundImage: 'linear-gradient(to bottom right, var(--theme-bg), var(--theme-surface), var(--theme-bg))'
         }}>
-        {/* Theme-aware wallpaper layer with enhancements - only shown if not NONE */}
-        {showWallpaper && displayedWallpaper && (
-          <div
-            className="absolute inset-0"
-            style={{
-              opacity: imageLoaded ? 0.85 : 0,
-              transition: 'opacity 300ms ease'
-              // viewTransitionName removed - was creating stacking context above tiles
-            } as React.CSSProperties}
-          >
+        {/* Wallpaper: a pre-blurred static file, its blur placeholder shown until it loads */}
+        {wallpaper && (
+          <div className="absolute inset-0" style={{ opacity: 0.85 }}>
             <Image
-              src={displayedWallpaper}
-              alt="Background wallpaper"
+              src={wallpaper}
+              alt=""
               fill
-              loading="lazy"
-              quality={85}
+              unoptimized
+              placeholder="blur"
               sizes="100vw"
-              onLoad={() => setImageLoaded(true)}
-              style={{
-                objectFit: 'cover',
-                filter: `blur(${bgConfig.blur}) brightness(${bgConfig.brightness}) contrast(${bgConfig.contrast})`,
-                transform: `scale(${bgConfig.scale})`,
-                transformOrigin: 'center',
-                willChange: 'opacity, filter, transform'
-              }}
+              style={{ objectFit: 'cover', filter: `brightness(${fx.brightness}) contrast(${fx.contrast})` }}
             />
           </div>
         )}
 
         {/* Theme-specific overlay for color integration - only shown with wallpaper */}
-        {showWallpaper && (
+        {wallpaper && (
           <div
             className="absolute inset-0 transition-colors duration-500"
             style={{
-              backgroundColor: bgConfig.overlay,
-              mixBlendMode: currentTheme === 'theme-solarized-light' ? 'multiply' : 'overlay'
+              backgroundColor: fx.overlay,
+              mixBlendMode: theme.preset === 'solarized-light' ? 'multiply' : 'overlay'
             }}
           />
         )}

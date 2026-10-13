@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { getImageUrl } from '@/lib/image-paths';
+import { themeBackgrounds } from '@/lib/wallpapers';
 
 // Theme preset types - Final three-tier system
 export type ThemePreset = 'solarized-light' | 'nord' | 'tokyo-night';
@@ -13,25 +13,8 @@ const themeDefaultAccents: Record<ThemePreset, AccentColor> = {
   'tokyo-night': 'purple'        // #bb9af7 maps to purple
 };
 
-// Background images for each theme preset
-export const themeBackgrounds: Record<ThemePreset, string[]> = {
-  'tokyo-night': [
-    getImageUrl('purple-girl.webp'),
-    getImageUrl('cat_anime-girl.webp'),
-    getImageUrl('shiny_purple.webp'),
-    getImageUrl('pixel_big_city.webp')
-  ],
-  'nord': [
-    getImageUrl('cool_rocks.webp'),
-    getImageUrl('lets_go_home.webp'),
-    getImageUrl('gradient-pb.webp')
-  ],
-  'solarized-light': [
-    getImageUrl('pastel-window.webp'),
-    getImageUrl('yellow_kyoto.webp'),
-    getImageUrl('ign_colorful.webp')
-  ]
-};
+// Wallpapers per preset live in lib/wallpapers.ts (plain TS, so tests can import them)
+export { themeBackgrounds };
 
 // Accent color types
 export type AccentColor =
