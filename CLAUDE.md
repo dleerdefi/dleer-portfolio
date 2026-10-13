@@ -38,6 +38,10 @@ NEXT_PUBLIC_FEATURE_LAB=true LAB_DEMO_DATA=true npm run dev
 # pre-blurred copies in assets/wallpapers + lib/wallpapers.generated.ts
 node scripts/build-wallpapers.mjs
 
+# After changing the profile photo in public/images/profile: the desktop neofetch tile's 3:4
+# copies in assets/hero + lib/hero-photo.generated.ts (`upper` for an upper-body crop)
+node scripts/build-hero-photo.mjs
+
 # After changing the glyphs the site draws with: font subsets + app/styles/03-fonts.css
 # (pip install fonttools brotli)
 python3 scripts/subset-fonts.py
@@ -114,7 +118,7 @@ The application uses a modular CSS architecture with styles split into 15 focuse
 12. **12-blog-content.css** (624 lines) - Blog prose styling, MDX components, figures, admonitions, code blocks
 13. **13-lab.css** (106 lines) - Lab (`~/lab`): attack-category colors per preset, `--lab-*` tokens, shared lab classes
 14. **14-lab-views.css** (260 lines) - Lab layouts: the framed `/lab` pages, the health line, NAS / CI blocks and tags, the globe's markers and tooltip, phone tweaks
-15. **15-home-layout.css** (253 lines) - The home page's two arrangements of one DOM: neofetch, the home view and project cards, the lab tile, the contents tree, the polybar tray and popovers, the section rail, the phone column, the desktop grid and tile chrome, the phone's scroll-driven animations
+15. **15-home-layout.css** (270 lines) - The home page's two arrangements of one DOM: neofetch and the desktop photo, the home view and project cards, the lab tile, the contents tree, the polybar tray and popovers, the section rail, the phone column, the desktop grid and tile chrome, the phone's scroll-driven animations
 
 The main `app/globals.css` file imports all modules in the correct cascade order.
 
@@ -136,25 +140,29 @@ desktop), which decides what the stage shows and which keys apply. Spec: §4.1 t
    `data-focused` and `data-dim`; its chrome (border, glass, `--tile-alpha` per preset, the focus
    ring) is CSS. The tiles: `neofetch` (`section-top`), `navigation` (`section-contents`,
    desktop only), `content` (`section-home`, the stage) and, with the lab flag, `lab`.
-3. **Neofetch** (`components/home/Neofetch.tsx`, server): the block-letter logo and the social
-   rows, plus `NeofetchLabRows` with the lab on. Side by side on desktop; logo over rows on
-   phones (a container query).
+3. **Neofetch** (`components/home/Neofetch.tsx`, server): the social rows, a `Stack` row (from
+   `config.technologies`) and `NeofetchLabRows` with the lab on. On desktop the profile photo
+   (`HeroPhoto.tsx`) stands beside the rows where real neofetch draws an image; pressing it
+   switches to the RF-DETR detection version, which loads on first hover or focus. Phones keep
+   the block-letter logo above the rows and download no photo (a desktop-only `<picture>`
+   source). The photo shows while `NEXT_PUBLIC_PROFILE_PHOTO` is set; its crops come from
+   `scripts/build-hero-photo.mjs`.
 4. **Stage** (`components/home/Stage.tsx`): the content tile's body. `home` is the server-rendered
-   `HomeView` (greeting, pitch, the three featured `ProjectCard`s and a "N more projects" card);
-   `about`, `contact` and the lab views load with `next/dynamic` on desktop. Phones always show
-   `home`.
+   `HomeView` (greeting, the one-line pitch `NEXT_PUBLIC_BIO_INTRO`, the short bio
+   `NEXT_PUBLIC_BIO_SUMMARY`, the three featured `ProjectCard`s and a "N more projects" card); it
+   is also the site's about, there is no about view. `contact` and the lab views load with
+   `next/dynamic` on desktop. Phones always show `home`.
 5. **NavTree** (`components/home/NavTree.tsx`): the contents tree on desktop: `home`,
-   `projects/` (links to the featured three and `/projects`), `lab/` (`LabDirectory`), `about`,
+   `projects/` (links to the featured three and `/projects`), `lab/` (`LabDirectory`),
    `contact`. Real buttons and links, `aria-expanded` and `aria-current`.
 6. **LabTile** (`components/lab/home/LabTile.tsx`): telemetry and threat-map cards from
    `/api/lab/summary`, fetched after idle; on desktop a card opens its view in the stage, on
    phones its page.
 7. **Polybar** (`components/layout/Polybar.tsx`, desktop only): workspaces (home, projects, lab,
-   about, contact), the `ThemeTray` (`components/layout/polybar/`: presets, accent and wallpaper
+   contact), the `ThemeTray` (`components/layout/polybar/`: presets, accent and wallpaper
    popovers, `?` keys; popovers are focus-trapping `role="dialog"`s) and the clock.
-8. **Phone sections** (`components/home/sections/PhoneSections.tsx`, server): about, stack, other
-   projects and contact (`ContactForm.tsx`), hidden on desktop where the stage shows about and
-   contact.
+8. **Phone sections** (`components/home/sections/PhoneSections.tsx`, server): the other
+   projects and contact (`ContactForm.tsx`), hidden on desktop where the stage shows contact.
 9. **SectionRail** (`components/home/SectionRail.tsx`, phones): one dot per section, tap to jump,
    the lab's live watts beside its dot, hidden while scrolling and while the keyboard is up.
 10. **Background** (`components/layout/Background.tsx`): the chosen wallpaper, pre-blurred to a
@@ -280,7 +288,7 @@ The theme system uses CSS variables that update based on the selected preset:
 3. Add an entry in `components/home/NavTree.tsx`
 4. Add a polybar workspace if needed, and the phone equivalent (a section or a page)
 
-Content types today: `home`, `about`, `contact`, and behind the lab flag `lab-telemetry` and
+Content types today: `home`, `contact`, and behind the lab flag `lab-telemetry` and
 `lab-threats`. `project`, `projects-overview` and `blog-overview` are navigation intents only:
 they become routes (`/projects/<slug>`, `/projects`, `/blog`), and no view renders them. A
 client component the home page imports from a server component ships in the page's chunk even

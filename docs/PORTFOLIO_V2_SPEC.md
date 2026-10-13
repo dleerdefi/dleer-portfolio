@@ -655,6 +655,34 @@ at about 200 ms: Lighthouse's model counts the JavaScript requested before that 
 blocking it. Real devices see the observed numbers; phase 6 can trim the shared runtime if the
 simulated figure matters.
 
+**Follow-up (2026-10-13): the photo, and no about view.** David's call after phase 2: the
+profile photo replaces the ASCII logo on desktop (real neofetch draws an image there), phones keep
+the logo, and the about view goes, with the bio cut to a pitch and two sentences on the home view.
+
+- `components/home/HeroPhoto.tsx` in the neofetch tile: a 3:4 photo 150 to 260 px wide (34 cqw),
+  never taller than the rows beside it, so the tile keeps its height at every desktop size. It is
+  a button: pressing it shows the RF-DETR detection version, which loads on the first hover or
+  focus. `scripts/build-hero-photo.mjs` writes 260, 390 and 520 px copies of both, cropped
+  identically (`full`, shipped, or `upper`, a 1.8x upper-body crop); 22 to 74 KB each. Phones get
+  a desktop-only `<picture>` source and a 1 px fallback, so they download none of it.
+- The about view, its photo window and tech grid, the phone About and Stack sections, the
+  `about` workspace, tree entry and content type, `TechIcon` and `react-icons` are deleted. The
+  technologies are a `Stack` row in the neofetch block; the bio is `NEXT_PUBLIC_BIO_SUMMARY`
+  under the pitch (`NEXT_PUBLIC_BIO_EXPERIENCE`, `_LEADERSHIP` and `_TAGLINE` are unused now).
+  The phone column is hero, featured, lab, projects, contact.
+- Small text: the phone logo grows to 4 cqw (96 % of the hero's width, 13 to 14 px on most
+  phones), and chips, the rail's watts and the form's character count go to 12 px. Without the
+  about text the 11.8 px logo had become 38 % of the phone home's text, and Lighthouse's
+  legible-font-size audit failed.
+
+| Production values, lab on, demo data | after phase 2 | after the follow-up |
+|---|---|---|
+| `/` first-load JS | 130 KB | 130 KB |
+| Desktop home: photo (1x / 2x screens) | | 22 / 74 KB |
+| Phone home: photo bytes | | 0 |
+| Lighthouse mobile `/` (3 runs) | 96 / 100 / 100 / 100 | 97 / 100 / 100 / 100 |
+| Lighthouse desktop `/` | 100 / 100 / 100 / 100 | 100 / 100 / 100 / 100 (LCP the photo, 0.5 s) |
+
 ### Phase 3: projects as the story
 
 Findings: C8, C9, U7, U8, U9, U12. Design: 4.4, 4.5.
