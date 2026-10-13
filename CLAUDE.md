@@ -24,7 +24,7 @@ npm run dev  # automatically runs cleanup first
 # Type checking
 npm run typecheck
 
-# Linting
+# Linting (the ESLint CLI with eslint.config.mjs; `next lint` is deprecated)
 npm run lint
 
 # Unit tests (Vitest, tests/lab)
@@ -72,7 +72,7 @@ loads only when a threats view shows it (on phones, after a tap).
 
 ## Project Architecture
 
-This is a **Next.js 15.5.4** portfolio application with App Router, designed as a Hyprland/Arch Linux rice-inspired website with a tiled window manager aesthetic.
+This is a **Next.js 15.5** portfolio application with App Router, designed as a Hyprland/Arch Linux rice-inspired website with a tiled window manager aesthetic.
 
 ### Core Structure
 - **Framework**: Next.js 15+ with App Router and Turbopack
@@ -80,7 +80,7 @@ This is a **Next.js 15.5.4** portfolio application with App Router, designed as 
   - **CSS Architecture**: Modular CSS with 14 focused stylesheets
   - **Organization**: Each module under 650 LOC for maintainability
 - **TypeScript**: Strict mode enabled with path aliases (@/* mapped to root)
-- **Fonts**: Geist and Geist Mono from next/font/google, JetBrains Mono
+- **Fonts**: JetBrains Mono, self-hosted in `public/fonts` (`03-fonts.css`, preloaded in `app/layout.tsx`); a TTF subset in `lib/og/fonts` for the Open Graph cards
 - **Theme**: Dynamic theme system with Tokyo Night, Nord, and Solarized Light presets
 - **State Management**: React Context API for theme and focus management
 
@@ -109,22 +109,20 @@ The main `app/globals.css` file imports all modules in the correct cascade order
 ### Current Implementation
 
 #### Tiled Layout System
-The portfolio features a fixed tiled layout system that mimics Hyprland window manager with dual-mode mobile support:
+The portfolio features a fixed tiled layout system that mimics Hyprland window manager on desktop, and a single scrolling column on phones:
 
 1. **LayoutManager** (`components/layout/LayoutManager.tsx`)
-   - Enhanced version with focus context integration
-   - Desktop: Fixed 6-tile layout (Neofetch, Navigation, Content, Theme Preset, Accent Color, Background)
-   - Mobile: Dual-mode support (Stacked or Parallax)
-   - Manages focus state through FocusContext
-   - Dynamic tile opacity based on focus and theme
+   - Desktop (≥ 1024 px): fixed 6-tile layout (Neofetch, Navigation, Content, Theme Preset, Accent Color, Background)
+   - Below 1024 px: always `MobileParallaxLayout` (there is no stacked mode)
+   - Chooses the layout after hydration from `window.innerWidth`, so the server HTML of `/` is empty today (spec finding C1; phase 2 replaces this with one server-rendered DOM)
+   - Manages focus state through FocusContext; tile opacity follows focus and theme
    - Uniform 12px spacing throughout (uses inline styles for reliability)
-   - Automatically switches to MobileParallaxLayout when parallax mode is enabled
 
 2. **Polybar** (`components/layout/Polybar.tsx`)
    - Workspace-style navigation bar at the top
    - Shows active workspace with dot indicators
-   - Displays tile count and current time
-   - Mobile: Hamburger menu with slide-out navigation
+   - Displays the current time
+   - Desktop only: phones have no polybar
    - Height: 36px (h-9)
 
 3. **NeofetchTile** (`components/tiles/NeofetchTile.tsx`)
@@ -159,7 +157,6 @@ The portfolio features a fixed tiled layout system that mimics Hyprland window m
    - Background image selector with previews
    - 3 curated images per theme + None option
    - Background effect toggle (animated gradient orbs)
-   - Mobile mode toggle (Stacked vs Parallax) - visible only on mobile
 
 9. **Background** (`components/layout/Background.tsx`)
    - Animated gradient orbs
@@ -167,14 +164,12 @@ The portfolio features a fixed tiled layout system that mimics Hyprland window m
    - Smooth, performant animations
    - Toggleable via BackgroundTile settings
 
-10. **MobileParallaxLayout** (`components/layout/parallax/MobileParallaxLayout.tsx`)
-   - Alternative mobile layout with parallax scrolling effects
-   - Each tile has different scroll speeds for depth effect
-   - Smooth transitions between tiles
-   - Touch-optimized scrolling behavior
-   - Activated via theme settings on mobile devices
+10. **MobileParallaxLayout** (`components/layout/MobileParallaxLayout.tsx`)
+   - The layout below 1024 px: a fixed neofetch hero that fades as the sections scroll over it
+   - Sections live in `components/layout/parallax/sections/` (Bio, Technologies, Projects, Blog, Lab, Contact)
+   - Forces Tokyo Night with a cyan accent (`hooks/useEnforceMobileTheme.ts`; spec finding C7)
 
-11. **ScrollProgress** (`components/layout/parallax/ScrollProgress.tsx`)
+11. **ScrollProgress** (`components/ui/ScrollProgress.tsx`)
    - Visual scroll position indicator for parallax mode
    - Shows current position in the scrollable content
    - Helps users understand their location in the parallax view
@@ -248,24 +243,21 @@ The theme system uses CSS variables that update based on the selected preset:
 - Internal tile padding: p-6 (24px)
 
 #### Responsive Breakpoints
-- Desktop: ≥1024px (full 4-tile layout)
-- Mobile/Tablet: <1024px (dual-mode):
-  - **Stacked Mode** (default): Traditional vertical scroll with all tiles
-  - **Parallax Mode** (optional): Depth-based scrolling with different speeds per layer
+- Desktop: ≥1024px (the tiled layout)
+- Phones and tablets: <1024px (`MobileParallaxLayout`, one scrolling column)
 
 ### Key Implementation Details
 
 1. **Focus Management**:
    - FocusContext manages tile and content navigation
    - Visual focus states with accent color borders and shadows
-   - Keyboard navigation with Tab and Arrow keys
-   - Auto-scroll to focused tiles in mobile view
+   - Keyboard navigation: Tab cycles tiles, hjkl moves between them (desktop only)
 
 2. **Theme System**:
    - CSS variables update dynamically on theme change
    - All colors use theme variables for consistency
    - Accent colors customizable independently
-   - Light/dark mode support via Catppuccin Latte
+   - Solarized Light is the light preset; preset and wallpaper persist in localStorage on desktop
 
 3. **Glass Morphism**:
    - `backdrop-blur` with semi-transparent backgrounds
@@ -273,14 +265,16 @@ The theme system uses CSS variables that update based on the selected preset:
    - Theme-aware transparency levels
 
 4. **Mobile UX**:
-   - **Dual-mode architecture**:
-     - Stacked Mode: Traditional layout with smooth scrolling
-     - Parallax Mode: Multi-layer scrolling with depth effects
-   - Mode toggle in theme settings (mobile only)
+   - One layout below 1024 px: `MobileParallaxLayout`, with a scroll indicator outside the frame
    - Touch-optimized targets (minimum 24x24px, 32x32px on touch screens)
-   - Auto-scroll to active content (stacked mode)
-   - Parallax scroll indicators (parallax mode)
-   - Responsive sizing for all interactive elements
+   - Detail pages (`/projects/*`, `/blog/*`, `/lab*`) use `FramedPageLayout` on every device
+
+5. **Open Graph cards**: generated at build time with `next/og` (`lib/og/card.tsx`): the site card
+   (`app/opengraph-image.tsx`), one per project and post, and the two lab cards, which 404 with
+   their flags off like every lab route. A project or post with a `cover` uses that instead.
+
+6. **Security headers**: `next.config.ts` sets HSTS, `nosniff`, `X-Frame-Options`, a referrer and
+   a permissions policy, and in production a report-only Content-Security-Policy (spec C14, Q8).
 
 ### Common Tasks
 
@@ -298,12 +292,12 @@ live in their own files (`components/tiles/nav/`), so the big tiles only get the
 #### Working with Themes
 1. **Add new theme preset**:
    - Update `ThemeContext.tsx` with new preset colors
-   - Add theme button in `ThemeTile.tsx`
-   - Ensure all CSS variables are defined
+   - Add theme button in `ThemePresetTile.tsx`
+   - Ensure all CSS variables are defined (`01-theme-variables.css`, and `13-lab.css` for the lab's category colors)
 
 2. **Modify accent colors**:
-   - Edit color array in `ThemeTile.tsx`
-   - Update `AccentColor` type in `ThemeContext.tsx`
+   - Edit color array in `AccentColorTile.tsx`
+   - Update `AccentColor` type and `accentColorMap` in `ThemeContext.tsx`
    - Colors automatically apply via CSS variables
 
 3. **Theme-aware components**:
@@ -326,10 +320,10 @@ live in their own files (`components/tiles/nav/`), so the big tiles only get the
 
 1. **Hot Reload Issues**: If changes don't appear, the dev server may need restart
 2. **Spacing Debugging**: Use browser inspector to verify padding/margin application
-3. **Mobile Testing**: Use responsive mode to test tabbed interface
+3. **Mobile Testing**: Use responsive mode below 1024 px to test the parallax layout; `docs/audit/audit-shots.mjs` screenshots five phone widths
 4. **Performance**: Keep animations smooth with transform/opacity only
 5. **CSS Changes**: When modifying styles, identify the correct module in `app/styles/`
-6. **Module Size**: Keep individual CSS modules under 200 LOC for maintainability
+6. **Module Size**: Keep new files, CSS or TypeScript, under about 300 lines
 
 ### Recent Improvements
 

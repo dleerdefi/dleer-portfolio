@@ -1,6 +1,6 @@
 # Portfolio v2: audit, performance and UI work order
 
-- **Status:** ready to run
+- **Status:** phase 0 done (branch `claude/confident-curie-kquvwl`, see its results under [Phase 0](#phase-0-hygiene-and-the-baseline)); phase 1 next
 - **Created:** 2026-10-13, from an audit of `main` at `9b0efa6` (build, typecheck, lint and 201 tests green)
 - **Audience:** a Claude Code session (Opus 5.5 or Fable 5.1) working in this repo, and David
 - **Companion docs:** [docs/lab/README.md](lab/README.md) (the lab's spec set, still binding), [CLAUDE.md](../CLAUDE.md)
@@ -118,7 +118,7 @@ references these by id.
 | C1 | **Blank first paint on `/`.** The server HTML for the home page contains no content: `LayoutManager` returns an empty `div` until a client effect has measured `window.innerWidth`. First paint and LCP wait for the whole JS bundle to hydrate; crawlers that do not run JS see nothing on the home page | `components/layout/LayoutManager.tsx` (`hasChecked`), `app/page.tsx` |
 | C2 | **`React.lazy` created inside render.** The phone layout is wrapped in `React.lazy(() => import(...))` inside `LayoutManager`'s render, so every re-render of `LayoutManager` creates a new lazy component and remounts `MobileParallaxLayout` (scroll position, state and the globe's intersection observers reset) | `components/layout/LayoutManager.tsx` |
 | C3 | **Placeholder author in metadata.** Project and blog pages ship `authors: [{ name: 'Your Name' }]` to search engines and social cards | `app/projects/[slug]/page.tsx:42`, `app/blog/[slug]/page.tsx:45` |
-| C4 | **The Open Graph fallback image does not exist.** Every project and blog page points at `/og-image.png`, which is not in `public/` (the site default is fine on dleer.ai because `NEXT_PUBLIC_OG_IMAGE` is set there; the per-page `generateMetadata` ignores it). Shared links to any project or post have a broken card; forks have none at all | `app/projects/[slug]/page.tsx:36`, `app/blog/[slug]/page.tsx:39`, `config/portfolio.config.ts:145` |
+| C4 | **The Open Graph fallback image does not exist.** Every project and blog page points at `/og-image.png`, which is not in `public/` and production's `NEXT_PUBLIC_OG_IMAGE` is `/og-image.png` too, so the site card, the lab pages' cards and every project and post card point at a file that does not exist. Every shared link to dleer.ai has a broken card | `app/projects/[slug]/page.tsx:36`, `app/blog/[slug]/page.tsx:39`, `config/portfolio.config.ts:145` |
 | C5 | **The lab mirrors are two days behind the homelab.** Homelab `main` at `6e4473a` (2026-10-12, "Public telemetry: NAS, CI runners, video engines, airflow, lab counts, cost") added `lab.vms_running`, `targets_up/total`, `alerts_firing`, `disks/disks_healthy`, `drive_temp_max_c`, `energy_cost_usd_24h`, per-host `fan_rpm`, `exhaust_c`, `psu_in_v`, a `nas` block, a `ci` block and GPU `enc_ratio/dec_ratio`. The portfolio's `now.v1.json` fixture (manifest commit `ba74e7e`) and `history.v1.json` (`79227c3`) have none of them, and neither do the Zod schemas or the UI. The sha256 values differ for both labsnap examples. Unknown keys are stripped today (by design), so nothing breaks, but the best new numbers are invisible | `lib/lab/fixtures/MANIFEST.json`, `lib/lab/schemas/`, `components/lab/telemetry/` |
 | C6 | **Full-size wallpapers fetched that nothing displays.** Two preloaders (`BackgroundTile` and `Background`) call `new Image()` on the *original* adjacent carousel files, which `next/image` never requests (it serves `/_next/image?...` variants). On the desktop home that is `cat_anime-girl.webp`, 218 KB, on every first load, for nothing | `components/tiles/BackgroundTile.tsx` (preload effect), `components/layout/Background.tsx` ("FIX 1") |
 | C7 | **Two theme systems fight on phones.** `useEnforceMobileTheme` forces Tokyo Night and sets `--accent-color` as an inline style on `<html>`; `ThemeContext` has a resize handler whose only job is to undo that. Resizing a desktop window across 1024 px flips the accent between purple and cyan; a phone visitor cannot use the preset or accent pickers at all, and `localStorage` preferences are ignored below 1024 px | `hooks/useEnforceMobileTheme.ts`, `contexts/ThemeContext.tsx`, `components/layout/parallax/hooks/useParallaxTheme.ts` |
@@ -425,6 +425,35 @@ Findings: C2, C3, C4, C6, C10, C12, C13, C14.
 
 Done when: all of the above, CI green, the appendix numbers reproduced within noise, and the
 desktop home no longer requests any `/images/*.webp` original.
+
+**Results (2026-10-13).** Done as listed, with these specifics:
+
+- Open Graph: `lib/og/card.tsx` renders a site card, one card per project and per post, and a card
+  each for `/lab` and `/lab/threats`, at build time, in a 28 KB TTF subset of JetBrains Mono
+  (`lib/og/fonts`). The lab cards 404 with their flags off, like every lab route. A project or
+  post with a `cover` uses it instead. `NEXT_PUBLIC_OG_IMAGE` and `seo.ogImage` are gone; the
+  variable can be deleted from Railway.
+- Zen mode removed (`ViewContext`, `FocusedView`), with `ThemeTile`, `ui/ProjectCard`,
+  `ui/Badge`, `ui/Card`, `ui/Section`, `ui/BorderedContainer`, `DleerVectorLogo`, `ScrollReveal`,
+  `SkillGrid`, `BackButton`, `useResponsive`, and `FocusContext`'s unused `transitionRules`.
+- ESLint runs as `eslint .` with `eslint.config.mjs`; linting the whole repo (not only `app`,
+  `components`, `lib`) found nine more problems, all fixed. Zero errors, zero warnings.
+- Headers: HSTS (one year, no `includeSubDomains`, since other subdomains are planned), `nosniff`,
+  `X-Frame-Options: SAMEORIGIN`, referrer and permissions policies; the CSP is report-only and
+  production-only. With it, every audited page, the globe on desktop and the globe after the tap
+  on a phone logged zero violations.
+- The profile photo now loads at 640 w (103 KB; the `sizes` of 400 px falls between the default
+  `imageSizes` and `deviceSizes`, so phase 1's `deviceSizes` change can bring it lower).
+
+| Production values, lab on, threat map off, demo data | before | after |
+|---|---|---|
+| `/` first-load JS (build table) | 213 KB | 211 KB |
+| Images, desktop 1440 home | 1,041 KB | 261 KB |
+| Images, phone 390 home | 235 KB | 21 KB |
+| Requests, desktop home | 21 | 20 |
+| Console errors on audited pages | 0 | 0 |
+| Lint problems (whole repo) | 12 | 0 |
+| Shared-link cards that resolve | 0 | all |
 
 ### Phase 1: performance foundations
 

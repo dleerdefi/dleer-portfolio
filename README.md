@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black?style=flat-square&logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js-15.5-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38bdf8?style=flat-square&logo=tailwindcss)
 ![Content Collections](https://img.shields.io/badge/Content_Collections-0.11-orange?style=flat-square)
@@ -29,7 +29,7 @@ A production-ready developer portfolio built with Next.js 15, featuring a tiled 
 - **Audio Narration**: Blog post audio with auto-detection, playback controls, and analytics tracking
 - **Contact Form**: Production-ready Resend integration with 5-layer spam protection (honeypot, rate limiting, validation)
 - **CDN Integration**: Optional Cloudflare R2 for optimized image delivery with automatic fallback
-- **Modern Architecture**: Next.js 15.5 + TypeScript strict mode + modular CSS (12 focused modules under 200 LOC each)
+- **Modern Architecture**: Next.js 15.5 + TypeScript strict mode + modular CSS (14 focused modules)
 - **Zero-Config Deployment**: Railway + Railpack auto-detection with intelligent caching
 
 ---
@@ -191,7 +191,7 @@ Add environment variables via Vercel dashboard → Settings → Environment Vari
 
 ## 🏗️ Tech Stack
 
-**Framework**: Next.js 15.5.4 with App Router and Turbopack
+**Framework**: Next.js 15.5 with App Router and Turbopack
 **Language**: TypeScript 5.0 (strict mode)
 **Styling**: Tailwind CSS v4 + Modular CSS architecture (12 modules)
 **Content**: Content Collections + MDX (blog & projects)
@@ -202,11 +202,11 @@ Add environment variables via Vercel dashboard → Settings → Environment Vari
 **Validation**: Zod 4.1 (schema validation)
 **State**: React Context API (Theme, Focus)
 **Icons**: React Icons 5.5 + Custom ASCII art
-**Fonts**: JetBrains Mono, Geist, Geist Mono
+**Fonts**: JetBrains Mono (self-hosted)
 
 ### Key Features
 
-- **Modular CSS**: 12 focused stylesheets organized by concern
+- **Modular CSS**: 14 focused stylesheets organized by concern
 - **MDX Content**: Blog and projects powered by Content Collections with syntax highlighting
 - **CDN Integration**: Cloudflare R2 for optimized image delivery with fallback to local
 - **Responsive**: Desktop (≥1024px) tiled layout, Mobile (<1024px) dual-mode
