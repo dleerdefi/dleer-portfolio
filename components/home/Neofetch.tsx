@@ -32,7 +32,7 @@ export function Neofetch() {
       <div className="neofetch-info">
         <p className="neofetch-user">
           <span style={{ color: 'var(--theme-success)' }}>{personal.username}</span>
-          <span style={{ color: 'var(--accent-color)' }}>@</span>
+          <span style={{ color: 'var(--accent-text)' }}>@</span>
           <span style={{ color: 'var(--theme-info)' }}>portfolio</span>
         </p>
         <p className="neofetch-rule" aria-hidden="true">

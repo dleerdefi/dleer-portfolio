@@ -11,7 +11,7 @@ export function Key({ children }: KeyProps) {
       style={{
         borderColor: 'var(--theme-border)',
         backgroundColor: 'var(--theme-surface)',
-        color: 'var(--accent-color)',
+        color: 'var(--accent-text)',
         minWidth: '2rem',
       }}
     >

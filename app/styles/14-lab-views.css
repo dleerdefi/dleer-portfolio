@@ -99,7 +99,7 @@ section.lab-page {
   margin-left: 0.5em;
   padding: 0 0.4em;
   border: 1px solid var(--accent-color);
-  color: var(--accent-color);
+  color: var(--accent-text);
   font-size: 0.8em;
   font-weight: 400;
   white-space: nowrap;
@@ -229,7 +229,7 @@ section.lab-page {
 
 .lab-globe-button.is-primary {
   border: 2px solid var(--accent-color);
-  color: var(--accent-color);
+  color: var(--accent-text);
   font-weight: 700;
 }
 
@@ -261,7 +261,7 @@ section.lab-page {
 
 /* /lab's "how this works" footer (LabHowItWorks.tsx) */
 .lab-how { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem; }
-.lab-how-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--accent-color); }
+.lab-how-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--accent-text); }
 .lab-how-diagram {
   margin: 0; padding: 0; overflow-x: auto; border: 0; background: none;
   font-size: 0.75rem; line-height: 1.35; color: var(--lab-text-2); white-space: pre;
@@ -270,3 +270,9 @@ section.lab-page {
 /* The diagram above the text on phones, beside it from 768 px */
 .lab-how-body { display: grid; gap: 1rem 2.5rem; align-items: start; }
 @media (min-width: 768px) { .lab-how-body { grid-template-columns: auto minmax(0, 1fr); } }
+/* Phones: nothing under 14 px; a link standing alone in a table cell is a 44 px target */
+@media (max-width: 1023px) {
+  .lab-tag, .lab-subblock-title { font-size: 0.875rem; }
+  .lab-table a.lab-link, .lab-teaser-link { display: inline-flex; align-items: center; min-height: 44px; }
+  .lab-link-pair { row-gap: 8px; }
+}

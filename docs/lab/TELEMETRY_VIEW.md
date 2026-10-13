@@ -273,7 +273,8 @@ their own.
 **Accessibility.** `section` with `aria-roledescription="carousel"`; each slide
 `aria-roledescription="slide"`, the ones out of view `aria-hidden` and out of the tab order; the
 row is a polite live region except while it plays; the dots are buttons (`Show hosts`,
-`aria-current` on the slide in view, 24 px targets). Only the power slide's badge is a status
+`aria-current` on the slide in view; 24 px targets on desktop, 44 px on phones, where the
+card's text is 14 px at least). Only the power slide's badge is a status
 region; the copies on the other slides are not, so a change is read once.
 
 **Narrow cards.** The card is a size container. Figures joined by ` · ` wrap between figures,

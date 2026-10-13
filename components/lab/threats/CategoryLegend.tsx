@@ -54,8 +54,8 @@ export function CategoryLegend({
               background: on ? 'rgba(var(--theme-surface-rgb), 0.6)' : 'transparent',
               color: 'var(--theme-text)',
               font: 'inherit',
-              // phones: a smaller size, and the count may drop to a second line on the narrowest
-              fontSize: variant === 'grid' ? '0.8125rem' : undefined,
+              // phones: 14 px, and the count may drop to a second line on the narrowest
+              fontSize: variant === 'grid' ? '0.875rem' : undefined,
               flexWrap: variant === 'grid' ? 'wrap' : undefined,
               rowGap: 0,
               cursor: 'pointer',

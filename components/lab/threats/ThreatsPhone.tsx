@@ -36,7 +36,7 @@ export function ThreatsPhone({
   const cell = (value: number, label: string) => (
     <div className="lab-card" style={{ padding: '0.6rem 0.7rem', minWidth: 0 }}>
       <div style={{ fontSize: '1.125rem' }}>{fmtInt(value)}</div>
-      <div className="lab-text-2" style={{ fontSize: '0.8rem' }}>
+      <div className="lab-text-2" style={{ fontSize: '0.875rem' }}>
         {label}
       </div>
     </div>
@@ -44,7 +44,7 @@ export function ThreatsPhone({
   return (
     <div className={`lab-page${d.state === 'delayed' ? ' lab-dim' : ''}`} style={{ gap: '1rem' }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '0.5rem' }}>
-        {cell(d.totals.events, 'events 24 h')}
+        {cell(d.totals.events, 'events 24\u00a0h')}
         {cell(d.totals.sources, 'sources')}
         {cell(d.totals.countries, 'countries')}
       </div>

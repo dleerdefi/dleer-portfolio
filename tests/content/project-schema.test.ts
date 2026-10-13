@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { projectSchema } from '@/lib/content-schema';
 import { extractCoverText } from '@/lib/cover-text';
+import { stripMargin } from '@/lib/terminal-text';
 
 const base = { title: 'T', slug: 't', summary: 's', date: '2026-10-01' };
 
@@ -44,6 +45,11 @@ describe('cover text', () => {
     expect(extractCoverText(mdx)).toEqual({ title: 'system architecture', lines: ['┌──┐', '│ a│', '└──┘'] });
   });
 
+  it('reads a Terminal diagram written with a | margin, its indentation kept', () => {
+    const mdx = 'Intro\n\n<Terminal cmd="the data path">{`\n|home    bucket\n|   ── PUT ──►\n|\n|        ▼\n`}</Terminal>\n';
+    expect(extractCoverText(mdx)).toEqual({ title: 'the data path', lines: ['home    bucket', '   ── PUT ──►', '', '        ▼'] });
+  });
+
   it('falls back to the first code block, and caps the lines', () => {
     const body = Array.from({ length: 20 }, (_, i) => `line ${i}`).join('\n');
     const cover = extractCoverText(`Text\n\n\`\`\`python\n${body}\n\`\`\`\n`);
@@ -53,5 +59,16 @@ describe('cover text', () => {
 
   it('is undefined without either', () => {
     expect(extractCoverText('Just prose.')).toBeUndefined();
+  });
+});
+
+describe('terminal margin', () => {
+  it('drops the | margin and keeps everything after it', () => {
+    expect(stripMargin('\n|a    b\n|   c\n|\n|  d\n')).toBe('a    b\n   c\n\n  d');
+  });
+
+  it('leaves text without a margin alone', () => {
+    expect(stripMargin('plain\noutput')).toBeNull();
+    expect(stripMargin('|a\nb')).toBeNull();
   });
 });
