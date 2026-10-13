@@ -13,7 +13,10 @@ import Background from '@/components/layout/Background';
 import Polybar from '@/components/layout/Polybar';
 import { useFocus, ContentType as FocusContentType } from '@/contexts/FocusContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import FocusedView from '@/components/layout/FocusedView';
+
+// Created once at module scope: a lazy component made inside render would remount the phone
+// layout (and reset its scroll position and state) on every re-render of LayoutManager.
+const MobileParallaxLayout = React.lazy(() => import('@/components/layout/MobileParallaxLayout'));
 
 // Bridge the content types
 type ContentType = FocusContentType;
@@ -160,7 +163,6 @@ const LayoutManager: React.FC = () => {
 
   // Mobile Layout - Always use Parallax
   if (isStacked) {
-    const MobileParallaxLayout = React.lazy(() => import('@/components/layout/MobileParallaxLayout'));
     return (
       <React.Suspense fallback={
         <div className="fixed inset-0 bg-[var(--theme-bg)]">
@@ -358,8 +360,6 @@ const LayoutManager: React.FC = () => {
         </div>
       </div>
 
-      {/* Focused View for zen mode - overlays on top without affecting tiled layout */}
-      <FocusedView />
     </>
   );
 };

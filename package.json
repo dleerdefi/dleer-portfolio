@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test": "vitest run",
     "cleanup": "bash scripts/cleanup-dev.sh",
     "predev": "npm run cleanup"
@@ -39,6 +39,7 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
     "@next/bundle-analyzer": "^15.5.6",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^22.20.5",

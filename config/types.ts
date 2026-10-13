@@ -148,7 +148,7 @@ export interface NavigationItem {
   id: string;
   name: string;
   type: 'project' | 'blog' | 'page' | 'external';
-  data?: any;
+  data?: unknown;
 }
 
 export interface ThemeConfig {
@@ -163,7 +163,6 @@ export interface SEOConfig {
   description: string;
   keywords: string[];
   author: string;
-  ogImage?: string;
   twitterHandle?: string;
 }
 

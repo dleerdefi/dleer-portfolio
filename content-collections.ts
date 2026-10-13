@@ -3,7 +3,6 @@ import { compileMarkdown } from '@content-collections/markdown';
 import readingTime from 'reading-time';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
 import { z } from 'zod';
 

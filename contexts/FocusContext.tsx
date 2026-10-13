@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
 
 // Type definitions for the focus management system
 export type TileType = 'neofetch' | 'navigation' | 'content' | 'themePreset' | 'accentColor' | 'background';
@@ -128,25 +128,6 @@ interface FocusContextValue {
 
 const FocusContext = createContext<FocusContextValue | undefined>(undefined);
 
-// Validation rules for state transitions
-const transitionRules = {
-  // Neofetch tile shows system info (no content requirements)
-  neofetch: {},
-
-  // Navigation tile doesn't change content
-  navigation: { maintainContent: true },
-
-  // Content tile can show any content type
-  content: {
-    validContent: ['home', 'about', 'projects-overview', 'blog-overview', 'contact', 'project', 'blog', 'lab-telemetry', 'lab-threats']
-  },
-
-  // Theme control tiles don't change content
-  themePreset: { maintainContent: true },
-  accentColor: { maintainContent: true },
-  background: { maintainContent: true }
-};
-
 export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Initialize with About section as default
   const [focusState, setFocusState] = useState<FocusState>({
@@ -168,15 +149,8 @@ export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   // Validate state transition
-  const validateTransition = useCallback((from: FocusState, to: Partial<FocusState>): boolean => {
-    const newTile = to.tile || from.tile;
-    const newContent = to.content || from.content;
-
-    // Simplified validation - content tile accepts all content types
-    // No special rules for neofetch or about content
-
-    return true;
-  }, []);
+  // Every transition is valid today: the content tile accepts every content type
+  const validateTransition = useCallback((_from: FocusState, _to: Partial<FocusState>): boolean => true, []);
 
   // Core state setter with validation
   const updateFocusState = useCallback((updates: Partial<FocusState>, trigger: FocusTransition['trigger'] = 'programmatic') => {

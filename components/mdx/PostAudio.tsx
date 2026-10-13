@@ -179,7 +179,7 @@ export function PostAudio({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isPlaying, duration, speedIndex]);
+  }, [duration, togglePlayPause, cycleSpeed]);
 
   // Handle download
   const handleDownload = () => {

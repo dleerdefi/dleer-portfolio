@@ -185,8 +185,9 @@ export function useKeyboardNav(
 
   // Cleanup refs on unmount
   useEffect(() => {
+    const refs = itemRefs.current;
     return () => {
-      itemRefs.current.clear();
+      refs.clear();
     };
   }, []);
 
