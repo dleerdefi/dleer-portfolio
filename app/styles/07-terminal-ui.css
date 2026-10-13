@@ -39,7 +39,7 @@
   transition: all 150ms ease;
 }
 
-.file-list-item:hover {
+.file-list-item:is(:hover, :focus-visible) {
   background: var(--term-surface);
   padding-left: 1ch;
 }

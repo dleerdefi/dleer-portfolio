@@ -123,7 +123,7 @@ describe('the live chart', () => {
     renderToStaticMarkup(
       React.createElement(LivePlot, { values, width: 600, height: 100, ariaLabel: 'test', clipId: 'c', ...extra }),
     );
-  const lines = (html: string) => (html.match(/stroke="var\(--accent-color\)"/g) ?? []).length;
+  const lines = (html: string) => (html.match(/class="lab-chart-line"/g) ?? []).length;
 
   it('breaks the line at null (a gap, never a zero)', () => {
     expect(lines(plot([1, 2, 3, 4]))).toBe(1);

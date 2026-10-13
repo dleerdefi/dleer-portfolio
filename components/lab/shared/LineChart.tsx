@@ -72,7 +72,7 @@ export function LineChart({
   const tipLeft = tipX > plotW - 150 ? tipX - 150 : tipX + 10;
 
   return (
-    <div ref={box} style={{ position: 'relative', width: '100%' }}>
+    <div ref={box} className="lab-chart" style={{ position: 'relative', width: '100%' }}>
       {width > 0 && (
         <svg
           role="img"
@@ -98,10 +98,10 @@ export function LineChart({
               </g>
             ))}
             {runs.map((r, i) => (
-              <path key={`a${i}`} d={r.area} fill="var(--accent-color)" fillOpacity={0.1} />
+              <path key={`a${i}`} d={r.area} className="lab-chart-area" />
             ))}
             {runs.map((r, i) => (
-              <path key={`l${i}`} d={r.line} fill="none" stroke="var(--accent-color)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+              <path key={`l${i}`} d={r.line} className="lab-chart-line" />
             ))}
             {[0, 0.5, 1].map((f, i) => (
               <text key={f} x={f * plotW} y={plotH + 18} textAnchor={i === 0 ? 'start' : i === 1 ? 'middle' : 'end'}>
@@ -110,7 +110,7 @@ export function LineChart({
             ))}
             {last !== null && (
               <g>
-                <circle cx={xAt(lastIndex)} cy={yAt(last)} r={3.5} fill="var(--accent-color)" />
+                <circle cx={xAt(lastIndex)} cy={yAt(last)} r={3.5} className="lab-chart-dot" />
                 <text x={xAt(lastIndex) + 10} y={yAt(last)} dy="0.35em" fill="var(--theme-text)">
                   {format(last)}
                 </text>
@@ -119,7 +119,7 @@ export function LineChart({
             {cursor !== null && (
               <g pointerEvents="none">
                 <line x1={tipX} x2={tipX} y1={0} y2={plotH} stroke="var(--lab-text-2)" strokeOpacity={0.7} />
-                {cv !== null && <circle cx={tipX} cy={yAt(cv)} r={3.5} fill="var(--accent-color)" />}
+                {cv !== null && <circle cx={tipX} cy={yAt(cv)} r={3.5} className="lab-chart-dot" />}
               </g>
             )}
           </g>

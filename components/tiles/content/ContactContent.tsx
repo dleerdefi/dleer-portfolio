@@ -145,6 +145,13 @@ const ContactContentComponent: React.FC = () => {
                 e.currentTarget.style.opacity = '1';
               }
             }}
+            // Keyboard focus looks like hover
+            onFocus={(e) => {
+              if (!isSubmitting && e.currentTarget.matches(':focus-visible')) e.currentTarget.style.opacity = '0.9';
+            }}
+            onBlur={(e) => {
+              if (!isSubmitting) e.currentTarget.style.opacity = '1';
+            }}
           >
             {isSubmitting ? 'Sending...' : 'Send Message'}
           </button>

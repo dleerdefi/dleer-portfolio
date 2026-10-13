@@ -3,20 +3,21 @@ import { FocusProvider } from '@/contexts/FocusContext';
 import { postSummaries, projectSummaries } from '@/lib/content-index';
 import { withGitHubStats } from '@/lib/github';
 import { labEnabled } from '@/lib/lab/flag';
-import { featuredProjects, otherProjects } from '@/lib/projects';
+import { featuredProjects, orderedProjects, otherProjects } from '@/lib/projects';
 import { FocusTile } from '@/components/home/FocusTile';
 import { HomeShell } from '@/components/home/HomeShell';
 import { HomeView } from '@/components/home/HomeView';
+import { ProjectsView } from '@/components/home/ProjectsView';
 import { LabTile } from '@/components/home/LabIslands';
 import NavTree from '@/components/home/NavTree';
 import { Neofetch } from '@/components/home/Neofetch';
 import { Stage } from '@/components/home/Stage';
-import { ContactSection, ProjectsSection, WritingSection } from '@/components/home/sections/PhoneSections';
+import { ContactSection, WritingSection } from '@/components/home/sections/PhoneSections';
 
 /**
  * The home page, server-rendered as one document (docs/PORTFOLIO_V2_SPEC.md §4.3). CSS lays the
  * same markup out as the desktop tiles (neofetch, contents, lab, stage) or the phone column
- * (hero, featured, lab, projects, writing, contact); nothing here depends on the width. Lab and
+ * (hero, featured, lab, writing, contact); nothing here depends on the width. Lab and
  * writing come and go with their flags. Rebuilt daily so
  * the GitHub numbers on the cards stay fresh (lib/github.ts).
  */
@@ -31,7 +32,7 @@ export default async function Home() {
   const posts = getPortfolioConfig().features?.blog
     ? postSummaries().sort((a, b) => b.date.localeCompare(a.date))
     : [];
-  const sectionIds = ['top', 'home', ...(lab ? ['lab'] : []), 'projects', ...(posts.length ? ['writing'] : []), 'contact'];
+  const sectionIds = ['top', 'home', ...(lab ? ['lab'] : []), ...(posts.length ? ['writing'] : []), 'contact'];
   const link = ({ slug, title, url }: { slug: string; title: string; url: string }) => ({ slug, title, url });
 
   return (
@@ -49,14 +50,16 @@ export default async function Home() {
           />
         </FocusTile>
         <FocusTile id="content" sectionId="home" label="Featured" className="home-stage">
-          <Stage home={<HomeView featured={featured} others={others} />} />
+          <Stage
+            home={<HomeView featured={featured} others={others} />}
+            projects={<ProjectsView projects={orderedProjects(projects)} />}
+          />
         </FocusTile>
         {lab && (
           <FocusTile id="lab" sectionId="lab" label="Lab" className="home-lab">
             <LabTile />
           </FocusTile>
         )}
-        <ProjectsSection projects={others} />
         {posts.length > 0 && <WritingSection posts={posts.slice(0, 4)} total={posts.length} />}
         <ContactSection />
       </HomeShell>

@@ -73,7 +73,7 @@ const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
               type="button"
               onClick={() => onNavigate(ws.id)}
               aria-current={active ? 'page' : undefined}
-              className="workspace flex items-center gap-1 transition-colors hover:underline underline-offset-4"
+              className="workspace flex items-center gap-1 transition-colors hover:underline focus-visible:underline underline-offset-4"
               style={{ color: active ? 'var(--accent-text)' : 'rgba(var(--theme-text-rgb), 0.72)' }}
             >
               <span aria-hidden="true" style={{ color: active ? 'var(--accent-color)' : 'var(--color-text-muted)' }}>

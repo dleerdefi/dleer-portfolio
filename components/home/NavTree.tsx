@@ -22,18 +22,48 @@ function ViewEntry({ branch, label, active, onSelect }: { branch: string; label:
 
 type NavLink = { slug: string; title: string; url: string };
 
-/** A directory of pages: its name links to the list, the arrow shows a few entries and "N more". */
-function LinkDir({ name, href, entries, more, defaultOpen = false }: { name: string; href: string; entries: NavLink[]; more: number; defaultOpen?: boolean }) {
+/**
+ * A directory of pages: the arrow shows a few entries and "N more". Its name links to the list,
+ * or, given `onOpen`, switches the stage to it (projects/, like lab/ and contact).
+ */
+function LinkDir({
+  name,
+  href,
+  entries,
+  more,
+  defaultOpen = false,
+  onOpen,
+  active = false,
+}: {
+  name: string;
+  href: string;
+  entries: NavLink[];
+  more: number;
+  defaultOpen?: boolean;
+  onOpen?: () => void;
+  active?: boolean;
+}) {
   const [open, setOpen] = useState(defaultOpen);
+  const label = (
+    <>
+      <span className="tree-branch" aria-hidden="true">
+        ├──
+      </span>{' '}
+      {name}/
+    </>
+  );
   return (
     <li>
       <div className="nav-dir">
-        <Link href={href} className="nav-entry">
-          <span className="tree-branch" aria-hidden="true">
-            ├──
-          </span>{' '}
-          {name}/
-        </Link>
+        {onOpen ? (
+          <button type="button" className="nav-entry" aria-current={active ? 'page' : undefined} onClick={onOpen}>
+            {label}
+          </button>
+        ) : (
+          <Link href={href} className="nav-entry">
+            {label}
+          </Link>
+        )}
         <button
           type="button"
           className="nav-toggle"
@@ -58,7 +88,13 @@ function LinkDir({ name, href, entries, more, defaultOpen = false }: { name: str
           ))}
           {more > 0 && (
             <li>
-              <Link href={href} className="nav-entry nav-more">
+              <Link href={href} className="nav-entry nav-more" onClick={
+                  onOpen &&
+                  ((e) => {
+                    e.preventDefault();
+                    onOpen();
+                  })
+                }>
                 <span className="tree-branch" aria-hidden="true">
                   └──
                 </span>{' '}
@@ -73,8 +109,8 @@ function LinkDir({ name, href, entries, more, defaultOpen = false }: { name: str
 }
 
 /**
- * The contents tile (desktop): the site as a file tree. home and contact switch the
- * stage; projects/ opens with the featured three and links to the rest; lab/ is LabDirectory;
+ * The contents tile (desktop): the site as a file tree. home, projects/ and contact switch the
+ * stage; projects/ opens with the featured three, each a link to its case study; lab/ is LabDirectory;
  * blog/, with the blog's entry points on, lists the newest posts.
  */
 export default function NavTree({
@@ -101,7 +137,15 @@ export default function NavTree({
       </h2>
       <ul className="nav-list" role="list">
         <ViewEntry branch="├──" label="home" active={is('home')} onSelect={view({ type: 'home' })} />
-        <LinkDir name="projects" href="/projects" entries={featured} more={more} defaultOpen />
+        <LinkDir
+          name="projects"
+          href="/projects"
+          entries={featured}
+          more={more}
+          defaultOpen
+          onOpen={view({ type: 'projects-overview' })}
+          active={is('projects-overview')}
+        />
         {features.lab && (
           <li>
             <LabDirectory activeType={activeContent.type} onSelect={(content, e) => {

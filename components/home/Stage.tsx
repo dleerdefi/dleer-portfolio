@@ -11,15 +11,17 @@ const LabTelemetryTile = dynamic(() => import('@/components/lab/telemetry/Teleme
 const LabThreatsTile = dynamic(() => import('@/components/lab/threats/ThreatsTile'), { ssr: false });
 
 /**
- * The content tile's body. `home` is the server-rendered home view; the other views replace it
- * on desktop. Phones always show home: there the stage is the section after the hero, and the
+ * The content tile's body. `home` and `projects` are server-rendered views; the others load on
+ * first use. Any view but home replaces it on desktop only. Phones always show home: there the stage is the section after the hero, and the
  * nav and polybar that switch views are hidden.
  */
-export function Stage({ home }: { home: React.ReactNode }) {
+export function Stage({ home, projects }: { home: React.ReactNode; projects: React.ReactNode }) {
   const { activeContent, handleContentNavigation } = useFocus();
   const isDesktop = useIsDesktop();
 
   switch (isDesktop ? activeContent.type : 'home') {
+    case 'projects-overview':
+      return <>{projects}</>;
     case 'contact':
       return <ContactContent />;
     case 'lab-telemetry':

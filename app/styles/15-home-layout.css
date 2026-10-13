@@ -26,7 +26,7 @@
   color: var(--accent-text); text-decoration: underline; text-decoration-color: rgba(var(--accent-color-rgb), 0.35);
   text-underline-offset: 3px; transition: text-decoration-color 150ms ease;
 }
-.neofetch-rows a:hover { text-decoration-color: var(--accent-color); }
+.neofetch-rows a:is(:hover, :focus-visible) { text-decoration-color: var(--accent-color); }
 .neofetch-dim { color: rgba(var(--theme-text-rgb), 0.72); }
 .neofetch-swatches { display: flex; gap: 0.25rem; padding-top: 0.35rem; }
 .neofetch-swatches span { width: 0.75rem; height: 0.75rem; border-radius: 2px; }
@@ -52,7 +52,7 @@
     overflow: hidden; cursor: pointer; border: 1px solid rgba(var(--accent-color-rgb), 0.45);
     background: rgba(var(--theme-surface-rgb), 0.6); transition: border-color 200ms ease;
   }
-  .hero-photo:hover, .hero-photo[aria-pressed='true'] { border-color: var(--accent-color); }
+  .hero-photo:is(:hover, :focus-visible), .hero-photo[aria-pressed='true'] { border-color: var(--accent-color); }
   .hero-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .hero-photo-detection { position: absolute; inset: 0; opacity: 0; transition: opacity 250ms ease; }
   .hero-photo-detection[data-shown] { opacity: 1; }
@@ -73,7 +73,7 @@
 @container (min-width: 560px) { .home-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .home-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
 .home-links a, .section-link a, .lab-tile-open { color: var(--accent-text); text-decoration: none; }
-.home-links a:hover, .section-link a:hover, .lab-tile-open:hover { text-decoration: underline; }
+.home-links a:is(:hover, :focus-visible), .section-link a:is(:hover, :focus-visible), .lab-tile-open:is(:hover, :focus-visible) { text-decoration: underline; }
 
 .tree-branch { color: var(--accent-text); }
 
@@ -84,7 +84,7 @@
 .project-row { display: flex; flex-direction: column; gap: 0.3rem; padding: 0.85rem 0; color: var(--theme-text); text-decoration: none; border-bottom: 1px solid rgba(var(--accent-color-rgb), 0.12); }
 .project-row-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
 .project-row-title { font-weight: 600; }
-.project-row:hover .project-row-title { color: var(--accent-text); }
+.project-row:is(:hover, :focus-visible) .project-row-title { color: var(--accent-text); }
 .project-row-summary { font-size: 0.85rem; color: rgba(var(--theme-text-rgb), 0.72); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .lab-tile { display: flex; flex-direction: column; gap: 1rem; }
 .lab-tile-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; }
@@ -114,7 +114,7 @@
   border: 0; border-radius: 4px; background: none; color: inherit; font: inherit; text-align: left;
   text-decoration: none; cursor: pointer; transition: background-color 150ms ease;
 }
-.nav-entry:hover { background: rgba(var(--accent-color-rgb), 0.1); }
+.nav-entry:is(:hover, :focus-visible) { background: rgba(var(--accent-color-rgb), 0.1); }
 .nav-entry[aria-current] { background: rgba(var(--accent-color-rgb), 0.1); color: var(--accent-text); font-weight: 700; }
 /* On the light preset a tint darkens what is behind the accent text: half as much */
 .theme-solarized-light .nav-entry[aria-current] { background: rgba(var(--accent-color-rgb), 0.05); }
@@ -128,7 +128,7 @@
   display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 4px;
   border: 0; border-radius: 4px; background: none; color: var(--theme-text); opacity: 0.6; font: inherit; cursor: pointer;
 }
-.tray-button:hover, .tray-button[aria-pressed='true'], .tray-button[aria-expanded='true'] { opacity: 1; }
+.tray-button:is(:hover, :focus-visible), .tray-button[aria-pressed='true'], .tray-button[aria-expanded='true'] { opacity: 1; }
 .tray-button[aria-pressed='true'] { color: var(--accent-text); }
 .tray-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--accent-color); box-shadow: 0 0 0 2px rgba(var(--theme-text-rgb), 0.25); }
 .popover-anchor { position: relative; }
@@ -140,7 +140,7 @@
 }
 .swatch-grid { display: grid; grid-template-columns: repeat(5, 24px); gap: 8px; }
 .swatch { width: 24px; height: 24px; border-radius: 4px; border: 2px solid rgba(var(--theme-text-rgb), 0.15); cursor: pointer; transition: transform 150ms ease; }
-.swatch:hover, .swatch[aria-pressed='true'] { transform: scale(1.1); }
+.swatch:is(:hover, :focus-visible), .swatch[aria-pressed='true'] { transform: scale(1.1); }
 .swatch[aria-pressed='true'] { border-color: var(--theme-text); }
 .wallpaper-grid { display: grid; grid-template-columns: repeat(2, 96px); gap: 8px; }
 .wallpaper-option {
@@ -154,9 +154,6 @@
 .keys-help dt { color: var(--accent-text); white-space: nowrap; }
 .keys-help dd { margin: 0; color: rgba(var(--theme-text-rgb), 0.85); }
 
-:is(.nav-entry, .nav-toggle, .tray-button, .workspace, .swatch, .wallpaper-option, .popover-toggle, .project-card, .project-row, .rail-dot, .hero-photo):focus-visible {
-  outline: 2px solid var(--accent-color); outline-offset: 2px;
-}
 
 /* ---------- Section rail (phones) ---------- */
 .section-rail {
@@ -167,13 +164,10 @@
 }
 .section-rail[data-hidden] { opacity: 0; transform: translate(-50%, 8px); pointer-events: none; }
 .rail-dot {
-  display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 44px; height: 44px; padding: 0 4px;
-  border: 0; background: none; color: var(--accent-text); font: inherit; font-size: 0.875rem; white-space: nowrap; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; min-width: 44px; height: 44px; padding: 0 8px;
+  border: 0; background: none; color: rgba(var(--theme-text-rgb), 0.72); font: inherit; font-size: 0.875rem; white-space: nowrap; cursor: pointer;
 }
-/* Below 360 px the six 44 px dots fill the frame: the watts stay in the dot's name only */
-@media (max-width: 359px) { .rail-power { display: none; } }
-.rail-dot-mark { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid rgba(var(--accent-color-rgb), 0.7); }
-.rail-dot[aria-current] .rail-dot-mark { background: var(--accent-color); border-color: var(--accent-color); }
+.rail-dot[aria-current] { color: var(--accent-text); }
 
 /* ---------- Phone column (< 1024 px) ---------- */
 @media (max-width: 1023px) {
