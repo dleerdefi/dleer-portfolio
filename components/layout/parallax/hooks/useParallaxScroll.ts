@@ -1,89 +1,113 @@
-import { useEffect, useState, RefObject } from 'react';
-import { useScroll, useTransform, MotionValue } from 'framer-motion';
+import { useEffect, useMemo, useRef, useState, RefObject } from 'react';
 
 interface Section {
   id: string;
   title: string;
 }
 
-interface UseParallaxScrollReturn {
-  activeSection: string;
-  scrollPercent: number;
-  scrollYProgress: MotionValue<number>;
-  backgroundOpacity: MotionValue<number>;
+/** Scroll progress (0 to 1) outside React state, so scrolling never re-renders the layout. */
+export interface ScrollProgressStore {
+  get(): number;
+  /** Calls `fn` now and on every change; returns the unsubscribe function. */
+  subscribe(fn: (progress: number) => void): () => void;
+}
+
+function createProgressStore(): ScrollProgressStore & { set(progress: number): void } {
+  let value = 0;
+  const listeners = new Set<(progress: number) => void>();
+  return {
+    get: () => value,
+    set(progress) {
+      if (progress === value) return;
+      value = progress;
+      listeners.forEach((fn) => fn(value));
+    },
+    subscribe(fn) {
+      listeners.add(fn);
+      fn(value);
+      return () => listeners.delete(fn);
+    },
+  };
 }
 
 /**
- * Custom hook for managing parallax scroll behavior
- * Handles scroll tracking, active section detection, and scroll-based animations
+ * Scroll behavior for the phone layout (docs/PORTFOLIO_V2_SPEC.md, P6):
+ * - at most one update per animation frame, which reads only `scrollTop` and sizes cached by a
+ *   ResizeObserver, so scrolling never forces a synchronous layout;
+ * - the hero's opacity and the scroll indicator are written to the DOM directly, not through state;
+ * - the active section comes from an IntersectionObserver on a line across the middle of the
+ *   viewport, and is the only state that changes (rarely).
  */
 export function useParallaxScroll(
   scrollRef: RefObject<HTMLDivElement>,
-  sections: Section[]
-): UseParallaxScrollReturn {
-  const [activeSection, setActiveSection] = useState('about');
-  const [scrollPercent, setScrollPercent] = useState(0);
+  sections: Section[],
+  heroRef: RefObject<HTMLDivElement | null>
+): { activeSection: string; progress: ScrollProgressStore } {
+  const [activeSection, setActiveSection] = useState('neofetch');
+  const progress = useMemo(createProgressStore, []);
+  const centered = useRef<string | null>(null);
+  const sectionKey = sections.map((s) => s.id).join(',');
 
-  // Framer Motion scroll tracking
-  const { scrollYProgress } = useScroll({
-    container: scrollRef
-  });
-
-  // Transform scroll progress to background opacity
-  const backgroundOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.2],
-    [0.7, 0.3]
-  );
-
-  // Track active section based on scroll position
   useEffect(() => {
-    const handleScroll = () => {
-      const container = scrollRef.current;
-      if (!container) return;
+    const container = scrollRef.current;
+    if (!container) return;
 
-      const scrollPosition = container.scrollTop;
-      const scrollHeight = container.scrollHeight - container.clientHeight;
-      const windowHeight = window.innerHeight;
-
-      // Calculate scroll percentage for smooth tracking
-      const percent = Math.round((scrollPosition / scrollHeight) * 100);
-      setScrollPercent(percent);
-
-      // Check if we're at the top (Neofetch section)
-      if (scrollPosition < windowHeight * 0.4) {  // Less than 40% of viewport height
-        setActiveSection('neofetch');  // Special case for top
-        return;
-      }
-
-      // Determine which section is most visible (center of viewport)
-      sections.forEach((section) => {
-        const sectionElement = document.getElementById(`section-${section.id}`);
-        if (sectionElement) {
-          const rect = sectionElement.getBoundingClientRect();
-          // Check if section center is in viewport center
-          if (rect.top < windowHeight / 2 && rect.bottom > windowHeight / 2) {
-            setActiveSection(section.id);
-          }
-        }
-      });
+    let frame = 0;
+    let maxScroll = 0;
+    let viewport = window.innerHeight;
+    const measure = () => {
+      maxScroll = container.scrollHeight - container.clientHeight;
+      viewport = window.innerHeight;
     };
 
-    const container = scrollRef.current;
-    container?.addEventListener('scroll', handleScroll, { passive: true });
+    const update = () => {
+      frame = 0;
+      const top = container.scrollTop;
+      const p = maxScroll > 0 ? Math.min(1, Math.max(0, top / maxScroll)) : 0;
+      progress.set(p);
+      // The hero fades from 0.7 to 0.3 over the first fifth of the page
+      if (heroRef.current) heroRef.current.style.opacity = String(0.7 - 0.4 * Math.min(p / 0.2, 1));
+      // Near the top the neofetch hero is "active"; below it, whichever section crosses the middle
+      setActiveSection(top < viewport * 0.4 ? 'neofetch' : centered.current ?? 'neofetch');
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
 
-    // Initial call to set state
-    handleScroll();
+    // Sizes change when sections load data or the viewport resizes; ResizeObserver callbacks
+    // run after layout, so measuring there is free
+    const resize = new ResizeObserver(() => {
+      measure();
+      schedule();
+    });
+    resize.observe(container);
+    Array.from(container.children).forEach((child) => resize.observe(child));
+
+    const middle = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) centered.current = entry.target.id.replace(/^section-/, '');
+        }
+        schedule();
+      },
+      { root: container, rootMargin: '-50% 0px -50% 0px' }
+    );
+    sectionKey.split(',').forEach((id) => {
+      const el = document.getElementById(`section-${id}`);
+      if (el) middle.observe(el);
+    });
+
+    container.addEventListener('scroll', schedule, { passive: true });
+    measure();
+    schedule();
 
     return () => {
-      container?.removeEventListener('scroll', handleScroll);
+      container.removeEventListener('scroll', schedule);
+      resize.disconnect();
+      middle.disconnect();
+      if (frame) cancelAnimationFrame(frame);
     };
-  }, [scrollRef, sections]);
+  }, [scrollRef, heroRef, progress, sectionKey]);
 
-  return {
-    activeSection,
-    scrollPercent,
-    scrollYProgress,
-    backgroundOpacity
-  };
+  return { activeSection, progress };
 }

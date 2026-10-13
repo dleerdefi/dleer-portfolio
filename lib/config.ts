@@ -1,5 +1,5 @@
 import { portfolioConfig, getPortfolioConfig } from '@/config/portfolio.config';
-import { PortfolioConfig, Project, SocialLink } from '@/config/types';
+import { PortfolioConfig, SocialLink } from '@/config/types';
 
 // Configuration utilities and helpers
 
@@ -35,22 +35,6 @@ export function useTechnologies() {
 export function useSocialLinks(): SocialLink[] {
   const config = usePortfolioConfig();
   return config.social;
-}
-
-/**
- * Get projects from config
- */
-export function useProjects(): Project[] {
-  const config = usePortfolioConfig();
-  return config.projects;
-}
-
-/**
- * Get a specific project by ID
- */
-export function useProject(id: string): Project | undefined {
-  const projects = useProjects();
-  return projects.find(p => p.id === id);
 }
 
 // Note: useBlogPosts() and useBlogPost() removed - blog posts moved to Content Collections

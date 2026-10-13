@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
 
 interface ProfilePhotoProps {
   src: string;
@@ -92,8 +91,8 @@ const ProfilePhotoComponent: React.FC<ProfilePhotoProps> = ({
       }}
     >
       {/* Window Frame */}
-      <motion.div
-        className="rounded-none border-2 transition-all duration-300"
+      <div
+        className={`rounded-none border-2 transition-all duration-300${detectionVariant ? ' active:scale-[0.98]' : ''}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleClick}
@@ -101,7 +100,6 @@ const ProfilePhotoComponent: React.FC<ProfilePhotoProps> = ({
         role={detectionVariant ? "button" : undefined}
         tabIndex={detectionVariant ? 0 : undefined}
         aria-label={detectionVariant ? "Toggle AI detection view" : undefined}
-        whileTap={detectionVariant ? { scale: 0.98 } : undefined}
         style={{
           borderColor: isHovered
             ? 'rgba(var(--accent-color-rgb), 0.5)'
@@ -146,16 +144,10 @@ const ProfilePhotoComponent: React.FC<ProfilePhotoProps> = ({
             paddingBottom: `${(height / width) * 100}%`
           }}
         >
-          <AnimatePresence mode="wait">
-            <motion.div
+          {/* Keyed so a new source fades in (the .fade-in keyframes in 08-animations.css) */}
+            <div
               key={currentSrc}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{
-                duration: 0.2,
-                ease: [0.4, 0, 0.2, 1]
-              }}
+              className="fade-in"
               style={{
                 position: 'absolute',
                 top: 0,
@@ -176,8 +168,7 @@ const ProfilePhotoComponent: React.FC<ProfilePhotoProps> = ({
                 quality={70}
                 style={{ pointerEvents: 'none' }}
               />
-            </motion.div>
-          </AnimatePresence>
+            </div>
         </div>
 
         {/* EXIF Status Bar (always visible) */}
@@ -190,17 +181,9 @@ const ProfilePhotoComponent: React.FC<ProfilePhotoProps> = ({
               overflow: 'hidden'
             }}
           >
-            <AnimatePresence mode="wait">
-              <motion.div
+              <div
                 key={exifString}
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{
-                  duration: 0.15,
-                  ease: [0.4, 0, 0.2, 1]
-                }}
-                className="flex items-center justify-center h-full px-3 font-mono text-xs"
+                className="fade-up flex items-center justify-center h-full px-3 font-mono text-xs"
                 style={{
                   color: 'var(--theme-text-dimmed)',
                   fontSize: '10px',
@@ -210,11 +193,10 @@ const ProfilePhotoComponent: React.FC<ProfilePhotoProps> = ({
                 }}
               >
                 {exifString}
-              </motion.div>
-            </AnimatePresence>
+              </div>
           </div>
         )}
-      </motion.div>
+      </div>
     </div>
   );
 };

@@ -216,7 +216,6 @@ export interface PortfolioConfig {
   social: SocialLink[];
   skills?: SkillCategory[]; // Optional - legacy field, can be removed
   technologies?: TechnologiesConfig;
-  projects: Project[];
   blog?: BlogPost[]; // Optional - migrated to Content Collections (content/blog/*.mdx)
   system: SystemInfo;
   navigation?: NavigationSection[];

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFocusState, useFocusNavigation, ContentType } from '@/contexts/FocusContext';
-import { allProjects, allBlogs } from 'content-collections';
+import { useContentIndex } from '@/contexts/ContentIndexContext';
 import { FONT_SIZES } from '@/lib/constants/typography';
 import { useFeatureFlags } from '@/lib/config';
 import { LabDirectory } from './nav/LabDirectory';
@@ -20,9 +20,8 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
   const { handleContentNavigation } = useFocusNavigation();
   const features = useFeatureFlags();
 
-  // Use content-collections instead of config
-  const projects = allProjects;
-  const blogs = allBlogs.filter(blog => blog.status === 'published');
+  // Slim project and post lists, built on the server (lib/content-index.ts)
+  const { projects, posts: blogs } = useContentIndex();
 
   const handleSelect = (content: ContentType, e?: React.MouseEvent) => {
     // Prevent event from bubbling up to tile container
@@ -32,12 +31,6 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
     if (content.type === 'project' && content.data?.slug) {
       // Navigate to individual project detail page using slug
       router.push(`/projects/${content.data.slug}`);
-      return;
-    }
-
-    if (content.type === 'blog' && content.data?.slug) {
-      // Navigate to individual blog detail page using slug
-      router.push(`/blog/${content.data.slug}`);
       return;
     }
 
@@ -106,15 +99,11 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
     tags: p.tags
   }));
 
-  // Use full blog data from content-collections - it already has all required fields
   const blogItems = blogs;
 
   const isActive = (type: string, data?: { slug: string }) => {
     if (activeContent.type === type) {
       if (data && activeContent.type === 'project') {
-        return activeContent.data.slug === data.slug;
-      }
-      if (data && activeContent.type === 'blog') {
         return activeContent.data.slug === data.slug;
       }
       return true;
@@ -379,7 +368,7 @@ const NavigationTile: React.FC<NavigationTileProps> = ({ onContentSelect, isBlur
                       e.currentTarget.style.backgroundColor = 'transparent';
                     }
                   }}
-                  onClick={(e) => handleSelect({ type: 'blog', data: blog }, e)}
+                  onClick={(e) => { e.stopPropagation(); router.push(blog.url); }}
                 >
                   <span>
                     <span className="text-[#9ece6a]">

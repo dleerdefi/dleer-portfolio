@@ -5,24 +5,7 @@ import React, { createContext, useContext, useState, useCallback, useRef } from 
 // Type definitions for the focus management system
 export type TileType = 'neofetch' | 'navigation' | 'content' | 'themePreset' | 'accentColor' | 'background';
 
-// Blog and Project data types (from content-collections schema)
-export interface BlogData {
-  title: string;
-  slug: string;
-  summary: string;
-  date: string;
-  updated?: string;
-  tags: string[];
-  cover?: string;
-  status: 'draft' | 'published';
-  series?: string;
-  html: string;
-  url: string;
-  readingTime: string;
-  readingMinutes: number;
-  ogTitle: string;
-}
-
+// Project data passed with a 'project' navigation intent
 // ProjectData supports both:
 // 1. MDX projects from content-collections (for detail pages)
 // 2. Config projects from portfolio.config (for overview navigation)
@@ -73,7 +56,6 @@ export type ContentType =
   | { type: 'about' }
   | { type: 'project'; data: ProjectData }
   | { type: 'projects-overview' }
-  | { type: 'blog'; data: BlogData }
   | { type: 'blog-overview' }
   | { type: 'contact' }
   | { type: 'lab-telemetry' }

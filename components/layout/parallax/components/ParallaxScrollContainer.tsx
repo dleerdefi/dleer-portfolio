@@ -1,7 +1,6 @@
 'use client';
 
 import React, { RefObject, ReactNode } from 'react';
-import { motion, MotionValue } from 'framer-motion';
 import NeofetchTile from '@/components/tiles/NeofetchTile';
 
 interface Section {
@@ -12,7 +11,8 @@ interface Section {
 interface ParallaxScrollContainerProps {
   scrollRef: RefObject<HTMLDivElement>;
   borderPadding: number;
-  backgroundOpacity: MotionValue<number>;
+  /** The fixed neofetch hero; useParallaxScroll fades it as the page scrolls */
+  heroRef: RefObject<HTMLDivElement | null>;
   sections: Section[];
   renderSection: (sectionId: string) => ReactNode;
 }
@@ -28,7 +28,7 @@ interface ParallaxScrollContainerProps {
 export const ParallaxScrollContainer: React.FC<ParallaxScrollContainerProps> = ({
   scrollRef,
   borderPadding,
-  backgroundOpacity,
+  heroRef,
   sections,
   renderSection
 }) => {
@@ -51,16 +51,18 @@ export const ParallaxScrollContainer: React.FC<ParallaxScrollContainerProps> = (
       aria-label="Main content"
     >
       {/* Fixed Neofetch Background - Now inside scroll container for clickability */}
-      <motion.div
+      <div
+        ref={heroRef}
         className="fixed flex items-center justify-center"
         style={{
           top: `${borderPadding}px`,
           left: `${borderPadding}px`,
           right: `${borderPadding}px`,
           height: '65vh',
-          opacity: backgroundOpacity, // MotionValue is handled by Framer Motion
+          opacity: 0.7,
+          // No backdrop-filter: the wallpaper behind is already blurred, and a 65vh backdrop blur
+          // re-samples on every scroll frame on phones (docs/PORTFOLIO_V2_SPEC.md, P5)
           backgroundColor: 'rgba(var(--theme-surface-rgb), 0.5)',
-          backdropFilter: 'blur(10px)',
           zIndex: 1,
           pointerEvents: 'none'
         }}
@@ -79,7 +81,7 @@ export const ParallaxScrollContainer: React.FC<ParallaxScrollContainerProps> = (
             background: 'linear-gradient(to bottom, transparent, var(--theme-bg))'
           }}
         />
-      </motion.div>
+      </div>
 
       {/* Spacer for fixed background */}
       <div
@@ -117,8 +119,6 @@ export const ParallaxScrollContainer: React.FC<ParallaxScrollContainerProps> = (
                   backgroundImage: `radial-gradient(circle at 1px 1px, rgba(var(--theme-bg-rgb), 0.8) 0.8px, transparent 0.8px)`,
                   backgroundSize: '3px 3px',
                   backgroundPosition: '0 0',
-                  backdropFilter: 'blur(4px)',
-                  WebkitBackdropFilter: 'blur(4px)',
                   maskImage: 'linear-gradient(to bottom, transparent 0%, black 100%)',
                   WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 100%)',
                   zIndex: 2,

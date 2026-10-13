@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useMemo } from 'react';
 import { usePersonalInfo, useSocialLinks, useFeatureFlags } from '@/lib/config';
-import { allProjects, allBlogs } from 'content-collections';
+import { useContentIndex } from '@/contexts/ContentIndexContext';
 import Background from '@/components/layout/Background';
 import ScrollProgress from '@/components/ui/ScrollProgress';
 
@@ -33,8 +33,8 @@ import { ParallaxLabSection } from './parallax/sections/ParallaxLabSection';
  */
 const MobileParallaxLayout: React.FC = () => {
   const personal = usePersonalInfo();
-  const projects = allProjects;
-  const blogPosts = allBlogs.filter(blog => blog.status === 'published');
+  // Slim project and post lists, built on the server (lib/content-index.ts)
+  const { projects, posts: blogPosts } = useContentIndex();
   const socialLinks = useSocialLinks();
   const features = useFeatureFlags();
 
@@ -46,24 +46,23 @@ const MobileParallaxLayout: React.FC = () => {
   const borderPadding = 16;
 
   // Sections for scrolling - split About into Bio and Technologies
-  const sections = [
+  // Memoised: the scroll hook subscribes per section list, so a new array each render would
+  // re-subscribe on every render
+  const sections = useMemo(() => [
     { id: 'bio', title: 'Bio' },
     { id: 'technologies', title: 'Technologies' },
     { id: 'projects', title: 'Projects' },
     { id: 'blog', title: 'Blog' },
     ...(features.lab ? [{ id: 'lab', title: 'Lab' }] : []),
     { id: 'contact', title: 'Contact' }
-  ];
+  ], [features.lab]);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   // Use custom hooks for theme enforcement
   useParallaxTheme();
 
   // Use custom hooks for scroll management
-  const {
-    activeSection,
-    scrollPercent,
-    backgroundOpacity
-  } = useParallaxScroll(scrollRef, sections);
+  const { activeSection, progress } = useParallaxScroll(scrollRef, sections, heroRef);
 
   // Use custom hooks for navigation
   const {
@@ -150,7 +149,7 @@ const MobileParallaxLayout: React.FC = () => {
       <Background />
 
       {/* Custom scrollbar positioned outside window frame */}
-      <ScrollProgress scrollPercent={scrollPercent} />
+      <ScrollProgress progress={progress} />
 
       {/* Border frame with glass effects */}
       <ParallaxBorderFrame borderPadding={borderPadding} />
@@ -159,7 +158,7 @@ const MobileParallaxLayout: React.FC = () => {
       <ParallaxScrollContainer
         scrollRef={scrollRef}
         borderPadding={borderPadding}
-        backgroundOpacity={backgroundOpacity}
+        heroRef={heroRef}
         sections={sections}
         renderSection={renderSection}
       />

@@ -1,5 +1,4 @@
 import { PortfolioConfig } from './types';
-import { projectsData } from './projects.config';
 import { getImageUrl } from '@/lib/image-paths';
 
 // Main portfolio configuration
@@ -98,7 +97,6 @@ export const portfolioConfig: PortfolioConfig = {
     ]
   },
 
-  projects: projectsData,
 
   system: {
     github: {

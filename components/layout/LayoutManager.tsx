@@ -2,7 +2,6 @@
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, LayoutGroup } from 'framer-motion';
 import NeofetchTile from '@/components/tiles/NeofetchTile';
 import NavigationTile from '@/components/tiles/NavigationTile';
 import ContentViewer from '@/components/tiles/ContentViewer';
@@ -11,6 +10,7 @@ import AccentColorTile from '@/components/tiles/AccentColorTile';
 import BackgroundTile from '@/components/tiles/BackgroundTile';
 import Background from '@/components/layout/Background';
 import Polybar from '@/components/layout/Polybar';
+import { Tile } from '@/components/layout/Tile';
 import { useFocus, ContentType as FocusContentType } from '@/contexts/FocusContext';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -88,17 +88,9 @@ const LayoutManager: React.FC = () => {
     }
   }, [handleTabNavigation, handleDirectionalNavigation, isStacked]);
 
-  // Framer Motion animation settings
-  const layoutTransition = {
-    type: "spring" as const,
-    stiffness: 300,
-    damping: 30,
-    mass: 1
-  };
-
   // Theme-aware tile opacity for better differentiation - using spec surface colors
   const getTileOpacity = (tileType: 'content' | 'navigation' | 'neofetch' | 'themePreset' | 'accentColor' | 'background', focused: boolean) => {
-    const isContentHeavy = tileType === 'content' && (activeContent.type === 'project' || activeContent.type === 'blog');
+    const isContentHeavy = tileType === 'content' && activeContent.type === 'project';
 
     // Tokyo Night - cooler, sharper contrasts
     if (theme.preset === 'tokyo-night') {
@@ -180,186 +172,58 @@ const LayoutManager: React.FC = () => {
     setFocusedTile('content');
   };
 
+  const tileBg = (tile: 'navigation' | 'neofetch' | 'themePreset' | 'accentColor' | 'background') =>
+    getTileOpacity(tile, focusedTile === tile);
+  const contentBg = focusedTile === 'content' ? getContentTileOpacity().focused : getContentTileOpacity().unfocused;
+  // The three theme tiles share the column's height minus its two 12 px gaps
+  const themeTileHeight = (share: number) => `calc((100% - 24px) * ${share})`;
+
   return (
     <>
       <Background />
       <div className="h-screen overflow-hidden relative flex flex-col">
         <Polybar onNavigate={handlePolybarNavigate} />
         <div className="flex-1 overflow-hidden" style={{ padding: '12px' }}>
-          <LayoutGroup>
-            <motion.div className="h-full flex" style={{ gap: '12px' }}>
-              {/* Left Column - Adjusted for gap */}
-              <motion.div className="flex flex-col" style={{ gap: '12px', width: 'calc(50% - 6px)' }}>
-                {/* Neofetch Tile */}
-                <motion.div
-                  layout
-                  layoutId="tile-neofetch"
-                  transition={layoutTransition}
-                  className={`h-2/5 shadow-xl border overflow-auto no-scrollbar ${
-                    focusedTile === 'neofetch' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
-                  }`}
-                  initial={{
-                    backgroundColor: getTileOpacity('neofetch', false)
-                  }}
-                  animate={{
-                    backgroundColor: getTileOpacity('neofetch', focusedTile === 'neofetch'),
-                    backdropFilter: 'blur(12px)',
-                    borderRadius: '0px',
-                    borderWidth: '1px',
-                    padding: '24px',
-                    willChange: 'background-color',
-                    containerType: 'inline-size'
-                  }}
-                  onClick={() => setFocusedTile('neofetch')}
-                >
-                  <NeofetchTile isBlurred={focusedTile !== 'neofetch'} layout="tile" />
-                </motion.div>
+          <div className="h-full flex" style={{ gap: '12px' }}>
+            {/* Left column */}
+            <div className="flex flex-col" style={{ gap: '12px', width: 'calc(50% - 6px)' }}>
+              <Tile id="neofetch" focused={focusedTile === 'neofetch'} background={tileBg('neofetch')} padding={24} scroll
+                style={{ height: '40%' }} onFocus={() => setFocusedTile('neofetch')}>
+                <NeofetchTile isBlurred={focusedTile !== 'neofetch'} layout="tile" />
+              </Tile>
 
-                {/* Bottom Section - Navigation and 3 Theme Tiles */}
-                <motion.div className="h-3/5 flex" style={{ gap: '12px', overflow: 'hidden' }}>
-                  {/* Navigation Tile - 70% of bottom width */}
-                  <motion.div
-                    layout
-                    layoutId="tile-navigation"
-                    transition={layoutTransition}
-                    className={`shadow-xl border overflow-auto no-scrollbar ${
-                      focusedTile === 'navigation' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
-                    }`}
-                    initial={{
-                      backgroundColor: getTileOpacity('navigation', false)
-                    }}
-                    animate={{
-                      backgroundColor: getTileOpacity('navigation', focusedTile === 'navigation'),
-                      flex: '0 0 calc(70% - 6px)',
-                      backdropFilter: 'blur(12px)',
-                      borderRadius: '0px',
-                      borderWidth: '1px',
-                      borderColor: focusedTile === 'navigation' ? 'var(--accent-color)' : 'rgba(var(--accent-color-rgb), 0.3)',
-                      padding: '24px',
-                      willChange: 'background-color',
-                      boxShadow: focusedTile === 'navigation' ? '0 25px 50px -12px rgba(var(--accent-color-rgb), 0.3)' : undefined,
-                      containerType: 'inline-size'
-                    }}
-                    onClick={() => setFocusedTile('navigation')}
-                  >
-                    <NavigationTile onContentSelect={handleDesktopContentSelect} isBlurred={focusedTile !== 'navigation'} />
-                  </motion.div>
+              {/* Bottom: navigation (70%) and the three theme tiles (30%) */}
+              <div className="flex" style={{ height: '60%', gap: '12px', overflow: 'hidden' }}>
+                <Tile id="navigation" focused={focusedTile === 'navigation'} background={tileBg('navigation')} padding={24} scroll
+                  style={{ flex: '0 0 calc(70% - 6px)' }} onFocus={() => setFocusedTile('navigation')}>
+                  <NavigationTile onContentSelect={handleDesktopContentSelect} isBlurred={focusedTile !== 'navigation'} />
+                </Tile>
 
-                  {/* Theme Controls Column - 30% width, 3 stacked tiles */}
-                  <motion.div className="flex flex-col" style={{ flex: '0 0 calc(30% - 6px)', gap: '12px', overflow: 'hidden' }}>
-                    {/* Theme Preset Tile - 15% height */}
-                    <motion.div
-                      layout
-                      layoutId="tile-themePreset"
-                      transition={layoutTransition}
-                      className={`shadow-xl border overflow-hidden ${
-                        focusedTile === 'themePreset' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
-                      }`}
-                      initial={{
-                        backgroundColor: getTileOpacity('themePreset', false)
-                      }}
-                      animate={{
-                        backgroundColor: getTileOpacity('themePreset', focusedTile === 'themePreset'),
-                        height: 'calc((100% - 24px) * 0.15)',
-                        backdropFilter: 'blur(12px)',
-                        borderRadius: '0px',
-                        borderWidth: '1px',
-                        padding: '12px',
-                        willChange: 'background-color',
-                        containerType: 'inline-size'
-                      }}
-                      onClick={() => setFocusedTile('themePreset')}
-                    >
-                      <ThemePresetTile isBlurred={focusedTile !== 'themePreset'} />
-                    </motion.div>
+                <div className="flex flex-col" style={{ flex: '0 0 calc(30% - 6px)', gap: '12px', overflow: 'hidden' }}>
+                  <Tile id="themePreset" focused={focusedTile === 'themePreset'} background={tileBg('themePreset')} padding={12}
+                    style={{ height: themeTileHeight(0.15) }} onFocus={() => setFocusedTile('themePreset')}>
+                    <ThemePresetTile isBlurred={focusedTile !== 'themePreset'} />
+                  </Tile>
+                  <Tile id="accentColor" focused={focusedTile === 'accentColor'} background={tileBg('accentColor')} padding={12}
+                    style={{ height: themeTileHeight(0.35) }} onFocus={() => setFocusedTile('accentColor')}>
+                    <AccentColorTile isBlurred={focusedTile !== 'accentColor'} />
+                  </Tile>
+                  <Tile id="background" focused={focusedTile === 'background'} background={tileBg('background')} padding={12}
+                    style={{ height: themeTileHeight(0.5) }} onFocus={() => setFocusedTile('background')}>
+                    <BackgroundTile isBlurred={focusedTile !== 'background'} />
+                  </Tile>
+                </div>
+              </div>
+            </div>
 
-                    {/* Accent Color Tile - 35% height */}
-                    <motion.div
-                      layout
-                      layoutId="tile-accentColor"
-                      transition={layoutTransition}
-                      className={`shadow-xl border overflow-hidden ${
-                        focusedTile === 'accentColor' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
-                      }`}
-                      initial={{
-                        backgroundColor: getTileOpacity('accentColor', false)
-                      }}
-                      animate={{
-                        backgroundColor: getTileOpacity('accentColor', focusedTile === 'accentColor'),
-                        height: 'calc((100% - 24px) * 0.35)',
-                        backdropFilter: 'blur(12px)',
-                        borderRadius: '0px',
-                        borderWidth: '1px',
-                        padding: '12px',
-                        willChange: 'background-color',
-                        containerType: 'inline-size'
-                      }}
-                      onClick={() => setFocusedTile('accentColor')}
-                    >
-                      <AccentColorTile isBlurred={focusedTile !== 'accentColor'} />
-                    </motion.div>
-
-                    {/* Background Tile - 50% height */}
-                    <motion.div
-                      layout
-                      layoutId="tile-background"
-                      transition={layoutTransition}
-                      className={`shadow-xl border overflow-hidden ${
-                        focusedTile === 'background' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
-                      }`}
-                      initial={{
-                        backgroundColor: getTileOpacity('background', false)
-                      }}
-                      animate={{
-                        backgroundColor: getTileOpacity('background', focusedTile === 'background'),
-                        height: 'calc((100% - 24px) * 0.50)',
-                        backdropFilter: 'blur(12px)',
-                        borderRadius: '0px',
-                        borderWidth: '1px',
-                        padding: '12px',
-                        willChange: 'background-color',
-                        containerType: 'inline-size'
-                      }}
-                      onClick={() => setFocusedTile('background')}
-                    >
-                      <BackgroundTile isBlurred={focusedTile !== 'background'} />
-                    </motion.div>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-
-              {/* Right Column - Content - Adjusted for gap */}
-              <motion.div
-                layout
-                layoutId="tile-content"
-                transition={layoutTransition}
-                className={`shadow-xl border overflow-auto no-scrollbar ${
-                  focusedTile === 'content' ? 'border-[var(--accent-color)] shadow-[var(--accent-color)]/30 shadow-2xl' : 'border-[var(--accent-color)]/30'
-                }`}
-                initial={{
-                  backgroundColor: getContentTileOpacity().unfocused
-                }}
-                animate={{
-                  backgroundColor: focusedTile === 'content'
-                    ? getContentTileOpacity().focused
-                    : getContentTileOpacity().unfocused,
-                  backdropFilter: 'blur(12px)',
-                  borderRadius: '0px',
-                  borderWidth: '1px',
-                  padding: '24px',
-                  willChange: 'background-color',
-                  width: 'calc(50% - 6px)',
-                  containerType: 'inline-size'
-                }}
-                onClick={() => setFocusedTile('content')}
-              >
-                <ContentViewer onNavigate={handleDesktopContentSelect} />
-              </motion.div>
-            </motion.div>
-          </LayoutGroup>
+            {/* Right column: content */}
+            <Tile id="content" focused={focusedTile === 'content'} background={contentBg} padding={24} scroll
+              style={{ width: 'calc(50% - 6px)' }} onFocus={() => setFocusedTile('content')}>
+              <ContentViewer onNavigate={handleDesktopContentSelect} />
+            </Tile>
+          </div>
         </div>
       </div>
-
     </>
   );
 };
