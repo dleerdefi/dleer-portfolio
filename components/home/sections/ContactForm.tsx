@@ -145,7 +145,7 @@ export function ContactForm() {
           style={{
             backgroundColor: isSubmitting
               ? 'rgba(var(--accent-color-rgb), 0.5)'
-              : 'var(--accent-color)',
+              : 'var(--accent-text)',
             color: 'var(--theme-bg)',
             marginTop: '24px',
             fontWeight: '600',
@@ -204,7 +204,7 @@ export function ContactForm() {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110"
-              style={{ color: 'var(--accent-color)' }}
+              style={{ color: 'var(--accent-text)' }}
               aria-label="Twitter/X"
               title="Twitter/X"
             >
@@ -227,7 +227,7 @@ export function ContactForm() {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110"
-              style={{ color: 'var(--accent-color)' }}
+              style={{ color: 'var(--accent-text)' }}
               aria-label="GitHub"
               title="GitHub"
             >
@@ -250,7 +250,7 @@ export function ContactForm() {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110"
-              style={{ color: 'var(--accent-color)' }}
+              style={{ color: 'var(--accent-text)' }}
               aria-label="LinkedIn"
               title="LinkedIn"
             >

@@ -13,7 +13,7 @@
 .neofetch { display: flex; gap: clamp(1rem, 4cqw, 2rem); align-items: flex-start; }
 .neofetch-logo {
   margin: 0; padding: 0; border: 0; background: none; flex-shrink: 0; overflow: hidden;
-  white-space: pre; line-height: 1.25; color: var(--accent-color);
+  white-space: pre; line-height: 1.25; color: var(--accent-text);
   font-size: clamp(0.3rem, 1.5cqw, 0.75rem);
 }
 .neofetch-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.25rem; }
@@ -24,7 +24,7 @@
 .neofetch-lab { min-height: 1.5em; } /* a line held for the lab row, which arrives after idle */
 .neofetch-key { color: var(--theme-primary); font-weight: 700; }
 .neofetch-rows a {
-  color: var(--accent-color); text-decoration: underline; text-decoration-color: rgba(var(--accent-color-rgb), 0.35);
+  color: var(--accent-text); text-decoration: underline; text-decoration-color: rgba(var(--accent-color-rgb), 0.35);
   text-underline-offset: 3px; transition: text-decoration-color 150ms ease;
 }
 .neofetch-rows a:hover { text-decoration-color: var(--accent-color); }
@@ -59,12 +59,12 @@
     position: absolute; left: 6px; bottom: 6px; padding: 1px 6px; font-size: 0.7rem; line-height: 1.4; color: var(--theme-text);
     background: rgba(var(--theme-bg-rgb), 0.8); border: 1px solid rgba(var(--accent-color-rgb), 0.45);
   }
-  .hero-photo[aria-pressed='true'] .hero-photo-tag { color: var(--theme-bg); background: var(--accent-color); border-color: var(--accent-color); }
+  .hero-photo[aria-pressed='true'] .hero-photo-tag { color: var(--theme-bg); background: var(--accent-text); border-color: var(--accent-color); }
 }
 
 /* ---------- The home view: greeting, pitch, bio, the cards (16-projects.css) ---------- */
 .home-view { display: flex; flex-direction: column; gap: 1.75rem; }
-.home-greeting { margin: 0; color: var(--accent-color); font-weight: 700; line-height: 1.15; font-size: clamp(1.875rem, 1.5rem + 2.5cqi, 2.5rem); }
+.home-greeting { margin: 0; color: var(--accent-text); font-weight: 700; line-height: 1.15; font-size: clamp(1.875rem, 1.5rem + 2.5cqi, 2.5rem); }
 .home-pitch { margin: 0.9rem 0 0; color: var(--theme-text); line-height: 1.6; font-size: clamp(1.05rem, 1rem + 1cqi, 1.25rem); }
 .home-bio { margin: 0.75rem 0 0; max-width: 62ch; color: rgba(var(--theme-text-rgb), 0.85); line-height: 1.65; font-size: 0.95rem; }
 .home-meta { margin: 0.6rem 0 0; color: rgba(var(--theme-text-rgb), 0.72); font-size: 0.9rem; }
@@ -74,16 +74,16 @@
 .home-links a, .section-link a, .lab-tile-open { color: var(--accent-text); text-decoration: none; }
 .home-links a:hover, .section-link a:hover, .lab-tile-open:hover { text-decoration: underline; }
 
-.tree-branch { color: var(--accent-color); }
+.tree-branch { color: var(--accent-text); }
 
 /* ---------- Sections (phone column) and the lab tile ---------- */
-.section-title { margin: 0 0 1.5rem; color: var(--accent-color); font-weight: 700; font-size: 1.875rem; line-height: 1.2; }
+.section-title { margin: 0 0 1.5rem; color: var(--accent-text); font-weight: 700; font-size: 1.875rem; line-height: 1.2; }
 .section-link { margin: 1.25rem 0 0; }
 .project-rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .project-row { display: flex; flex-direction: column; gap: 0.3rem; padding: 0.85rem 0; color: var(--theme-text); text-decoration: none; border-bottom: 1px solid rgba(var(--accent-color-rgb), 0.12); }
 .project-row-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
 .project-row-title { font-weight: 600; }
-.project-row:hover .project-row-title { color: var(--accent-color); }
+.project-row:hover .project-row-title { color: var(--accent-text); }
 .project-row-summary { font-size: 0.85rem; color: rgba(var(--theme-text-rgb), 0.72); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .lab-tile { display: flex; flex-direction: column; gap: 1rem; }
 .lab-tile-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; }
@@ -114,10 +114,12 @@
   text-decoration: none; cursor: pointer; transition: background-color 150ms ease;
 }
 .nav-entry:hover { background: rgba(var(--accent-color-rgb), 0.1); }
-.nav-entry[aria-current] { background: rgba(var(--accent-color-rgb), 0.2); color: var(--accent-color); font-weight: 700; }
+.nav-entry[aria-current] { background: rgba(var(--accent-color-rgb), 0.1); color: var(--accent-text); font-weight: 700; }
+/* On the light preset a tint darkens what is behind the accent text: half as much */
+.theme-solarized-light .nav-entry[aria-current] { background: rgba(var(--accent-color-rgb), 0.05); }
 .nav-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nav-more { color: rgba(var(--theme-text-rgb), 0.72); }
-.nav-toggle { padding: 0.25rem 0.5rem; border: 0; border-radius: 4px; background: none; color: var(--accent-color); font: inherit; cursor: pointer; }
+.nav-toggle { padding: 0.25rem 0.5rem; border: 0; border-radius: 4px; background: none; color: var(--accent-text); font: inherit; cursor: pointer; }
 
 /* ---------- Polybar tray and popovers (desktop) ---------- */
 .tray { display: flex; align-items: center; gap: 2px; }
@@ -126,7 +128,7 @@
   border: 0; border-radius: 4px; background: none; color: var(--theme-text); opacity: 0.6; font: inherit; cursor: pointer;
 }
 .tray-button:hover, .tray-button[aria-pressed='true'], .tray-button[aria-expanded='true'] { opacity: 1; }
-.tray-button[aria-pressed='true'] { color: var(--accent-color); }
+.tray-button[aria-pressed='true'] { color: var(--accent-text); }
 .tray-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--accent-color); box-shadow: 0 0 0 2px rgba(var(--theme-text-rgb), 0.25); }
 .popover-anchor { position: relative; }
 .popover:focus { outline: none; }
@@ -148,7 +150,7 @@
 .wallpaper-option[aria-pressed='true'] { border-color: var(--accent-color); }
 .popover-toggle { margin-top: 10px; width: 100%; padding: 4px 8px; border: 1px solid var(--theme-border); background: none; color: var(--theme-text); font: inherit; cursor: pointer; text-align: left; }
 .keys-help { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; width: 320px; }
-.keys-help dt { color: var(--accent-color); white-space: nowrap; }
+.keys-help dt { color: var(--accent-text); white-space: nowrap; }
 .keys-help dd { margin: 0; color: rgba(var(--theme-text-rgb), 0.85); }
 
 :is(.nav-entry, .nav-toggle, .tray-button, .workspace, .swatch, .wallpaper-option, .popover-toggle, .project-card, .project-row, .rail-dot, .hero-photo):focus-visible {
@@ -165,7 +167,7 @@
 .section-rail[data-hidden] { opacity: 0; transform: translate(-50%, 8px); pointer-events: none; }
 .rail-dot {
   display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 44px; height: 44px; padding: 0 4px;
-  border: 0; background: none; color: var(--accent-color); font: inherit; font-size: 0.875rem; white-space: nowrap; cursor: pointer;
+  border: 0; background: none; color: var(--accent-text); font: inherit; font-size: 0.875rem; white-space: nowrap; cursor: pointer;
 }
 /* Below 360 px the six 44 px dots fill the frame: the watts stay in the dot's name only */
 @media (max-width: 359px) { .rail-power { display: none; } }
@@ -212,14 +214,14 @@
     transition: background-color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
   }
   .tile::-webkit-scrollbar { display: none; }
-  .theme-nord .tile { --tile-alpha: 0.4; --tile-alpha-focused: 0.85; }
-  .theme-solarized-light .tile { --tile-alpha: 0.6; --tile-alpha-focused: 0.95; }
+  /* Nord's and Solarized's glass is more opaque: their wallpapers through it made mid-tones
+     that no text color reads on */
+  .theme-nord .tile { --tile-alpha: 0.7; --tile-alpha-focused: 0.85; }
+  .theme-solarized-light .tile { --tile-alpha: 0.9; --tile-alpha-focused: 0.95; }
   .tile[data-focused] {
     background-color: rgba(var(--color-surface-rgb), var(--tile-alpha-focused));
     border-color: var(--accent-color); box-shadow: 0 25px 50px -12px rgba(var(--accent-color-rgb), 0.3);
   }
-  .tile-body { transition: opacity 250ms ease; }
-  .tile[data-dim]:not([data-focused]) > .tile-body { opacity: 0.7; }
   .home-lab { padding: 20px; }
   @media (max-height: 820px) { .home-lab { padding-block: 14px; } }
   .home-lab .section-title { color: var(--theme-primary); font-size: clamp(1.25rem, 1.25rem + 2.5cqi, 1.5rem); }
