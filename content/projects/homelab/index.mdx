@@ -1,0 +1,72 @@
+---
+title: "The Homelab, Live"
+slug: "homelab"
+summary: "Three PowerEdge servers at home running storage, GPU inference and CI, published live on this site through a push-only data path, with a honeynet watching the internet's side of the door."
+date: "2026-10-08"
+updated: "2026-10-13"
+tags: ["homelab", "infrastructure", "observability", "security"]
+tech: ["Prometheus", "Cloudflare R2", "Next.js", "Zod", "Python"]
+status: "production"
+featured_rank: 4
+hero: "/images/dleer-homelab.webp"
+audience: "anyone curious what runs behind the agents"
+metrics:
+  - { label: "servers", value: 3 }
+  - { label: "GPUs", value: 3 }
+  - { label: "between updates", value: "30 s" }
+links:
+  - { label: "Live telemetry", url: "/lab" }
+---
+
+## What runs at home
+
+Three Dell PowerEdge servers, each with one job:
+
+- **T430: storage and media.** The NAS, and a Quadro RTX 4000 that transcodes for Plex.
+- **R730: GPUs and inference.** Two RTX A4000s for local model inference.
+- **R720xd: apps and CI.** Self-hosted runners that build and test my repositories.
+
+Prometheus reads them at home; the power figures come from each server's iDRAC, so the number on
+[/lab](/lab) is what the servers draw at the wall, right now.
+
+## Publishing without opening the house
+
+The obvious way to show live numbers is to let the website ask the house for them. That means a
+door in the network, and a website that can knock on it. The lab works the other way round:
+
+<Terminal cmd="the public data path">
+home (LAN)                      private bucket                 dleer.ai
+labsnap    ── PUT now.json ──►                ◄── read-only ── /api/lab/*
+           ── PUT history ───►                    token,       │ validated,
+threatsnap ── PUT threats ───►                    server side  │ cached
+                                                               ▼
+                                                     edge cache ──► /lab
+</Terminal>
+
+- **Push, never pull.** Two small programs at home, labsnap and threatsnap, write JSON documents
+  to a private bucket on a timer. Nothing on the internet calls into the house for them.
+- **An allowlist, checked twice.** Each document carries only the keys its producer's contract
+  lists, and the producer validates it against a JSON Schema before it publishes. The site parses
+  it again against its own mirror of that schema and refuses anything that does not fit; a value
+  the producer could not read renders as a dash, never as a guess.
+- **Read-only, server side.** The site's credentials can only read the bucket, and they never
+  reach the browser.
+- **Cheap by construction.** The documents are small (the live one is about a kilobyte), the site
+  caches each for its own refresh window, and the edge cache answers most visitors. The whole lab costs next to
+  nothing to serve.
+- **Honest about freshness.** Every view shows how old its data is. When labsnap stops pushing,
+  the badge goes from `live` to `delayed` to `offline` on its own; nothing pretends.
+
+## The honeynet
+
+A honeypot runs on a small cloud VM, deliberately off-site so that nothing it attracts ever
+touches the home network, and a set of decoy paths on dleer.ai catch the scanners that crawl
+every site. threatsnap pulls what they saw, sorts it into six kinds of attack (recon, brute force,
+web exploits, intrusion attempts, malware, AI agents) and publishes an anonymised summary through
+the same push-only path. No IP address is ever in the data or on a page.
+
+## Why it is on a portfolio
+
+The work behind the other projects runs on this hardware: local inference on the R730, CI for
+the repositories on the R720xd. Showing it live, with the same care for what is published as for
+what is built, says more about how I work than a list of tools would.

@@ -1,0 +1,99 @@
+---
+title: "Construction Skills for Claude Code"
+slug: "claude-code-construction"
+summary: "Open-source skills that give Claude Code a project engineer's working knowledge: split drawing sets and project manuals, extract schedules to Excel, build submittal logs, tabulate and evaluate bids, draft RFIs."
+date: "2026-03-26"
+updated: "2026-10-12"
+tags: ["construction", "claude-code", "ai", "agents", "open-source"]
+tech: ["Claude Code", "Python", "PyMuPDF", "pdfplumber", "openpyxl"]
+status: "production"
+github: "https://github.com/dleerdefi/claude-code-construction"
+featured_rank: 2
+audience: "construction project engineers and managers"
+metrics:
+  - { label: "skills", value: 14 }
+  - { label: "stars", value: "github" }
+  - { label: "forks", value: "github" }
+links:
+  - { label: "GitHub", url: "https://github.com/dleerdefi/claude-code-construction" }
+  - { label: "Install", url: "https://github.com/dleerdefi/claude-code-construction#setup" }
+  - { label: "Evals", url: "https://github.com/dleerdefi/claude-code-construction/blob/main/evals/plugin/README.md" }
+---
+
+## The problem
+
+A project engineer's week is documents: a 300-page drawing set to split by sheet, a project
+manual to break into spec sections, door and finish schedules to retype into Excel, a submittal
+register to build from every section, five subcontractor bids to line up against one scope.
+None of it is hard. All of it is slow, and every hour on it is an hour not spent on the job.
+
+Claude Code is very good at this kind of work once it knows how the documents are put together:
+what a sheet index is, where a schedule lives on a drawing, which spec section a submittal
+belongs to, which document governs when two disagree. These skills are that knowledge, written
+down by someone who did the job before writing software.
+
+## What it does
+
+<Terminal cmd="construction plugin">
+construction/
+├── project-setup            inventory and classify the folder
+├── sheet-splitter           one PDF per drawing sheet
+├── spec-splitter            one file per spec section
+├── schedule-extractor       door, finish, window schedules to Excel
+├── submittal-log-generator  a register from every section
+├── bid-tabulator            bids side by side
+├── bid-evaluator            scope gaps, risk, a recommendation
+├── subcontract-writer       from your firm's template
+├── rfi-drafter              RFIs from the issues found
+├── submittal-review         against specs, drawings and code
+├── pe-review                a project engineer's second look
+├── code-researcher          codes and standards that apply
+├── tag-audit-and-takeoff    count tagged elements across sheets
+└── construction-guide       the rules Claude follows
+</Terminal>
+
+Fourteen skills in four groups:
+
+- **Documents.** `project-setup` inventories the project folder and classifies every file;
+  `sheet-splitter` and `spec-splitter` turn bound drawing sets and project manuals into one file
+  per sheet and per section; `schedule-extractor` reads door, finish, window and panel schedules
+  into Excel and back.
+- **Procurement.** `submittal-log-generator` parses every spec section into a submittal register;
+  `bid-tabulator` lines bids up against one scope; `bid-evaluator` scores scope gaps and risk and
+  writes an award recommendation; `subcontract-writer` drafts a scope-specific subcontract from
+  your firm's template.
+- **Review.** `submittal-review` checks a submittal against the specs, the drawings, code
+  questions and trade coordination, then drafts the GC review; `pe-review` reviews drawings,
+  specs, submittals or RFIs with a project engineer's judgment; `rfi-drafter` drafts RFIs from the
+  issues the other skills flag; `code-researcher` finds the codes and standards that apply;
+  `tag-audit-and-takeoff` counts tagged elements across sheets.
+- **The guide.** `construction-guide` is what Claude loads before touching your documents: how to
+  read them, which document takes precedence, what never to change.
+
+Deliverables (workbooks, Word documents, split PDFs, reports) land in the project folder where
+people already work. Nothing leaves the machine but what Claude Code itself sends.
+
+## Install
+
+Two lines in Claude Code, on Windows, macOS or Linux:
+
+```
+/plugin marketplace add dleerdefi/claude-code-construction
+/plugin install construction@construction-skills
+```
+
+Then `/construction:project-setup` in a project folder. The repository is its own marketplace;
+new versions arrive through it.
+
+## How it is tested
+
+Every skill has an eval case, run through a harness on Windows with Claude Sonnet: the real
+documents are the plans and specifications of Sanibel Fire and Rescue Station 172 (100%
+construction documents, January 2024), which are public, so anyone can run the same cases. The
+eval suite says what each case checks and what is still known to be weak.
+
+It works on its own, from the PDFs alone. In a project that AgentCM has processed, the skills read
+AgentCM's index instead of splitting sheets or extracting text again, and send what they find back
+to it.
+
+MIT licensed.

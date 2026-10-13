@@ -10,6 +10,12 @@ cover: ""
 status: "development"
 github: "https://github.com/dleerdefi/llm-security-auditor"
 featured: true
+featured_rank: 3
+audience: "teams shipping LLM features who need to know what breaks them"
+metrics:
+  - { label: "research attacks", value: 219 }
+  - { label: "stars", value: "github" }
+  - { label: "baseline success", value: "16.5%" }
 ---
 
 ## Overview
@@ -17,6 +23,15 @@ featured: true
 Research toolkit for LLM security testing with **219 curated jailbreak attacks** validated against production systems. Completed **Phase 1: Attack Testing** (16.5% baseline success, multi-turn 1.48× stronger, model comparison). **Phase 2: Defense validation** in progress, targeting 95-99% blocking based on AegisLLM 2024 paper.
 
 Built on 5 major 2024 research papers (Crescendo, AegisLLM, DefensiveTokens) with findings validated through extensive testing. **20+ GitHub stars** from security researchers and AI practitioners.
+
+<Terminal cmd="phase 1 results">
+attacks       219 from 5 research papers
+baseline      16.5% get through
+multi-turn    1.48x a single turn
+DSPy-made     7-11% (curated attacks win)
+defense       patterns block 70-80%, ~1 ms
+              DSPy-optimized: targeting 95-99%
+</Terminal>
 
 **Attack Testing Complete (Phase 1):**
 - 219 research attacks validated: 16.5% baseline success rate
