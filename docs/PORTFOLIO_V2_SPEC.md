@@ -118,7 +118,7 @@ references these by id.
 | C1 | **Blank first paint on `/`.** The server HTML for the home page contains no content: `LayoutManager` returns an empty `div` until a client effect has measured `window.innerWidth`. First paint and LCP wait for the whole JS bundle to hydrate; crawlers that do not run JS see nothing on the home page | `components/layout/LayoutManager.tsx` (`hasChecked`), `app/page.tsx` |
 | C2 | **`React.lazy` created inside render.** The phone layout is wrapped in `React.lazy(() => import(...))` inside `LayoutManager`'s render, so every re-render of `LayoutManager` creates a new lazy component and remounts `MobileParallaxLayout` (scroll position, state and the globe's intersection observers reset) | `components/layout/LayoutManager.tsx` |
 | C3 | **Placeholder author in metadata.** Project and blog pages ship `authors: [{ name: 'Your Name' }]` to search engines and social cards | `app/projects/[slug]/page.tsx:42`, `app/blog/[slug]/page.tsx:45` |
-| C4 | **The Open Graph fallback image does not exist.** Every project and blog page, and `config.seo.ogImage` by default, point at `/og-image.png`, which is not in `public/`. Unless `NEXT_PUBLIC_OG_IMAGE` is set, every shared link has a broken card | `app/projects/[slug]/page.tsx:36`, `app/blog/[slug]/page.tsx:39`, `config/portfolio.config.ts:145` |
+| C4 | **The Open Graph fallback image does not exist.** Every project and blog page points at `/og-image.png`, which is not in `public/` (the site default is fine on dleer.ai because `NEXT_PUBLIC_OG_IMAGE` is set there; the per-page `generateMetadata` ignores it). Shared links to any project or post have a broken card; forks have none at all | `app/projects/[slug]/page.tsx:36`, `app/blog/[slug]/page.tsx:39`, `config/portfolio.config.ts:145` |
 | C5 | **The lab mirrors are two days behind the homelab.** Homelab `main` at `6e4473a` (2026-10-12, "Public telemetry: NAS, CI runners, video engines, airflow, lab counts, cost") added `lab.vms_running`, `targets_up/total`, `alerts_firing`, `disks/disks_healthy`, `drive_temp_max_c`, `energy_cost_usd_24h`, per-host `fan_rpm`, `exhaust_c`, `psu_in_v`, a `nas` block, a `ci` block and GPU `enc_ratio/dec_ratio`. The portfolio's `now.v1.json` fixture (manifest commit `ba74e7e`) and `history.v1.json` (`79227c3`) have none of them, and neither do the Zod schemas or the UI. The sha256 values differ for both labsnap examples. Unknown keys are stripped today (by design), so nothing breaks, but the best new numbers are invisible | `lib/lab/fixtures/MANIFEST.json`, `lib/lab/schemas/`, `components/lab/telemetry/` |
 | C6 | **Full-size wallpapers fetched that nothing displays.** Two preloaders (`BackgroundTile` and `Background`) call `new Image()` on the *original* adjacent carousel files, which `next/image` never requests (it serves `/_next/image?...` variants). On the desktop home that is `cat_anime-girl.webp`, 218 KB, on every first load, for nothing | `components/tiles/BackgroundTile.tsx` (preload effect), `components/layout/Background.tsx` ("FIX 1") |
 | C7 | **Two theme systems fight on phones.** `useEnforceMobileTheme` forces Tokyo Night and sets `--accent-color` as an inline style on `<html>`; `ThemeContext` has a resize handler whose only job is to undo that. Resizing a desktop window across 1024 px flips the accent between purple and cyan; a phone visitor cannot use the preset or accent pickers at all, and `localStorage` preferences are ignored below 1024 px | `hooks/useEnforceMobileTheme.ts`, `contexts/ThemeContext.tsx`, `components/layout/parallax/hooks/useParallaxTheme.ts` |
@@ -738,6 +738,15 @@ Largest requests on the desktop home: `cat_anime-girl.webp` 218 KB (original, un
 Homelab contract drift (C5): portfolio `now.v1.json` sha256 `d3a33aba…` (manifest commit
 `ba74e7e`) versus homelab `main` `6e4473a` `cc0715ff…`; `history.v1.json` `817d7993…` versus
 `a61d5c1c…`. The threats fixtures match.
+
+Production variables on Railway (service `dleer-portfolio`, project `brave-wonder`, deployed
+from `main`, last deploy 2026-10-13 00:17 UTC; names only, values were not read): every
+`NEXT_PUBLIC_*` personal, social, photo, SEO and CDN variable in `.env.example` is set, as are
+`NEXT_PUBLIC_FEATURE_LAB`, `NEXT_PUBLIC_FEATURE_LAB_THREATS`, `LAB_DEMO_DATA`, the four `R2_*`
+variables and the two `RESEND_*` ones. So the audit's placeholder rows (`(N/A)`, `[Your Name]`)
+are an artefact of the audit environment, not of production; the findings above do not depend on
+them. To reproduce the audit with real content, copy the `NEXT_PUBLIC_*` values (no secrets
+needed: the lab runs in demo mode without `R2_*`) into `.env.local` before `npm run build`.
 
 Screenshots reviewed for section 3.3: desktop home at three widths, phone home at four scroll
 positions, `/projects` and a project page at both widths, `/blog`, `/lab` and `/lab/threats` at
