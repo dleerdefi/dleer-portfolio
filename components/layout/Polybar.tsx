@@ -39,6 +39,7 @@ const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
     { id: 'home', label: 'home' },
     { id: 'projects', label: 'projects' },
     ...(features.lab ? [{ id: 'lab', label: 'lab' }] : []),
+    ...(features.blog ? [{ id: 'blog', label: 'blog' }] : []),
     { id: 'contact', label: 'contact' },
   ];
 

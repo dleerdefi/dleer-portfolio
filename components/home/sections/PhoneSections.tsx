@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { ProjectSummary } from '@/lib/content-types';
+import type { PostSummary, ProjectSummary } from '@/lib/content-types';
 import { StatusChip } from '@/components/projects/ProjectCard';
 import { ContactForm } from './ContactForm';
 
@@ -31,6 +31,30 @@ export function ProjectsSection({ projects }: { projects: ProjectSummary[] }) {
       </ul>
       <p className="section-link">
         <Link href="/projects">all projects →</Link>
+      </p>
+    </section>
+  );
+}
+
+/** The newest posts, with the blog's entry points on (NEXT_PUBLIC_FEATURE_BLOG). */
+export function WritingSection({ posts, total }: { posts: PostSummary[]; total: number }) {
+  return (
+    <section id="section-writing" className="phone-section" aria-labelledby="writing-title">
+      <h2 id="writing-title" className="section-title">
+        Writing
+      </h2>
+      <ul className="project-rows" role="list">
+        {posts.map((p) => (
+          <li key={p.slug}>
+            <Link href={p.url} className="project-row">
+              <span className="project-row-title">{p.title}</span>
+              <span className="project-row-summary">{p.readingTime}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <p className="section-link">
+        <Link href="/blog">{total > posts.length ? `all ${total} posts →` : 'all writing →'}</Link>
       </p>
     </section>
   );
