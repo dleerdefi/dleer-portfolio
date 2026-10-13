@@ -1,4 +1,10 @@
-import { PortfolioConfig } from './types';
+import { PortfolioConfig, SocialInfo } from './types';
+
+/** A neofetch row, or nothing when its URL is unset or empty; the handle defaults to the URL's last part */
+function social(platform: string, url?: string, username?: string, followers?: string): SocialInfo | undefined {
+  if (!url) return undefined;
+  return { platform, url, username: username || url.replace(/\/+$/, '').split('/').pop() || url, followers: followers || undefined };
+}
 
 // Main portfolio configuration
 // Replace values with your own information
@@ -62,55 +68,14 @@ export const portfolioConfig: PortfolioConfig = {
     }
   ],
 
-  technologies: {
-    items: [
-      { name: "Python" },
-      { name: "TypeScript" },
-      { name: "React" },
-      { name: "Tailwind CSS" },
-      { name: "PostgreSQL" },
-      { name: "Neo4j" },
-      { name: "Redis" },
-      { name: "Kafka" },
-      { name: "Docker" }
-    ]
-  },
-
-
+  // The neofetch rows. A row shows only when its URL is set; followers is optional text after it
   system: {
-    github: {
-      platform: "GitHub",
-      username: process.env.NEXT_PUBLIC_GITHUB_HANDLE || "username",
-      url: process.env.NEXT_PUBLIC_GITHUB_URL || "https://github.com/username"
-    },
-    twitter: {
-      platform: "X",
-      username: process.env.NEXT_PUBLIC_TWITTER_HANDLE || "@username",
-      url: process.env.NEXT_PUBLIC_TWITTER_URL || "https://x.com/username",
-      followers: process.env.NEXT_PUBLIC_TWITTER_FOLLOWERS || "N/A"
-    },
-    linkedin: {
-      platform: "LinkedIn",
-      username: process.env.NEXT_PUBLIC_LINKEDIN_HANDLE || "Your Name",
-      url: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://linkedin.com/in/yourprofile"
-    },
-    youtube: {
-      platform: "YouTube",
-      username: process.env.NEXT_PUBLIC_YOUTUBE_HANDLE || "Your Channel",
-      url: process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://youtube.com/@username"
-    },
-    instagram: {
-      platform: "Instagram",
-      username: process.env.NEXT_PUBLIC_INSTAGRAM_HANDLE || "username",
-      url: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://instagram.com/username",
-      followers: process.env.NEXT_PUBLIC_INSTAGRAM_STATS || "N/A"
-    },
-    tiktok: {
-      platform: "TikTok",
-      username: process.env.NEXT_PUBLIC_TIKTOK_HANDLE || "username",
-      url: process.env.NEXT_PUBLIC_TIKTOK_URL || "https://tiktok.com/@username",
-      followers: process.env.NEXT_PUBLIC_TIKTOK_STATS || "N/A"
-    }
+    github: social("GitHub", process.env.NEXT_PUBLIC_GITHUB_URL, process.env.NEXT_PUBLIC_GITHUB_HANDLE),
+    twitter: social("X", process.env.NEXT_PUBLIC_TWITTER_URL, process.env.NEXT_PUBLIC_TWITTER_HANDLE, process.env.NEXT_PUBLIC_TWITTER_FOLLOWERS),
+    linkedin: social("LinkedIn", process.env.NEXT_PUBLIC_LINKEDIN_URL, process.env.NEXT_PUBLIC_LINKEDIN_HANDLE),
+    youtube: social("YouTube", process.env.NEXT_PUBLIC_YOUTUBE_URL, process.env.NEXT_PUBLIC_YOUTUBE_HANDLE),
+    instagram: social("Instagram", process.env.NEXT_PUBLIC_INSTAGRAM_URL, process.env.NEXT_PUBLIC_INSTAGRAM_HANDLE, process.env.NEXT_PUBLIC_INSTAGRAM_STATS),
+    tiktok: social("TikTok", process.env.NEXT_PUBLIC_TIKTOK_URL, process.env.NEXT_PUBLIC_TIKTOK_HANDLE, process.env.NEXT_PUBLIC_TIKTOK_STATS)
   },
 
   seo: {

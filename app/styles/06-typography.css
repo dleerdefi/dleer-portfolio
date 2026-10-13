@@ -13,8 +13,6 @@ a {
 
 a:hover {
   color: var(--term-orange);
-  text-decoration: underline;
-  text-decoration-style: dotted;
 }
 
 /* Headings - Container-relative responsive sizing */
