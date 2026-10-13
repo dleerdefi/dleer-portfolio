@@ -73,7 +73,7 @@ routes outside `/lab` and `/api/lab/` for it.
 | `app/api/lab/*` | `status`, `status/history`, `threats`, `threats/live`, `summary`: GET only, validated payloads, §5 cache headers |
 | `hooks/useLabData.ts`, `lib/lab/status-store.ts`, `hooks/useLabColors.ts` | polling, the shared live/delayed/offline store, concrete theme colors for the globe |
 | `components/lab/shared/` | `LabStatusBadge`, `Meter`, `Sparkline`, `LineChart`, `HourlyBlocks`, `Swatch`, `LabAttribution`, `Value`, `LabHeader` |
-| `components/lab/telemetry/`, `components/lab/threats/` | the tiles (`lab-telemetry`, `lab-threats`), the framed pages `/lab` and `/lab/threats`, their phone layouts, `ReplayClock`, the feed, stats, legend, and the lazy globe (`ThreatGlobe`, `globe-setup`, `globe-layers`) |
+| `components/lab/telemetry/`, `components/lab/threats/` | the tiles (`lab-telemetry`, `lab-threats`), the framed pages `/lab` and `/lab/threats`, their phone layouts, `LabExtras` (cost, the health line, the NAS and CI blocks, the transcoding tag), `ReplayClock`, the feed, stats, legend, and the lazy globe (`ThreatGlobe`, `globe-setup`, `globe-layers`) |
 | entry points | `nav/LabDirectory.tsx` in the nav tile, the polybar `lab` workspace, `home/NeofetchLabRows.tsx`, `parallax/sections/ParallaxLabSection.tsx` |
 
 Lab colors come only from CSS variables (`13-lab.css`); `null` renders as a dash; the globe chunk
@@ -113,7 +113,7 @@ The application uses a modular CSS architecture with styles split into 14 focuse
 11. **11-glass-effects.css** (123 lines) - Glass morphism, the desktop `.tile` chrome & visual effects
 12. **12-blog-content.css** (624 lines) - Blog prose styling, MDX components, figures, admonitions, code blocks
 13. **13-lab.css** (106 lines) - Lab (`~/lab`): attack-category colors per preset, `--lab-*` tokens, shared lab classes
-14. **14-lab-views.css** (224 lines) - Lab layouts: the framed `/lab` pages, the globe's markers and tooltip, phone tweaks
+14. **14-lab-views.css** (260 lines) - Lab layouts: the framed `/lab` pages, the health line, NAS / CI blocks and tags, the globe's markers and tooltip, phone tweaks
 
 The main `app/globals.css` file imports all modules in the correct cascade order.
 

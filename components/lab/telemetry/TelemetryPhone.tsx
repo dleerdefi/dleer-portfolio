@@ -2,12 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { fmtCelsius, fmtInt, fmtKwh, fmtWatts } from '@/lib/lab/format';
-import { HOSTS, gpuName } from '@/lib/lab/names';
+import { fmtCelsius, fmtDeltaC, fmtInt, fmtKwh, fmtPct, fmtWatts, withUnit } from '@/lib/lab/format';
+import { COST_NOTE, HOSTS, gpuName } from '@/lib/lab/names';
 import { LabStateLine } from '@/components/lab/shared/LabHeader';
 import { Meter } from '@/components/lab/shared/Meter';
 import { Sparkline } from '@/components/lab/shared/Sparkline';
 import { Value } from '@/components/lab/shared/Value';
+import { CiBlock, Cost, HealthLine, NasBlock, TranscodingBadge, airflowDelta, isTranscoding } from './LabExtras';
 import { Down } from './TelemetryTables';
 import { HistoryOr } from './TelemetryTile';
 import { threatsTeaser, type useTelemetry } from './useTelemetry';
@@ -33,11 +34,17 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
             </div>
             <div style={{ textAlign: 'right' }}>
               <div>{fmtKwh(now.lab.energy_kwh_24h)} 24 h</div>
+              <div className="lab-text-2">
+                <Cost usd={now.lab.energy_cost_usd_24h} />
+                <sup aria-hidden="true">*</sup>
+              </div>
               <div>
                 {now.lab.hosts_up}/{now.lab.hosts_expected} hosts up
               </div>
             </div>
           </div>
+
+          <HealthLine lab={now.lab} style={{ fontSize: '0.875rem' }} />
 
           <div>
             <p className="lab-text-2" style={{ margin: '0 0 0.4rem' }}>
@@ -61,6 +68,30 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
                 <span className="lab-text-2">mem</span>
                 <Meter value={h.up ? h.mem_ratio : null} width="100%" />
               </div>
+              <p className="lab-text-2" style={{ margin: '0.6rem 0 0', fontSize: '0.8rem', lineHeight: 1.6 }}>
+                {[
+                  `inlet ${fmtCelsius(h.up ? h.inlet_c : null)}`,
+                  ...(h.exhaust_c === null
+                    ? []
+                    : [`exhaust ${fmtCelsius(h.up ? h.exhaust_c : null)}`, `Δt ${fmtDeltaC(h.up ? airflowDelta(h) : null)}`]),
+                  `fan ${withUnit(h.up ? h.fan_rpm : null, 'rpm')}`,
+                  `psu ${withUnit(h.up ? h.psu_in_v : null, 'V')}`,
+                ].map((item, i) => (
+                  <React.Fragment key={item}>
+                    {i > 0 && ' · '}
+                    <span style={{ whiteSpace: 'nowrap' }}>{item}</span>
+                  </React.Fragment>
+                ))}
+              </p>
+              {h.role === 'storage' && (
+                <NasBlock
+                  nas={now.nas}
+                  storage={now.storage}
+                  read24h={t.history?.nas?.read_bytes_s ?? null}
+                  write24h={t.history?.nas?.write_bytes_s ?? null}
+                />
+              )}
+              {h.role === 'apps' && <CiBlock ci={now.ci} busy24h={t.history?.ci?.runners_busy ?? null} />}
             </section>
           ))}
 
@@ -70,8 +101,19 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
                 <tbody>
                   {now.gpus.map((g) => (
                     <tr key={`${g.role}:${g.index}`}>
-                      <th scope="row" style={{ color: 'var(--theme-text)', whiteSpace: 'nowrap' }}>
-                        {gpuName(g.role, g.index)}
+                      <th scope="row" style={{ color: 'var(--theme-text)' }}>
+                        <span style={{ whiteSpace: 'nowrap' }}>{gpuName(g.role, g.index)}</span>
+                        <div className="lab-text-2" style={{ fontSize: '0.8rem' }}>
+                          <span style={{ whiteSpace: 'nowrap' }} title="video encoder / decoder load">
+                            enc {fmtPct(g.enc_ratio)} · dec {fmtPct(g.dec_ratio)}
+                          </span>
+                          {/* its own line: there is no break opportunity between "12%" and the tag */}
+                          {isTranscoding(g) && (
+                            <div className="lab-tag-line">
+                              <TranscodingBadge />
+                            </div>
+                          )}
+                        </div>
                       </th>
                       <td style={{ width: '45%' }}>
                         <Meter value={g.util_ratio} width="100%" />
@@ -83,6 +125,10 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
               </table>
             </section>
           )}
+
+          <p className="lab-text-2" style={{ margin: 0, fontSize: '0.75rem' }}>
+            * ≈ $ per 24 h: {COST_NOTE}.
+          </p>
         </div>
       )}
       {teaser && (

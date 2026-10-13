@@ -49,6 +49,46 @@ export function fmtTB(bytes: N): string {
   return known(bytes) ? (bytes / 1e12).toFixed(1) : DASH;
 }
 
+/** 99.9% from a 0–1 ratio, one decimal (ARC hit ratios live just under 100 %). */
+export const fmtPct1 = (ratio: N) => (known(ratio) ? `${(ratio * 100).toFixed(1)}%` : DASH);
+
+/** An approximate daily cost: "≈ $4.96". */
+export const fmtUsd = (n: N) => (known(n) ? `≈ $${n.toFixed(2)}` : DASH);
+
+/** Decimal throughput: 240 kB/s, 12.5 MB/s, 145 MB/s (one decimal below 100 of a unit). */
+export function fmtRate(bytesPerS: N): string {
+  if (!known(bytesPerS)) return DASH;
+  const units: [number, string][] = [
+    [1e9, 'GB/s'],
+    [1e6, 'MB/s'],
+    [1e3, 'kB/s'],
+  ];
+  for (const [size, unit] of units) {
+    if (bytesPerS >= size) {
+      const v = bytesPerS / size;
+      return `${v < 100 ? trim1(v) : Math.round(v)} ${unit}`;
+    }
+  }
+  return `${Math.round(bytesPerS)} B/s`;
+}
+
+/** An airflow difference with its sign: "+30 °C". */
+export function fmtDeltaC(n: N): string {
+  if (!known(n)) return DASH;
+  const r = Math.round(n);
+  return `${r < 0 ? '−' : '+'}${Math.abs(r)} °C`;
+}
+
+/** A wait: "42 s", "3 min", "1 h 5 min", "2 d 3 h". */
+export function fmtDuration(seconds: N): string {
+  if (!known(seconds)) return DASH;
+  const s = Math.max(0, Math.round(seconds));
+  if (s < 60) return `${s} s`;
+  if (s < 3600) return `${Math.floor(s / 60)} min`;
+  if (s < 86400) return `${Math.floor(s / 3600)} h ${Math.floor((s % 3600) / 60)} min`;
+  return `${Math.floor(s / 86400)} d ${Math.floor((s % 86400) / 3600)} h`;
+}
+
 /** A short age: "42 s ago", "7 min ago", "3 h ago". */
 export function fmtAge(seconds: number): string {
   const s = Math.max(0, Math.round(seconds));
