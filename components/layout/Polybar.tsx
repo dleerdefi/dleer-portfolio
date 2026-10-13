@@ -14,10 +14,19 @@ const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
   const features = useFeatureFlags();
 
   useEffect(() => {
-    // Set initial time after mount to avoid hydration mismatch
+    // Set after mount (no hydration mismatch), then once a minute on the minute: the clock shows
+    // HH:MM, so a per-second tick re-rendered the bar 59 times a minute for nothing
     setTime(new Date());
-    const timer = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timer);
+    let interval: ReturnType<typeof setInterval> | undefined;
+    const toNextMinute = 60_000 - (Date.now() % 60_000);
+    const timeout = setTimeout(() => {
+      setTime(new Date());
+      interval = setInterval(() => setTime(new Date()), 60_000);
+    }, toNextMinute);
+    return () => {
+      clearTimeout(timeout);
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
   const workspaces = [
