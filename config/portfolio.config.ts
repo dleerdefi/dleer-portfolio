@@ -123,10 +123,12 @@ export const portfolioConfig: PortfolioConfig = {
   },
 
   features: {
-    blog: true,
+    // The blog's entry points (a polybar workspace, blog/ in the contents tree, a phone section).
+    // On unless NEXT_PUBLIC_FEATURE_BLOG=false; dleer.ai sets false and keeps the posts as an
+    // archive, reachable at their URLs and from the home page's writing link. Inlined at build time.
+    blog: process.env.NEXT_PUBLIC_FEATURE_BLOG !== 'false',
     projects: true,
     contact: true,
-    about: true,
     neofetch: true,
     // ~/lab: homelab telemetry and the honeypot threat map (docs/lab). Inlined at build time.
     lab: process.env.NEXT_PUBLIC_FEATURE_LAB === 'true'

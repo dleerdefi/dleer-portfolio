@@ -58,7 +58,8 @@ export type ContentType =
   | { type: 'projects-overview' }
   | { type: 'blog-overview' }
   | { type: 'contact' }
-  | { type: 'lab-telemetry' }
+  /** `section`: scroll the view to that part once its numbers are in (the home lab card's slides) */
+  | { type: 'lab-telemetry'; section?: 'hosts' | 'gpus' }
   | { type: 'lab-threats' };
 
 export interface FocusState {

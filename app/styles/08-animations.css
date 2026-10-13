@@ -76,13 +76,17 @@
   animation: fade-up 150ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
-/* Reduced motion: the background orbs and stars hold still, entrances are instant */
+/* Reduced motion: the background orbs and stars hold still, entrances are instant, and no
+   transition (a fade, a slide, a color change) takes any time, inline ones included */
 @media (prefers-reduced-motion: reduce) {
   .animate-blob,
   .animate-pulse,
   .fade-in,
   .fade-up {
     animation: none;
+  }
+  *, *::before, *::after {
+    transition-duration: 0s !important;
   }
 }
 

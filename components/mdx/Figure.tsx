@@ -49,7 +49,7 @@ export function Figure({ src, alt, caption, width = 1200, height = 630, size = '
       {caption && (
         <figcaption
           className="mt-0.5 text-sm text-center italic"
-          style={{ color: 'var(--theme-text-dimmed)' }}
+          style={{ color: 'rgba(var(--theme-text-rgb), 0.72)' }}
         >
           {caption}
         </figcaption>

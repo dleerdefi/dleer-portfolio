@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
 import { ProjectCard } from '@/components/projects/ProjectCard';
-import { ProjectsKeys } from '@/components/projects/ProjectsKeys';
+import { ListKeys } from '@/components/ui/ListKeys';
 import { projectSummaries } from '@/lib/content-index';
 import { withGitHubStats } from '@/lib/github';
 import { orderedProjects } from '@/lib/projects';
@@ -25,26 +25,26 @@ export default async function ProjectsPage() {
   const projects = orderedProjects(await withGitHubStats(projectSummaries()));
   return (
     <FramedPageLayout autoFocus={false}>
-      <ProjectsKeys />
-      <div className="projects-page">
-        <header className="projects-head">
+      <ListKeys />
+      <div className="list-page">
+        <header className="list-head">
           <div>
             <h1>Projects</h1>
             <p>What I build, and who it is for.</p>
           </div>
-          <div className="projects-head-side">
+          <div className="list-head-side">
             <span className="key-hints">j/k move · Enter open · Esc back</span>
-            <Link href="/" className="projects-close" aria-label="Close and return home">
+            <Link href="/" className="list-close" aria-label="Close and return home">
               ✕
             </Link>
           </div>
         </header>
-        <div className="projects-grid">
+        <div className="card-grid">
           {projects.map((project, i) => (
             <ProjectCard key={project.slug} project={project} sizes={CARD_SIZES} priority={i === 0} />
           ))}
         </div>
-        <p className="projects-foot">
+        <p className="list-foot">
           {projects.length} project{projects.length === 1 ? '' : 's'}
         </p>
       </div>

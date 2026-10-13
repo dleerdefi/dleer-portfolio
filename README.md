@@ -25,7 +25,7 @@ A production-ready developer portfolio built with Next.js 15, featuring a tiled 
 - **Keyboard Navigation**: Vim-style hjkl between tiles, native Tab, Esc back home, workspaces in the Polybar
 - **Mobile Experience**: One server-rendered column with a section rail, a scroll indicator and CSS scroll-driven depth effects
 - **Theme System**: 3 curated presets (Tokyo Night, Nord, Solarized Light) + 15 accent color swatches
-- **Content Management**: MDX-powered blog and projects with syntax highlighting and reading time
+- **Content Management**: MDX-powered blog and projects with syntax highlighting and reading time; `NEXT_PUBLIC_FEATURE_BLOG=false` keeps the posts as an archive, reachable but out of the navigation
 - **Audio Narration**: Blog post audio with auto-detection, playback controls, and analytics tracking
 - **Contact Form**: Production-ready Resend integration with 5-layer spam protection (honeypot, rate limiting, validation)
 - **CDN Integration**: Optional Cloudflare R2 for optimized image delivery with automatic fallback

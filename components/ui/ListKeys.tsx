@@ -4,10 +4,11 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 /**
- * Keys for /projects: j/k (or the arrows) move focus through the cards, Enter opens one (it is a
- * link), Esc goes home. Ignored while typing or with a modifier held.
+ * Keys for a list page (/projects, /blog): j/k (or the arrows) move focus through the cards in
+ * `.card-grid`, Enter opens one (it is a link), Esc goes home. Ignored while typing or with a
+ * modifier held.
  */
-export function ProjectsKeys() {
+export function ListKeys() {
   const router = useRouter();
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -19,7 +20,7 @@ export function ProjectsKeys() {
       }
       const step = e.key === 'j' || e.key === 'ArrowDown' ? 1 : e.key === 'k' || e.key === 'ArrowUp' ? -1 : 0;
       if (!step) return;
-      const cards = Array.from(document.querySelectorAll<HTMLElement>('.projects-grid .project-card'));
+      const cards = Array.from(document.querySelectorAll<HTMLElement>('.card-grid .project-card'));
       if (cards.length === 0) return;
       e.preventDefault();
       const at = cards.indexOf(document.activeElement as HTMLElement);

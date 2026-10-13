@@ -25,20 +25,20 @@ AgentCM reads the project folder, extracts the text of every drawing sheet, help
 and teach it how your project's tags look, then writes an index next to your files and opens a
 read-only database, so the agent can find its way around.
 
-<Terminal cmd="your project, after AgentCM">
-your-project/
-├── Drawings/                your files, where they were
-├── Specifications/
-└── .construction/           written by AgentCM
-    ├── CLAUDE.md            where the agent starts
-    ├── INDEX.md             every sheet and spec section
-    ├── sheets/              each sheet's text, in reading order
-    ├── schedules/           one table per schedule
-    ├── specs/               one file per spec section
-    ├── tags.tsv             every room, door and grid tag
-    ├── xrefs.tsv            every reference between sheets
-    └── query.sh             one read-only database query
-</Terminal>
+<Terminal cmd="your project, after AgentCM">{`
+|your-project/
+|├── Drawings/                your files, where they were
+|├── Specifications/
+|└── .construction/           written by AgentCM
+|    ├── CLAUDE.md            where the agent starts
+|    ├── INDEX.md             every sheet and spec section
+|    ├── sheets/              each sheet's text, in reading order
+|    ├── schedules/           one table per schedule
+|    ├── specs/               one file per spec section
+|    ├── tags.tsv             every room, door and grid tag
+|    ├── xrefs.tsv            every reference between sheets
+|    └── query.sh             one read-only database query
+`}</Terminal>
 
 1. **Open the folder.** AgentCM indexes every file and classifies it: drawing sets,
    specifications, RFIs, submittals, schedules.

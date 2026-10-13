@@ -1,5 +1,6 @@
+import { getPortfolioConfig } from '@/config/portfolio.config';
 import { FocusProvider } from '@/contexts/FocusContext';
-import { projectSummaries } from '@/lib/content-index';
+import { postSummaries, projectSummaries } from '@/lib/content-index';
 import { withGitHubStats } from '@/lib/github';
 import { labEnabled } from '@/lib/lab/flag';
 import { featuredProjects, otherProjects } from '@/lib/projects';
@@ -10,12 +11,13 @@ import { LabTile } from '@/components/home/LabIslands';
 import NavTree from '@/components/home/NavTree';
 import { Neofetch } from '@/components/home/Neofetch';
 import { Stage } from '@/components/home/Stage';
-import { ContactSection, ProjectsSection } from '@/components/home/sections/PhoneSections';
+import { ContactSection, ProjectsSection, WritingSection } from '@/components/home/sections/PhoneSections';
 
 /**
  * The home page, server-rendered as one document (docs/PORTFOLIO_V2_SPEC.md §4.3). CSS lays the
  * same markup out as the desktop tiles (neofetch, contents, lab, stage) or the phone column
- * (hero, featured, lab, projects, contact); nothing here depends on the width. Rebuilt daily so
+ * (hero, featured, lab, projects, writing, contact); nothing here depends on the width. Lab and
+ * writing come and go with their flags. Rebuilt daily so
  * the GitHub numbers on the cards stay fresh (lib/github.ts).
  */
 export const revalidate = 86400;
@@ -25,26 +27,37 @@ export default async function Home() {
   const featured = featuredProjects(projects);
   const others = otherProjects(projects, featured);
   const lab = labEnabled();
-  const sectionIds = ['top', 'home', ...(lab ? ['lab'] : []), 'projects', 'contact'];
+  // The blog's entry points, with NEXT_PUBLIC_FEATURE_BLOG on: blog/ in the tree, a phone section
+  const posts = getPortfolioConfig().features?.blog
+    ? postSummaries().sort((a, b) => b.date.localeCompare(a.date))
+    : [];
+  const sectionIds = ['top', 'home', ...(lab ? ['lab'] : []), 'projects', ...(posts.length ? ['writing'] : []), 'contact'];
+  const link = ({ slug, title, url }: { slug: string; title: string; url: string }) => ({ slug, title, url });
 
   return (
     <FocusProvider>
       <HomeShell hasLab={lab} sectionIds={sectionIds}>
-        <FocusTile id="neofetch" sectionId="top" label="Profile" dim className="home-hero">
+        <FocusTile id="neofetch" sectionId="top" label="Profile" className="home-hero">
           <Neofetch />
         </FocusTile>
-        <FocusTile id="navigation" sectionId="contents" label="Contents" dim className="home-nav">
-          <NavTree featured={featured.map(({ slug, title, url }) => ({ slug, title, url }))} more={others.length} />
+        <FocusTile id="navigation" sectionId="contents" label="Contents" className="home-nav">
+          <NavTree
+            featured={featured.map(link)}
+            more={others.length}
+            posts={posts.slice(0, 3).map(link)}
+            morePosts={Math.max(0, posts.length - 3)}
+          />
         </FocusTile>
         <FocusTile id="content" sectionId="home" label="Featured" className="home-stage">
           <Stage home={<HomeView featured={featured} others={others} />} />
         </FocusTile>
         {lab && (
-          <FocusTile id="lab" sectionId="lab" label="Lab" dim className="home-lab">
+          <FocusTile id="lab" sectionId="lab" label="Lab" className="home-lab">
             <LabTile />
           </FocusTile>
         )}
         <ProjectsSection projects={others} />
+        {posts.length > 0 && <WritingSection posts={posts.slice(0, 4)} total={posts.length} />}
         <ContactSection />
       </HomeShell>
     </FocusProvider>
