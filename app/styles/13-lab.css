@@ -169,3 +169,11 @@
   .lab-slide-head .lab-badge-word { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
 @media (prefers-reduced-motion: reduce) { .lab-slides { scroll-behavior: auto; } }
+/* Phones: nothing under 14 px, and the dots are 44 px targets */
+@media (max-width: 1023px) {
+  .lab-slide-stats, .lab-rows, .lab-bars, .lab-slide-cta { font-size: 0.875rem; }
+  .lab-dots { gap: 0; }
+  .lab-dot { width: 44px; height: 44px; }
+}
+/* Phones: a badge is at least 14 px whatever size its caller sets */
+@media (max-width: 1023px) { .lab-badge { font-size: max(1em, 0.875rem); } }

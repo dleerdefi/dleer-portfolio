@@ -270,3 +270,9 @@ section.lab-page {
 /* The diagram above the text on phones, beside it from 768 px */
 .lab-how-body { display: grid; gap: 1rem 2.5rem; align-items: start; }
 @media (min-width: 768px) { .lab-how-body { grid-template-columns: auto minmax(0, 1fr); } }
+/* Phones: nothing under 14 px; a link standing alone in a table cell is a 44 px target */
+@media (max-width: 1023px) {
+  .lab-tag, .lab-subblock-title { font-size: 0.875rem; }
+  .lab-table a.lab-link, .lab-teaser-link { display: inline-flex; align-items: center; min-height: 44px; }
+  .lab-link-pair { row-gap: 8px; }
+}

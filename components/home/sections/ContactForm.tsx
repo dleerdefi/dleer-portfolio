@@ -196,14 +196,14 @@ export function ContactForm() {
 
       {/* Social Links - Horizontal SVG Icons */}
       <div className="mt-8">
-        <div className="flex gap-6 justify-center items-center">
+        <div className="flex gap-2 justify-center items-center">
           {/* Twitter/X Icon */}
           {twitterLink && (
             <a
               href={twitterLink.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all hover:scale-110"
+              className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110"
               style={{ color: 'var(--accent-color)' }}
               aria-label="Twitter/X"
               title="Twitter/X"
@@ -226,7 +226,7 @@ export function ContactForm() {
               href={githubLink.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all hover:scale-110"
+              className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110"
               style={{ color: 'var(--accent-color)' }}
               aria-label="GitHub"
               title="GitHub"
@@ -249,7 +249,7 @@ export function ContactForm() {
               href={linkedinLink.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all hover:scale-110"
+              className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110"
               style={{ color: 'var(--accent-color)' }}
               aria-label="LinkedIn"
               title="LinkedIn"

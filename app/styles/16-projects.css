@@ -107,3 +107,10 @@
 
 :is(.list-close, .link-row a, .case-bar a, .case-foot a):focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .project-card, .project-card-title, .link-row a { transition: none; } }
+/* Phones: nothing under 14 px (a cover is a picture), and standalone links are 44 px targets */
+@media (max-width: 1023px) {
+  .project-card-path, .project-card-audience, .project-card-meta, .project-card-tree, .chip, .post-card-date,
+  .status-chip, .list-foot, .metric dt, .case-next span { font-size: 0.875rem; }
+  .list-close { width: 44px; height: 44px; }
+  .case-bar a, .case-foot a, .link-row a { display: inline-flex; align-items: center; min-height: 44px; }
+}

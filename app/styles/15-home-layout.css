@@ -158,15 +158,17 @@
 /* ---------- Section rail (phones) ---------- */
 .section-rail {
   position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 28px); z-index: 45; transform: translateX(-50%);
-  display: flex; align-items: center; gap: 2px; padding: 2px 8px; border-radius: 999px;
+  display: flex; align-items: center; padding: 0 8px; border-radius: 999px;
   border: 1px solid rgba(var(--accent-color-rgb), 0.35); background: rgba(var(--theme-surface-rgb), 0.9);
   transition: opacity 200ms ease, transform 200ms ease;
 }
 .section-rail[data-hidden] { opacity: 0; transform: translate(-50%, 8px); pointer-events: none; }
 .rail-dot {
-  display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 32px; height: 36px; padding: 0 4px;
-  border: 0; background: none; color: var(--accent-color); font: inherit; font-size: 0.75rem; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 44px; height: 44px; padding: 0 4px;
+  border: 0; background: none; color: var(--accent-color); font: inherit; font-size: 0.875rem; white-space: nowrap; cursor: pointer;
 }
+/* Below 360 px the six 44 px dots fill the frame: the watts stay in the dot's name only */
+@media (max-width: 359px) { .rail-power { display: none; } }
 .rail-dot-mark { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid rgba(var(--accent-color-rgb), 0.7); }
 .rail-dot[aria-current] .rail-dot-mark { background: var(--accent-color); border-color: var(--accent-color); }
 
@@ -178,6 +180,9 @@
   .home > section:not(.home-hero) { z-index: 1; background: var(--theme-bg); border-top: 1px solid rgba(var(--accent-color-rgb), 0.2); }
   .home-hero { padding-top: 3rem !important; }
   .home-nav { display: none; }
+  /* Nothing under 14 px; the standalone links are 44 px tall targets */
+  .project-row-summary, .lab-tile-open { font-size: 0.875rem; }
+  .home-links a, .section-link a, .lab-tile-open { display: inline-flex; align-items: center; min-height: 44px; }
 }
 
 /* ---------- Desktop tiles (>= 1024 px) ---------- */

@@ -49,7 +49,7 @@ export function Window({ title, children, scrollable = false, maxHeight = '500px
         <div
           className="flex items-center justify-between px-4 py-2 text-sm font-mono"
           style={{
-            color: 'var(--theme-text-dimmed)',
+            color: 'rgba(var(--theme-text-rgb), 0.72)',
             backgroundColor: 'rgba(var(--accent-color-rgb), 0.08)',
             borderBottom: '1px solid rgba(var(--accent-color-rgb), 0.2)',
           }}
@@ -58,7 +58,7 @@ export function Window({ title, children, scrollable = false, maxHeight = '500px
           <button
             type="button"
             onClick={handleCopy}
-            className="text-xs font-mono transition-opacity hover:opacity-70"
+            className="inline-flex items-center justify-center min-h-11 min-w-11 -my-2 text-sm lg:min-h-0 lg:min-w-0 lg:my-0 lg:text-xs font-mono transition-opacity hover:opacity-70"
             style={{
               color: 'var(--accent-color)',
             }}

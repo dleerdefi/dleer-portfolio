@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import React from 'react';
 import Link from 'next/link';
 import { allBlogs } from 'content-collections';
@@ -12,8 +14,19 @@ import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
 import { Admonition, Terminal, Window, Key, Figure, Collapsible, PostAudio } from '@/components/mdx';
 import { CodeBlock, InlineCode } from '@/components/mdx/Code';
 import { AutoPostAudio } from '@/components/blog/AutoPostAudio';
+import { getBlogAudioPath } from '@/lib/audio-utils';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
+
+/**
+ * A post's narration is public/audio/blog/<slug>.mp3 (a CDN serves a copy of that tree), so the
+ * page renders the player itself: found in the browser after load, it pushed the article down
+ * (CLS 0.22 on phones; docs/PORTFOLIO_V2_SPEC.md phase 6). A post without a local file keeps the
+ * browser's check, for audio kept only on a CDN.
+ */
+function hasLocalAudio(slug: string): boolean {
+  return fs.existsSync(path.join(process.cwd(), 'public', 'audio', 'blog', `${slug}.mp3`));
+}
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -107,8 +120,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </Link>
 
           <span
-            className="text-xs"
-            style={{ color: 'var(--theme-text-dimmed)' }}
+            className="text-sm lg:text-xs"
+            style={{ color: 'rgba(var(--theme-text-rgb), 0.72)' }}
           >
             {blog.readingTime}
           </span>
@@ -122,7 +135,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           style={{ margin: '0 auto' }}
         >
           {/* Audio Player */}
-          <AutoPostAudio slug={blog.slug} title={blog.title} className="mb-10" />
+          {hasLocalAudio(blog.slug) ? (
+            <PostAudio src={getBlogAudioPath(blog.slug)} title={`Listen to "${blog.title}"`} postSlug={blog.slug} className="mb-10" />
+          ) : (
+            <AutoPostAudio slug={blog.slug} title={blog.title} className="mb-10" />
+          )}
 
           {/* Title and metadata */}
           <header className="mb-12 pb-8 border-b-2" style={{ borderColor: 'var(--theme-border)' }}>
@@ -135,27 +152,27 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
             <p
               className="text-lg mb-12"
-              style={{ color: 'var(--theme-text-dimmed)' }}
+              style={{ color: 'rgba(var(--theme-text-rgb), 0.72)' }}
             >
               {blog.summary}
             </p>
 
             <div className="flex items-center gap-4 text-sm flex-wrap">
-              <time style={{ color: 'var(--theme-text-dimmed)' }}>
+              <time style={{ color: 'rgba(var(--theme-text-rgb), 0.72)' }}>
                 {formatDate(blog.date)}
               </time>
 
               {blog.updated && blog.updated !== blog.date && (
                 <>
-                  <span style={{ color: 'var(--theme-text-dimmed)' }}>•</span>
-                  <span style={{ color: 'var(--theme-text-dimmed)' }}>
+                  <span style={{ color: 'rgba(var(--theme-text-rgb), 0.72)' }}>•</span>
+                  <span style={{ color: 'rgba(var(--theme-text-rgb), 0.72)' }}>
                     Updated {formatDate(blog.updated)}
                   </span>
                 </>
               )}
 
-              <span style={{ color: 'var(--theme-text-dimmed)' }}>•</span>
-              <span style={{ color: 'var(--theme-text-dimmed)' }}>
+              <span style={{ color: 'rgba(var(--theme-text-rgb), 0.72)' }}>•</span>
+              <span style={{ color: 'rgba(var(--theme-text-rgb), 0.72)' }}>
                 {blog.readingTime}
               </span>
             </div>
@@ -208,7 +225,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <footer className="mt-12 pt-8 border-t-2" style={{ borderColor: 'var(--theme-border)' }}>
             <Link
               href="/blog"
-              className="hover:underline"
+              className="inline-flex items-center min-h-11 hover:underline"
               style={{ color: 'var(--accent-color)' }}
             >
               ← Back to Blog
