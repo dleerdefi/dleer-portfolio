@@ -124,6 +124,21 @@
         26.9,
         25.0,
         23.5
+      ],
+      "enc_ratio": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
       ]
     },
     {
@@ -158,6 +173,21 @@
         52.4,
         39.9,
         29.7
+      ],
+      "enc_ratio": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
       ]
     },
     {
@@ -192,9 +222,26 @@
         17.2,
         16.0,
         15.0
+      ],
+      "enc_ratio": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
       ]
     }
   ],
+  "nas": null,
+  "ci": null,
   "media": {
     "streams": [
       1,

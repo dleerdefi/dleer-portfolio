@@ -6,6 +6,14 @@
   "lab": {
     "power_w": 1028.5,
     "energy_kwh_24h": 24.14,
+    "energy_cost_usd_24h": 4.96,
+    "vms_running": 6,
+    "targets_up": 27,
+    "targets_total": 27,
+    "alerts_firing": 0,
+    "disks": 20,
+    "disks_healthy": 20,
+    "drive_temp_max_c": 31.0,
     "hosts_up": 3,
     "hosts_expected": 3
   },
@@ -16,7 +24,10 @@
       "power_w": 231.4,
       "cpu_ratio": 0.1234,
       "mem_ratio": 0.7123,
-      "inlet_c": 22.0
+      "inlet_c": 22.0,
+      "fan_rpm": 2280.0,
+      "exhaust_c": null,
+      "psu_in_v": 118.0
     },
     {
       "role": "gpu",
@@ -24,7 +35,10 @@
       "power_w": 384.2,
       "cpu_ratio": 0.0712,
       "mem_ratio": 0.4101,
-      "inlet_c": 24.0
+      "inlet_c": 24.0,
+      "fan_rpm": 5620.0,
+      "exhaust_c": 35.0,
+      "psu_in_v": 118.0
     },
     {
       "role": "apps",
@@ -32,7 +46,10 @@
       "power_w": 412.9,
       "cpu_ratio": 0.0533,
       "mem_ratio": 0.1862,
-      "inlet_c": 23.0
+      "inlet_c": 23.0,
+      "fan_rpm": 6500.0,
+      "exhaust_c": 51.0,
+      "psu_in_v": 116.0
     }
   ],
   "gpus": [
@@ -42,7 +59,9 @@
       "util_ratio": 0.12,
       "mem_ratio": 0.0871,
       "power_w": 28.4,
-      "temp_c": 45.0
+      "temp_c": 45.0,
+      "enc_ratio": 0.31,
+      "dec_ratio": 0.12
     },
     {
       "role": "gpu",
@@ -50,7 +69,9 @@
       "util_ratio": 0.37,
       "mem_ratio": 0.6125,
       "power_w": 64.2,
-      "temp_c": 52.0
+      "temp_c": 52.0,
+      "enc_ratio": 0.0,
+      "dec_ratio": 0.0
     },
     {
       "role": "gpu",
@@ -58,12 +79,27 @@
       "util_ratio": 0.0,
       "mem_ratio": 0.0281,
       "power_w": 17.9,
-      "temp_c": 38.0
+      "temp_c": 38.0,
+      "enc_ratio": 0.0,
+      "dec_ratio": 0.0
     }
   ],
   "storage": {
     "used_bytes": 38551113072640,
     "total_bytes": 50319836839936
+  },
+  "nas": {
+    "pool_healthy": true,
+    "read_bytes_s": 12500000,
+    "write_bytes_s": 240000,
+    "arc_hit_ratio": 0.9991
+  },
+  "ci": {
+    "runners_online": 14,
+    "runners_total": 22,
+    "runners_busy": 2,
+    "queue_oldest_s": 0,
+    "busy_hours_24h": 6.4
   },
   "media": {
     "streams": 2,

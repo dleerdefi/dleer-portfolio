@@ -4,7 +4,8 @@
 // a GPU job on `gpu` (A4000 #0) about 9 h ago, one missed scrape about 7 h ago (a `null` in
 // every series), and Plex streams in the last few hours. Every series ends exactly at the now
 // fixture's values, so a hero number matches its chart's end label. docs/lab/concepts was drawn
-// from this shape.
+// from this shape. The series added later (GPU encoder, NAS throughput, CI runners) draw from the
+// generator after the original ones, so those stay exactly as they were.
 
 const POINTS = 289;
 const STEP_S = 300;
@@ -14,7 +15,9 @@ const SEED = 0x1ab5eed;
 interface NowFixture {
   lab: { power_w: number | null };
   hosts: { role: string; power_w: number | null; cpu_ratio: number | null }[];
-  gpus: { role: string; index: number; util_ratio: number | null; power_w: number | null }[];
+  gpus: { role: string; index: number; util_ratio: number | null; power_w: number | null; enc_ratio: number | null }[];
+  nas: { read_bytes_s: number | null; write_bytes_s: number | null } | null;
+  ci: { runners_busy: number | null } | null;
   media: { streams: number | null } | null;
 }
 
@@ -119,6 +122,35 @@ export function demoHistory(now: number, fixture: NowFixture) {
       }
     : null;
 
+  // Added series, after the original ones (see the header). The Quadro's encoder runs while Plex
+  // transcodes, in the last three hours; the NAS reads hard during the nightly backup and a little
+  // for Plex; CI runners are busy in two working stretches.
+  const enc = fixture.gpus.map((g) =>
+    g.role === 'storage'
+      ? series(g.enc_ratio, (h) => (g.enc_ratio ?? 0) * recent(h, 3), ratio(0.01))
+      : series(g.enc_ratio, () => 0, ratio(0)),
+  );
+  const bytes = (amp: number) => ({ amp, decimals: 0, max: 1e11 });
+  const nas = fixture.nas
+    ? {
+        read_bytes_s: series(
+          fixture.nas.read_bytes_s,
+          (h) => 140e6 * plateau(h, 17.5, 20.5) + 9e6 * recent(h, 3),
+          bytes(1.5e6),
+        ),
+        write_bytes_s: series(fixture.nas.write_bytes_s, (h) => 60e6 * plateau(h, 17.5, 20.5), bytes(2e5)),
+      }
+    : null;
+  const ci = fixture.ci
+    ? {
+        runners_busy: series(
+          fixture.ci.runners_busy,
+          (h) => 6 * bump(h, 5, 1.5) + 4 * bump(h, 13, 2) - 2 * plateau(h, 15.5, 23),
+          { amp: 0.4, decimals: 0, max: 500 },
+        ),
+      }
+    : null;
+
   const startMs = Math.floor(now / (STEP_S * 1000)) * STEP_S * 1000 - (POINTS - 1) * STEP_S * 1000;
   return {
     schema_version: 1,
@@ -130,7 +162,9 @@ export function demoHistory(now: number, fixture: NowFixture) {
     points: POINTS,
     lab: { power_w: labPower },
     hosts,
-    gpus,
+    gpus: gpus.map((g, i) => ({ ...g, enc_ratio: enc[i] })),
+    nas,
+    ci,
     media,
   };
 }

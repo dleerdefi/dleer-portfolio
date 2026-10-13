@@ -3,8 +3,9 @@ import { defineConfig } from 'vitest/config';
 
 // Unit tests for the lab (tests/lab). `server-only` throws outside a React Server Components
 // build, so tests resolve it to the package's own empty module, as the react-server
-// condition would.
+// condition would. tsconfig keeps JSX as is for Next; the view tests need it compiled.
 export default defineConfig({
+  oxc: { jsx: { runtime: 'automatic' } },
   resolve: {
     alias: [
       { find: /^@\//, replacement: fileURLToPath(new URL('./', import.meta.url)) },

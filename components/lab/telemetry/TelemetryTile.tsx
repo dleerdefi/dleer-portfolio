@@ -10,6 +10,7 @@ import { HOSTS } from '@/lib/lab/names';
 import { LabHeader, LabStateLine } from '@/components/lab/shared/LabHeader';
 import { Sparkline } from '@/components/lab/shared/Sparkline';
 import { Value } from '@/components/lab/shared/Value';
+import { Cost, HealthLine } from './LabExtras';
 import { HostTable, GpuTable } from './TelemetryTables';
 import { HostsGlyph, hostsText } from './HostsLine';
 import { threatsTeaser, useTelemetry, type HistoryLive } from './useTelemetry';
@@ -51,7 +52,10 @@ export default function TelemetryTile({ onNavigate }: { onNavigate?: (content: C
             </div>
             <dl style={{ margin: 0, display: 'grid', gridTemplateColumns: 'auto auto', columnGap: '0.75em', rowGap: '0.3em', fontSize: FONT_SIZES.sm }}>
               <dt className="lab-text-2">24 h</dt>
-              <dd style={{ margin: 0 }}>{fmtKwh(now.lab.energy_kwh_24h)}</dd>
+              <dd style={{ margin: 0 }}>
+                {fmtKwh(now.lab.energy_kwh_24h)} <span className="lab-text-2">·</span>{' '}
+                <Cost usd={now.lab.energy_cost_usd_24h} />
+              </dd>
               <dt className="lab-text-2">hosts</dt>
               <dd style={{ margin: 0 }}>
                 {hostsText(now.lab.hosts_up, now.lab.hosts_expected)} up{' '}
@@ -60,13 +64,20 @@ export default function TelemetryTile({ onNavigate }: { onNavigate?: (content: C
             </dl>
           </div>
 
+          <HealthLine lab={now.lab} style={{ fontSize: FONT_SIZES.sm }} />
+
           <div>
             <p style={caption}>power, last 24 h</p>
             <HistoryOr history={t.history} offline={t.historyOffline} render={(h) => <Sparkline values={h.lab.power_w} height={56} />} />
           </div>
 
-          <HostTable hosts={now.hosts} />
-          <GpuTable gpus={now.gpus} />
+          {/* narrow tiles scroll the tables sideways rather than clip them */}
+          <div style={{ overflowX: 'auto' }}>
+            <HostTable hosts={now.hosts} />
+          </div>
+          <div style={{ overflowX: 'auto' }}>
+            <GpuTable gpus={now.gpus} />
+          </div>
 
           <div>
             <p style={caption}>power by host, 24 h · same scale</p>

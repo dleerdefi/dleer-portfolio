@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useLabData } from '@/hooks/useLabData';
 import { labThreatsEnabled } from '@/lib/lab/flag';
-import { fmtCount, fmtInt, fmtKwh } from '@/lib/lab/format';
+import { fmtCount, fmtInt, fmtKwh, fmtUsd } from '@/lib/lab/format';
 import { categoryVar } from '@/lib/lab/names';
 import { CATEGORIES, type LabSummary } from '@/lib/lab/types';
 import { LabStatusBadge } from '@/components/lab/shared/LabStatusBadge';
@@ -72,6 +72,12 @@ export const ParallaxLabSection: React.FC = () => {
               </span>
               <span className="lab-text-2" style={{ textAlign: 'right', fontSize: '0.85rem' }}>
                 {fmtKwh(tel.energy_kwh_24h)} / 24 h
+                {typeof tel.energy_cost_usd_24h === 'number' && (
+                  <>
+                    <br />
+                    {fmtUsd(tel.energy_cost_usd_24h)}/day
+                  </>
+                )}
                 <br />
                 {tel.hosts_up}/{tel.hosts_expected} hosts up
               </span>

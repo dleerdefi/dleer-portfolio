@@ -6,15 +6,15 @@
       "path": "lib/lab/fixtures/now.v1.json",
       "source": "stacks/monitoring/labsnap/examples/now.v1.json",
       "branch": "main",
-      "commit": "ba74e7e0210b8f4d2b6e4410623011e000108434",
-      "sha256": "d3a33aba851f302813c24ec6bf7adf61ba9e56ad08c8e6806b738aeb5bbbdd38"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "cc0715ff03f13e54c12aa27dc9db87a062f4776fdbf5905f755a1bd6ac437ab1"
     },
     {
       "path": "lib/lab/fixtures/history.v1.json",
       "source": "stacks/monitoring/labsnap/examples/history.v1.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "817d79932aca900ba466674c8570b313c233f5bb8f04f1098d809aedd3a23e36"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "a61d5c1c7abe35dab2d907440a3c5184d288f458b6363e1e5cfb0780ed7b1d0a"
     },
     {
       "path": "lib/lab/fixtures/threats.v1.json",
@@ -34,85 +34,85 @@
       "path": "tests/fixtures/homelab/invalid/labsnap/history-gpu-extra-field.json",
       "source": "stacks/monitoring/labsnap/examples/invalid/history-gpu-extra-field.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "999c0fe095a3bd0965b8e02fc428239fae4d5dba07840a99e505811b006ceb24"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "293b0fff046bb90bb49689da7a20372a805ce8d739c6e8d9af6e13d639c6194d"
     },
     {
       "path": "tests/fixtures/homelab/invalid/labsnap/history-series-with-text.json",
       "source": "stacks/monitoring/labsnap/examples/invalid/history-series-with-text.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "a277c0d2771873303f203df232a39a3ab34d6ae1efe68a3d60260a510ebfa034"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "eb4b91657d3847172419b323eb3781cbeacf5eed21027cda7a38a6243f55e4fb"
     },
     {
       "path": "tests/fixtures/homelab/invalid/labsnap/history-two-hosts.json",
       "source": "stacks/monitoring/labsnap/examples/invalid/history-two-hosts.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "bc9b9d9d009b31f6100a01e5a402182a06c1b82dc56e89c0e426c8dbbb3c1785"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "d1ab1e8997028aaa9ec19d71829899123cb4881848e7e44be3e5316c5249c0d8"
     },
     {
       "path": "tests/fixtures/homelab/invalid/labsnap/now-bad-timestamp.json",
       "source": "stacks/monitoring/labsnap/examples/invalid/now-bad-timestamp.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "13bb60756e5e9c5981348f412e6042e6c22f0c39006e5f676f6ca7aca3db4d2b"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "ff28a2574a3ba99c0a94248e3db7b61c44f8fd2717b76201fa7d3fbd79c8c0da"
     },
     {
       "path": "tests/fixtures/homelab/invalid/labsnap/now-extra-host-field.json",
       "source": "stacks/monitoring/labsnap/examples/invalid/now-extra-host-field.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "a76e2e5147e5472b67bdca060976089e4a3a0e1c51526f7d08af2bed67ff8c61"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "6fffeae3e695ac06a22ad8509642309fa18fbce3f0b9a2e5e845e51ccd06988b"
     },
     {
       "path": "tests/fixtures/homelab/invalid/labsnap/now-free-text-gpu-model.json",
       "source": "stacks/monitoring/labsnap/examples/invalid/now-free-text-gpu-model.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "dfe4f3594f98eda40567cf9c95bf0b29409292dae2136c1417fbe7378c5e6443"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "729130bf0aecb5d16fbdd340865786d16467d0a52dda2d2b319412faf9c3dbc2"
     },
     {
       "path": "tests/fixtures/homelab/invalid/labsnap/now-hosts-out-of-order.json",
       "source": "stacks/monitoring/labsnap/examples/invalid/now-hosts-out-of-order.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "01fc9a8ce4a650747c1830929f0afaaab7d33702439712eee1af308dad493c91"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "c25871f5e8285481c01970586ab8032795defe635acd9871b573db014a9a1b73"
     },
     {
       "path": "tests/fixtures/homelab/invalid/labsnap/now-missing-media-key.json",
       "source": "stacks/monitoring/labsnap/examples/invalid/now-missing-media-key.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "86b9e16e4e19ffb4afafdb158c4d4ecfff477c64cf6d72b4ec84e169f90bdfe5"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "a8b600185610ca8b04500dfd47a31151877dd62e777a1a2b05f0fb64eebeab5c"
     },
     {
       "path": "tests/fixtures/homelab/invalid/labsnap/now-nan-as-string.json",
       "source": "stacks/monitoring/labsnap/examples/invalid/now-nan-as-string.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "ae71400d473d1896ab71f75d25cde034e6af2cd74c23961e9a09824eef871390"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "a74f6ba2f94415ae8110d38bf1ec2145a22c8b787c297721737e852fbc3be7dc"
     },
     {
       "path": "tests/fixtures/homelab/invalid/labsnap/now-ratio-out-of-range.json",
       "source": "stacks/monitoring/labsnap/examples/invalid/now-ratio-out-of-range.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "566345d239114d7fbe0db24ee65dcf041173eee4d094f36cca33c7dcd7a01cc8"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "60da0d55b4bdb0bdb6eae93fc6c365a06679a982451b05d22f28388c4548aa3d"
     },
     {
       "path": "tests/fixtures/homelab/invalid/labsnap/now-unknown-role.json",
       "source": "stacks/monitoring/labsnap/examples/invalid/now-unknown-role.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "ae005a9ba7543bf02b8f25aef013ba82c25d85c06a1d9b2484e16affd5e3bdb5"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "ef107df40e0a25a590b597e3c831964d915f4d82e50252244a3b8aed1fdc5577"
     },
     {
       "path": "tests/fixtures/homelab/invalid/labsnap/now-wrong-version.json",
       "source": "stacks/monitoring/labsnap/examples/invalid/now-wrong-version.json",
       "branch": "main",
-      "commit": "79227c3ca820e37c2098a154690468a1fb281b72",
-      "sha256": "6486e5d8f8fb3b881a3954a0e49e26088db789e9e40388e14973f4f62da1153a"
+      "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
+      "sha256": "94bcc8fc47646bc6a8f917dac3366c94fd6e3eeacd5178bdbcf6fec086e655d6"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-bad-cve-id.json",

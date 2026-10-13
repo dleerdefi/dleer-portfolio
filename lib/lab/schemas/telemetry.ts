@@ -6,6 +6,8 @@ import { ratio, role, timestamp } from './shared';
 import type { Role } from '../types';
 
 const watts = (max: number) => z.number().min(0).max(max).nullable();
+const count = (max: number) => z.number().int().min(0).max(max).nullable();
+const bytesPerS = z.number().int().min(0).max(1e11).nullable();
 
 const host = <R extends Role>(r: R) =>
   z.object({
@@ -15,6 +17,10 @@ const host = <R extends Role>(r: R) =>
     cpu_ratio: ratio,
     mem_ratio: ratio,
     inlet_c: z.number().min(-10).max(70).nullable(),
+    fan_rpm: z.number().min(0).max(30000).nullable(),
+    // null where the BMC has no exhaust sensor (the T430)
+    exhaust_c: z.number().min(-10).max(100).nullable(),
+    psu_in_v: z.number().min(0).max(300).nullable(),
   });
 
 const gpuIndex = z.number().int().min(0).max(7);
@@ -27,6 +33,14 @@ export const NowDoc = z.object({
   lab: z.object({
     power_w: watts(10000),
     energy_kwh_24h: z.number().min(0).max(250).nullable(),
+    energy_cost_usd_24h: z.number().min(0).max(100).nullable(),
+    vms_running: count(500),
+    targets_up: count(1000),
+    targets_total: count(1000),
+    alerts_firing: count(1000),
+    disks: count(500),
+    disks_healthy: count(500),
+    drive_temp_max_c: z.number().min(0).max(100).nullable(),
     hosts_up: z.number().int().min(0).max(3),
     hosts_expected: z.literal(3),
   }),
@@ -41,6 +55,9 @@ export const NowDoc = z.object({
         mem_ratio: ratio,
         power_w: watts(500),
         temp_c: z.number().min(0).max(120).nullable(),
+        // NVENC / NVDEC load: a load, never a count of streams
+        enc_ratio: ratio,
+        dec_ratio: ratio,
       }),
     )
     .max(8),
@@ -48,6 +65,25 @@ export const NowDoc = z.object({
     .object({
       used_bytes: z.number().int().min(0).max(1e15),
       total_bytes: z.number().int().min(0).max(1e15),
+    })
+    .nullable(),
+  // TrueNAS data pools (boot pool excluded); null while TrueNAS isn't reporting
+  nas: z
+    .object({
+      pool_healthy: z.boolean().nullable(),
+      read_bytes_s: bytesPerS,
+      write_bytes_s: bytesPerS,
+      arc_hit_ratio: ratio,
+    })
+    .nullable(),
+  // Self-hosted GitHub Actions runners, totals across every repo; null while not reporting
+  ci: z
+    .object({
+      runners_online: count(500),
+      runners_total: count(500),
+      runners_busy: count(500),
+      queue_oldest_s: z.number().int().min(0).max(2592000).nullable(),
+      busy_hours_24h: z.number().min(0).max(12000).nullable(),
     })
     .nullable(),
   media: z
@@ -85,9 +121,12 @@ export const HistoryDoc = z
           index: gpuIndex,
           util_ratio: series(ratio),
           power_w: series(watts(500)),
+          enc_ratio: series(ratio),
         }),
       )
       .max(8),
+    nas: z.object({ read_bytes_s: series(bytesPerS), write_bytes_s: series(bytesPerS) }).nullable(),
+    ci: z.object({ runners_busy: series(count(500)) }).nullable(),
     media: z.object({ streams: series(z.number().int().min(0).max(100).nullable()) }).nullable(),
   })
   // The contract: every series has exactly `points` entries (the JSON Schema only caps them).
@@ -99,13 +138,17 @@ export type HistoryDoc = z.infer<typeof HistoryDoc>;
 function historySeries(d: {
   lab: { power_w: unknown[] };
   hosts: { power_w: unknown[]; cpu_ratio: unknown[] }[];
-  gpus: { util_ratio: unknown[]; power_w: unknown[] }[];
+  gpus: { util_ratio: unknown[]; power_w: unknown[]; enc_ratio: unknown[] }[];
+  nas: { read_bytes_s: unknown[]; write_bytes_s: unknown[] } | null;
+  ci: { runners_busy: unknown[] } | null;
   media: { streams: unknown[] } | null;
 }): unknown[][] {
   return [
     d.lab.power_w,
     ...d.hosts.flatMap((h) => [h.power_w, h.cpu_ratio]),
-    ...d.gpus.flatMap((g) => [g.util_ratio, g.power_w]),
+    ...d.gpus.flatMap((g) => [g.util_ratio, g.power_w, g.enc_ratio]),
+    ...(d.nas ? [d.nas.read_bytes_s, d.nas.write_bytes_s] : []),
+    ...(d.ci ? [d.ci.runners_busy] : []),
     ...(d.media ? [d.media.streams] : []),
   ];
 }
