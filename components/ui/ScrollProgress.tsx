@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import type { ScrollProgressStore } from '@/components/layout/parallax/hooks/useParallaxScroll';
+import type { ScrollProgressStore } from '@/hooks/usePhoneScroll';
 
 interface ScrollProgressProps {
   progress: ScrollProgressStore;

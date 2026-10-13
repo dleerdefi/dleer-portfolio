@@ -37,7 +37,9 @@ const Background: React.FC = () => {
         style={{
           backgroundImage: 'linear-gradient(to bottom right, var(--theme-bg), var(--theme-surface), var(--theme-bg))'
         }}>
-        {/* Wallpaper: a pre-blurred static file, its blur placeholder shown until it loads */}
+        {/* Wallpaper: a pre-blurred static file of a few KB, so no placeholder: next/image's blur
+            placeholder is an SVG Gaussian blur drawn at full screen, which cost 0.5 to 1 s of main
+            thread per load (spec P13) */}
         {wallpaper && (
           <div className="absolute inset-0" style={{ opacity: 0.85 }}>
             <Image
@@ -45,7 +47,6 @@ const Background: React.FC = () => {
               alt=""
               fill
               unoptimized
-              placeholder="blur"
               sizes="100vw"
               style={{ objectFit: 'cover', filter: `brightness(${fx.brightness}) contrast(${fx.contrast})` }}
             />

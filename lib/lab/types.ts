@@ -49,6 +49,11 @@ export interface LabSummary {
     hosts_up?: number;
     hosts_expected?: number;
     power_24h?: (number | null)[];
+    // The home page's lab card slides (docs/lab/LAB_UI_SPEC.md §5): headline numbers only
+    hosts?: { role: Role; up: boolean; cpu_ratio: number | null; inlet_c: number | null }[];
+    gpus?: { role: Role; index: number; util_ratio: number | null; enc_ratio: number | null; temp_c: number | null }[];
+    nas?: { pool_healthy: boolean | null; read_bytes_s: number | null; write_bytes_s: number | null } | null;
+    ci?: { runners_online: number | null; runners_total: number | null; runners_busy: number | null } | null;
   };
   threats?: {
     state: LabState;

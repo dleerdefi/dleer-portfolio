@@ -116,10 +116,10 @@
   --color-bg-rgb: 46, 52, 64;
   --color-surface: #3B4252;        /* nord1 - Polar Night */
   --color-surface-rgb: 59, 66, 82;
-  --color-text-body: #D8DEE9;      /* nord4 - Snow Storm */
-  --color-text-body-rgb: 216, 222, 233;
-  --color-text-header: #6A8FF2;    /* Vibrant blue per spec */
-  --color-text-header-rgb: 106, 143, 242;
+  --color-text-body: #E5E9F0;      /* nord5 - Snow Storm (nord4 #D8DEE9 at 0.72 fell under 4.5:1 on the glass) */
+  --color-text-body-rgb: 229, 233, 240;
+  --color-text-header: #98B9FF;    /* The spec's vibrant blue #6A8FF2, lightened to read at 4.5:1 */
+  --color-text-header-rgb: 152, 185, 255;
   --color-input-text: #ECEFF4;     /* nord6 - Snow Storm */
   --color-accent-1: #6A8FF2;       /* Vibrant blue per spec */
   --color-accent-1-rgb: 106, 143, 242;
@@ -135,8 +135,8 @@
   --theme-text-bright: #E5E9F0;    /* nord5 - Snow Storm */
   --theme-text-dimmed: #88C0D0;    /* nord8 - Frost (improved 5.5:1 contrast, was nord3 2:1) */
   --theme-text-muted: #81A1C1;     /* nord9 - Frost (4.8:1 contrast, subtle muted state) */
-  --theme-primary: var(--color-accent-1);
-  --theme-primary-rgb: var(--color-accent-1-rgb);
+  --theme-primary: var(--color-text-header);
+  --theme-primary-rgb: var(--color-text-header-rgb);
   --theme-secondary: #88C0D0;      /* nord8 - Frost */
   --theme-border: #4C566A;          /* nord3 - Polar Night */
   --theme-border-active: var(--color-accent-1);
@@ -144,10 +144,10 @@
   --theme-success-rgb: 163, 190, 140;
   --theme-warning: #EBCB8B;        /* nord13 - Aurora (Yellow) */
   --theme-warning-rgb: 235, 203, 139;
-  --theme-error: #BF616A;          /* nord11 - Aurora (Red) */
-  --theme-error-rgb: 191, 97, 106;
-  --theme-info: #5E81AC;           /* nord10 - Frost */
-  --theme-info-rgb: 94, 129, 172;
+  --theme-error: #FD99A0;          /* nord11 #BF616A, lightened to read at 4.5:1 */
+  --theme-error-rgb: 253, 153, 160;
+  --theme-info: #9CBFED;           /* nord10 #5E81AC, lightened to read at 4.5:1 */
+  --theme-info-rgb: 156, 191, 237;
 
   /* Default accent for this theme */
   --accent-color: var(--color-accent-1);
@@ -163,8 +163,8 @@
   --color-surface-rgb: 238, 232, 213;
   --color-text-body: #073642;      /* base02 - EMPHASIZED TEXT (11.5:1 contrast - exceptional readability) */
   --color-text-body-rgb: 7, 54, 66;
-  --color-text-header: #2368B3;    /* Darker blue per spec */
-  --color-text-header-rgb: 35, 104, 179;
+  --color-text-header: #065CA6;    /* The spec's #2368B3, darkened to read at 4.5:1 */
+  --color-text-header-rgb: 6, 92, 166;
   --color-input-text: #073642;     /* base02 - Input text (matches body for consistency) */
   --color-accent-1: #EC4899;       /* Pink per spec */
   --color-accent-1-rgb: 236, 72, 153;
@@ -182,14 +182,16 @@
   --theme-primary-rgb: var(--color-text-header-rgb);
   --theme-border: #93a1a1;          /* base1 */
   --theme-border-active: var(--color-accent-1);
-  --theme-success: #859900;        /* green */
-  --theme-success-rgb: 133, 153, 0;
-  --theme-warning: #b58900;        /* yellow */
-  --theme-warning-rgb: 181, 137, 0;
-  --theme-error: #dc322f;          /* red */
-  --theme-error-rgb: 220, 50, 47;
-  --theme-info: #2aa198;           /* cyan */
-  --theme-info-rgb: 42, 161, 152;
+  /* Solarized's accent colors, darkened (CIELAB, same hues) to read at 4.5:1 as text on cream:
+     green #859900, yellow #b58900 (no yellow does), red #dc322f, cyan #2aa198 */
+  --theme-success: #4b6100;
+  --theme-success-rgb: 75, 97, 0;
+  --theme-warning: #765200;
+  --theme-warning-rgb: 118, 82, 0;
+  --theme-error: #bc0019;
+  --theme-error-rgb: 188, 0, 25;
+  --theme-info: #006861;
+  --theme-info-rgb: 0, 104, 97;
 
   /* Default accent for this theme */
   --accent-color: var(--color-accent-1);
@@ -212,3 +214,26 @@
 .accent-lime { --accent-color: #84cc16; --accent-color-rgb: 132, 204, 22; }
 .accent-amber { --accent-color: #f59e0b; --accent-color-rgb: 245, 158, 11; }
 .accent-orange { --accent-color: #f97316; --accent-color-rgb: 249, 115, 22; }
+
+/* Text in the accent (links, headings, labels; and the fill under text, like the Send button):
+   the accent with its lightness held where it reads at 4.5:1 on the preset's tiles over any of
+   its wallpapers, whichever of the 15 accents is picked. CIELAB lightness (lch) follows
+   luminance, so one bound fits every hue; the chroma cap keeps the result in sRGB. Browsers
+   without relative colors get a mix toward white or black. */
+:root { --accent-text: color-mix(in srgb, var(--accent-color) 70%, #fff); }
+.theme-solarized-light { --accent-text: color-mix(in srgb, var(--accent-color) 55%, #000); }
+@supports (color: lch(from red l c h)) {
+  :root { --accent-text: lch(from var(--accent-color) max(l, 74) min(c, 55) h); }
+  .theme-nord { --accent-text: lch(from var(--accent-color) max(l, 79) min(c, 48) h); }
+  .theme-solarized-light { --accent-text: lch(from var(--accent-color) min(l, 35) min(c, 70) h); }
+}
+
+/* Phones (< 1024 px) use Tokyo Night with its cyan accent: ThemeContext keeps the preset there,
+   this keeps the accent. One rule, no script, so resizing across 1024 px cannot leave a stale
+   override behind. Spec Q3 decides whether phones get the theme pickers instead. */
+@media (max-width: 1023px) {
+  :root {
+    --accent-color: #7dcfff !important;
+    --accent-color-rgb: 125, 207, 255 !important;
+  }
+}

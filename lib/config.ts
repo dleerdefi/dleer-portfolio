@@ -18,16 +18,8 @@ export function usePersonalInfo() {
   return config.personal;
 }
 
-// Note: useSkills() removed - skills array deleted from config
-// Skills displayed in NeofetchTile (via config.system) and AboutTechGrid (via config.technologies)
-
-/**
- * Get technologies from config
- */
-export function useTechnologies() {
-  const config = usePortfolioConfig();
-  return config.technologies;
-}
+// Note: useSkills() and useTechnologies() removed: the technologies are the neofetch block's
+// Stack row (components/home/Neofetch.tsx, a server component reading the config directly)
 
 /**
  * Get social links from config
@@ -67,7 +59,6 @@ export function useFeatureFlags() {
     blog: true,
     projects: true,
     contact: true,
-    about: true,
     neofetch: true,
     lab: false
   };

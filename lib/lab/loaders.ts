@@ -75,6 +75,10 @@ export function buildSummary(
           hosts_up: now.lab.hosts_up,
           hosts_expected: now.lab.hosts_expected,
           ...(history.state === 'offline' ? {} : { power_24h: downsample(history.lab.power_w) }),
+          hosts: now.hosts.map((h) => ({ role: h.role, up: h.up, cpu_ratio: h.cpu_ratio, inlet_c: h.inlet_c })),
+          gpus: now.gpus.map((g) => ({ role: g.role, index: g.index, util_ratio: g.util_ratio, enc_ratio: g.enc_ratio, temp_c: g.temp_c })),
+          nas: now.nas && { pool_healthy: now.nas.pool_healthy, read_bytes_s: now.nas.read_bytes_s, write_bytes_s: now.nas.write_bytes_s },
+          ci: now.ci && { runners_online: now.ci.runners_online, runners_total: now.ci.runners_total, runners_busy: now.ci.runners_busy },
         };
   const threats: LabSummary['threats'] = !digest
     ? undefined
