@@ -18,6 +18,7 @@ import { GpuTable } from './TelemetryTables';
 import { hostsText } from './HostsLine';
 import { HistoryOr } from './TelemetryTile';
 import { LabHowItWorks } from './LabHowItWorks';
+import { LivePanel } from './LivePanel';
 import { TelemetryPhone } from './TelemetryPhone';
 import { threatsTeaser, useTelemetry } from './useTelemetry';
 
@@ -115,6 +116,8 @@ export default function TelemetryPage() {
                 </div>
 
                 <HealthLine lab={now.lab} />
+
+                <LivePanel />
 
                 <div className="lab-host-cards" id="hosts">
                   {now.hosts.map((host, i) => (

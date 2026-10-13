@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import * as status from '@/app/api/lab/status/route';
 import * as history from '@/app/api/lab/status/history/route';
+import * as statusLive from '@/app/api/lab/status/live/route';
 import * as threats from '@/app/api/lab/threats/route';
 import * as live from '@/app/api/lab/threats/live/route';
 import * as summary from '@/app/api/lab/summary/route';
@@ -13,6 +14,7 @@ vi.mock('content-collections', () => ({ allBlogs: [], allProjects: [] }));
 const ROUTES = [
   ['/api/lab/status', status, 'public, max-age=15, s-maxage=15, stale-while-revalidate=30', 'telemetry'],
   ['/api/lab/status/history', history, 'public, max-age=60, s-maxage=120, stale-while-revalidate=300', 'telemetry'],
+  ['/api/lab/status/live', statusLive, 'public, max-age=0, s-maxage=10, stale-while-revalidate=10', 'telemetry'],
   ['/api/lab/threats', threats, 'public, max-age=60, s-maxage=120, stale-while-revalidate=300', 'threats'],
   ['/api/lab/threats/live', live, 'public, max-age=0, s-maxage=30, stale-while-revalidate=30', 'threats'],
   ['/api/lab/summary', summary, 'public, max-age=30, s-maxage=30, stale-while-revalidate=60', 'telemetry'],

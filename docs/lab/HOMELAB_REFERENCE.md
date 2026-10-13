@@ -165,7 +165,7 @@ secrets: the invalid examples use only documentation addresses (`203.0.113.0/24`
 
 | Source (homelab) | Destination (here) | Use |
 |---|---|---|
-| `stacks/monitoring/labsnap/examples/now.v1.json`, `history.v1.json` | `lib/lab/fixtures/` | demo mode, tests |
+| `stacks/monitoring/labsnap/examples/now.v1.json`, `history.v1.json`, `live.v1.json` | `lib/lab/fixtures/` | demo mode, tests |
 | `stacks/honeynet/threatsnap/examples/threats.v1.json`, `threats-live.v1.json` | `lib/lab/fixtures/` | demo mode, tests |
 | `stacks/monitoring/labsnap/examples/invalid/*.json` | `tests/fixtures/homelab/invalid/labsnap/` | tests |
 | `stacks/honeynet/threatsnap/examples/invalid/*.json` | `tests/fixtures/homelab/invalid/threatsnap/` | tests |
@@ -178,7 +178,8 @@ fails CI. The fixtures were first copied from `main` at `79227c3` (labsnap) and
 files (the sha256 values did not change). `now.v1.json` was re-synced from `main` at `ba74e7e`
 (homelab PR #16, `storage` filled), then every labsnap example (both golden files and the 12
 invalid ones) from `main` at `6e4473a` (homelab PR #28: cost, lab health counts, airflow, PSU
-input, GPU video engines, `nas`, `ci`).
+input, GPU video engines, `nas`, `ci`). `live.v1.json` and `invalid/live-history-steps.json`
+came from `main` at `a0225ce` (homelab PR #31: live.json, the last 10 minutes at 10 s steps).
 
 **Sync procedure** (when a homelab PR changes an example or a schema):
 

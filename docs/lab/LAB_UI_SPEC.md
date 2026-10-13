@@ -44,7 +44,7 @@ These hold for every phase. If a task seems to need breaking one, stop and ask D
 
 1. **Read the homelab first.** Before writing code, read the documents listed in
    [HOMELAB_REFERENCE.md](HOMELAB_REFERENCE.md) in the `dleerdefi/dleer-homelab` repo: the two
-   data contracts, the four JSON Schemas, the golden examples, the public Grafana dashboard and
+   data contracts, the five JSON Schemas, the golden examples, the public Grafana dashboard and
    the honeynet build spec. The contracts there are the source of truth; the consumer schemas
    here mirror them.
 2. **No theme settings of its own.** Every lab view follows the site's theme preset and accent
@@ -250,21 +250,23 @@ lib/lab/
   r2.ts              server-only. aws4fetch client; getObject(key, maxBytes) → { ok: true, body } | { ok: false, reason }
   freshness.ts       pure. freshness({ generatedAt, staleAfterS, delayedCeilingS, now }) → { state, ageS }
   schemas/
-    telemetry.ts     Zod: NowDoc, HistoryDoc (mirror of the labsnap schemas)
+    telemetry.ts     Zod: NowDoc, HistoryDoc, TelemetryLiveDoc (mirror of the labsnap schemas; history and live share one object)
     threats.ts       Zod: DigestDoc, LiveDoc (mirror of the threatsnap schemas)
     shared.ts        timestamp, count, lat, lon, cc, ratio, category, target, svc, the IP-shape refinement, ipShapes()
   load.ts            server-only. createLoader({...}) → () => Promise<LabPayload<T>>; in-memory cache, one in-flight fetch per key
-  loaders.ts         server-only. loadNow, loadHistory, loadDigest, loadLive, loadSummary
+  loaders.ts         server-only. loadNow, loadHistory, loadTelemetryLive, loadDigest, loadLive, loadSummary
   demo/
     rebase.ts        shifts a fixture's timestamps to "now" (demo mode)
     history.ts       builds a 289-point demo history pinned to the now fixture (the golden history has 13 points)
   fixtures/          vendored golden examples (verbatim copies; see HOMELAB_REFERENCE.md §6)
-    now.v1.json  history.v1.json  threats.v1.json  threats-live.v1.json  MANIFEST.json
+    now.v1.json  history.v1.json  live.v1.json  threats.v1.json  threats-live.v1.json  MANIFEST.json
   names.ts           role/index → hardware names; category and behavior labels
   format.ts          numbers, units, compact counts, the dash for null, relative ages
+  live.ts            the live chart's glide (pure)
   types.ts           LabState, LabPayload<T>, Category, …
 app/api/lab/status/route.ts           → loadNow
 app/api/lab/status/history/route.ts   → loadHistory
+app/api/lab/status/live/route.ts      → loadTelemetryLive
 app/api/lab/threats/route.ts          → loadDigest
 app/api/lab/threats/live/route.ts     → loadLive
 app/api/lab/summary/route.ts          → loadSummary
@@ -291,7 +293,7 @@ const base = `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${pr
 - `getObject(key, maxBytes)`: `client.fetch(`${base}/${key}`, { signal: AbortSignal.timeout(3000) })`.
   Reject when any `R2_*` variable is missing (`reason: 'unconfigured'`), on non-200, when
   `Content-Length` exceeds `maxBytes`, and when the body read exceeds `maxBytes`.
-- The key is always one of four constants. Nothing from the request reaches the URL.
+- The key is always one of five constants. Nothing from the request reaches the URL.
 - Log a failure server-side at most once a minute per key, with the reason and status only
   (never the body or headers).
 
@@ -301,6 +303,7 @@ const base = `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${pr
 |---|---|---|---|---|
 | `loadNow` | `v1/now.json` | 16 KiB | 10 s | 900 s |
 | `loadHistory` | `v1/history.json` | 512 KiB | 60 s | 3600 s |
+| `loadTelemetryLive` | `v1/live.json` (status live: 10 minutes at 10 s steps) | 32 KiB | 5 s | 900 s |
 | `loadDigest` | `v1/threats.json` | 64 KiB (the contract cap) | 60 s | 3600 s |
 | `loadLive` | `v1/threats-live.json` | 48 KiB (the contract cap) | 20 s | 900 s |
 
@@ -332,7 +335,7 @@ Decided on the server with the server's clock, from each document's own `generat
 
 | State | Condition | Shows |
 |---|---|---|
-| `live` | `age ≤ stale_after_s` (now 120, history 900, digest 1200, live 300 today) | the values |
+| `live` | `age ≤ stale_after_s` (now 120, history 900, status live 40, digest 1200, threats live 300 today) | the values |
 | `delayed` | `age ≤` the loader's delayed ceiling | values greyed, `as of N min ago`; the globe's replay stops |
 | `offline` | older, a 404, any failure above, or `generated_at` more than 300 s in the future | one line (`lab offline`, `honeynet offline`), no numbers |
 
@@ -391,6 +394,7 @@ hidden.
 |---|---|---|
 | `/api/lab/status` | `public, max-age=15, s-maxage=15, stale-while-revalidate=30` | `public, max-age=15, s-maxage=15` |
 | `/api/lab/status/history` | `public, max-age=60, s-maxage=120, stale-while-revalidate=300` | `public, max-age=30, s-maxage=30` |
+| `/api/lab/status/live` | `public, max-age=0, s-maxage=10, stale-while-revalidate=10` (the worst-case age, labsnap 10 s + memory 5 s + edge 10 s + stale-while-revalidate 10 s, stays under `stale_after_s` 40) | `public, max-age=10, s-maxage=10` |
 | `/api/lab/threats` | `public, max-age=60, s-maxage=120, stale-while-revalidate=300` | `public, max-age=30, s-maxage=30` |
 | `/api/lab/threats/live` | `public, max-age=0, s-maxage=30, stale-while-revalidate=30` (the client polls anyway; short caches keep the replay budget in [THREATS_VIEW.md §6](THREATS_VIEW.md#6-replay-clock)) | `public, max-age=30, s-maxage=30` |
 | `/api/lab/summary` | `public, max-age=30, s-maxage=30, stale-while-revalidate=60` | same |
@@ -413,7 +417,8 @@ fixtures inside the demo branch (`await import(...)`) so production never loads 
 | now | `generated_at` = now − 12 s |
 | history | the generated 289-point series from `demo/history.ts`; `start` = now rounded down to 5 min − 288 × 300 s; `generated_at` = now − 60 s |
 | digest | `generated_at` = now − 42 s; `hourly.start` = the current hour − 23 h; `malware[].first_seen` shifted by the same delta as `generated_at` |
-| live | `generated_at` = now rounded down to 10 s − 20 s; `window_start` = `generated_at` − 900 s |
+| status live | the fixture's 13 points stretched to 61, slot k taking entry k mirrored back and forth over them, so the demo moves one step every 10 s; the last point at now rounded down to 10 s − 10 s; `generated_at` 5 s after it |
+| threats live | `generated_at` = now rounded down to 10 s − 20 s; `window_start` = `generated_at` − 900 s |
 
 `demo/history.ts` is deterministic (a seeded generator, no `Math.random`): a quiet night, a GPU
 job in the afternoon on the `gpu` host, a nightly backup on `storage`, one `null` gap, and every
@@ -437,8 +442,21 @@ label. `docs/lab/concepts` was drawn from this shape.
 | Consumer | Routes and periods |
 |---|---|
 | Telemetry tile and page | `/api/lab/status` every 30 s; `/api/lab/status/history` every 5 min; `/api/lab/summary` every 5 min (the honeypot teaser) |
+| `/lab`'s last-10-minutes panel (`LivePanel`) | `/api/lab/status/live` every 10 s, only while the panel is within 200 px of the viewport (`useOnScreen`, an IntersectionObserver); no other page or tile polls it |
 | Threats tile and page | `/api/lab/threats` every 5 min; `/api/lab/threats/live` every 60 s |
 | Neofetch rows, nav glyphs, the home lab card | `/api/lab/summary` once after first paint (`useAfterIdle`: `requestIdleCallback`, fallback `setTimeout` 1 s), then every 5 min while visible; the rows and the card share the request |
+
+### The live chart
+
+`LiveChart` (`components/lab/shared/`) draws `live.json` on a time axis: entry i at
+`start + i × step_s`, the newest point at the right edge when it arrives. Then
+requestAnimationFrame moves the line left at one step per `step_s` (a transform written to the
+DOM, no React render per frame), so the next point slides in at the edge; with no new point
+the line holds after one step and the badge says it is late. With `prefers-reduced-motion` it
+only redraws on each poll. `null` is a gap. A value that repeats between updates (power and NAS
+every 15 s, CI every 60 s) is drawn as the flat line it is. Lab power is large with axes; each
+host's CPU and each GPU's utilisation are small multiples on one 0–100 % scale, all in the
+accent. The home page and `/api/lab/summary` never read `live.json`.
 
 ### Shared status store
 

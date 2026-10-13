@@ -14,6 +14,10 @@ export const CACHE = {
     ok: 'public, max-age=60, s-maxage=120, stale-while-revalidate=300',
     offline: 'public, max-age=30, s-maxage=30',
   },
+  statusLive: {
+    ok: 'public, max-age=0, s-maxage=10, stale-while-revalidate=10',
+    offline: 'public, max-age=10, s-maxage=10',
+  },
   threats: {
     ok: 'public, max-age=60, s-maxage=120, stale-while-revalidate=300',
     offline: 'public, max-age=30, s-maxage=30',

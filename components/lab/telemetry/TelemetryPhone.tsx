@@ -8,6 +8,7 @@ import { LabStateLine } from '@/components/lab/shared/LabHeader';
 import { Meter } from '@/components/lab/shared/Meter';
 import { Sparkline } from '@/components/lab/shared/Sparkline';
 import { Value } from '@/components/lab/shared/Value';
+import { LivePanel } from './LivePanel';
 import { CiBlock, Cost, HealthLine, NasBlock, TranscodingBadge, airflowDelta, isTranscoding } from './LabExtras';
 import { Down } from './TelemetryTables';
 import { HistoryOr } from './TelemetryTile';
@@ -45,6 +46,7 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
           </div>
 
           <HealthLine lab={now.lab} style={{ fontSize: '0.875rem' }} />
+          <LivePanel />
 
           <div>
             <p className="lab-text-2" style={{ margin: '0 0 0.4rem' }}>

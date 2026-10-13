@@ -72,11 +72,11 @@ routes outside `/lab` and `/api/lab/` for it.
 
 | Where | What |
 |---|---|
-| `lib/lab/` | Zod mirrors of the four producer schemas, freshness, the read-only R2 client, cached loaders with the IP-shape scan, demo mode (`LAB_DEMO_DATA=true`), the summary, names and formatting |
+| `lib/lab/` | Zod mirrors of the five producer schemas, freshness, the read-only R2 client, cached loaders with the IP-shape scan, demo mode (`LAB_DEMO_DATA=true`), the summary, names and formatting |
 | `lib/lab/fixtures/`, `tests/fixtures/homelab/` | verbatim homelab golden and invalid examples; `MANIFEST.json` pins source commit and sha256 (re-sync per `docs/lab/HOMELAB_REFERENCE.md` §6, never hand-edit) |
-| `app/api/lab/*` | `status`, `status/history`, `threats`, `threats/live`, `summary`: GET only, validated payloads, §5 cache headers |
+| `app/api/lab/*` | `status`, `status/history`, `status/live` (the last 10 minutes at 10 s steps, `/lab`'s gliding `LivePanel` only), `threats`, `threats/live`, `summary`: GET only, validated payloads, §5 cache headers |
 | `hooks/useLabData.ts`, `lib/lab/status-store.ts`, `hooks/useLabColors.ts` | polling, the shared live/delayed/offline store, concrete theme colors for the globe |
-| `components/lab/shared/` | `LabStatusBadge`, `Meter`, `Sparkline`, `LineChart`, `HourlyBlocks`, `Swatch`, `LabAttribution`, `Value`, `LabHeader` |
+| `components/lab/shared/` | `LabStatusBadge`, `Meter`, `Sparkline`, `LineChart`, `LiveChart` (the gliding 10-minute chart), `HourlyBlocks`, `Swatch`, `LabAttribution`, `Value`, `LabHeader` |
 | `components/lab/telemetry/`, `components/lab/threats/` | the tiles (`lab-telemetry`, `lab-threats`), the framed pages `/lab` and `/lab/threats`, their phone layouts, `LabExtras` (cost, the health line, the NAS and CI blocks, the transcoding tag), `LabHowItWorks` (`/lab`'s footer), `ReplayClock`, the feed, stats, legend, and the lazy globe (`ThreatGlobe`, `globe-setup`, `globe-layers`) |
 | entry points | `components/tiles/nav/LabDirectory.tsx` in the contents tree, the polybar `lab` workspace, the lab card `components/lab/home/LabTile.tsx` (a carousel: `LabCarousel.tsx`, `LabSlides.tsx`; loaded through `components/home/LabIslands.tsx`), the section rail's watts |
 
@@ -117,7 +117,7 @@ The application uses a modular CSS architecture with styles split into 16 focuse
 11. **11-glass-effects.css** (93 lines) - Glass morphism & visual effects (the home tiles' chrome is in 15)
 12. **12-blog-content.css** (637 lines) - Blog prose styling (links underlined), MDX components, figures, admonitions, code blocks
 13. **13-lab.css** (179 lines) - Lab (`~/lab`): attack-category colors per preset, `--lab-*` tokens, shared lab classes, the home lab card (carousel and slides)
-14. **14-lab-views.css** (278 lines) - Lab layouts: the framed `/lab` pages, the health line, NAS / CI blocks and tags, the globe's markers and tooltip, phone tweaks, `/lab`'s how-this-works footer
+14. **14-lab-views.css** (285 lines) - Lab layouts: the framed `/lab` pages, the last-10-minutes panel, the health line, NAS / CI blocks and tags, the globe's markers and tooltip, phone tweaks, `/lab`'s how-this-works footer
 15. **15-home-layout.css** (246 lines) - The home page's two arrangements of one DOM: neofetch and the desktop photo, the home view, the lab tile, the contents tree, the polybar tray and popovers, the section rail, the phone column, the desktop grid and tile chrome, the phone's scroll-driven animations
 16. **16-projects.css** (111 lines) - Projects: the cards and their covers, the `/projects` grid, the case-study pages
 

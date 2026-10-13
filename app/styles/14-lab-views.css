@@ -259,6 +259,13 @@ section.lab-page {
   }
 }
 
+/* /lab's last-10-minutes panel (LivePanel.tsx): power, then CPU and GPU small multiples */
+.lab-live-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+.lab-live-multiples { display: grid; gap: 1rem 2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+/* One grid per figure (rows are display: contents) so the label column fits its longest name */
+.lab-live-rows { display: grid; grid-template-columns: max-content minmax(0, 1fr) 5ch; gap: 0.4rem 0.75rem; align-items: center; margin-top: 0.4rem; }
+.lab-live-row { display: contents; }
+
 /* /lab's "how this works" footer (LabHowItWorks.tsx) */
 .lab-how { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem; }
 .lab-how-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--accent-text); }

@@ -4,7 +4,7 @@ import { AwsClient } from 'aws4fetch';
 // Signed, read-only GETs against the private lab bucket. The key is always one of four
 // constants: nothing from a request ever reaches the URL.
 
-export const LAB_KEYS = ['v1/now.json', 'v1/history.json', 'v1/threats.json', 'v1/threats-live.json'] as const;
+export const LAB_KEYS = ['v1/now.json', 'v1/history.json', 'v1/live.json', 'v1/threats.json', 'v1/threats-live.json'] as const;
 export type LabKey = (typeof LAB_KEYS)[number];
 
 export type R2Failure = 'unconfigured' | 'timeout' | 'network' | 'status' | 'oversize';
