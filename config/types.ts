@@ -36,15 +36,6 @@ export interface SkillCategory {
   skills: string[];
 }
 
-export interface Technology {
-  name: string;         // Shown in the neofetch block's Stack row
-  category?: string;    // Optional category for grouping
-}
-
-export interface TechnologiesConfig {
-  items: Technology[];
-}
-
 export interface Project {
   id: string;
   name: string;
@@ -193,7 +184,6 @@ export interface PortfolioConfig {
   personal: PersonalInfo;
   social: SocialLink[];
   skills?: SkillCategory[]; // Optional - legacy field, can be removed
-  technologies?: TechnologiesConfig;
   blog?: BlogPost[]; // Optional - migrated to Content Collections (content/blog/*.mdx)
   system: SystemInfo;
   navigation?: NavigationSection[];

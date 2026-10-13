@@ -120,9 +120,8 @@ public first. With it off the lab is telemetry only:
 
 The table records the first implementation. Since portfolio v2 (docs/PORTFOLIO_V2_SPEC.md,
 phases 2 and 5) the home page is one server-rendered DOM: the entry points are `LabDirectory` in
-the contents tree, the polybar `lab` workspace, `NeofetchLabRows` and the lab card (`LabTile`, a
-carousel of slides, [TELEMETRY_VIEW.md §5.4](TELEMETRY_VIEW.md#54-home-lab-card)), both loaded
-through `components/home/LabIslands.tsx`; the stage (`components/home/Stage.tsx`) renders the
+the contents tree, the polybar `lab` workspace and the lab card (`LabTile`, a carousel of slides,
+[TELEMETRY_VIEW.md §5.4](TELEMETRY_VIEW.md#54-home-lab-card)), loaded through `components/home/LabIslands.tsx`; the stage (`components/home/Stage.tsx`) renders the
 `lab-` views. CLAUDE.md lists the files.
 
 | Place | Change | Concept |

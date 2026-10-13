@@ -78,7 +78,7 @@ routes outside `/lab` and `/api/lab/` for it.
 | `hooks/useLabData.ts`, `lib/lab/status-store.ts`, `hooks/useLabColors.ts` | polling, the shared live/delayed/offline store, concrete theme colors for the globe |
 | `components/lab/shared/` | `LabStatusBadge`, `Meter`, `Sparkline`, `LineChart`, `HourlyBlocks`, `Swatch`, `LabAttribution`, `Value`, `LabHeader` |
 | `components/lab/telemetry/`, `components/lab/threats/` | the tiles (`lab-telemetry`, `lab-threats`), the framed pages `/lab` and `/lab/threats`, their phone layouts, `LabExtras` (cost, the health line, the NAS and CI blocks, the transcoding tag), `LabHowItWorks` (`/lab`'s footer), `ReplayClock`, the feed, stats, legend, and the lazy globe (`ThreatGlobe`, `globe-setup`, `globe-layers`) |
-| entry points | `components/tiles/nav/LabDirectory.tsx` in the contents tree, the polybar `lab` workspace, `components/lab/home/NeofetchLabRows.tsx` and the lab card `components/lab/home/LabTile.tsx` (a carousel: `LabCarousel.tsx`, `LabSlides.tsx`; both loaded through `components/home/LabIslands.tsx`), the section rail's watts |
+| entry points | `components/tiles/nav/LabDirectory.tsx` in the contents tree, the polybar `lab` workspace, the lab card `components/lab/home/LabTile.tsx` (a carousel: `LabCarousel.tsx`, `LabSlides.tsx`; loaded through `components/home/LabIslands.tsx`), the section rail's watts |
 
 Lab colors come only from CSS variables (`13-lab.css`); `null` renders as a dash; the globe chunk
 loads only when a threats view shows it (on phones, after a tap).
@@ -141,10 +141,12 @@ desktop), which decides what the stage shows and which keys apply. Spec: §4.1 t
    `data-focused`; its chrome (border, glass, `--tile-alpha` per preset, the focus ring) is CSS.
    The tiles: `neofetch` (`section-top`), `navigation` (`section-contents`, desktop only),
    `content` (`section-home`, the stage) and, with the lab flag, `lab`.
-3. **Neofetch** (`components/home/Neofetch.tsx`, server): the social rows, a `Stack` row (from
-   `config.technologies`) and `NeofetchLabRows` with the lab on. On desktop the profile photo
-   (`HeroPhoto.tsx`) stands beside the rows where real neofetch draws an image; pressing it
-   switches to the RF-DETR detection version, which loads on first hover or focus. Phones keep
+3. **Neofetch** (`components/home/Neofetch.tsx`, server): the social rows whose URL is set
+   (`system` in `config/portfolio.config.ts`: GitHub, X, LinkedIn, YouTube, Instagram, TikTok; an
+   optional follower or views count after the handle) and the color swatches. On desktop the
+   profile photo (`HeroPhoto.tsx`) stands beside the rows, centred on it, where real neofetch
+   draws an image; pressing it switches to the RF-DETR detection version, which loads on first
+   hover or focus. Phones keep
    the block-letter logo above the rows and download no photo (a desktop-only `<picture>`
    source). The photo shows while `NEXT_PUBLIC_PROFILE_PHOTO` is set; its crops come from
    `scripts/build-hero-photo.mjs`.
@@ -317,8 +319,8 @@ cannot see through the glass. Run it after any color, glass or wallpaper change.
      24 px pitch at least. Each module's phone block holds its sizes (spec phase 6)
    - Form fields are 16 px at least, or iOS Safari zooms the page when one takes focus
    - With `prefers-reduced-motion` no transition takes any time (`08-animations.css`)
-   - Nothing on the page grows after load: the neofetch lab line and the lab cards hold their
-     space until the summary arrives
+   - Nothing on the page grows after load: the lab cards hold their space until the summary
+     arrives
 
 5. **Open Graph cards**: generated at build time with `next/og` (`lib/og/card.tsx`): the site card
    (`app/opengraph-image.tsx`), one per project and post, and the two lab cards, which 404 with

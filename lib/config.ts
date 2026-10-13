@@ -18,8 +18,7 @@ export function usePersonalInfo() {
   return config.personal;
 }
 
-// Note: useSkills() and useTechnologies() removed: the technologies are the neofetch block's
-// Stack row (components/home/Neofetch.tsx, a server component reading the config directly)
+// Note: useSkills() and useTechnologies() removed
 
 /**
  * Get social links from config
