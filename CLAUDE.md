@@ -77,8 +77,8 @@ routes outside `/lab` and `/api/lab/` for it.
 | `app/api/lab/*` | `status`, `status/history`, `threats`, `threats/live`, `summary`: GET only, validated payloads, §5 cache headers |
 | `hooks/useLabData.ts`, `lib/lab/status-store.ts`, `hooks/useLabColors.ts` | polling, the shared live/delayed/offline store, concrete theme colors for the globe |
 | `components/lab/shared/` | `LabStatusBadge`, `Meter`, `Sparkline`, `LineChart`, `HourlyBlocks`, `Swatch`, `LabAttribution`, `Value`, `LabHeader` |
-| `components/lab/telemetry/`, `components/lab/threats/` | the tiles (`lab-telemetry`, `lab-threats`), the framed pages `/lab` and `/lab/threats`, their phone layouts, `LabExtras` (cost, the health line, the NAS and CI blocks, the transcoding tag), `ReplayClock`, the feed, stats, legend, and the lazy globe (`ThreatGlobe`, `globe-setup`, `globe-layers`) |
-| entry points | `components/tiles/nav/LabDirectory.tsx` in the contents tree, the polybar `lab` workspace, `components/lab/home/NeofetchLabRows.tsx` and `components/lab/home/LabTile.tsx` (both loaded through `components/home/LabIslands.tsx`), the section rail's watts |
+| `components/lab/telemetry/`, `components/lab/threats/` | the tiles (`lab-telemetry`, `lab-threats`), the framed pages `/lab` and `/lab/threats`, their phone layouts, `LabExtras` (cost, the health line, the NAS and CI blocks, the transcoding tag), `LabHowItWorks` (`/lab`'s footer), `ReplayClock`, the feed, stats, legend, and the lazy globe (`ThreatGlobe`, `globe-setup`, `globe-layers`) |
+| entry points | `components/tiles/nav/LabDirectory.tsx` in the contents tree, the polybar `lab` workspace, `components/lab/home/NeofetchLabRows.tsx` and the lab card `components/lab/home/LabTile.tsx` (a carousel: `LabCarousel.tsx`, `LabSlides.tsx`; both loaded through `components/home/LabIslands.tsx`), the section rail's watts |
 
 Lab colors come only from CSS variables (`13-lab.css`); `null` renders as a dash; the globe chunk
 loads only when a threats view shows it (on phones, after a tap).
@@ -116,9 +116,9 @@ The application uses a modular CSS architecture with styles split into 16 focuse
 10. **10-mobile.css** (133 lines) - Mobile-specific optimizations & safe areas
 11. **11-glass-effects.css** (93 lines) - Glass morphism & visual effects (the home tiles' chrome is in 15)
 12. **12-blog-content.css** (624 lines) - Blog prose styling, MDX components, figures, admonitions, code blocks
-13. **13-lab.css** (106 lines) - Lab (`~/lab`): attack-category colors per preset, `--lab-*` tokens, shared lab classes
-14. **14-lab-views.css** (260 lines) - Lab layouts: the framed `/lab` pages, the health line, NAS / CI blocks and tags, the globe's markers and tooltip, phone tweaks
-15. **15-home-layout.css** (245 lines) - The home page's two arrangements of one DOM: neofetch and the desktop photo, the home view, the lab tile, the contents tree, the polybar tray and popovers, the section rail, the phone column, the desktop grid and tile chrome, the phone's scroll-driven animations
+13. **13-lab.css** (171 lines) - Lab (`~/lab`): attack-category colors per preset, `--lab-*` tokens, shared lab classes, the home lab card (carousel and slides)
+14. **14-lab-views.css** (272 lines) - Lab layouts: the framed `/lab` pages, the health line, NAS / CI blocks and tags, the globe's markers and tooltip, phone tweaks, `/lab`'s how-this-works footer
+15. **15-home-layout.css** (239 lines) - The home page's two arrangements of one DOM: neofetch and the desktop photo, the home view, the lab tile, the contents tree, the polybar tray and popovers, the section rail, the phone column, the desktop grid and tile chrome, the phone's scroll-driven animations
 16. **16-projects.css** (106 lines) - Projects: the cards and their covers, the `/projects` grid, the case-study pages, `--accent-text` (the accent at 4.5:1 for small link text)
 
 The main `app/globals.css` file imports all modules in the correct cascade order.
@@ -156,9 +156,12 @@ desktop), which decides what the stage shows and which keys apply. Spec: §4.1 t
 5. **NavTree** (`components/home/NavTree.tsx`): the contents tree on desktop: `home`,
    `projects/` (links to the featured three and `/projects`), `lab/` (`LabDirectory`),
    `contact`. Real buttons and links, `aria-expanded` and `aria-current`.
-6. **LabTile** (`components/lab/home/LabTile.tsx`): telemetry and threat-map cards from
-   `/api/lab/summary`, fetched after idle; on desktop a card opens its view in the stage, on
-   phones its page.
+6. **LabTile** (`components/lab/home/LabTile.tsx`): the lab card, one card of slides
+   (`LabCarousel`, `LabSlides`): power, hosts, GPUs, storage and CI, and the honeypot with the
+   threat map on, each a link to its part of the lab, from `/api/lab/summary` fetched after
+   idle. On desktop a slide opens its view in the stage (at that section) and the card advances
+   every 6 s unless hovered, focused, off screen, paused or with reduced motion; phones swipe it
+   and open the pages. Spec: `docs/lab/TELEMETRY_VIEW.md` §5.4.
 7. **Polybar** (`components/layout/Polybar.tsx`, desktop only): workspaces (home, projects, lab,
    contact), the `ThemeTray` (`components/layout/polybar/`: presets, accent and wallpaper
    popovers, `?` keys; popovers are focus-trapping `role="dialog"`s) and the clock.

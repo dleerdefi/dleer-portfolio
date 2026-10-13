@@ -118,6 +118,13 @@ public first. With it off the lab is telemetry only:
   the home bundle (`LabDirectory`, `ContentViewer`) read `process.env.NEXT_PUBLIC_FEATURE_LAB_THREATS`
   directly so the build folds them: the home bundle carries no threats entry and does not grow.
 
+The table records the first implementation. Since portfolio v2 (docs/PORTFOLIO_V2_SPEC.md,
+phases 2 and 5) the home page is one server-rendered DOM: the entry points are `LabDirectory` in
+the contents tree, the polybar `lab` workspace, `NeofetchLabRows` and the lab card (`LabTile`, a
+carousel of slides, [TELEMETRY_VIEW.md §5.4](TELEMETRY_VIEW.md#54-home-lab-card)), both loaded
+through `components/home/LabIslands.tsx`; the stage (`components/home/Stage.tsx`) renders the
+`lab-` views. CLAUDE.md lists the files.
+
 | Place | Change | Concept |
 |---|---|---|
 | `config/portfolio.config.ts`, `config/types.ts`, `lib/config.ts` | `features.lab: process.env.NEXT_PUBLIC_FEATURE_LAB === 'true'`; add `lab?: boolean` to the type and `lab: false` to the `useFeatureFlags()` fallback | — |
@@ -348,8 +355,8 @@ This follows the sketch in the homelab's `docs/status-contract.md`.
 
 ### `/api/lab/summary`
 
-One small response for the home page (neofetch rows, nav glyphs, the mobile Lab section), so the
-home page never downloads a full digest:
+One small response for the home page (neofetch rows, nav glyphs, the lab card's slides), so the
+home page never downloads a full digest (about 1.3 KB with every block):
 
 ```ts
 {
@@ -357,14 +364,19 @@ home page never downloads a full digest:
   telemetry: { state: LabState; age_s?: number; power_w?: number | null; energy_kwh_24h?: number | null;
                energy_cost_usd_24h?: number | null;
                hosts_up?: number; hosts_expected?: number;
-               power_24h?: (number | null)[] },   // history lab.power_w: the last 288 points, averaged in 3s → 96 points; a window with a null stays null
+               power_24h?: (number | null)[],   // history lab.power_w: the last 288 points, averaged in 3s → 96 points; a window with a null stays null
+               // the lab card's slides (TELEMETRY_VIEW.md §5.4), in now.json's order
+               hosts?: { role: Role; up: boolean; cpu_ratio: number | null; inlet_c: number | null }[];
+               gpus?: { role: Role; index: number; util_ratio: number | null; enc_ratio: number | null; temp_c: number | null }[];
+               nas?: { pool_healthy: boolean | null; read_bytes_s: number | null; write_bytes_s: number | null } | null;
+               ci?: { runners_online: number | null; runners_total: number | null; runners_busy: number | null } | null },
   threats?:  { state: LabState; age_s?: number; events?: number; sources?: number; countries?: number;
                by_category?: Record<Category, number> }   // absent while the threat map is off
 }
 ```
 
 Built from `loadNow`, `loadHistory` and `loadDigest`; each block carries only its state when
-offline. `power_24h` is omitted when history is not live or delayed. With the threat map off
+offline. `nas` and `ci` are `null` while the producer reports them `null`. `power_24h` is omitted when history is not live or delayed. With the threat map off
 (§3) `loadDigest` is not called and `threats` is absent; consumers treat a missing block as
 hidden.
 
@@ -427,8 +439,7 @@ label. `docs/lab/concepts` was drawn from this shape.
 |---|---|
 | Telemetry tile and page | `/api/lab/status` every 30 s; `/api/lab/status/history` every 5 min; `/api/lab/summary` every 5 min (the honeypot teaser) |
 | Threats tile and page | `/api/lab/threats` every 5 min; `/api/lab/threats/live` every 60 s |
-| Neofetch rows, nav glyphs | `/api/lab/summary` once after first paint (`requestIdleCallback`, fallback `setTimeout` 1 s), then every 5 min while visible |
-| Mobile Lab section | `/api/lab/summary` when the section is within one screen of the viewport (`IntersectionObserver`), then every 5 min while visible |
+| Neofetch rows, nav glyphs, the home lab card | `/api/lab/summary` once after first paint (`useAfterIdle`: `requestIdleCallback`, fallback `setTimeout` 1 s), then every 5 min while visible; the rows and the card share the request |
 
 ### Shared status store
 

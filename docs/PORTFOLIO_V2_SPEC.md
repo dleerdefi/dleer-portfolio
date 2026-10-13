@@ -352,6 +352,12 @@ Beyond the lab tile (4.1) and the phone order (4.2):
     busy sparkline; `queue_oldest_s` as `queue 4 min` when non-zero;
   - GPU rows gain `enc`/`dec` columns (the Quadro's encoder shows Plex transcoding).
   - the neofetch `Lab:` row gains the VM count: `Lab: 1,029 W · 27 VMs · 3/3 hosts ●`.
+- **The lab card becomes a carousel** (agreed with David 2026-10-13, after this spec): one card
+  of fixed size cycling through slides (power, hosts, GPUs, NAS and CI, and the honeypot with
+  the threat map on), each a link to its part of `/lab`, every ~6 s on desktop, pausing on
+  hover or focus, off screen, in a hidden tab and with reduced motion, with dots and a pause
+  button; phones swipe it and it never moves on its own. `/api/lab/summary` gains the slides'
+  headline numbers. Details: [TELEMETRY_VIEW.md §5.4](lab/TELEMETRY_VIEW.md#54-home-lab-card).
 - **`/lab` gets a one-paragraph "how this works" footer** with the push-not-serve diagram from
   the lab README, because visitors who understand the architecture are the ones David wants.
 - **The threats page links back** to the construction of the honeynet in one sentence (the
@@ -833,6 +839,46 @@ and the homelab project page (4.6). The list below is the original plan, kept fo
 Done when: every new number renders in demo mode with the right unit and a dash for `null`, the
 manifest test passes against the new SHAs, and the telemetry chunk stays within its budget
 (≤ 25 KB gzipped, [LAB_UI_SPEC.md §8](lab/LAB_UI_SPEC.md#8-performance-budgets)).
+
+**Results (2026-10-13).** Done (the homelab case study shipped with phase 3); the three CI builds,
+typecheck, lint and the 263 tests pass.
+
+- **The lab card is a carousel** (4.6): `LabTile` builds the slides, `LabCarousel` moves them
+  (scroll snapping, so a phone swipes; a timer on desktop that holds for the pointer, focus, an
+  off-screen card, a hidden tab, `pause` and reduced motion), `LabSlides` draws them. Each slide
+  is a link: on desktop to its view in the stage, which scrolls to the hosts or the GPUs
+  (`ContentType` `lab-telemetry` gained an optional `section`); on phones to `/lab`,
+  `/lab#hosts`, `/lab#gpus` or `/lab/threats`, and `/lab` scrolls to the hash once its data
+  renders. Slides out of view are hidden from assistive technology; only one copy of the
+  telemetry badge is a status region.
+- **The summary grew** by the slides' numbers: per host `up`, cpu and inlet; per GPU util, enc and
+  temperature; the NAS pool, read and write; the CI runners. Tested against the golden fixture
+  and with `nas` and `ci` `null`.
+- **Fit.** The card is a size container: figures wrap between figures and never inside one, and
+  the narrowest card (the tile at 1024 px) drops `inlet`, the honeypot bars and the badge's word.
+  Short screens drop the tile's intro line (≤ 900 px tall) and its heading (≤ 820 px). The tile
+  no longer scrolls at any size measured, with the threat map off or on; at phase 4 it scrolled
+  at 1024 x 768, 1280 x 720 and 1366 x 768.
+- **`/lab`'s footer**: `LabHowItWorks`, a 35-column vertical diagram of the push-only path beside
+  (below, on phones) one paragraph, and `The full story →` to the homelab case study. It renders
+  after the first answer: drawn from the start, the data arriving pushed it down (CLS 0.5 on
+  mobile).
+- **The threats page** ends its framing with `How it is built →` to the case study's honeynet
+  section.
+- The slides' calls to action, `/lab ↗` and the home page's small links use `--accent-text` (the
+  magenta accent was 3.7:1 on Solarized Light's surface).
+- The lab spec set is updated: TELEMETRY_VIEW §5.1 to §5.4, THREATS_VIEW §4.2 and §4.4,
+  LAB_UI_SPEC §3 (a pointer to the one-DOM entry points), §5 (the summary) and §6.
+
+| | after phase 4 | after phase 5 |
+|---|---|---|
+| Lab tile, content / visible px at 1024 x 768, 1280 x 720, 1366 x 768 | 416 / 340, 391 / 316, 391 / 353 | 340 / 340, 316 / 316, 353 / 353 |
+| `/api/lab/summary` (demo) | 749 B | 1,293 B |
+| Lab card chunk, gzipped | 4.2 KB | 5.6 KB |
+| `/lab` page chunk, gzipped (budget 25 KB) | 7.2 KB | 7.7 KB |
+| JS transferred on `/`, desktop / phone (lab on) | 156.0 / 140.4 KB | 157.7 / 141.6 KB |
+| Lighthouse `/`, mobile (two runs) / desktop | 97, 97 / 100; a11y, BP, SEO 100 | 97, 98 / 100; a11y, BP, SEO 100 |
+| Lighthouse `/lab`, mobile (two runs) / desktop | 97, 97 / 100; CLS 0 | 97, 98 / 100; CLS 0 |
 
 ### Phase 6: phone polish pass
 
