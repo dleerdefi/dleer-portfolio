@@ -9,6 +9,9 @@ export const HOSTS: Record<Role, { name: string; short: string; job: string }> =
   apps: { name: 'PowerEdge R720xd', short: 'R720xd', job: 'apps · CI' },
 };
 
+/** What `lab.energy_cost_usd_24h` is priced at (homelab status-contract.md). */
+export const COST_NOTE = 'Puget Sound Energy residential rate, $0.2056/kWh; excludes the basic charge and taxes';
+
 const GPUS: Record<string, string> = {
   'storage:0': 'Quadro RTX 4000',
   'gpu:0': 'RTX A4000 #0',

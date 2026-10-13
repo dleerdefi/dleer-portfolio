@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { domainOf } from '@/lib/lab/chart';
 import { fmtDecimal, fmtInt, withUnit } from '@/lib/lab/format';
+import { COST_NOTE } from '@/lib/lab/names';
 import { LabFramedHeader } from '@/components/lab/LabFramedHeader';
 import { LabHeader, LabStateLine } from '@/components/lab/shared/LabHeader';
 import { LabStatusBadge } from '@/components/lab/shared/LabStatusBadge';
@@ -12,6 +13,7 @@ import { LineChart } from '@/components/lab/shared/LineChart';
 import { Sparkline } from '@/components/lab/shared/Sparkline';
 import { Value } from '@/components/lab/shared/Value';
 import { HostCard } from './HostCard';
+import { Cost, HealthLine } from './LabExtras';
 import { GpuTable } from './TelemetryTables';
 import { hostsText } from './HostsLine';
 import { HistoryOr } from './TelemetryTile';
@@ -27,8 +29,9 @@ export default function TelemetryPage() {
   const { now, history } = t;
   const teaser = threatsTeaser(t.threats);
   const powerDomain = history ? domainOf(...history.hosts.map((h) => h.power_w)) : null;
-  const gpuUtil = (role: string, index: number) =>
-    history?.gpus.find((g) => g.role === role && g.index === index)?.util_ratio ?? null;
+  const gpuSeries = (role: string, index: number) => history?.gpus.find((g) => g.role === role && g.index === index);
+  const ratioSparkline = (s: (number | null)[] | undefined) =>
+    s ? <Sparkline values={s} domain={{ min: 0, max: 1 }} height={22} /> : null;
 
   const state = t.view === 'loading' ? null : t.view;
   return (
@@ -73,6 +76,10 @@ export default function TelemetryPage() {
                       <div className="lab-card">
                         <div style={{ fontSize: '1.25rem' }}>{fmtDecimal(now.lab.energy_kwh_24h)}</div>
                         <div className="lab-text-2">kWh, 24 h</div>
+                        <div className="lab-text-2" style={{ marginTop: '0.2rem' }}>
+                          <Cost usd={now.lab.energy_cost_usd_24h} />
+                          <sup aria-hidden="true">*</sup>
+                        </div>
                       </div>
                       <div className="lab-card">
                         <div style={{ fontSize: '1.25rem' }}>{hostsText(now.lab.hosts_up, now.lab.hosts_expected)}</div>
@@ -99,6 +106,8 @@ export default function TelemetryPage() {
                   </figure>
                 </div>
 
+                <HealthLine lab={now.lab} />
+
                 <div className="lab-host-cards">
                   {now.hosts.map((host, i) => (
                     <HostCard
@@ -109,6 +118,10 @@ export default function TelemetryPage() {
                       powerDomain={powerDomain}
                       storage={host.role === 'storage' ? now.storage : null}
                       media={host.role === 'storage' ? now.media : null}
+                      nas={host.role === 'storage' ? now.nas : null}
+                      nas24h={history?.nas ? { read: history.nas.read_bytes_s, write: history.nas.write_bytes_s } : null}
+                      ci={host.role === 'apps' ? now.ci : null}
+                      ciBusy24h={history?.ci?.runners_busy ?? null}
                     />
                   ))}
                 </div>
@@ -118,13 +131,15 @@ export default function TelemetryPage() {
                     <GpuTable
                       gpus={now.gpus}
                       full
-                      sparkline={(role, index) => {
-                        const s = gpuUtil(role, index);
-                        return s ? <Sparkline values={s} domain={{ min: 0, max: 1 }} height={22} /> : null;
-                      }}
+                      sparkline={(role, index) => ratioSparkline(gpuSeries(role, index)?.util_ratio)}
+                      encSparkline={(role, index) => ratioSparkline(gpuSeries(role, index)?.enc_ratio)}
                     />
                   </div>
                 )}
+
+                <p className="lab-text-2" style={{ margin: 0, fontSize: '0.8rem' }}>
+                  * ≈ $ per 24 h: {COST_NOTE}.
+                </p>
               </div>
             )}
 

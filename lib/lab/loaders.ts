@@ -71,6 +71,7 @@ export function buildSummary(
           age_s: now.age_s,
           power_w: now.lab.power_w,
           energy_kwh_24h: now.lab.energy_kwh_24h,
+          energy_cost_usd_24h: now.lab.energy_cost_usd_24h,
           hosts_up: now.lab.hosts_up,
           hosts_expected: now.lab.hosts_expected,
           ...(history.state === 'offline' ? {} : { power_24h: downsample(history.lab.power_w) }),

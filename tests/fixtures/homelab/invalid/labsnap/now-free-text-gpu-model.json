@@ -7,7 +7,15 @@
     "power_w": 1028.5,
     "energy_kwh_24h": 24.14,
     "hosts_up": 3,
-    "hosts_expected": 3
+    "hosts_expected": 3,
+    "energy_cost_usd_24h": null,
+    "vms_running": null,
+    "targets_up": null,
+    "targets_total": null,
+    "alerts_firing": null,
+    "disks": null,
+    "disks_healthy": null,
+    "drive_temp_max_c": null
   },
   "hosts": [
     {
@@ -16,7 +24,10 @@
       "power_w": 231.4,
       "cpu_ratio": 0.1234,
       "mem_ratio": 0.7123,
-      "inlet_c": 22.0
+      "inlet_c": 22.0,
+      "fan_rpm": null,
+      "exhaust_c": null,
+      "psu_in_v": null
     },
     {
       "role": "gpu",
@@ -24,7 +35,10 @@
       "power_w": 384.2,
       "cpu_ratio": 0.0712,
       "mem_ratio": 0.4101,
-      "inlet_c": 24.0
+      "inlet_c": 24.0,
+      "fan_rpm": null,
+      "exhaust_c": null,
+      "psu_in_v": null
     },
     {
       "role": "apps",
@@ -32,7 +46,10 @@
       "power_w": 412.9,
       "cpu_ratio": 0.0533,
       "mem_ratio": 0.1862,
-      "inlet_c": 23.0
+      "inlet_c": 23.0,
+      "fan_rpm": null,
+      "exhaust_c": null,
+      "psu_in_v": null
     }
   ],
   "gpus": [
@@ -43,7 +60,9 @@
       "mem_ratio": 0.0871,
       "power_w": 28.4,
       "temp_c": 45.0,
-      "model": "Quadro RTX 4000"
+      "model": "Quadro RTX 4000",
+      "enc_ratio": null,
+      "dec_ratio": null
     },
     {
       "role": "gpu",
@@ -51,7 +70,9 @@
       "util_ratio": 0.37,
       "mem_ratio": 0.6125,
       "power_w": 64.2,
-      "temp_c": 52.0
+      "temp_c": 52.0,
+      "enc_ratio": null,
+      "dec_ratio": null
     },
     {
       "role": "gpu",
@@ -59,10 +80,14 @@
       "util_ratio": 0.0,
       "mem_ratio": 0.0281,
       "power_w": 17.9,
-      "temp_c": 38.0
+      "temp_c": 38.0,
+      "enc_ratio": null,
+      "dec_ratio": null
     }
   ],
   "storage": null,
+  "nas": null,
+  "ci": null,
   "media": {
     "streams": 2,
     "transcodes": 1

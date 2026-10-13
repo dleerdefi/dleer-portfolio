@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { useFocusNavigation } from '@/contexts/FocusContext';
 import { useLabData } from '@/hooks/useLabData';
-import { fmtCount, fmtInt, fmtWatts } from '@/lib/lab/format';
+import { fmtCount, fmtInt, fmtUsd, fmtWatts } from '@/lib/lab/format';
+import { COST_NOTE } from '@/lib/lab/names';
 import type { LabSummary } from '@/lib/lab/types';
 import { StatusGlyph } from '@/components/lab/shared/LabStatusBadge';
 import { HostsGlyph } from '@/components/lab/telemetry/HostsLine';
@@ -59,6 +60,9 @@ export default function NeofetchLabRows({ isBlurred }: { isBlurred: boolean }) {
           <span className="font-bold" style={label}>Lab</span>: {fmtWatts(tel.power_w)} · {tel.hosts_up}/
           {tel.hosts_expected} hosts{' '}
           <HostsGlyph up={tel.hosts_up} expected={tel.hosts_expected} state={tel.state} />
+          {typeof tel.energy_cost_usd_24h === 'number' && (
+            <span title={COST_NOTE}> · {fmtUsd(tel.energy_cost_usd_24h)}/day</span>
+          )}
         </button>
       )}
       {threats && threats.state !== 'offline' && threats.events !== undefined && (
