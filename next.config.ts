@@ -66,6 +66,12 @@ const nextConfig: NextConfig = {
     ],
     // Configure quality values for Next.js 16 compatibility
     qualities: [70, 85, 90, 100],
+    // Widths next/image may serve (docs/PORTFOLIO_V2_SPEC.md, phase 1). Phones get 390/640/828,
+    // 480 fits the 400 px profile photo, and nothing is served wider than 1920. AVIF is left off:
+    // its encode cost lands on the Railway instance whose RAM sharp already dominates
+    // (docs/RAILWAY_MEMORY_OPTIMIZATION.md), for a few KB on the few images still optimized.
+    deviceSizes: [390, 640, 828, 1080, 1280, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 480],
     // Keep optimized images cached for 4 hours (the Next.js 16 default) instead
     // of 60s, so sharp isn't re-run in the background on nearly every visit
     minimumCacheTTL: 14400,

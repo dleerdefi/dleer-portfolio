@@ -26,7 +26,7 @@ export function LabHeader({
 }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-      <h2 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: titleSize, margin: 0 }}>
+      <h2 className="font-bold" style={{ color: 'var(--accent-text)', fontSize: titleSize, margin: 0 }}>
         <span aria-hidden="true">❯ </span>
         {title}
       </h2>

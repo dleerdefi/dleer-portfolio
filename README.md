@@ -9,7 +9,7 @@
 ![Resend](https://img.shields.io/badge/Resend-6.1.2-blueviolet?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
-A production-ready developer portfolio built with Next.js 15, featuring a tiled window manager aesthetic inspired by Hyprland/Arch Linux. Showcases MDX-powered blog and projects, Cloudflare CDN integration, Resend contact form and parallax scrolling mobile layout. Deployed on Railway with zero-config Railpack builds.
+A production-ready developer portfolio built with Next.js 15, featuring a tiled window manager aesthetic inspired by Hyprland/Arch Linux. Showcases MDX-powered blog and projects, Cloudflare CDN integration, Resend contact form and a server-rendered home page that is tiles on desktop and one scrolling column on phones. Deployed on Railway with zero-config Railpack builds.
 
 **Modern tech stack meets terminal aesthetics—designed for developers who appreciate both craft and performance.**
 
@@ -21,15 +21,15 @@ A production-ready developer portfolio built with Next.js 15, featuring a tiled 
 
 ## ✨ Features
 
-- **Desktop Layout**: 6-tile Hyprland-inspired layout (Neofetch, Navigation, Content, Theme Preset, Accent Color, Background)
-- **Keyboard Navigation**: Vim-style hjkl movement + Tab cycling + workspace indicators via Polybar
-- **Mobile Experience**: Parallax scrolling with depth effects and scroll progress indicators
+- **Desktop Layout**: Hyprland-inspired tiles (Neofetch, Contents, the stage, the optional Lab) with the theme controls in the polybar tray
+- **Keyboard Navigation**: Vim-style hjkl between tiles, native Tab, Esc back home, workspaces in the Polybar
+- **Mobile Experience**: One server-rendered column with a section rail, a scroll indicator and CSS scroll-driven depth effects
 - **Theme System**: 3 curated presets (Tokyo Night, Nord, Solarized Light) + 15 accent color swatches
-- **Content Management**: MDX-powered blog and projects with syntax highlighting and reading time
+- **Content Management**: MDX-powered blog and projects with syntax highlighting and reading time; `NEXT_PUBLIC_FEATURE_BLOG=false` keeps the posts as an archive, reachable but out of the navigation
 - **Audio Narration**: Blog post audio with auto-detection, playback controls, and analytics tracking
 - **Contact Form**: Production-ready Resend integration with 5-layer spam protection (honeypot, rate limiting, validation)
 - **CDN Integration**: Optional Cloudflare R2 for optimized image delivery with automatic fallback
-- **Modern Architecture**: Next.js 15.5 + TypeScript strict mode + modular CSS (14 focused modules)
+- **Modern Architecture**: Next.js 15.5 + TypeScript strict mode + modular CSS (15 focused modules)
 - **Zero-Config Deployment**: Railway + Railpack auto-detection with intelligent caching
 
 ---
@@ -193,9 +193,9 @@ Add environment variables via Vercel dashboard → Settings → Environment Vari
 
 **Framework**: Next.js 15.5 with App Router and Turbopack
 **Language**: TypeScript 5.0 (strict mode)
-**Styling**: Tailwind CSS v4 + Modular CSS architecture (12 modules)
+**Styling**: Tailwind CSS v4 + Modular CSS architecture (14 modules)
 **Content**: Content Collections + MDX (blog & projects)
-**Animation**: Framer Motion 12.23
+**Animation**: CSS transitions and keyframes (no animation library)
 **Email**: Resend API 6.1.2 + React Email
 **Audio**: HTML5 Audio API + Custom analytics (7 event types)
 **CDN**: Cloudflare R2 (image storage & delivery)
@@ -304,7 +304,6 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 - Built with [Next.js](https://nextjs.org/) by Vercel
 - Content managed with [Content Collections](https://content-collections.dev/)
 - Styled with [Tailwind CSS](https://tailwindcss.com/)
-- Animated with [Framer Motion](https://www.framer.com/motion/)
 - Emails powered by [Resend](https://resend.com/)
 - CDN hosted on [Cloudflare R2](https://www.cloudflare.com/developer-platform/r2/)
 

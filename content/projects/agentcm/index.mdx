@@ -1,0 +1,77 @@
+---
+title: "AgentCM"
+slug: "agentcm"
+summary: "Makes a construction project folder as navigable to AI as a codebase: drawing sets, specifications and schedules turned into an index and a database that Claude Code can find its way around."
+date: "2026-10-16"
+tags: ["construction", "claude-code", "ai", "agents", "open-source"]
+tech: ["TypeScript", "React", "PostgreSQL", "Poppler", "Claude Code"]
+status: "coming-soon"
+release_date: "2026-10-16"
+featured_rank: 1
+audience: "construction teams who want Claude Code to read their drawings"
+---
+
+## The problem
+
+Construction projects live in hundreds of PDFs, spreadsheets and markups spread across nested
+folders. The information is spatial, cross-referenced and locked inside pixels. Claude Code
+navigates a repository with speed and precision, but it cannot read a 96-page bid set the same
+way: it does not know what sheet A-2.01 contains, where detail 5/A7.10 points, or which rooms a
+door schedule covers.
+
+## What it does
+
+AgentCM reads the project folder, extracts the text of every drawing sheet, helps you check it
+and teach it how your project's tags look, then writes an index next to your files and opens a
+read-only database, so the agent can find its way around.
+
+<Terminal cmd="your project, after AgentCM">{`
+|your-project/
+|├── Drawings/                your files, where they were
+|├── Specifications/
+|└── .construction/           written by AgentCM
+|    ├── CLAUDE.md            where the agent starts
+|    ├── INDEX.md             every sheet and spec section
+|    ├── sheets/              each sheet's text, in reading order
+|    ├── schedules/           one table per schedule
+|    ├── specs/               one file per spec section
+|    ├── tags.tsv             every room, door and grid tag
+|    ├── xrefs.tsv            every reference between sheets
+|    └── query.sh             one read-only database query
+`}</Terminal>
+
+1. **Open the folder.** AgentCM indexes every file and classifies it: drawing sets,
+   specifications, RFIs, submittals, schedules.
+2. **Extract.** Each page's text comes from the PDF's own text layer; only scanned pages go to
+   OCR. Sheet numbers are read from the title blocks for you to confirm.
+3. **Review.** Fix the text on a canvas over the drawing, and apply a fix to the same spot on
+   many sheets at once.
+4. **Teach and detect.** Show it a few room tags, door tags, callouts or grid bubbles on one
+   sheet; it finds the rest across the set, and you accept or reject each find.
+5. **Navigate.** Accepted finds become rooms, callout links, views, notes, grid lines and
+   schedules the agent can query.
+
+## What you can ask
+
+| You ask | The answer comes from |
+|---|---|
+| "List all architectural sheets" | the sheet index: number, title and discipline of every sheet |
+| "Where does detail 5/A7.10 point?" | the accepted callouts and the sheets they point to |
+| "What finishes does room 101 get?" | the room profile: its level and the schedule rows linked to it |
+| "Show the door schedule" | the schedule's table, read from the drawing's text |
+| "What does spec 07 92 00 say about sealants?" | the section's text, read from the project manual |
+
+## How it is built
+
+Everything runs on your machine: a local web app (Express and React), PostgreSQL in Docker, and
+Poppler to render pages and read their text. The only outside service is optional OCR for
+scanned pages. Two principles hold throughout: **reference, don't copy** (your files stay where
+they are, and change only when you ask), and **meet projects where they are** (a project with
+months of history onboards as it is).
+
+What an agent may rely on, every file and column in `.construction/` and the read-only views, is
+a written contract that the test suite checks against the code. The
+[Construction Skills](/projects/claude-code-construction) plug into it: in a folder AgentCM has
+processed, they read its index instead of splitting sheets again, and send what they find back.
+
+Open source from October 16, under the AGPL-3.0.

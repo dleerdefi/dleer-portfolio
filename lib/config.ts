@@ -1,5 +1,5 @@
 import { portfolioConfig, getPortfolioConfig } from '@/config/portfolio.config';
-import { PortfolioConfig, Project, SocialLink } from '@/config/types';
+import { PortfolioConfig, SocialLink } from '@/config/types';
 
 // Configuration utilities and helpers
 
@@ -18,16 +18,8 @@ export function usePersonalInfo() {
   return config.personal;
 }
 
-// Note: useSkills() removed - skills array deleted from config
-// Skills displayed in NeofetchTile (via config.system) and AboutTechGrid (via config.technologies)
-
-/**
- * Get technologies from config
- */
-export function useTechnologies() {
-  const config = usePortfolioConfig();
-  return config.technologies;
-}
+// Note: useSkills() and useTechnologies() removed: the technologies are the neofetch block's
+// Stack row (components/home/Neofetch.tsx, a server component reading the config directly)
 
 /**
  * Get social links from config
@@ -35,22 +27,6 @@ export function useTechnologies() {
 export function useSocialLinks(): SocialLink[] {
   const config = usePortfolioConfig();
   return config.social;
-}
-
-/**
- * Get projects from config
- */
-export function useProjects(): Project[] {
-  const config = usePortfolioConfig();
-  return config.projects;
-}
-
-/**
- * Get a specific project by ID
- */
-export function useProject(id: string): Project | undefined {
-  const projects = useProjects();
-  return projects.find(p => p.id === id);
 }
 
 // Note: useBlogPosts() and useBlogPost() removed - blog posts moved to Content Collections
@@ -83,7 +59,6 @@ export function useFeatureFlags() {
     blog: true,
     projects: true,
     contact: true,
-    about: true,
     neofetch: true,
     lab: false
   };

@@ -1,14 +1,15 @@
 # robots.txt for dleer.ai
-# Cloudflare manages User-agent rules above this line via Scrape Shield
-# Custom path blocks below
+# Cloudflare may prepend its own User-agent groups above this file (Scrape Shield). The group
+# below is for every other crawler: without its own User-agent line, these rules attached to
+# whichever bot Cloudflare listed last, and validators reject them.
+User-agent: *
 
-# Disallow Next.js internals and API routes
-Disallow: /_next/
+# API routes are not pages. /_next/ is deliberately allowed: crawlers need the site's scripts
+# and styles to render its pages (Google renders with JavaScript).
 Disallow: /api/
 
-# Disallow removed standalone pages (use tile system instead)
+# Removed standalone pages (the tile system replaced them)
 Disallow: /about
 Disallow: /contact
 
-# Sitemap for better indexing
 Sitemap: https://dleer.ai/sitemap.xml

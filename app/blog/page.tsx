@@ -1,88 +1,57 @@
-'use client';
-
-import React from 'react';
-import { useRouter } from 'next/navigation';
-import { ZenList } from '@/components/zen/ZenList';
-import { allBlogs } from 'content-collections';
+import Link from 'next/link';
+import type { Metadata } from 'next';
+import { getPortfolioConfig } from '@/config/portfolio.config';
+import { PostCard } from '@/components/blog/PostCard';
 import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
+import { ListKeys } from '@/components/ui/ListKeys';
+import { postSummaries } from '@/lib/content-index';
+
+export const metadata: Metadata = {
+  title: 'Writing',
+  description: 'Posts on AI, agents and building software.',
+};
 
 /**
- * Blog Zen View - Fullscreen list of blog posts
- * Features j/k/Enter/Esc keyboard navigation
- * Displays published blog posts from content-collections
- *
- * Route: /blog
+ * /blog: published posts as cards, newest first, server-rendered. With the blog's entry points
+ * off (NEXT_PUBLIC_FEATURE_BLOG=false) the page says it is an archive and points at the projects.
  */
-export default function BlogZenPage() {
-  const router = useRouter();
-
-  // Filter to published posts only, sorted by date (newest first)
-  const publishedBlogs = allBlogs
-    .filter((blog) => blog.status === 'published')
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-  const handleSelect = (blog: typeof allBlogs[0]) => {
-    router.push(blog.url);
-  };
-
-  const handleExit = () => {
-    router.push('/');
-  };
-
+export default function BlogPage() {
+  const posts = postSummaries().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const archive = !getPortfolioConfig().features?.blog;
   return (
     <FramedPageLayout autoFocus={false}>
-      <ZenList
-        items={publishedBlogs}
-        onSelect={handleSelect}
-        onExit={handleExit}
-        title="Blog"
-        subtitle="Technical articles and insights"
-        emptyMessage="No blog posts found. Check back soon!"
-        renderItem={(blog, _index, isSelected) => (
-        <div>
-          {/* Title */}
-          <h2
-            className="text-xl font-bold mb-4"
-            style={{
-              color: isSelected
-                ? 'var(--accent-color)'
-                : 'var(--theme-text)',
-              lineHeight: '1.4',
-              letterSpacing: '-0.01em',
-            }}
-          >
-            {blog.title}
-          </h2>
-
-          {/* Metadata: Date and Reading Time */}
-          <div className="flex items-center gap-4 text-sm">
-            <time style={{ color: 'var(--theme-text-dimmed)' }}>
-              {formatDate(blog.date)}
-            </time>
-            <span style={{ color: 'var(--theme-text-dimmed)' }}>•</span>
-            <span style={{ color: 'var(--theme-text-dimmed)' }}>
-              {blog.readingTime}
-            </span>
+      <ListKeys />
+      <div className="list-page">
+        <header className="list-head">
+          <div>
+            <h1>Writing</h1>
+            <p>Posts on AI, agents and building software.</p>
           </div>
-        </div>
-      )}
-      />
+          <div className="list-head-side">
+            <span className="key-hints">j/k move · Enter open · Esc back</span>
+            <Link href="/" className="list-close" aria-label="Close and return home">
+              ✕
+            </Link>
+          </div>
+        </header>
+        {archive && (
+          <p className="list-note">
+            An archive of earlier writing. The current work is in <Link href="/projects">projects</Link>.
+          </p>
+        )}
+        {posts.length === 0 ? (
+          <p className="list-foot">No posts yet.</p>
+        ) : (
+          <div className="card-grid">
+            {posts.map((post) => (
+              <PostCard key={post.slug} post={post} />
+            ))}
+          </div>
+        )}
+        <p className="list-foot">
+          {posts.length} post{posts.length === 1 ? '' : 's'}
+        </p>
+      </div>
     </FramedPageLayout>
   );
-}
-
-/**
- * Format date to readable string
- */
-function formatDate(dateString: string): string {
-  try {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  } catch {
-    return dateString;
-  }
 }

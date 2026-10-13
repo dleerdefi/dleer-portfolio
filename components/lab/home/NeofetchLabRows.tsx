@@ -1,47 +1,42 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useRouter } from 'next/navigation';
 import { useFocusNavigation } from '@/contexts/FocusContext';
+import { useAfterIdle } from '@/hooks/useAfterIdle';
 import { useLabData } from '@/hooks/useLabData';
+import { isDesktopNow } from '@/hooks/useMediaQuery';
 import { fmtCount, fmtInt, fmtUsd, fmtWatts } from '@/lib/lab/format';
 import { COST_NOTE } from '@/lib/lab/names';
 import type { LabSummary } from '@/lib/lab/types';
 import { StatusGlyph } from '@/components/lab/shared/LabStatusBadge';
 import { HostsGlyph } from '@/components/lab/telemetry/HostsLine';
 
-/** True once the browser is idle after first paint (requestIdleCallback, else 1 s). */
-function useAfterIdle(): boolean {
-  const [idle, setIdle] = useState(false);
-  useEffect(() => {
-    if ('requestIdleCallback' in window) {
-      const id = window.requestIdleCallback(() => setIdle(true), { timeout: 3000 });
-      return () => window.cancelIdleCallback(id);
-    }
-    const id = setTimeout(() => setIdle(true), 1000);
-    return () => clearTimeout(id);
-  }, []);
-  return idle;
-}
-
 /**
  * The neofetch tile's two lab rows, from /api/lab/summary: `Lab: 1,029 W · 3/3 hosts ●` and
  * `Honeypot: 15.4k events/24h · 31 countries`. A row is hidden while its state is offline or
- * unknown, and the Honeypot row while the summary has no threats block (threat map off);
- * clicking a row opens its view in the content tile.
+ * unknown, and the Honeypot row while the summary has no threats block (threat map off).
+ * Clicking a row opens its view in the content tile on desktop, and its page on a phone (the
+ * same rows are the phone hero's). Dimming while the tile is unfocused is CSS.
  */
-export default function NeofetchLabRows({ isBlurred }: { isBlurred: boolean }) {
+export default function NeofetchLabRows() {
   const idle = useAfterIdle();
   const { payload } = useLabData<LabSummary>('/api/lab/summary', 300_000, { enabled: idle });
   const { handleContentNavigation } = useFocusNavigation();
+  const router = useRouter();
   if (!payload) return null;
   const { telemetry: tel, threats } = payload;
 
-  const label = { color: isBlurred ? 'rgba(var(--theme-primary-rgb), 0.6)' : 'var(--theme-primary)' };
+  const label = { color: 'var(--theme-primary)' };
   const row: React.CSSProperties = {
     display: 'block',
+    // At least WCAG's 24 px target: the two rows sit 4 px apart
+    minHeight: '24px',
     background: 'none',
     border: 0,
-    padding: 0,
+    // A wrapped row indents under its key, like the rows above (.neofetch-rows > li)
+    padding: '0 0 0 2ch',
+    textIndent: '-2ch',
     font: 'inherit',
     color: 'inherit',
     textAlign: 'left',
@@ -50,7 +45,8 @@ export default function NeofetchLabRows({ isBlurred }: { isBlurred: boolean }) {
   };
   const open = (type: 'lab-telemetry' | 'lab-threats') => (e: React.MouseEvent) => {
     e.stopPropagation();
-    handleContentNavigation({ type });
+    if (isDesktopNow()) handleContentNavigation({ type });
+    else router.push(type === 'lab-telemetry' ? '/lab' : '/lab/threats');
   };
 
   return (

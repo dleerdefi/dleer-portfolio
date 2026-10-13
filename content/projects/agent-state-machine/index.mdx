@@ -18,18 +18,18 @@ Streamlined RinAI framework focused on hierarchical state machine architecture f
 
 Clean, extensible architecture for building stateful AI agents with complex decision trees, optional Neo4j graph support, and simple web-based testing interface. MIT licensed for community use.
 
-<Terminal cmd="state machine architecture">
-┌─────────────┐      ┌──────────────┐      ┌─────────────┐
-│   FastAPI   │─────▶│  State FSM   │─────▶│  Tool       │
-│   Server    │      │  Manager     │      │  Registry   │
-└─────────────┘      └──────────────┘      └─────────────┘
-       │                     │                      │
-       ▼                     ▼                      ▼
-  ┌─────────┐          ┌─────────┐          ┌─────────┐
-  │ MongoDB │          │  Neo4j  │          │  Tools  │
-  │ Memory  │          │ (opt)   │          │ (6+)    │
-  └─────────┘          └─────────┘          └─────────┘
-</Terminal>
+<Terminal cmd="state machine architecture">{`
+|┌─────────────┐      ┌──────────────┐      ┌─────────────┐
+|│   FastAPI   │─────▶│  State FSM   │─────▶│  Tool       │
+|│   Server    │      │  Manager     │      │  Registry   │
+|└─────────────┘      └──────────────┘      └─────────────┘
+|       │                     │                      │
+|       ▼                     ▼                      ▼
+|  ┌─────────┐          ┌─────────┐          ┌─────────┐
+|  │ MongoDB │          │  Neo4j  │          │  Tools  │
+|  │ Memory  │          │ (opt)   │          │ (6+)    │
+|  └─────────┘          └─────────┘          └─────────┘
+`}</Terminal>
 
 <Window title="state_machine_example.py">
 ```python
