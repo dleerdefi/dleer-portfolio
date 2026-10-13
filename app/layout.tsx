@@ -28,7 +28,6 @@ export const metadata: Metadata = {
     title: config.seo.title,
     description: config.seo.description,
     type: "website",
-    images: config.seo.ogImage ? [config.seo.ogImage] : undefined,
   },
   twitter: {
     card: "summary_large_image",

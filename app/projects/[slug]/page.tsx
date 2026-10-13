@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { allProjects } from 'content-collections';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { getPortfolioConfig } from '@/config/portfolio.config';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
 import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
@@ -33,32 +34,25 @@ export async function generateMetadata({ params }: ProjectDetailPageProps): Prom
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-  const ogImage = project.cover || `${siteUrl}/og-image.png`;
 
   return {
     title: project.title,
     description: project.summary,
     keywords: project.tags,
-    authors: [{ name: 'Your Name' }],
+    authors: [{ name: getPortfolioConfig().seo.author }],
     openGraph: {
       title: project.title,
       description: project.summary,
       type: 'website',
       url: `${siteUrl}${project.url}`,
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: project.title,
-        },
-      ],
+      // The image comes from ./opengraph-image.tsx, or the project's own cover when it has one
+      ...(project.cover ? { images: [{ url: project.cover, alt: project.title }] } : {}),
     },
     twitter: {
       card: 'summary_large_image',
       title: project.title,
       description: project.summary,
-      images: [ogImage],
+      ...(project.cover ? { images: [project.cover] } : {}),
     },
   };
 }

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { allBlogs } from 'content-collections';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { getPortfolioConfig } from '@/config/portfolio.config';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { ReadingProgress } from '@/components/blog/ReadingProgress';
 import { CodeCopyButton } from '@/components/blog/CodeCopyButton';
@@ -36,26 +37,19 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-  const ogImage = blog.cover || `${siteUrl}/og-image.png`;
 
   return {
     title: blog.title,
     description: blog.summary,
     keywords: blog.tags,
-    authors: [{ name: 'Your Name' }],
+    authors: [{ name: getPortfolioConfig().seo.author }],
     openGraph: {
       title: blog.title,
       description: blog.summary,
       type: 'article',
       url: `${siteUrl}${blog.url}`,
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: blog.title,
-        },
-      ],
+      // The image comes from ./opengraph-image.tsx, or the post's own cover when it has one
+      ...(blog.cover ? { images: [{ url: blog.cover, alt: blog.title }] } : {}),
       publishedTime: blog.date,
       modifiedTime: blog.updated || blog.date,
       tags: blog.tags,
@@ -64,7 +58,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       card: 'summary_large_image',
       title: blog.title,
       description: blog.summary,
-      images: [ogImage],
+      ...(blog.cover ? { images: [blog.cover] } : {}),
     },
   };
 }

@@ -4,18 +4,16 @@ import type { Metadata } from 'next';
 import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
 import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
 import ThreatsPage from '@/components/lab/threats/ThreatsPage';
-import { getPortfolioConfig } from '@/config/portfolio.config';
 import { labThreatsEnabled } from '@/lib/lab/flag';
 
 const title = 'Lab: threat map';
 const description = 'Where attacks on my honeypot come from, live, by type. No IP addresses are shown.';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const ogImage = getPortfolioConfig().seo.ogImage;
   return {
     title,
     description,
-    openGraph: { title, description, type: 'website', images: ogImage ? [ogImage] : undefined },
+    openGraph: { title, description, type: 'website' },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

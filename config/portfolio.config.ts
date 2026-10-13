@@ -142,7 +142,6 @@ export const portfolioConfig: PortfolioConfig = {
       "A modern, terminal-inspired portfolio showcasing projects and expertise in web development and software engineering.",
     keywords: ["Web Development", "Software Engineering", "React", "TypeScript", "Node.js", "Full Stack", "Portfolio"],
     author: process.env.NEXT_PUBLIC_NAME || "Your Name",
-    ogImage: process.env.NEXT_PUBLIC_OG_IMAGE || getImageUrl("og-image.png"),
     twitterHandle: process.env.NEXT_PUBLIC_TWITTER_USERNAME || "@username"
   },
 
