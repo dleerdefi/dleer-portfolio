@@ -169,9 +169,11 @@ const ProfilePhotoComponent: React.FC<ProfilePhotoProps> = ({
                 alt={alt}
                 fill
                 className="object-cover"
-                sizes={`(max-width: 768px) 100vw, (max-width: 1024px) 350px, ${width}px`}
+                // The box is clamp(280px, 35%, 400px) wide in the content tile; width/height
+                // only set the aspect ratio, never the requested size
+                sizes="(max-width: 768px) 100vw, 400px"
                 priority={false}
-                quality={85}
+                quality={70}
                 style={{ pointerEvents: 'none' }}
               />
             </motion.div>

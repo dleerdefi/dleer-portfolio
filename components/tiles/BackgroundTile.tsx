@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { useTheme, themeBackgrounds } from '@/contexts/ThemeContext';
 import { getThumbnailUrl } from '@/lib/image-paths';
@@ -43,26 +43,6 @@ const BackgroundTile: React.FC<BackgroundTileProps> = ({ isBlurred = false }) =>
       setBackgroundImage(currentBackgrounds[currentIndex + 1]);
     }
   };
-
-  // Preload adjacent images for instant carousel navigation
-  useEffect(() => {
-    if (currentIndex === -1) return; // Don't preload when NONE is selected
-
-    const preloadImage = (src: string) => {
-      const img = new window.Image();
-      img.src = src;
-    };
-
-    // Preload previous image
-    if (currentIndex > 0) {
-      preloadImage(currentBackgrounds[currentIndex - 1]);
-    }
-
-    // Preload next image
-    if (currentIndex < currentBackgrounds.length - 1) {
-      preloadImage(currentBackgrounds[currentIndex + 1]);
-    }
-  }, [currentIndex, currentBackgrounds]);
 
   return (
     <div className={`h-full flex flex-col items-center justify-center font-mono text-sm transition-all duration-300 px-3 ${
