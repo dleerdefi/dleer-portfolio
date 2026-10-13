@@ -193,9 +193,9 @@ Add environment variables via Vercel dashboard → Settings → Environment Vari
 
 **Framework**: Next.js 15.5 with App Router and Turbopack
 **Language**: TypeScript 5.0 (strict mode)
-**Styling**: Tailwind CSS v4 + Modular CSS architecture (12 modules)
+**Styling**: Tailwind CSS v4 + Modular CSS architecture (14 modules)
 **Content**: Content Collections + MDX (blog & projects)
-**Animation**: Framer Motion 12.23
+**Animation**: CSS transitions and keyframes (no animation library)
 **Email**: Resend API 6.1.2 + React Email
 **Audio**: HTML5 Audio API + Custom analytics (7 event types)
 **CDN**: Cloudflare R2 (image storage & delivery)
@@ -304,7 +304,6 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 - Built with [Next.js](https://nextjs.org/) by Vercel
 - Content managed with [Content Collections](https://content-collections.dev/)
 - Styled with [Tailwind CSS](https://tailwindcss.com/)
-- Animated with [Framer Motion](https://www.framer.com/motion/)
 - Emails powered by [Resend](https://resend.com/)
 - CDN hosted on [Cloudflare R2](https://www.cloudflare.com/developer-platform/r2/)
 
