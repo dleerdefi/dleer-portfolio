@@ -53,8 +53,8 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
             <HistoryOr history={t.history} offline={t.historyOffline} render={(h) => <Sparkline values={h.lab.power_w} height={64} />} />
           </div>
 
-          {now.hosts.map((h) => (
-            <section key={h.role} className="lab-card" style={{ opacity: h.up ? 1 : 0.5 }}>
+          {now.hosts.map((h, i) => (
+            <section key={h.role} id={i === 0 ? 'hosts' : undefined} className="lab-card" style={{ opacity: h.up ? 1 : 0.5 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem' }}>
                 <span className="font-bold">
                   {HOSTS[h.role].name}
@@ -96,7 +96,7 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
           ))}
 
           {now.gpus.length > 0 && (
-            <section className="lab-card" aria-label="GPUs">
+            <section className="lab-card" id="gpus" aria-label="GPUs">
               <table className="lab-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <tbody>
                   {now.gpus.map((g) => (

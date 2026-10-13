@@ -258,3 +258,15 @@ section.lab-page {
     font-size: 0.875rem;
   }
 }
+
+/* /lab's "how this works" footer (LabHowItWorks.tsx) */
+.lab-how { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.lab-how-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--accent-color); }
+.lab-how-diagram {
+  margin: 0; padding: 0; overflow-x: auto; border: 0; background: none;
+  font-size: 0.75rem; line-height: 1.35; color: var(--lab-text-2); white-space: pre;
+}
+.lab-how-text { margin: 0; max-width: 70ch; line-height: 1.6; }
+/* The diagram above the text on phones, beside it from 768 px */
+.lab-how-body { display: grid; gap: 1rem 2.5rem; align-items: start; }
+@media (min-width: 768px) { .lab-how-body { grid-template-columns: auto minmax(0, 1fr); } }

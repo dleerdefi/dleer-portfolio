@@ -103,3 +103,69 @@
   text-align: right;
   white-space: nowrap;
 }
+
+/* ---------- The home page's lab card (LabCarousel, LabSlides) ---------- */
+.lab-carousel { display: flex; flex-direction: column; gap: 0.5rem; }
+/* One slide in view; the row scrolls (and snaps) under a swipe, a dot or the timer */
+.lab-slides {
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+  scrollbar-width: none; border: 1px solid var(--theme-border); background: rgba(var(--theme-surface-rgb), 0.5);
+}
+.lab-slides::-webkit-scrollbar { display: none; }
+.lab-slide {
+  container-type: inline-size; flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always;
+  display: flex; flex-direction: column; gap: 0.75rem; padding: 1rem; color: var(--theme-text); text-decoration: none;
+}
+.lab-slide-head { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+.lab-slide-body { display: flex; flex-direction: column; gap: 0.6rem; }
+.lab-slide-cta { margin-top: auto; color: var(--accent-text); white-space: nowrap; }
+.lab-slide-power { display: flex; justify-content: space-between; align-items: flex-end; gap: 0.75rem; }
+/* Figures joined by a dot (Figs in LabSlides.tsx): each starts with its " · ", 3ch wide, and the
+   row is pulled left by as much so the dot that starts a line is clipped */
+.lab-figs { display: block; overflow: hidden; }
+.lab-figs-in { display: block; margin-left: -1.8em; }
+.lab-fig { display: inline-block; white-space: nowrap; }
+.lab-fig-sep { white-space: pre; }
+.lab-nowrap { white-space: nowrap; }
+/* A wide card: the power's stats stand in a column at its right */
+.lab-slide-stats { font-size: 0.85rem; }
+.lab-slide-stats .lab-figs-in { margin-left: 0; text-align: right; }
+.lab-slide-stats .lab-fig { display: block; }
+.lab-slide-stats .lab-fig-sep { display: none; }
+.lab-rows { gap: 0.55rem; font-size: 0.85rem; }
+.lab-row { display: flex; flex-direction: column; gap: 0.1rem; }
+.lab-row-name { font-weight: 700; }
+.lab-row-name .lab-text-2 { font-weight: 400; }
+.lab-bars { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.4rem 0.75rem; align-items: center; font-size: 0.85rem; }
+.lab-bars-name { display: inline-flex; align-items: center; gap: 0.5em; min-width: 0; }
+.lab-bar { height: 0.5em; background: var(--lab-track); }
+.lab-ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The space the first slide's figures take, held until the summary arrives */
+.lab-slide-pending { min-height: 115px; }
+.lab-carousel-controls { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; min-height: 24px; }
+.lab-dots { display: flex; gap: 2px; }
+.lab-dot { width: 24px; height: 24px; padding: 0; border: 0; background: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.lab-dot::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid rgba(var(--accent-color-rgb), 0.7); }
+.lab-dot[aria-current]::before { background: var(--accent-color); border-color: var(--accent-color); }
+.lab-pause { padding: 0 0.4rem; height: 24px; border: 0; background: none; color: rgba(var(--theme-text-rgb), 0.72); font: inherit; font-size: 0.75rem; cursor: pointer; }
+.lab-pause:hover { color: var(--theme-text); }
+:is(.lab-dot, .lab-pause):focus-visible { outline: 2px solid var(--accent-color); outline-offset: 1px; }
+/* A narrow card (the desktop lab tile below about 1440 px): the stats go under the power, wrapping as a row */
+@container (max-width: 270px) {
+  .lab-slide-power { flex-direction: column; align-items: stretch; gap: 0.4rem; }
+  .lab-slide-stats .lab-figs-in { margin-left: -1.8em; text-align: left; }
+  .lab-slide-stats .lab-fig { display: inline-block; }
+  .lab-slide-stats .lab-fig-sep { display: inline; }
+  .lab-slide-cta { font-size: 0.85rem; }
+  .lab-slide-pending { min-height: 145px; }
+}
+/* The narrowest (the lab tile at 1024 px): "cpu 7% · 24 °C", and the badge is its icon (the word
+   stays for screen readers) */
+@container (max-width: 180px) {
+  .lab-wide { display: none; }
+  .lab-bars { grid-template-columns: minmax(0, 1fr) auto; column-gap: 0.5rem; font-size: 0.8rem; }
+  .lab-bar { display: none; }
+  .lab-slide-head .lab-badge { border-width: 0; padding: 0; }
+  .lab-slide-head .lab-badge-word { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+@media (prefers-reduced-motion: reduce) { .lab-slides { scroll-behavior: auto; } }
