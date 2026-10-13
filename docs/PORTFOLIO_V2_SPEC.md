@@ -993,6 +993,9 @@ popovers, every framed page scrolled through), and optionally with each of the 1
 - **A themed 404** (`app/not-found.tsx`): a framed page like `/projects`, in the visitor's preset.
 - **The measurement after:** 0 of 11,436 runs fail, and 0 of 14,700 with each of the 15 accents
   on every wallpaper; phones (Tokyo Night) too. The desktop lab tile still fits at every size.
+  Lighthouse on `/`: desktop 100 for performance, accessibility, best practices and SEO, phone
+  98 / 100 / 100 / 100. Lighthouse does not run on a 404 response; axe finds no violation on the
+  404 page on any preset.
 
 ### Phase 7: the GPU, visible (G1 and G5 consumer side)
 
