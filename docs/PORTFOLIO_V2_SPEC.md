@@ -144,6 +144,8 @@ Production build, lab and threat map on, demo data, no CDN, cold cache, headless
 | P6 | **Scroll handler does layout reads per frame.** `useParallaxScroll` runs `getBoundingClientRect()` for every section on every scroll event and sets React state twice per event (`scrollPercent` rounds to an integer, so it re-renders the whole layout up to 100 times per page scroll) | `components/layout/parallax/hooks/useParallaxScroll.ts` |
 | P7 | **A `MutationObserver` on `<html>` re-derives the theme** that `ThemeContext` already knows, and `Background` imports `ThemeContext` dynamically at runtime to find the carousel list | `components/layout/Background.tsx` |
 | P8 | **The polybar clock re-renders every second** with `setInterval` + `setState`; harmless alone, but `Polybar` sits inside `LayoutManager`'s tree | `components/layout/Polybar.tsx` |
+| P10 | **The profile photo is served at 1920 px wide for a 280 to 400 px box.** `ProfilePhoto` passes `sizes` built from the config's intrinsic width (1536 px), so `next/image` picks the `w=1920` variant: **684 KB** on every desktop home load (the original is 908 KB; the 575 KB detection variant is a second file). With the real production values the desktop home moves 1,041 KB of images, of which the photo is two thirds. A `sizes` of `(min-width: 1024px) 400px, 100vw` and `quality` 80 makes it about 40 KB | `components/ui/ProfilePhoto.tsx:172`, `config/portfolio.config.ts` (`width: 1536`) |
+| P11 | **Layout shift after hydration.** Tile `padding`, `borderWidth` and `backdropFilter` are `framer-motion` `animate` targets, so the server HTML and first client render have the tiles unpadded and the text flush against the borders; once hydrated, every tile animates to 24 px padding and the content jumps (the audit script's `*-first-paint.png` versus the final screenshot). This is a measurable CLS on top of C1 and goes away with CSS-only tile chrome | `components/layout/LayoutManager.tsx` (every `animate={{ padding: ... }}`) |
 | P9 | **The lab is within budget.** `/lab` 127 KB and `/lab/threats` 131 KB first load; the globe chunk (573 KB measured, 590 KB stated in `GLOBE_KB`) loads only when a threats view is visible on desktop and only after a tap on phones, as specified. Keep it that way | appendix |
 
 ### 3.3 UX and layout
@@ -161,6 +163,7 @@ Production build, lab and threat map on, demo data, no CDN, cold cache, headless
 | U9 | **The projects list has the `j/k move · Enter open · Esc back` hints on phones** in a layout that has no keyboard |
 | U10 | **The blog is the weakest section and is given equal billing**: a polybar workspace, a nav directory, a phone section, sitemap priority 0.9 (above projects at 0.9 for the list and 0.7 for project pages) |
 | U11 | **`Lab/` in the nav opens telemetry in a 50 % wide tile**, which works, but the richer framed `/lab` page is one more click away and nothing on the tile says it exists except a small `~/lab →` |
+| U13 | **With real values the phone hero wraps every stat row** (`X: @dleer_defi` / `(20,000 Followers)`, `Instagram: feralchef5` / `(5M views)`) into two lines inside a 160 px column next to the logo, and still has no lab row; on the 1280×720 laptop the bio wraps at six words a line beside the photo for twelve lines before the tech grid (U4) |
 | U12 | **No "coming soon" state exists** in the project schema (`status` is `concept | development | beta | production`); AgentCM cannot be announced with a date today |
 
 ### 3.4 What is good and must survive
@@ -401,6 +404,9 @@ Findings: C2, C3, C4, C6, C10, C12, C13, C14.
   `DLEER` block letters on the Tokyo Night surface with the title, generated with `next/og` at
   build time; it is a static route, no runtime cost) and `app/projects/[slug]/opengraph-image.tsx`
   (title, summary, the hero when present). Remove the `/og-image.png` fallbacks (C4).
+- Fix the profile photo's `sizes` (P10): `(min-width: 1024px) 400px, 100vw`, `quality={80}`,
+  and stop referencing the intrinsic 1536 px width for layout; the detection variant loads only
+  when its effect is active. This alone removes about 640 KB from every desktop home load.
 - Delete the two full-size preloaders; if adjacent thumbnails should be warm, use
   `<link rel="prefetch">` on the `/_next/image` URLs the tile actually requests (C6).
 - Delete the unused files in C10 and zen mode (`ViewContext`, `FocusedView`, `enterZen` paths
@@ -613,13 +619,13 @@ simulated 4G, mid-tier CPU throttling), no CDN, cold cache. The lab's own budget
 |---|---|---|---|
 | First-load JS (gzipped, Next's build table) | 213 KB | ≤ 150 KB | ≤ 130 KB (lab pages ≤ 135 KB) |
 | Images on first load, phone 390 px | 235 KB | ≤ 100 KB | ≤ 150 KB (blog post covers) |
-| Images on first load, desktop 1440 px | 373 KB | ≤ 220 KB | ≤ 250 KB |
+| Images on first load, desktop 1440 px | 1,041 KB with the production photo (373 KB without it) | ≤ 220 KB | ≤ 250 KB |
 | Fonts on first paint | 187 KB | ≤ 60 KB | ≤ 60 KB |
 | Server HTML carries the LCP element | no | yes | yes |
 | Lighthouse mobile: performance / a11y / best practices / SEO | not measured (blank paint) | ≥ 95 / 100 / 100 / 100 | same |
 | LCP, mobile simulated 4G | n/a | ≤ 1.8 s | ≤ 2.0 s |
 | TBT, mobile | n/a | ≤ 150 ms | ≤ 150 ms |
-| CLS | n/a | 0 | 0 |
+| CLS | tiles jump from 0 to 24 px padding after hydration (P11) | 0 | 0 |
 | Long tasks after load on a mid-range phone | n/a | none > 100 ms | none > 100 ms (globe excepted, per lab spec) |
 | Requests on first load | 21 | ≤ 18 | ≤ 20 |
 | Railway RSS after 24 h | baseline | within +10 MB of the phase 0 baseline | |
@@ -747,6 +753,27 @@ variables and the two `RESEND_*` ones. So the audit's placeholder rows (`(N/A)`,
 are an artefact of the audit environment, not of production; the findings above do not depend on
 them. To reproduce the audit with real content, copy the `NEXT_PUBLIC_*` values (no secrets
 needed: the lab runs in demo mode without `R2_*`) into `.env.local` before `npm run build`.
+
+**Second run, real public values** (the `NEXT_PUBLIC_*` values from production in `.env.local`,
+no secrets, lab on, threat map off as deployed, demo data, local copies of the CDN images because
+the audit container cannot reach `cdn.dleer.ai`):
+
+| Viewport | Page | Load (ms) | JS (KB) | Images (KB) | Fonts (KB) | Requests |
+|---|---|---|---|---|---|---|
+| 1440×900 | `/` | 1787 | 216 | **1,041** | 183 | 21 |
+| 1920×1080 | `/` | 1309 | 216 | 1,041 | 183 | 21 |
+| 1280×720 | `/` | 1328 | 216 | 1,041 | 183 | 21 |
+| 390×844 | `/` | 1067 | 231 | 235 | 183 | 20 |
+| 320 / 360 / 430 × tall | `/` | 1018 to 1063 | 231 | 235 | 183 | 20 |
+| 768×1024 | `/` | 1117 | 231 | 245 | 183 | 20 |
+| 844×390 landscape | `/` | 1017 | 231 | 266 | 183 | 20 |
+| 1440×900 | `/lab` | 865 | 13 | 0 | 1 | 25 |
+| 390×844 | `/lab` | 702 | 13 | 0 | 1 | 25 |
+
+Largest requests on the desktop home in this run: the profile photo at `w=1920` 684 KB (P10),
+`cat_anime-girl.webp` 218 KB (C6), the wallpaper at `w=1920` 161 KB, the two fonts 187 KB. No
+console errors on any page; `/lab/threats` is a 404, as deployed. No horizontal overflow at any
+width. The `first-paint` screenshots at 100 ms show the tiles unpadded (P11).
 
 Screenshots reviewed for section 3.3: desktop home at three widths, phone home at four scroll
 positions, `/projects` and a project page at both widths, `/blog`, `/lab` and `/lab/threats` at
