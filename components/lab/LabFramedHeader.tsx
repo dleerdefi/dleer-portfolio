@@ -39,7 +39,7 @@ export function LabFramedHeader({ current, aside }: { current: 'telemetry' | 'th
                   className="px-3 py-1 border lab-focus"
                   style={{
                     borderColor: active ? 'var(--accent-color)' : 'var(--theme-border)',
-                    color: active ? 'var(--accent-color)' : 'var(--theme-text)',
+                    color: active ? 'var(--accent-text)' : 'var(--theme-text)',
                     background: active ? 'rgba(var(--accent-color-rgb), 0.12)' : 'transparent',
                   }}
                 >

@@ -1,11 +1,53 @@
-import ProjectsZenPage from '@/components/zen/ProjectsZenPage';
+import Link from 'next/link';
+import type { Metadata } from 'next';
+import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
+import { ProjectCard } from '@/components/projects/ProjectCard';
+import { ListKeys } from '@/components/ui/ListKeys';
 import { projectSummaries } from '@/lib/content-index';
+import { withGitHubStats } from '@/lib/github';
+import { orderedProjects } from '@/lib/projects';
 
-/** /projects: featured first, then newest first. Only summaries reach the client. */
-export default function ProjectsPage() {
-  const projects = projectSummaries().sort((a, b) => {
-    if (a.featured !== b.featured) return a.featured ? -1 : 1;
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
-  return <ProjectsZenPage projects={projects} />;
+export const metadata: Metadata = {
+  title: 'Projects',
+  description: 'What I build, and who it is for.',
+};
+
+// Rebuilt daily so the GitHub numbers stay fresh (lib/github.ts)
+export const revalidate = 86400;
+
+const CARD_SIZES = '(min-width: 1200px) 380px, (min-width: 720px) 50vw, 100vw';
+
+/**
+ * /projects: every project as a card (docs/PORTFOLIO_V2_SPEC.md §4.4), the featured three first,
+ * then the rest newest first. Server-rendered; only the keys are a client island.
+ */
+export default async function ProjectsPage() {
+  const projects = orderedProjects(await withGitHubStats(projectSummaries()));
+  return (
+    <FramedPageLayout autoFocus={false}>
+      <ListKeys />
+      <div className="list-page">
+        <header className="list-head">
+          <div>
+            <h1>Projects</h1>
+            <p>What I build, and who it is for.</p>
+          </div>
+          <div className="list-head-side">
+            <span className="key-hints">j/k move · Enter open · Esc back</span>
+            <Link href="/" className="list-close" aria-label="Close and return home">
+              ✕
+            </Link>
+          </div>
+        </header>
+        <div className="card-grid">
+          {projects.map((project, i) => (
+            <ProjectCard key={project.slug} project={project} sizes={CARD_SIZES} priority={i === 0} />
+          ))}
+        </div>
+        <p className="list-foot">
+          {projects.length} project{projects.length === 1 ? '' : 's'}
+        </p>
+      </div>
+    </FramedPageLayout>
+  );
 }

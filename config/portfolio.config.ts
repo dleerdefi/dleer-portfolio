@@ -1,5 +1,4 @@
 import { PortfolioConfig } from './types';
-import { getImageUrl } from '@/lib/image-paths';
 
 // Main portfolio configuration
 // Replace values with your own information
@@ -13,41 +12,19 @@ export const portfolioConfig: PortfolioConfig = {
     email: process.env.NEXT_PUBLIC_EMAIL || "your.email@example.com",
     contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@example.com",
     location: process.env.NEXT_PUBLIC_LOCATION || "Your City, Country",
-    profilePhoto: {
-      src: process.env.NEXT_PUBLIC_PROFILE_PHOTO || getImageUrl("profile/placeholder.webp"),
-      alt: process.env.NEXT_PUBLIC_PROFILE_ALT || "Profile photo",
-      width: 1536,
-      height: 2048,
-      // EXIF data for photography theme (optional - customize via env vars)
-      exif: {
-        location: process.env.NEXT_PUBLIC_PHOTO_LOCATION || "Location",
-        aperture: process.env.NEXT_PUBLIC_PHOTO_APERTURE || "f/1.7",
-        shutter: process.env.NEXT_PUBLIC_PHOTO_SHUTTER || "1/1000s",
-        iso: process.env.NEXT_PUBLIC_PHOTO_ISO || "100"
-      },
-      // Detection variant for AI/ML theme (optional - set NEXT_PUBLIC_PROFILE_DETECTION)
-      detectionVariant: {
-        src: process.env.NEXT_PUBLIC_PROFILE_DETECTION || getImageUrl("profile/placeholder-detection.webp"),
-        exif: {
-          location: process.env.NEXT_PUBLIC_PHOTO_LOCATION || "Location",
-          model: "RF-DETR",
-          task: "Object Detection"
-        }
-      }
-    },
+    // The photo in the desktop neofetch tile (components/home/HeroPhoto.tsx), shown while
+    // NEXT_PUBLIC_PROFILE_PHOTO is set. Its files are cropped from public/images/profile by
+    // scripts/build-hero-photo.mjs; without it the tile keeps the ASCII logo.
+    profilePhoto: process.env.NEXT_PUBLIC_PROFILE_PHOTO
+      ? { alt: process.env.NEXT_PUBLIC_PROFILE_ALT || "Profile photo" }
+      : undefined,
     bio: {
-      // Structured bio for parallax sections (minimal version)
+      // The home view: a one-line pitch, then a two or three sentence bio under it
       intro: process.env.NEXT_PUBLIC_BIO_INTRO ||
         "Brief introduction about yourself and what you do.",
 
-      experience: process.env.NEXT_PUBLIC_BIO_EXPERIENCE || "",
-
-      leadership: process.env.NEXT_PUBLIC_BIO_LEADERSHIP ||
-        "Your professional background and expertise. Highlight key accomplishments and areas of focus.",
-
-      // Personal tagline
-      tagline: process.env.NEXT_PUBLIC_BIO_TAGLINE ||
-        "What you enjoy outside of work.",
+      summary: process.env.NEXT_PUBLIC_BIO_SUMMARY ||
+        "Two or three sentences: what you built, and what you did before.",
 
       // Legacy fields for compatibility
       short: process.env.NEXT_PUBLIC_BIO_SHORT ||
@@ -87,15 +64,15 @@ export const portfolioConfig: PortfolioConfig = {
 
   technologies: {
     items: [
-      { name: "Python", icon: "SiPython" },
-      { name: "TypeScript", icon: "SiTypescript" },
-      { name: "React", icon: "SiReact" },
-      { name: "Tailwind CSS", icon: "SiTailwindcss" },
-      { name: "PostgreSQL", icon: "SiPostgresql" },
-      { name: "Neo4j", icon: "SiNeo4J" },
-      { name: "Redis", icon: "SiRedis" },
-      { name: "Kafka", icon: "SiApachekafka" },
-      { name: "Docker", icon: "SiDocker" }
+      { name: "Python" },
+      { name: "TypeScript" },
+      { name: "React" },
+      { name: "Tailwind CSS" },
+      { name: "PostgreSQL" },
+      { name: "Neo4j" },
+      { name: "Redis" },
+      { name: "Kafka" },
+      { name: "Docker" }
     ]
   },
 
@@ -146,10 +123,12 @@ export const portfolioConfig: PortfolioConfig = {
   },
 
   features: {
-    blog: true,
+    // The blog's entry points (a polybar workspace, blog/ in the contents tree, a phone section).
+    // On unless NEXT_PUBLIC_FEATURE_BLOG=false; dleer.ai sets false and keeps the posts as an
+    // archive, reachable at their URLs and from the home page's writing link. Inlined at build time.
+    blog: process.env.NEXT_PUBLIC_FEATURE_BLOG !== 'false',
     projects: true,
     contact: true,
-    about: true,
     neofetch: true,
     // ~/lab: homelab telemetry and the honeypot threat map (docs/lab). Inlined at build time.
     lab: process.env.NEXT_PUBLIC_FEATURE_LAB === 'true'

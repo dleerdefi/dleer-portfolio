@@ -1,51 +1,12 @@
 import Link from 'next/link';
-import { getPortfolioConfig } from '@/config/portfolio.config';
-import type { ProjectSummary } from '@/lib/content-types';
+import type { PostSummary, ProjectSummary } from '@/lib/content-types';
 import { StatusChip } from '@/components/projects/ProjectCard';
-import { TechIcon } from '@/components/ui/TechIcon';
 import { ContactForm } from './ContactForm';
 
 /*
  * The phone column's sections after the hero, the featured block and the lab (docs/PORTFOLIO_V2_SPEC.md
- * §4.2). Server-rendered and hidden on desktop by CSS, where the stage shows About and Contact.
+ * §4.2). Server-rendered and hidden on desktop by CSS, where the stage shows the contact form.
  */
-
-export function AboutSection() {
-  const { personal } = getPortfolioConfig();
-  const paragraphs = [personal.bio.experience, personal.bio.leadership].filter(Boolean);
-  return (
-    <section id="section-about" className="phone-section" aria-labelledby="about-title">
-      <h2 id="about-title" className="section-title">
-        About
-      </h2>
-      {paragraphs.map((p) => (
-        <p key={p} className="section-text">
-          {p}
-        </p>
-      ))}
-      {personal.bio.tagline && <p className="section-tagline">{personal.bio.tagline}</p>}
-    </section>
-  );
-}
-
-export function StackSection() {
-  const items = getPortfolioConfig().technologies?.items ?? [];
-  if (items.length === 0) return null;
-  return (
-    <section id="section-stack" className="phone-section" aria-labelledby="stack-title">
-      <h2 id="stack-title" className="section-title">
-        Stack
-      </h2>
-      <ul className="stack-grid" role="list">
-        {items.map((tech) => (
-          <li key={tech.name}>
-            <TechIcon iconName={tech.icon} name={tech.name} size={24} />
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
 
 /** Every project the featured block does not show, as compact rows. */
 export function ProjectsSection({ projects }: { projects: ProjectSummary[] }) {
@@ -61,7 +22,7 @@ export function ProjectsSection({ projects }: { projects: ProjectSummary[] }) {
             <Link href={p.url} className="project-row">
               <span className="project-row-head">
                 <span className="project-row-title">{p.title}</span>
-                <StatusChip status={p.status} />
+                <StatusChip status={p.status} releaseDate={p.releaseDate} />
               </span>
               <span className="project-row-summary">{p.summary}</span>
             </Link>
@@ -70,6 +31,30 @@ export function ProjectsSection({ projects }: { projects: ProjectSummary[] }) {
       </ul>
       <p className="section-link">
         <Link href="/projects">all projects →</Link>
+      </p>
+    </section>
+  );
+}
+
+/** The newest posts, with the blog's entry points on (NEXT_PUBLIC_FEATURE_BLOG). */
+export function WritingSection({ posts, total }: { posts: PostSummary[]; total: number }) {
+  return (
+    <section id="section-writing" className="phone-section" aria-labelledby="writing-title">
+      <h2 id="writing-title" className="section-title">
+        Writing
+      </h2>
+      <ul className="project-rows" role="list">
+        {posts.map((p) => (
+          <li key={p.slug}>
+            <Link href={p.url} className="project-row">
+              <span className="project-row-title">{p.title}</span>
+              <span className="project-row-summary">{p.readingTime}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <p className="section-link">
+        <Link href="/blog">{total > posts.length ? `all ${total} posts →` : 'all writing →'}</Link>
       </p>
     </section>
   );

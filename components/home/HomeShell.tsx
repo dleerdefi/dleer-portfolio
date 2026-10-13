@@ -54,8 +54,9 @@ export function HomeShell({ hasLab, sectionIds, children }: { hasLab: boolean; s
     return () => window.removeEventListener('keydown', onKey);
   }, [isDesktop, focusedTile, activeContent.type, setFocusedTile, handleContentNavigation]);
 
+  // projects and blog are pages; the rest switch the stage
   const onPolybar = (section: string) => {
-    if (section === 'projects') router.push('/projects');
+    if (section === 'projects' || section === 'blog') router.push(`/${section}`);
     else handlePolybarNavigation(section);
   };
 

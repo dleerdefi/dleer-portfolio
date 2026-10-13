@@ -30,9 +30,13 @@ export default function NeofetchLabRows() {
   const label = { color: 'var(--theme-primary)' };
   const row: React.CSSProperties = {
     display: 'block',
+    // At least WCAG's 24 px target: the two rows sit 4 px apart
+    minHeight: '24px',
     background: 'none',
     border: 0,
-    padding: 0,
+    // A wrapped row indents under its key, like the rows above (.neofetch-rows > li)
+    padding: '0 0 0 2ch',
+    textIndent: '-2ch',
     font: 'inherit',
     color: 'inherit',
     textAlign: 'left',

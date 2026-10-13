@@ -102,7 +102,7 @@ export function Malware({ d, nowMs }: { d: DigestLive; nowMs: number }) {
                   </td>
                   <td>
                     {ok && (
-                      <span style={{ display: 'inline-flex', flexWrap: 'wrap', columnGap: '0.75em' }}>
+                      <span className="lab-link-pair" style={{ display: 'inline-flex', flexWrap: 'wrap', columnGap: '0.75em' }}>
                         <a href={`https://www.virustotal.com/gui/file/${m.sha256}`} {...ext}>
                           VirusTotal
                         </a>

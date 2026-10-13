@@ -36,7 +36,7 @@ export function Collapsible({
       >
         <span
           className="font-semibold text-xs uppercase tracking-wider"
-          style={{ color: 'var(--accent-color)' }}
+          style={{ color: 'var(--accent-text)' }}
         >
           {title}
         </span>
@@ -44,7 +44,7 @@ export function Collapsible({
           className="text-lg transition-transform duration-300"
           style={{
             transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-            color: 'var(--accent-color)',
+            color: 'var(--accent-text)',
           }}
         >
           ▼

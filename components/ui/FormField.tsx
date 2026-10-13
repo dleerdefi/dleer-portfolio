@@ -1,5 +1,10 @@
 import React, { useState, useId } from 'react';
 
+// 14 px at least for the words around a field; 16 px for what is typed, or iOS Safari zooms the
+// page when the field takes focus
+const TEXT_SIZE = 'clamp(14px, 2cqw, 18px)';
+const INPUT_SIZE = 'clamp(16px, 2cqw, 18px)';
+
 interface FormFieldProps {
   label: string;
   type?: 'text' | 'email' | 'textarea';
@@ -86,7 +91,7 @@ export const FormField: React.FC<FormFieldProps> = ({
       <label
         htmlFor={fieldId}
         className="block font-medium mb-1"
-        style={{ color: 'var(--theme-text)', fontSize: 'clamp(11px, 2cqw, 18px)' }}
+        style={{ color: 'var(--theme-text)', fontSize: TEXT_SIZE }}
       >
         {label}
         {required && (
@@ -116,7 +121,7 @@ export const FormField: React.FC<FormFieldProps> = ({
           aria-invalid={hasError}
           aria-describedby={ariaDescribedBy}
           className="w-full rounded px-3 py-2 resize-none transition-all"
-          style={{ ...baseInputStyles, fontSize: 'clamp(11px, 2cqw, 18px)' }}
+          style={{ ...baseInputStyles, fontSize: INPUT_SIZE }}
         />
       ) : (
         <input
@@ -137,7 +142,7 @@ export const FormField: React.FC<FormFieldProps> = ({
             type === 'text' ? 'name' : type === 'email' ? 'email' : undefined
           }
           className="w-full rounded px-3 py-2 transition-all"
-          style={{ ...baseInputStyles, fontSize: 'clamp(11px, 2cqw, 18px)' }}
+          style={{ ...baseInputStyles, fontSize: INPUT_SIZE }}
         />
       )}
 
@@ -148,7 +153,7 @@ export const FormField: React.FC<FormFieldProps> = ({
           className="mt-1"
           style={{
             color: isNearLimit ? 'var(--theme-warning)' : 'rgba(var(--theme-text-rgb), 0.72)',
-            fontSize: 'clamp(11px, 2cqw, 18px)'
+            fontSize: TEXT_SIZE
           }}
           aria-live="polite"
         >
@@ -161,7 +166,7 @@ export const FormField: React.FC<FormFieldProps> = ({
         <div
           id={errorId}
           className="flex items-start gap-2 mt-2"
-          style={{ color: 'var(--theme-error)', fontSize: 'clamp(11px, 2cqw, 18px)' }}
+          style={{ color: 'var(--theme-error)', fontSize: TEXT_SIZE }}
           role="alert"
           aria-live="polite"
         >

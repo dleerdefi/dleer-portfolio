@@ -352,6 +352,12 @@ Beyond the lab tile (4.1) and the phone order (4.2):
     busy sparkline; `queue_oldest_s` as `queue 4 min` when non-zero;
   - GPU rows gain `enc`/`dec` columns (the Quadro's encoder shows Plex transcoding).
   - the neofetch `Lab:` row gains the VM count: `Lab: 1,029 W · 27 VMs · 3/3 hosts ●`.
+- **The lab card becomes a carousel** (agreed with David 2026-10-13, after this spec): one card
+  of fixed size cycling through slides (power, hosts, GPUs, NAS and CI, and the honeypot with
+  the threat map on), each a link to its part of `/lab`, every ~6 s on desktop, pausing on
+  hover or focus, off screen, in a hidden tab and with reduced motion, with dots and a pause
+  button; phones swipe it and it never moves on its own. `/api/lab/summary` gains the slides'
+  headline numbers. Details: [TELEMETRY_VIEW.md §5.4](lab/TELEMETRY_VIEW.md#54-home-lab-card).
 - **`/lab` gets a one-paragraph "how this works" footer** with the push-not-serve diagram from
   the lab README, because visitors who understand the architecture are the ones David wants.
 - **The threats page links back** to the construction of the honeynet in one sentence (the
@@ -655,6 +661,34 @@ at about 200 ms: Lighthouse's model counts the JavaScript requested before that 
 blocking it. Real devices see the observed numbers; phase 6 can trim the shared runtime if the
 simulated figure matters.
 
+**Follow-up (2026-10-13): the photo, and no about view.** David's call after phase 2: the
+profile photo replaces the ASCII logo on desktop (real neofetch draws an image there), phones keep
+the logo, and the about view goes, with the bio cut to a pitch and two sentences on the home view.
+
+- `components/home/HeroPhoto.tsx` in the neofetch tile: a 3:4 photo 150 to 260 px wide (34 cqw),
+  never taller than the rows beside it, so the tile keeps its height at every desktop size. It is
+  a button: pressing it shows the RF-DETR detection version, which loads on the first hover or
+  focus. `scripts/build-hero-photo.mjs` writes 260, 390 and 520 px copies of both, cropped
+  identically (`full`, shipped, or `upper`, a 1.8x upper-body crop); 22 to 74 KB each. Phones get
+  a desktop-only `<picture>` source and a 1 px fallback, so they download none of it.
+- The about view, its photo window and tech grid, the phone About and Stack sections, the
+  `about` workspace, tree entry and content type, `TechIcon` and `react-icons` are deleted. The
+  technologies are a `Stack` row in the neofetch block; the bio is `NEXT_PUBLIC_BIO_SUMMARY`
+  under the pitch (`NEXT_PUBLIC_BIO_EXPERIENCE`, `_LEADERSHIP` and `_TAGLINE` are unused now).
+  The phone column is hero, featured, lab, projects, contact.
+- Small text: the phone logo grows to 4 cqw (96 % of the hero's width, 13 to 14 px on most
+  phones), and chips, the rail's watts and the form's character count go to 12 px. Without the
+  about text the 11.8 px logo had become 38 % of the phone home's text, and Lighthouse's
+  legible-font-size audit failed.
+
+| Production values, lab on, demo data | after phase 2 | after the follow-up |
+|---|---|---|
+| `/` first-load JS | 130 KB | 130 KB |
+| Desktop home: photo (1x / 2x screens) | | 22 / 74 KB |
+| Phone home: photo bytes | | 0 |
+| Lighthouse mobile `/` (3 runs) | 96 / 100 / 100 / 100 | 97 / 100 / 100 / 100 |
+| Lighthouse desktop `/` | 100 / 100 / 100 / 100 | 100 / 100 / 100 / 100 (LCP the photo, 0.5 s) |
+
 ### Phase 3: projects as the story
 
 Findings: C8, C9, U7, U8, U9, U12. Design: 4.4, 4.5.
@@ -689,6 +723,55 @@ with status chips and at least one metric each; AgentCM shows `coming <date>`; t
 metrics appear for repos with a `github` URL and vanish gracefully offline (test with
 `GITHUB_TOKEN` unset and the network blocked); the phone list has no overlap at 390 px.
 
+**Results (2026-10-13).** Done. AgentCM's page shipped once David approved its text.
+
+- **Schema.** `lib/content-schema.ts` holds the project frontmatter (content-collections imports
+  it): `featured_rank`, `coming-soon` with a required `release_date` (`superRefine`), `hero`,
+  `metrics` (at most three), `links` (URLs or site paths), `audience`. Tests in `tests/content/`.
+- **Order and status.** `lib/projects.ts`: featured by rank (4 and up stand in), then the old
+  flag, then the newest; `orderedProjects`, `nextProject`; `effectiveStatus` turns `coming-soon`
+  into `production` on the release date when a page is built. Home, `/projects` and the project
+  pages revalidate daily.
+- **GitHub numbers.** `lib/github.ts`: one request per repository a day (Next's fetch cache plus
+  an in-process cache), `GITHUB_TOKEN` optional, five-second timeout. A 403, a network failure or
+  a malformed answer leaves the metric out (tested with a mocked `fetch`). This session's proxy
+  blocks api.github.com, so every local build exercised the offline path; the numbers appear on
+  builds with network access.
+- **Cards and covers.** `ProjectCard` shows the path and status, title, audience, summary, and
+  the first metric (or the stack) plus `updated <time>`. Without a `hero`, `/projects` draws the
+  MDX's first diagram or code block as an SVG picture (`ProjectCover`): HTML text at that size
+  would fail the legible-font audit, and the readable diagram is on the page. **Deviation:** the
+  home page's cards have no cover, so the featured three and the "more" card fit the first
+  screen; covers live on `/projects` and hero images on the case studies.
+- **`/projects`** is a server-rendered grid (`ZenList` is now the blog's alone): j/k and the
+  arrows move focus through the cards, Enter opens, Esc goes home; the hints show only with
+  `(hover: hover) and (pointer: fine)` (U9), and the count sits in the flow inside the frame (C8,
+  fixed in `ZenList` for the blog too). The overlapping rows of C9 are gone with the list.
+- **Case studies** (`/projects/<slug>`): hero image when there is one, title, "For <audience>",
+  summary, `MetricsRow`, `LinkRow`, the stack, the MDX, then `next project →`. No reading time
+  (U8). `--accent-text` (16-projects.css) keeps small accent links at 4.5:1: the default desktop
+  purple alone is 4.3:1.
+- **Content.** `claude-code-construction` (rank 2: the 14 skills in four groups, install in two
+  lines, the evals on Sanibel Fire and Rescue Station 172, MIT), `homelab` (rank 4, the existing
+  photo as hero: three PowerEdge servers, the push-only data path, the honeynet), and
+  `llm-security-auditor` at rank 3 with metrics and a results diagram.
+- **Q1, answered:** AgentCM (featured 1) shows `coming Oct 16` with no links until the
+  repository is public; its text comes from the AgentCM README, approved by David. On release
+  day: add its `github` URL. The homelab is the fourth candidate, shown when a featured project
+  is missing.
+- **Q2, open:** only the homelab has a hero image. The others draw their text cover.
+- Also: the sitemap ranks `/projects` 0.9 and project pages 0.8 over `/blog` 0.6 and posts 0.5;
+  `⚠` (in the LLM toolkit's text) joins the font subset; the client-side content index is gone
+  (the contents tree gets the featured titles as props).
+
+| Production values, lab on, demo data | after phase 2 | after phase 3 |
+|---|---|---|
+| First-load JS: `/`, `/projects`, `/projects/<slug>` | 130, 114, 120 KB | 130, 116, 120 KB |
+| Lighthouse mobile `/` (2 runs) | 97 / 100 / 100 / 100 | 97 and 99 / 100 / 100 / 100 |
+| Lighthouse mobile `/projects`, a case study (2 runs each) | | 97, 97 and 98, 97 / 100 / 100 / 100 |
+| Lighthouse desktop `/`, `/projects`, two case studies | | 100 / 100 / 100 / 100 each |
+| Horizontal overflow, phone and desktop, all project pages | | none |
+
 ### Phase 4: the blog recedes
 
 Findings: U10.
@@ -703,6 +786,28 @@ Findings: U10.
   component, and the `/blog` page says, in one line, that it is an archive.
 
 Done when: both flag values build and pass; a crawl of the sitemap finds every post URL alive.
+
+**Results (2026-10-13).** Done; both flag values build and pass.
+
+- `features.blog` is `process.env.NEXT_PUBLIC_FEATURE_BLOG !== 'false'`. **Off** (dleer.ai, Q4's
+  recommendation, set in Railway before this reaches `main`): no polybar workspace, no `blog/` in
+  the contents tree, no phone section, and `/blog` opens with "An archive of earlier writing. The
+  current work is in projects." **On** (the default, for forks): a `blog` workspace, `blog/` with
+  the three newest posts and `N more`, and a phone "Writing" section with its rail dot, before
+  Contact. Either way the posts keep their URLs, the sitemap (posts at 0.5), RSS, the JSON feed and
+  the home page's `writing →` link. There is no About footer any more (the about view went in the
+  phase 2 follow-up).
+- `/blog` is the `/projects` grid: `PostCard` (path, date, title, summary, reading time and tags)
+  in the same card shell, server-rendered, with the shared `ListKeys`. `ZenList`, `BlogZenPage`
+  and `useKeyboardNav` are deleted; the contents tree's directories share one `LinkDir`.
+- A crawl of `/sitemap.xml` with either value: 20 URLs, all 200, the four posts among them;
+  `/rss.xml` and `/feed.json` 200.
+- `.env.example` documents the flag; the unwired `about` flag is gone from the config.
+
+| | after phase 3 | after phase 4 |
+|---|---|---|
+| `/blog` first-load JS | 114 KB (client list) | 115 KB (server grid) |
+| Lighthouse `/blog`, mobile / desktop | | 98 / 100 / 100 / 100 and 100 / 100 / 100 / 100 |
 
 ### Phase 5: the lab, promoted
 
@@ -735,6 +840,46 @@ Done when: every new number renders in demo mode with the right unit and a dash 
 manifest test passes against the new SHAs, and the telemetry chunk stays within its budget
 (≤ 25 KB gzipped, [LAB_UI_SPEC.md §8](lab/LAB_UI_SPEC.md#8-performance-budgets)).
 
+**Results (2026-10-13).** Done (the homelab case study shipped with phase 3); the three CI builds,
+typecheck, lint and the 263 tests pass.
+
+- **The lab card is a carousel** (4.6): `LabTile` builds the slides, `LabCarousel` moves them
+  (scroll snapping, so a phone swipes; a timer on desktop that holds for the pointer, focus, an
+  off-screen card, a hidden tab, `pause` and reduced motion), `LabSlides` draws them. Each slide
+  is a link: on desktop to its view in the stage, which scrolls to the hosts or the GPUs
+  (`ContentType` `lab-telemetry` gained an optional `section`); on phones to `/lab`,
+  `/lab#hosts`, `/lab#gpus` or `/lab/threats`, and `/lab` scrolls to the hash once its data
+  renders. Slides out of view are hidden from assistive technology; only one copy of the
+  telemetry badge is a status region.
+- **The summary grew** by the slides' numbers: per host `up`, cpu and inlet; per GPU util, enc and
+  temperature; the NAS pool, read and write; the CI runners. Tested against the golden fixture
+  and with `nas` and `ci` `null`.
+- **Fit.** The card is a size container: figures wrap between figures and never inside one, and
+  the narrowest card (the tile at 1024 px) drops `inlet`, the honeypot bars and the badge's word.
+  Short screens drop the tile's intro line (≤ 900 px tall) and its heading (≤ 820 px). The tile
+  no longer scrolls at any size measured, with the threat map off or on; at phase 4 it scrolled
+  at 1024 x 768, 1280 x 720 and 1366 x 768.
+- **`/lab`'s footer**: `LabHowItWorks`, a 35-column vertical diagram of the push-only path beside
+  (below, on phones) one paragraph, and `The full story →` to the homelab case study. It renders
+  after the first answer: drawn from the start, the data arriving pushed it down (CLS 0.5 on
+  mobile).
+- **The threats page** ends its framing with `How it is built →` to the case study's honeynet
+  section.
+- The slides' calls to action, `/lab ↗` and the home page's small links use `--accent-text` (the
+  magenta accent was 3.7:1 on Solarized Light's surface).
+- The lab spec set is updated: TELEMETRY_VIEW §5.1 to §5.4, THREATS_VIEW §4.2 and §4.4,
+  LAB_UI_SPEC §3 (a pointer to the one-DOM entry points), §5 (the summary) and §6.
+
+| | after phase 4 | after phase 5 |
+|---|---|---|
+| Lab tile, content / visible px at 1024 x 768, 1280 x 720, 1366 x 768 | 416 / 340, 391 / 316, 391 / 353 | 340 / 340, 316 / 316, 353 / 353 |
+| `/api/lab/summary` (demo) | 749 B | 1,293 B |
+| Lab card chunk, gzipped | 4.2 KB | 5.6 KB |
+| `/lab` page chunk, gzipped (budget 25 KB) | 7.2 KB | 7.7 KB |
+| JS transferred on `/`, desktop / phone (lab on) | 156.0 / 140.4 KB | 157.7 / 141.6 KB |
+| Lighthouse `/`, mobile (two runs) / desktop | 97, 97 / 100; a11y, BP, SEO 100 | 97, 98 / 100; a11y, BP, SEO 100 |
+| Lighthouse `/lab`, mobile (two runs) / desktop | 97, 97 / 100; CLS 0 | 97, 98 / 100; CLS 0 |
+
 ### Phase 6: phone polish pass
 
 Done after phases 2 to 5, as one PR of small fixes found by the audit script's phone screenshots
@@ -750,6 +895,107 @@ at 320, 360, 390, 430 and 768 px, plus landscape 844×390. The checklist to walk
   for body text, checked with the lab's `--lab-text-2` rule).
 - Back navigation from a project page returns to the scroll position on the home page
   (`scroll-restoration` with the one-DOM layout should make this free; verify).
+
+**Results (2026-10-13).** Done. Measured with a sweep of eight routes (`/`, `/projects`, two case
+studies, `/blog`, a post, `/lab`, `/lab/threats`) at 320, 360, 390, 430, 768 and 844×390, phone
+user agent and touch, on a build with the threat map on.
+
+- **Type.** Below 1024 px nothing is under 14 px: status chips, card paths and meta, dates, list
+  counts, case-page chips and metric labels, the lab card's figures and badges, the lab pages'
+  tags, sub-block titles, quiet lines and footnote, the threat map's stat labels and legend, the
+  contact form, code blocks, the post page's reading time and the audio player. Each module has
+  a phone block; inline sizes in the phone-only lab views went to 0.875rem. Decorative art stays
+  smaller (the block-letter logo, the `/lab` diagram, a cover's title bar, a footnote mark).
+- **Targets.** Standalone controls are 44 px on phones: the rail's dots (the watts hide below
+  360 px so six dots fit the frame), the lab card's dots, the contact icons, the list pages'
+  close button, `← all projects`, the case page's link row, `all projects →`, `/lab ↗`, the
+  `/lab` teaser link, the threat tables' CVE and malware links (8 px apart), the code blocks'
+  copy buttons and the audio player. Targets of 44 px may abut (dots, list rows), as in a
+  segmented control. Links inside lines of text keep their line, WCAG's inline exception: prose,
+  the attribution, and the neofetch rows, which are lines of a terminal block (their social links
+  sit at a 25 px pitch; the two lab rows are now 24 px tall, which also fixes desktop's
+  `target-size` failure with the threat map on).
+- **The frame.** At rest nothing sits on the border at any width: at the top of each page the
+  first content clears the top border, at the end the last clears the bottom one. Content crosses
+  the border strips only while it scrolls through them, as designed. C8 does not recur.
+- **The rail** hides while the keyboard is up (the visual viewport shrinks) and, new, while a
+  text field has focus, for browsers that resize the layout instead. The page does not opt into
+  `viewport-fit=cover`, so Safari keeps the layout viewport clear of the home indicator; the rail
+  adds `env(safe-area-inset-bottom)` should that change.
+- **The threat map** works one-handed: `./render-globe` 170×44, `■ stop globe` 135×44 at the
+  right thumb, legend toggles 159×44, the feed read-only. `events 24 h` no longer strands its
+  `h`.
+- **Reduced motion.** No parallax and no fades were already true of the scroll-driven parts and
+  the globe; a global rule now makes every transition instant, inline ones included (the rail's
+  fade, the scroll indicator, the Send button, link and color transitions ran 200 to 500 ms).
+- **Contrast** on phones (Tokyo Night, the only phone preset under Q3): every text run is
+  4.5:1 or more (3:1 large). The post page's subtitle, date, reading time, figcaption, quote and
+  player time used `--theme-text-dimmed` (2.8:1) and now use the 0.72 secondary text.
+- **Back navigation** restores the home page's scroll position by itself (a project row, a
+  featured card, a lab slide, each then back: the same `scrollY`).
+- **Found on the way:** every `<Terminal>` diagram in eight case studies lost its indentation on
+  every device (MDX strips leading spaces inside a component, and up to two inside an
+  expression). Diagrams are now template literals with a `|` margin (`lib/terminal-text.ts`,
+  tested; the covers are unchanged) and scroll sideways on a phone instead of wrapping. Contact
+  form fields are 16 px, or iOS Safari zooms the page on focus. A post's audio player was found
+  in the browser after load and pushed the article down (CLS 0.22 on phones): the page now
+  renders it when `public/audio/blog/<slug>.mp3` exists. Prose links are underlined and use
+  `--accent-text` (desktop's `link-in-text-block` and contrast failures on posts). The speed
+  button's name matches its `1×`.
+
+| Sweep, 6 viewports × 8 routes | after phase 5 | after phase 6 |
+|---|---|---|
+| Routes with sideways scroll | 0 | 0 |
+| Text runs under 14 px (not decorative) | 316 | 0 |
+| Standalone targets under 44 px | 344 | 12 (the neofetch lab rows, 24 px lines) |
+| Text under 4.5:1 on phones | 8 runs on the post page | 0 |
+| Transitions over 150 ms with reduced motion | 6 kinds | 0 |
+
+| Lighthouse, mobile (perf / a11y) | after phase 5 | after phase 6 |
+|---|---|---|
+| `/` | 97 / 100 | 97 to 98 / 100 |
+| `/projects`, `/projects/homelab` | 98 / 100, 98 / 100 | 97 / 100, 97 to 99 / 100 |
+| a post | 87 / 96, CLS 0.22 | 97 to 98 / 100, CLS 0.001 |
+| `/lab`, `/lab/threats` | 97 / 100, 96 / 100 | 97 / 100, 97 / 100 |
+| desktop: `/` with the threat map on, a post (a11y) | 96, 93 | 100, 100 |
+
+**Follow-up: contrast on every preset (2026-10-13).** Phase 6 left the desktop presets' accent
+text for a theme pass. Lighthouse gave Tokyo Night 100 for accessibility, but axe cannot see
+through the glass tiles and reports their text as "needs review", so the pass started with a
+measurement that can: `docs/audit/contrast.mjs` records every visible text run's color and boxes,
+hides all text, screenshots, and compares each run with the worst 10 % of the pixels behind it, on
+every preset with each of its wallpapers (the home page with its stage views and the tray's
+popovers, every framed page scrolled through), and optionally with each of the 15 accents.
+
+- **The measurement before:** 3,666 of 11,462 text runs under 4.5:1 (3:1 large): Tokyo Night 897,
+  Nord 1,195, Solarized Light 1,574, the worst at 1.2:1. All three presets failed, Tokyo Night
+  included. The causes: unfocused tiles dimmed their text to 70 %; the raw accent was the
+  color of 52 text rules (links, headings, the contents tree, the polybar, code); Nord's and
+  Solarized's glass let their wallpapers through as mid-tones; Nord's header blue and red,
+  Solarized's blue, green, yellow and cyan were too close to their backgrounds; the polybar's
+  grey was a Tokyo Night token the other presets never set; and the 404 page was Next's
+  default, white, with the site's light text on it (1.4:1 to 1.6:1).
+- **`--accent-text`** (01-theme-variables.css) is the accent as text: its CIELAB lightness
+  clamped per preset (`lch(from var(--accent-color) max(l, 74) min(c, 55) h)` on Tokyo Night,
+  L* 79 on Nord, at most 35 on Solarized Light). L* follows luminance, so one bound fits every
+  hue and any of the 15 accents reads; browsers without relative colors get a mix toward white
+  or black. Every text use of the accent moved to it, and so did the fills with text on them
+  (the Send button, the photo's tag). `--accent-color` stays for borders, fills and tints.
+- **Unfocused tiles are no longer dimmed;** focus shows in the border, the shadow and the glass.
+  Nord's unfocused glass went from 0.4 to 0.7 and Solarized's from 0.6 to 0.9, the polybar's from
+  0.8 to 0.92; Tokyo Night's stays at 0.25. The contents tree's highlight tint is 0.1 (0.05 on
+  Solarized, where a tint darkens what is behind the accent text).
+- **Preset colors,** each the same hue moved in CIELAB lightness to read at 4.5:1: Nord's text
+  nord4 to nord5, header and primary #6A8FF2 to #98B9FF, error #BF616A to #FD99A0, info #5E81AC
+  to #9CBFED; Solarized's primary #2368B3 to #065CA6, green #859900 to #4b6100, yellow #b58900
+  to #765200 (no yellow reads on cream), red #dc322f to #bc0019, cyan #2aa198 to #006861. The
+  polybar uses the 0.72 secondary text; card paths went from 0.6 to 0.72.
+- **A themed 404** (`app/not-found.tsx`): a framed page like `/projects`, in the visitor's preset.
+- **The measurement after:** 0 of 11,436 runs fail, and 0 of 14,700 with each of the 15 accents
+  on every wallpaper; phones (Tokyo Night) too. The desktop lab tile still fits at every size.
+  Lighthouse on `/`: desktop 100 for performance, accessibility, best practices and SEO, phone
+  98 / 100 / 100 / 100. Lighthouse does not run on a 404 response; axe finds no violation on the
+  404 page on any preset.
 
 ### Phase 7: the GPU, visible (G1 and G5 consumer side)
 
@@ -844,7 +1090,15 @@ AUDIT_BASE=http://localhost:3111 AUDIT_OUT=./audit-out node docs/audit/audit-sho
 # Lighthouse, mobile, on the same server
 npx lighthouse http://localhost:3111/ --preset=perf --form-factor=mobile --screenEmulation.mobile \
   --throttling-method=simulate --output=json --output-path=./audit-out/lh-home.json
+
+# text contrast as rendered, every preset and wallpaper (ACCENTS=all: also the 15 accents;
+# VP=390x844: a phone); exits 1 on a failure
+AUDIT_BASE=http://localhost:3111 node docs/audit/contrast.mjs
 ```
+
+Lighthouse's accessibility score covers Tokyo Night only, and axe cannot see through the desktop
+tiles' glass; `contrast.mjs` measures the pixels behind each text run instead (the follow-up after
+phase 6).
 
 Keep `playwright-core` and `lighthouse` out of `package.json`; they are audit tools, not
 dependencies, and the CI job does not run them.
