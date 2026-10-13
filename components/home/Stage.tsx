@@ -23,7 +23,7 @@ export function Stage({ home }: { home: React.ReactNode }) {
     case 'contact':
       return <ContactContent />;
     case 'lab-telemetry':
-      return <LabTelemetryTile onNavigate={handleContentNavigation} />;
+      return <LabTelemetryTile onNavigate={handleContentNavigation} section={activeContent.type === 'lab-telemetry' ? activeContent.section : undefined} />;
     case 'lab-threats':
       // read directly so the build folds it (see LabDirectory)
       return process.env.NEXT_PUBLIC_FEATURE_LAB_THREATS === 'true' ? <LabThreatsTile onNavigate={handleContentNavigation} /> : null;

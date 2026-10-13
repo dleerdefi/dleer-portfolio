@@ -205,7 +205,6 @@ export interface PortfolioConfig {
     blog?: boolean;
     projects?: boolean;
     contact?: boolean;
-    about?: boolean;
     neofetch?: boolean;
     lab?: boolean;
   };

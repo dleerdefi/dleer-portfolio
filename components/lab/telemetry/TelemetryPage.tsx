@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { domainOf } from '@/lib/lab/chart';
 import { fmtDecimal, fmtInt, withUnit } from '@/lib/lab/format';
@@ -17,6 +17,7 @@ import { Cost, HealthLine } from './LabExtras';
 import { GpuTable } from './TelemetryTables';
 import { hostsText } from './HostsLine';
 import { HistoryOr } from './TelemetryTile';
+import { LabHowItWorks } from './LabHowItWorks';
 import { TelemetryPhone } from './TelemetryPhone';
 import { threatsTeaser, useTelemetry } from './useTelemetry';
 
@@ -34,6 +35,13 @@ export default function TelemetryPage() {
     s ? <Sparkline values={s} domain={{ min: 0, max: 1 }} height={22} /> : null;
 
   const state = t.view === 'loading' ? null : t.view;
+  // The home page's lab card links to /lab#hosts and /lab#gpus, which exist only once the data has
+  // arrived: scroll to them then, once
+  const hasData = Boolean(now);
+  useEffect(() => {
+    if (!hasData || !window.location.hash) return;
+    document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ block: 'start' });
+  }, [hasData]);
   return (
     <>
       <LabFramedHeader
@@ -108,7 +116,7 @@ export default function TelemetryPage() {
 
                 <HealthLine lab={now.lab} />
 
-                <div className="lab-host-cards">
+                <div className="lab-host-cards" id="hosts">
                   {now.hosts.map((host, i) => (
                     <HostCard
                       key={host.role}
@@ -127,7 +135,7 @@ export default function TelemetryPage() {
                 </div>
 
                 {now.gpus.length > 0 && (
-                  <div className="lab-card" style={{ overflowX: 'auto' }}>
+                  <div className="lab-card" id="gpus" style={{ overflowX: 'auto' }}>
                     <GpuTable
                       gpus={now.gpus}
                       full
@@ -149,7 +157,7 @@ export default function TelemetryPage() {
                 style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}
               >
                 <span>
-                  <span aria-hidden="true" style={{ color: 'var(--accent-color)' }}>
+                  <span aria-hidden="true" style={{ color: 'var(--accent-text)' }}>
                     ❯{' '}
                   </span>
                   honeypot: <b>{fmtInt(teaser.events)}</b> events in 24 h from <b>{fmtInt(teaser.countries)}</b>{' '}
@@ -162,6 +170,8 @@ export default function TelemetryPage() {
             )}
           </>
         )}
+        {/* After the first answer, so the numbers arriving never push it down (a layout shift) */}
+        {t.view !== 'loading' && <LabHowItWorks />}
       </section>
     </>
   );

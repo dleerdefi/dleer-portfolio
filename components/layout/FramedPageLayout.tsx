@@ -40,7 +40,7 @@ export const FramedPageLayout: React.FC<FramedPageLayoutProps> = ({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Auto-focus container on mount for immediate keyboard event handling
-  // (disabled when wrapping interactive components like ZenList that handle their own focus)
+  // (disabled on the list pages, whose keys move focus through the cards themselves)
   useEffect(() => {
     if (autoFocus) {
       scrollContainerRef.current?.focus();

@@ -1,24 +1,35 @@
 import Link from 'next/link';
 import type { ProjectSummary } from '@/lib/content-types';
+import { relativeTime } from '@/lib/projects';
+import { ProjectCover } from './ProjectCover';
+import { StatusChip } from './StatusChip';
 
-const STATUS_LABEL: Record<ProjectSummary['status'], string> = {
-  production: 'production',
-  beta: 'beta',
-  development: 'in development',
-  concept: 'concept',
-};
-
-/** A project's status as a small bordered chip, colored by app/styles/15-home-layout.css. */
-export function StatusChip({ status }: { status: ProjectSummary['status'] }) {
-  return <span className={`status-chip status-${status}`}>{STATUS_LABEL[status]}</span>;
-}
+export { StatusChip };
 
 /**
- * A project as a whole-card link. Its accessible name is its text, title first: the path and
- * status row comes after the title in the DOM and is drawn above it (CSS order). Used by the home
- * stage and the phone's featured block; phase 3 adds a cover, metrics and the audience line.
+ * A project as a whole-card link (docs/PORTFOLIO_V2_SPEC.md §4.4): cover, path and status, title,
+ * audience, one line, and its first number (or its stack). The accessible name is its text, title
+ * first: the cover and the path row come after the title in the DOM and are drawn above it (CSS
+ * order). /projects shows the covers; the home page's cards leave them out (`cover={false}`), so
+ * the featured three and the rest fit the first screen.
  */
-export function ProjectCard({ project }: { project: ProjectSummary }) {
+export function ProjectCard({
+  project,
+  sizes = '100vw',
+  priority = false,
+  cover = true,
+}: {
+  project: ProjectSummary;
+  sizes?: string;
+  priority?: boolean;
+  cover?: boolean;
+}) {
+  const metric = project.metrics[0];
+  const meta = [
+    metric ? `${metric.value} ${metric.label}` : project.tech.slice(0, 3).join(' · '),
+    project.pushedAt ? `updated ${relativeTime(project.pushedAt)}` : '',
+  ].filter(Boolean);
+
   return (
     <Link href={project.url} className="project-card">
       <span className="project-card-title">{project.title}</span>
@@ -26,23 +37,17 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
         <span className="project-card-path" aria-hidden="true">
           ~/projects/{project.slug}
         </span>
-        <StatusChip status={project.status} />
+        <StatusChip status={project.status} releaseDate={project.releaseDate} />
       </span>
+      {cover && <ProjectCover project={project} sizes={sizes} priority={priority} />}
+      {project.audience && <span className="project-card-audience">for {project.audience}</span>}
       <span className="project-card-summary">{project.summary}</span>
-      {project.tech.length > 0 && (
-        <span className="project-card-tech" aria-hidden="true">
-          {project.tech.slice(0, 3).map((t) => (
-            <span key={t} className="chip">
-              {t}
-            </span>
-          ))}
-        </span>
-      )}
+      {meta.length > 0 && <span className="project-card-meta">{meta.join(' · ')}</span>}
     </Link>
   );
 }
 
-/** The fourth card: how many more projects there are, the next few as a tree, a link to all. */
+/** The fourth card on the home stage: how many more projects there are, the next few as a tree. */
 export function MoreProjectsCard({ projects }: { projects: ProjectSummary[] }) {
   const shown = projects.slice(0, 4);
   return (

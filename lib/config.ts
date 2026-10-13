@@ -59,7 +59,6 @@ export function useFeatureFlags() {
     blog: true,
     projects: true,
     contact: true,
-    about: true,
     neofetch: true,
     lab: false
   };

@@ -145,7 +145,7 @@ export function ContactForm() {
           style={{
             backgroundColor: isSubmitting
               ? 'rgba(var(--accent-color-rgb), 0.5)'
-              : 'var(--accent-color)',
+              : 'var(--accent-text)',
             color: 'var(--theme-bg)',
             marginTop: '24px',
             fontWeight: '600',
@@ -196,15 +196,15 @@ export function ContactForm() {
 
       {/* Social Links - Horizontal SVG Icons */}
       <div className="mt-8">
-        <div className="flex gap-6 justify-center items-center">
+        <div className="flex gap-2 justify-center items-center">
           {/* Twitter/X Icon */}
           {twitterLink && (
             <a
               href={twitterLink.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all hover:scale-110"
-              style={{ color: 'var(--accent-color)' }}
+              className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110"
+              style={{ color: 'var(--accent-text)' }}
               aria-label="Twitter/X"
               title="Twitter/X"
             >
@@ -226,8 +226,8 @@ export function ContactForm() {
               href={githubLink.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all hover:scale-110"
-              style={{ color: 'var(--accent-color)' }}
+              className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110"
+              style={{ color: 'var(--accent-text)' }}
               aria-label="GitHub"
               title="GitHub"
             >
@@ -249,8 +249,8 @@ export function ContactForm() {
               href={linkedinLink.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all hover:scale-110"
-              style={{ color: 'var(--accent-color)' }}
+              className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110"
+              style={{ color: 'var(--accent-text)' }}
               aria-label="LinkedIn"
               title="LinkedIn"
             >

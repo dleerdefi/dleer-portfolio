@@ -32,6 +32,7 @@ export function LabStatusBadge({
   receivedAt,
   demo,
   compact = false,
+  announce = true,
   style,
 }: {
   state: LabState | null;
@@ -40,6 +41,8 @@ export function LabStatusBadge({
   demo?: boolean;
   /** Phones: the word only. */
   compact?: boolean;
+  /** A status region (read out when it changes); false for a copy of a badge shown elsewhere too */
+  announce?: boolean;
   style?: React.CSSProperties;
 }) {
   const age = useAge(state === 'offline' ? undefined : ageS, receivedAt);
@@ -53,11 +56,13 @@ export function LabStatusBadge({
         : fmtAge(age);
   return (
     <span style={{ display: 'inline-flex', flexWrap: 'wrap', gap: '0.5em', ...style }}>
-      <span role="status" className="lab-badge" style={{ borderColor: look.color }}>
+      <span role={announce ? 'status' : undefined} className="lab-badge" style={{ borderColor: look.color }}>
         <span aria-hidden="true" style={{ color: look.color }}>
           {look.icon}
         </span>
-        <span style={{ color: 'var(--theme-text)' }}>{look.word}</span>
+        <span className="lab-badge-word" style={{ color: 'var(--theme-text)' }}>
+          {look.word}
+        </span>
         {when && <span className="lab-text-2">{when}</span>}
       </span>
       {demo && (

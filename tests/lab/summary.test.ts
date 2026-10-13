@@ -43,6 +43,13 @@ describe('buildSummary', () => {
     expect(s.telemetry).toMatchObject({ state: 'live', power_w: 1028.5, energy_kwh_24h: 24.14, hosts_up: 3, hosts_expected: 3 });
     expect(s.telemetry.power_24h).toHaveLength(96);
     expect(s.telemetry.power_24h!.filter((v) => v === null)).toHaveLength(1);
+    // The home card's slides: headline numbers only, never a whole block
+    expect(s.telemetry.hosts!.map((h) => h.role)).toEqual(['storage', 'gpu', 'apps']);
+    expect(Object.keys(s.telemetry.hosts![0]).sort()).toEqual(['cpu_ratio', 'inlet_c', 'role', 'up']);
+    expect(s.telemetry.gpus).toHaveLength(3);
+    expect(s.telemetry.gpus![0]).toEqual({ role: 'storage', index: 0, util_ratio: 0.12, enc_ratio: 0.31, temp_c: 45 });
+    expect(s.telemetry.nas).toEqual({ pool_healthy: true, read_bytes_s: 12500000, write_bytes_s: 240000 });
+    expect(s.telemetry.ci).toEqual({ runners_online: 14, runners_total: 22, runners_busy: 2 });
     expect(s.threats).toEqual({
       state: 'delayed',
       age_s: 1500,
@@ -51,6 +58,12 @@ describe('buildSummary', () => {
       countries: 31,
       by_category: { recon: 9234, brute_force: 5088, web_exploit: 887, intrusion: 168, malware: 66, ai_agent: 4 },
     });
+  });
+
+  it('passes a null NAS or CI block on as null (not reporting)', () => {
+    const s = buildSummary({ ...now, nas: null, ci: null }, history, null);
+    expect(s.telemetry.nas).toBeNull();
+    expect(s.telemetry.ci).toBeNull();
   });
 
   it('carries only the state of an offline block, and no history when it is offline', () => {

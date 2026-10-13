@@ -170,7 +170,9 @@ Concept `tile-threats`:
 
 Concept `page-threats`. Framed header with `← Back`, tabs, `esc closes`; title row with badges;
 framing: "A honeypot I run on a small cloud VM, plus decoy paths on this site. Every arc is a
-real attack from the last few minutes. No IP addresses are shown."
+real attack from the last few minutes. No IP addresses are shown." followed by `How it is built →`
+to `/projects/homelab#the-honeynet` (the case study's section on the off-site sensor, the decoys
+and the no-IP rule; docs/PORTFOLIO_V2_SPEC.md §4.6).
 
 First screen at ≥ 1024 px:
 
@@ -213,12 +215,14 @@ Concepts `mobile-threats` (before the tap) and `mobile-threats-globe` (after):
    pairs, behaviors, CVEs, malware, AI agents.
 7. Attribution.
 
-### 4.4 Mobile Lab section card
+### 4.4 Home lab card: the honeypot slide
 
-Concept `mobile-section`, the second card in `ParallaxLabSection`, the whole card a link to
-`/lab/threats`: `~/lab/threats` and the badge; `15,447 events in 24 h from 31 countries`; the
-three largest categories (swatch, name, a bar in the category color scaled to the largest,
-compact count); `open the threat map →`. From `/api/lab/summary`; no globe here.
+The last slide of the home lab card ([TELEMETRY_VIEW.md §5.4](TELEMETRY_VIEW.md#54-home-lab-card)),
+shown while the threat map is on, the whole slide a link (`lab-threats` in the stage on desktop,
+`/lab/threats` on phones): `~/lab/threats` and the badge; `15,447 events in 24 h from 31
+countries`; the three largest categories (swatch, name, a bar in the category color scaled to
+the largest, compact count; in the narrowest card the bars go and the counts stay); `the threat
+map →`. From `/api/lab/summary`; no globe here.
 
 ### 4.5 Neofetch row
 
