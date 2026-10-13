@@ -38,6 +38,14 @@ NEXT_PUBLIC_FEATURE_LAB=true LAB_DEMO_DATA=true npm run dev
 On a fresh checkout `npm run typecheck` needs the content-collections types that a build (or
 `npm run dev`) generates first.
 
+## Portfolio v2 work order
+
+[docs/PORTFOLIO_V2_SPEC.md](docs/PORTFOLIO_V2_SPEC.md) is the audit (2026-10-13) and the phased
+spec for the next version of the site: performance budgets, the one-DOM home layout, projects as
+case studies, the blog receding, the lab promoted. Read it before any layout, performance or
+projects work; its phases are one PR each. `docs/audit/audit-shots.mjs` produces the before and
+after numbers every phase PR shows.
+
 ## Lab (`~/lab`)
 
 Live homelab telemetry and a honeypot threat map, behind `NEXT_PUBLIC_FEATURE_LAB` (off by
