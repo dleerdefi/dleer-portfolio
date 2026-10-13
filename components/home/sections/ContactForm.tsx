@@ -165,6 +165,13 @@ export function ContactForm() {
               e.currentTarget.style.transform = 'scale(1)';
             }
           }}
+          // Keyboard focus looks like hover
+          onFocus={(e) => {
+            if (!isSubmitting && e.currentTarget.matches(':focus-visible')) e.currentTarget.style.transform = 'scale(1.02)';
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
           onMouseDown={(e) => {
             if (!isSubmitting) {
               e.currentTarget.style.transform = 'scale(0.98)';
@@ -203,7 +210,7 @@ export function ContactForm() {
               href={twitterLink.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110"
+              className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110 focus-visible:scale-110"
               style={{ color: 'var(--accent-text)' }}
               aria-label="Twitter/X"
               title="Twitter/X"
@@ -226,7 +233,7 @@ export function ContactForm() {
               href={githubLink.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110"
+              className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110 focus-visible:scale-110"
               style={{ color: 'var(--accent-text)' }}
               aria-label="GitHub"
               title="GitHub"
@@ -249,7 +256,7 @@ export function ContactForm() {
               href={linkedinLink.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110"
+              className="inline-flex items-center justify-center w-11 h-11 transition-all hover:scale-110 focus-visible:scale-110"
               style={{ color: 'var(--accent-text)' }}
               aria-label="LinkedIn"
               title="LinkedIn"

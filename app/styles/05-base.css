@@ -48,11 +48,17 @@ body {
   opacity: 0.9;
 }
 
-/* Focus styles */
+/* Keyboard focus looks like hover, never a box: every hover rule also names :focus-visible,
+   and this tint is the fallback for a control without one. Fields show focus in their border. */
 :focus-visible {
-  outline: 2px solid var(--term-accent);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: none;
+}
+:is(a, button, summary, [tabindex]:not(.tile)):focus-visible {
+  background-color: rgba(var(--accent-color-rgb), 0.14);
+  border-radius: 3px;
+}
+:where(input, textarea, select):focus-visible {
+  border-color: var(--accent-color) !important;
 }
 
 /* Smooth scrolling */

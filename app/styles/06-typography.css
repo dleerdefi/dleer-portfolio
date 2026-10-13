@@ -11,7 +11,7 @@ a {
   transition: all 150ms ease;
 }
 
-a:hover {
+a:is(:hover, :focus-visible) {
   color: var(--term-orange);
 }
 

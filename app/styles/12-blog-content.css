@@ -83,7 +83,7 @@
   transition: all 0.2s ease;
 }
 
-.blog-prose a:hover {
+.blog-prose a:is(:hover, :focus-visible) {
   text-decoration-color: var(--accent-color);
 }
 

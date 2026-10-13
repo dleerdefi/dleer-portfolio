@@ -28,7 +28,7 @@ export function Collapsible({
       {/* Header / Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-2.5 flex items-center justify-between transition-colors hover:bg-opacity-80"
+        className="w-full px-4 py-2.5 flex items-center justify-between transition-colors hover:bg-opacity-80 focus-visible:bg-opacity-80"
         style={{
           backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
           borderBottom: isOpen ? '1px solid rgba(var(--accent-color-rgb), 0.2)' : 'none',

@@ -110,7 +110,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto flex items-center justify-between">
           <Link
             href="/blog"
-            className="flex items-center gap-2 px-3 py-1 border-2 hover:bg-opacity-10 transition-colors"
+            className="flex items-center gap-2 px-3 py-1 border-2 hover:bg-opacity-10 focus-visible:bg-opacity-10 transition-colors"
             style={{
               borderColor: 'var(--theme-border)',
               color: 'var(--theme-text)',
@@ -225,7 +225,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <footer className="mt-12 pt-8 border-t-2" style={{ borderColor: 'var(--theme-border)' }}>
             <Link
               href="/blog"
-              className="inline-flex items-center min-h-11 hover:underline"
+              className="inline-flex items-center min-h-11 hover:underline focus-visible:underline"
               style={{ color: 'var(--accent-text)' }}
             >
               ← Back to Blog

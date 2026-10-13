@@ -67,18 +67,10 @@ export function LivePlot({
         <g clipPath={`url(#${clipId})`}>
           <g ref={lineRef} transform="translate(0 0)">
             {runs.map((r, i) => (
-              <path key={`a${i}`} d={r.area} fill="var(--accent-color)" fillOpacity={0.1} />
+              <path key={`a${i}`} d={r.area} className="lab-chart-area" />
             ))}
             {runs.map((r, i) => (
-              <path
-                key={`l${i}`}
-                d={r.line}
-                fill="none"
-                stroke="var(--accent-color)"
-                strokeWidth={2}
-                strokeLinejoin="round"
-                strokeLinecap="round"
-              />
+              <path key={`l${i}`} d={r.line} className="lab-chart-line" />
             ))}
           </g>
         </g>
@@ -149,7 +141,7 @@ export function LiveChart({
   }, [lastMs, width, stepS, reduced, plot.axes, plot.values.length]);
 
   return (
-    <div ref={box} style={{ width: '100%', height }}>
+    <div ref={box} className="lab-chart" style={{ width: '100%', height }}>
       {width > 0 && <LivePlot {...plot} width={width} height={height} lineRef={line} clipId={clipId} />}
     </div>
   );

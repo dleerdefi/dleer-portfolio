@@ -413,6 +413,8 @@ export function PostAudio({
         }}
         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--theme-border)'}
         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+        onFocus={(e) => { if (e.currentTarget.matches(':focus-visible')) e.currentTarget.style.backgroundColor = 'var(--theme-border)'; }}
+        onBlur={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
       >
         {speeds[speedIndex]}×
       </button>
@@ -438,6 +440,8 @@ export function PostAudio({
           }}
           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--theme-border)'}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+        onFocus={(e) => { if (e.currentTarget.matches(':focus-visible')) e.currentTarget.style.backgroundColor = 'var(--theme-border)'; }}
+        onBlur={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--theme-text)" strokeWidth="2">
             <path d="M10 3v10m0 0l-3-3m3 3l3-3" strokeLinecap="round" strokeLinejoin="round" />
@@ -468,6 +472,8 @@ export function PostAudio({
           }}
           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--theme-border)'}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+        onFocus={(e) => { if (e.currentTarget.matches(':focus-visible')) e.currentTarget.style.backgroundColor = 'var(--theme-border)'; }}
+        onBlur={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
         >
           Transcript
         </a>

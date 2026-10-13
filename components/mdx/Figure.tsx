@@ -39,7 +39,7 @@ export function Figure({ src, alt, caption, width = 1200, height = 630, size = '
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className="block hover:opacity-90 transition-opacity"
+          className="block hover:opacity-90 focus-visible:opacity-90 transition-opacity"
         >
           {imageElement}
         </a>

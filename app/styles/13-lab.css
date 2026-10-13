@@ -77,14 +77,17 @@
   text-underline-offset: 3px;
 }
 
-.lab-link:hover {
-  opacity: 0.85;
-}
+.lab-chart-line { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; transition: stroke 150ms ease; }
+.lab-chart-area { fill: var(--accent-color); fill-opacity: 0.1; transition: fill 150ms ease, fill-opacity 150ms ease; }
+.lab-chart-dot { fill: var(--accent-color); transition: fill 150ms ease; }
+/* A chart pointed at or focused takes the hover color, as text does */
+.lab-chart:is(:hover, :focus-within) .lab-chart-line { stroke: var(--accent-text); }
+.lab-chart:is(:hover, :focus-within) .lab-chart-area { fill: var(--accent-text); fill-opacity: 0.18; }
+.lab-chart:is(:hover, :focus-within) .lab-chart-dot { fill: var(--accent-text); }
+@media (prefers-reduced-motion: reduce) { :is(.lab-chart-line, .lab-chart-area, .lab-chart-dot) { transition: none; } }
 
-.lab-focus:focus-visible,
-.lab-link:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
+.lab-link:is(:hover, :focus-visible) {
+  opacity: 0.85;
 }
 
 .lab-table th {
@@ -148,8 +151,7 @@
 .lab-dot::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid rgba(var(--accent-color-rgb), 0.7); }
 .lab-dot[aria-current]::before { background: var(--accent-color); border-color: var(--accent-color); }
 .lab-pause { padding: 0 0.4rem; height: 24px; border: 0; background: none; color: rgba(var(--theme-text-rgb), 0.72); font: inherit; font-size: 0.75rem; cursor: pointer; }
-.lab-pause:hover { color: var(--theme-text); }
-:is(.lab-dot, .lab-pause):focus-visible { outline: 2px solid var(--accent-color); outline-offset: 1px; }
+.lab-pause:is(:hover, :focus-visible) { color: var(--theme-text); }
 /* A narrow card (the desktop lab tile below about 1440 px): the stats go under the power, wrapping as a row */
 @container (max-width: 270px) {
   .lab-slide-power { flex-direction: column; align-items: stretch; gap: 0.4rem; }
