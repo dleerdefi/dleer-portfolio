@@ -119,7 +119,7 @@ references these by id.
 | C2 | **`React.lazy` created inside render.** The phone layout is wrapped in `React.lazy(() => import(...))` inside `LayoutManager`'s render, so every re-render of `LayoutManager` creates a new lazy component and remounts `MobileParallaxLayout` (scroll position, state and the globe's intersection observers reset) | `components/layout/LayoutManager.tsx` |
 | C3 | **Placeholder author in metadata.** Project and blog pages ship `authors: [{ name: 'Your Name' }]` to search engines and social cards | `app/projects/[slug]/page.tsx:42`, `app/blog/[slug]/page.tsx:45` |
 | C4 | **The Open Graph fallback image does not exist.** Every project and blog page points at `/og-image.png`, which is not in `public/` and production's `NEXT_PUBLIC_OG_IMAGE` is `/og-image.png` too, so the site card, the lab pages' cards and every project and post card point at a file that does not exist. Every shared link to dleer.ai has a broken card | `app/projects/[slug]/page.tsx:36`, `app/blog/[slug]/page.tsx:39`, `config/portfolio.config.ts:145` |
-| C5 | **The lab mirrors are two days behind the homelab.** Homelab `main` at `6e4473a` (2026-10-12, "Public telemetry: NAS, CI runners, video engines, airflow, lab counts, cost") added `lab.vms_running`, `targets_up/total`, `alerts_firing`, `disks/disks_healthy`, `drive_temp_max_c`, `energy_cost_usd_24h`, per-host `fan_rpm`, `exhaust_c`, `psu_in_v`, a `nas` block, a `ci` block and GPU `enc_ratio/dec_ratio`. The portfolio's `now.v1.json` fixture (manifest commit `ba74e7e`) and `history.v1.json` (`79227c3`) have none of them, and neither do the Zod schemas or the UI. The sha256 values differ for both labsnap examples. Unknown keys are stripped today (by design), so nothing breaks, but the best new numbers are invisible | `lib/lab/fixtures/MANIFEST.json`, `lib/lab/schemas/`, `components/lab/telemetry/` |
+| C5 | **Resolved on `main` by PR #14 (2026-10-13)**, which re-synced the fixtures to homelab `6e4473a`, mirrored every new field and drew them (`LabExtras`: cost, the health line, airflow, the NAS and CI blocks, the GPU video engines). As audited: **the lab mirrors were two days behind the homelab.** Homelab `main` at `6e4473a` (2026-10-12, "Public telemetry: NAS, CI runners, video engines, airflow, lab counts, cost") added `lab.vms_running`, `targets_up/total`, `alerts_firing`, `disks/disks_healthy`, `drive_temp_max_c`, `energy_cost_usd_24h`, per-host `fan_rpm`, `exhaust_c`, `psu_in_v`, a `nas` block, a `ci` block and GPU `enc_ratio/dec_ratio`. The portfolio's `now.v1.json` fixture (manifest commit `ba74e7e`) and `history.v1.json` (`79227c3`) have none of them, and neither do the Zod schemas or the UI. The sha256 values differ for both labsnap examples. Unknown keys are stripped today (by design), so nothing breaks, but the best new numbers are invisible | `lib/lab/fixtures/MANIFEST.json`, `lib/lab/schemas/`, `components/lab/telemetry/` |
 | C6 | **Full-size wallpapers fetched that nothing displays.** Two preloaders (`BackgroundTile` and `Background`) call `new Image()` on the *original* adjacent carousel files, which `next/image` never requests (it serves `/_next/image?...` variants). On the desktop home that is `cat_anime-girl.webp`, 218 KB, on every first load, for nothing | `components/tiles/BackgroundTile.tsx` (preload effect), `components/layout/Background.tsx` ("FIX 1") |
 | C7 | **Two theme systems fight on phones.** `useEnforceMobileTheme` forces Tokyo Night and sets `--accent-color` as an inline style on `<html>`; `ThemeContext` has a resize handler whose only job is to undo that. Resizing a desktop window across 1024 px flips the accent between purple and cyan; a phone visitor cannot use the preset or accent pickers at all, and `localStorage` preferences are ignored below 1024 px | `hooks/useEnforceMobileTheme.ts`, `contexts/ThemeContext.tsx`, `components/layout/parallax/hooks/useParallaxTheme.ts` |
 | C8 | **List footer overlaps the frame on phones.** On `/projects` and `/blog` at 390 px the `ZenList` footer ("9 items", "1 / 9") sits on top of the 2 px frame border, half outside it | `components/zen/ZenList.tsx`, `components/layout/FramedPageLayout.tsx` |
@@ -587,6 +587,12 @@ Findings: C5, U11. Design: 4.6. The lab's own spec set governs the details; this
 it, so update [TELEMETRY_VIEW.md](lab/TELEMETRY_VIEW.md) with the new fields and views in the
 same PR.
 
+**Mostly done on `main` by PR #14** (2026-10-13): the fixture re-sync, the schema mirrors, the
+counts (as a health line), cost, airflow, the NAS and CI blocks and the GPU video engines, with
+tests, are in. The neofetch row gained the daily cost rather than the VM count. Still open from
+this phase: the `/lab` "how this works" footer, the threats page's one-sentence honeynet note,
+and the homelab project page (4.6). The list below is the original plan, kept for reference.
+
 - Re-sync the four fixtures from homelab `main` (record the commit; `6e4473a` or later) per
   [HOMELAB_REFERENCE.md §6](lab/HOMELAB_REFERENCE.md#6-vendored-fixtures); update `MANIFEST.json`;
   confirm `tests/lab/fixtures-manifest.test.ts` passes.
@@ -774,7 +780,7 @@ Homelab contract drift (C5): portfolio `now.v1.json` sha256 `d3a33aba…` (manif
 `ba74e7e`) versus homelab `main` `6e4473a` `cc0715ff…`; `history.v1.json` `817d7993…` versus
 `a61d5c1c…`. The threats fixtures match.
 
-Production variables on Railway (service `dleer-portfolio`, project `brave-wonder`, deployed
+Production variables on Railway (service `dleer-portfolio`, deployed
 from `main`, last deploy 2026-10-13 00:17 UTC; names only, values were not read): every
 `NEXT_PUBLIC_*` personal, social, photo, SEO and CDN variable in `.env.example` is set, as are
 `NEXT_PUBLIC_FEATURE_LAB`, `NEXT_PUBLIC_FEATURE_LAB_THREATS`, `LAB_DEMO_DATA`, the four `R2_*`
