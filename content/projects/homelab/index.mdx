@@ -34,14 +34,14 @@ Prometheus reads them at home; the power figures come from each server's iDRAC, 
 The obvious way to show live numbers is to let the website ask the house for them. That means a
 door in the network, and a website that can knock on it. The lab works the other way round:
 
-<Terminal cmd="the public data path">
-home (LAN)                      private bucket                 dleer.ai
-labsnap    ── PUT now.json ──►                ◄── read-only ── /api/lab/*
-           ── PUT history ───►                    token,       │ validated,
-threatsnap ── PUT threats ───►                    server side  │ cached
-                                                               ▼
-                                                     edge cache ──► /lab
-</Terminal>
+<Terminal cmd="the public data path">{`
+|home (LAN)                      private bucket                 dleer.ai
+|labsnap    ── PUT now.json ──►                ◄── read-only ── /api/lab/*
+|           ── PUT history ───►                    token,       │ validated,
+|threatsnap ── PUT threats ───►                    server side  │ cached
+|                                                               ▼
+|                                                     edge cache ──► /lab
+`}</Terminal>
 
 - **Push, never pull.** Two small programs at home, labsnap and threatsnap, write JSON documents
   to a private bucket on a timer. Nothing on the internet calls into the house for them.
