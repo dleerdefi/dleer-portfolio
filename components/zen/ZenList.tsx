@@ -135,17 +135,8 @@ export function ZenList<T>({
               </div>
 
               <div className="flex items-center gap-4">
-                {/* Keyboard hints - desktop only */}
-                <div
-                  className="hidden sm:flex items-center gap-4 text-xs"
-                  style={{ color: 'var(--theme-text-dimmed)' }}
-                >
-                  <span>j/k move</span>
-                  <span>·</span>
-                  <span>Enter open</span>
-                  <span>·</span>
-                  <span>Esc back</span>
-                </div>
+                {/* Keyboard hints: only with a keyboard and a fine pointer (.key-hints, 16-projects.css) */}
+                <span className="key-hints">j/k move · Enter open · Esc back</span>
 
                 {/* Close button - always visible */}
                 <button
@@ -212,14 +203,10 @@ export function ZenList<T>({
           </div>
         </div>
 
-        {/* Footer - item count, zen flat style */}
+        {/* Footer: the item count, in the flow inside the frame (it was fixed and sat on the frame, C8) */}
       <div
-        className="fixed bottom-0 left-0 right-0 py-2 px-6 text-xs"
-        style={{
-          color: 'var(--theme-text-dimmed)',
-          zIndex: 1,
-          pointerEvents: 'none',
-        }}
+        className="pb-8 px-6 text-xs"
+        style={{ color: 'rgba(var(--theme-text-rgb), 0.72)' }}
       >
         <div className="max-w-[720px] flex justify-between" style={{ margin: '0 auto' }}>
           <span>

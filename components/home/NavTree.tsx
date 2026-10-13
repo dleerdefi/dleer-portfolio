@@ -2,10 +2,8 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useContentIndex } from '@/contexts/ContentIndexContext';
 import { useFocus, type ContentType } from '@/contexts/FocusContext';
 import { useFeatureFlags } from '@/lib/config';
-import { featuredProjects } from '@/lib/projects';
 import { LabDirectory } from '@/components/tiles/nav/LabDirectory';
 
 /** A view switch in the tree: a real button, current view marked for assistive tech. */
@@ -26,10 +24,7 @@ function ViewEntry({ branch, label, active, onSelect }: { branch: string; label:
  * The contents tile (desktop): the site as a file tree. home and contact switch the
  * stage; projects/ opens with the featured three and links to the rest; lab/ is LabDirectory.
  */
-export default function NavTree() {
-  const { projects } = useContentIndex();
-  const featured = featuredProjects(projects);
-  const more = projects.length - featured.length;
+export default function NavTree({ featured, more }: { featured: { slug: string; title: string; url: string }[]; more: number }) {
   const { activeContent, handleContentNavigation } = useFocus();
   const features = useFeatureFlags();
   const [projectsOpen, setProjectsOpen] = useState(true);

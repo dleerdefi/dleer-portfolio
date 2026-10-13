@@ -22,7 +22,7 @@ export function ProjectsSection({ projects }: { projects: ProjectSummary[] }) {
             <Link href={p.url} className="project-row">
               <span className="project-row-head">
                 <span className="project-row-title">{p.title}</span>
-                <StatusChip status={p.status} />
+                <StatusChip status={p.status} releaseDate={p.releaseDate} />
               </span>
               <span className="project-row-summary">{p.summary}</span>
             </Link>

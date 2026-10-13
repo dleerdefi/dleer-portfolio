@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { getPortfolioConfig } from '@/config/portfolio.config';
 import type { ProjectSummary } from '@/lib/content-types';
-import { featuredProjects, otherProjects } from '@/lib/projects';
 import { MoreProjectsCard, ProjectCard } from '@/components/projects/ProjectCard';
 
 /**
@@ -9,10 +8,8 @@ import { MoreProjectsCard, ProjectCard } from '@/components/projects/ProjectCard
  * and a card for the rest. It is also the site's about: there is no separate about view. On desktop it is the content tile's default view; on phones it is the section after
  * the hero. docs/PORTFOLIO_V2_SPEC.md §4.1, §4.2.
  */
-export function HomeView({ projects }: { projects: ProjectSummary[] }) {
+export function HomeView({ featured, others }: { featured: ProjectSummary[]; others: ProjectSummary[] }) {
   const { personal } = getPortfolioConfig();
-  const featured = featuredProjects(projects);
-  const others = otherProjects(projects, featured);
   const meta = [personal.title, personal.location].filter(Boolean).join(' · ');
 
   return (
@@ -27,7 +24,7 @@ export function HomeView({ projects }: { projects: ProjectSummary[] }) {
       <h2 className="sr-only">Featured projects</h2>
       <div className="home-cards">
         {featured.map((p) => (
-          <ProjectCard key={p.slug} project={p} />
+          <ProjectCard key={p.slug} project={p} cover={false} />
         ))}
         {others.length > 0 && <MoreProjectsCard projects={others} />}
       </div>
