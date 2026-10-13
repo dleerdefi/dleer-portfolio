@@ -59,7 +59,7 @@ export function Terminal({ cmd, children: raw }: TerminalProps) {
           }}
         >
           <div className="flex items-center gap-2">
-            <span style={{ color: 'var(--accent-color)' }}>$</span>
+            <span style={{ color: 'var(--accent-text)' }}>$</span>
             <span>{cmd}</span>
           </div>
           <button
@@ -67,7 +67,7 @@ export function Terminal({ cmd, children: raw }: TerminalProps) {
             onClick={handleCopy}
             className="inline-flex items-center justify-center min-h-11 min-w-11 -my-2 text-sm lg:min-h-0 lg:min-w-0 lg:my-0 lg:text-xs font-mono transition-opacity hover:opacity-70"
             style={{
-              color: 'var(--accent-color)',
+              color: 'var(--accent-text)',
             }}
             aria-label={copied ? 'Copied!' : 'Copy code'}
           >

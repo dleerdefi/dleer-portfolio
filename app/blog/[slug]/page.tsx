@@ -145,7 +145,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <header className="mb-12 pb-8 border-b-2" style={{ borderColor: 'var(--theme-border)' }}>
             <h1
               className="text-3xl font-bold mb-8"
-              style={{ color: 'var(--accent-color)' }}
+              style={{ color: 'var(--accent-text)' }}
             >
               {blog.title}
             </h1>
@@ -226,7 +226,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <Link
               href="/blog"
               className="inline-flex items-center min-h-11 hover:underline"
-              style={{ color: 'var(--accent-color)' }}
+              style={{ color: 'var(--accent-text)' }}
             >
               ← Back to Blog
             </Link>

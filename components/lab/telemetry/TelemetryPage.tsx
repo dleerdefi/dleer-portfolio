@@ -157,7 +157,7 @@ export default function TelemetryPage() {
                 style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}
               >
                 <span>
-                  <span aria-hidden="true" style={{ color: 'var(--accent-color)' }}>
+                  <span aria-hidden="true" style={{ color: 'var(--accent-text)' }}>
                     ❯{' '}
                   </span>
                   honeypot: <b>{fmtInt(teaser.events)}</b> events in 24 h from <b>{fmtInt(teaser.countries)}</b>{' '}

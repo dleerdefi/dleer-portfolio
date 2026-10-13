@@ -52,16 +52,16 @@ const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
     <header
       className="polybar hidden lg:flex h-9 backdrop-blur-md border-b-2 items-center justify-between px-3 font-mono text-xs relative z-50"
       style={{
-        backgroundColor: 'rgba(var(--color-surface-rgb), 0.8)',
+        backgroundColor: 'rgba(var(--color-surface-rgb), 0.92)',
         borderColor: 'rgba(var(--accent-color-rgb), 0.3)',
         color: 'var(--color-text-body)',
       }}
     >
       <div className="flex items-center gap-2">
-        <span className="font-bold" style={{ color: 'var(--accent-color)' }}>
+        <span className="font-bold" style={{ color: 'var(--accent-text)' }}>
           [DLEER]
         </span>
-        <span style={{ color: 'var(--color-text-dimmed)' }}>portfolio</span>
+        <span style={{ color: 'rgba(var(--theme-text-rgb), 0.72)' }}>portfolio</span>
       </div>
 
       <nav aria-label="Workspaces" className="flex items-center gap-4">
@@ -73,8 +73,8 @@ const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
               type="button"
               onClick={() => onNavigate(ws.id)}
               aria-current={active ? 'page' : undefined}
-              className="workspace flex items-center gap-1 transition-colors hover:opacity-80"
-              style={{ color: active ? 'var(--accent-color)' : 'var(--color-text-dimmed)' }}
+              className="workspace flex items-center gap-1 transition-colors hover:underline underline-offset-4"
+              style={{ color: active ? 'var(--accent-text)' : 'rgba(var(--theme-text-rgb), 0.72)' }}
             >
               <span aria-hidden="true" style={{ color: active ? 'var(--accent-color)' : 'var(--color-text-muted)' }}>
                 ●
