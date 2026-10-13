@@ -717,6 +717,54 @@ with status chips and at least one metric each; AgentCM shows `coming <date>`; t
 metrics appear for repos with a `github` URL and vanish gracefully offline (test with
 `GITHUB_TOKEN` unset and the network blocked); the phone list has no overlap at 390 px.
 
+**Results (2026-10-13).** Done, with AgentCM's page held back for David's approval of its text.
+
+- **Schema.** `lib/content-schema.ts` holds the project frontmatter (content-collections imports
+  it): `featured_rank`, `coming-soon` with a required `release_date` (`superRefine`), `hero`,
+  `metrics` (at most three), `links` (URLs or site paths), `audience`. Tests in `tests/content/`.
+- **Order and status.** `lib/projects.ts`: featured by rank (4 and up stand in), then the old
+  flag, then the newest; `orderedProjects`, `nextProject`; `effectiveStatus` turns `coming-soon`
+  into `production` on the release date when a page is built. Home, `/projects` and the project
+  pages revalidate daily.
+- **GitHub numbers.** `lib/github.ts`: one request per repository a day (Next's fetch cache plus
+  an in-process cache), `GITHUB_TOKEN` optional, five-second timeout. A 403, a network failure or
+  a malformed answer leaves the metric out (tested with a mocked `fetch`). This session's proxy
+  blocks api.github.com, so every local build exercised the offline path; the numbers appear on
+  builds with network access.
+- **Cards and covers.** `ProjectCard` shows the path and status, title, audience, summary, and
+  the first metric (or the stack) plus `updated <time>`. Without a `hero`, `/projects` draws the
+  MDX's first diagram or code block as an SVG picture (`ProjectCover`): HTML text at that size
+  would fail the legible-font audit, and the readable diagram is on the page. **Deviation:** the
+  home page's cards have no cover, so the featured three and the "more" card fit the first
+  screen; covers live on `/projects` and hero images on the case studies.
+- **`/projects`** is a server-rendered grid (`ZenList` is now the blog's alone): j/k and the
+  arrows move focus through the cards, Enter opens, Esc goes home; the hints show only with
+  `(hover: hover) and (pointer: fine)` (U9), and the count sits in the flow inside the frame (C8,
+  fixed in `ZenList` for the blog too). The overlapping rows of C9 are gone with the list.
+- **Case studies** (`/projects/<slug>`): hero image when there is one, title, "For <audience>",
+  summary, `MetricsRow`, `LinkRow`, the stack, the MDX, then `next project →`. No reading time
+  (U8). `--accent-text` (16-projects.css) keeps small accent links at 4.5:1: the default desktop
+  purple alone is 4.3:1.
+- **Content.** `claude-code-construction` (rank 2: the 14 skills in four groups, install in two
+  lines, the evals on Sanibel Fire and Rescue Station 172, MIT), `homelab` (rank 4, the existing
+  photo as hero: three PowerEdge servers, the push-only data path, the honeynet), and
+  `llm-security-auditor` at rank 3 with metrics and a results diagram.
+- **Q1, answered:** AgentCM shows `coming Oct 16` with no links until the repository is public;
+  its text is drafted from the AgentCM README, and the page ships once David approves the draft.
+  Until then the homelab stands in as the third featured card.
+- **Q2, open:** only the homelab has a hero image. The others draw their text cover.
+- Also: the sitemap ranks `/projects` 0.9 and project pages 0.8 over `/blog` 0.6 and posts 0.5;
+  `⚠` (in the LLM toolkit's text) joins the font subset; the client-side content index is gone
+  (the contents tree gets the featured titles as props).
+
+| Production values, lab on, demo data | after phase 2 | after phase 3 |
+|---|---|---|
+| First-load JS: `/`, `/projects`, `/projects/<slug>` | 130, 114, 120 KB | 130, 116, 120 KB |
+| Lighthouse mobile `/` (2 runs) | 97 / 100 / 100 / 100 | 97 and 99 / 100 / 100 / 100 |
+| Lighthouse mobile `/projects`, a case study (2 runs each) | | 97, 97 and 98, 97 / 100 / 100 / 100 |
+| Lighthouse desktop `/`, `/projects`, two case studies | | 100 / 100 / 100 / 100 each |
+| Horizontal overflow, phone and desktop, all project pages | | none |
+
 ### Phase 4: the blog recedes
 
 Findings: U10.
