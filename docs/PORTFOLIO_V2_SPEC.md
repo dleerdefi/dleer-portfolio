@@ -717,7 +717,7 @@ with status chips and at least one metric each; AgentCM shows `coming <date>`; t
 metrics appear for repos with a `github` URL and vanish gracefully offline (test with
 `GITHUB_TOKEN` unset and the network blocked); the phone list has no overlap at 390 px.
 
-**Results (2026-10-13).** Done, with AgentCM's page held back for David's approval of its text.
+**Results (2026-10-13).** Done. AgentCM's page shipped once David approved its text.
 
 - **Schema.** `lib/content-schema.ts` holds the project frontmatter (content-collections imports
   it): `featured_rank`, `coming-soon` with a required `release_date` (`superRefine`), `hero`,
@@ -749,9 +749,10 @@ metrics appear for repos with a `github` URL and vanish gracefully offline (test
   lines, the evals on Sanibel Fire and Rescue Station 172, MIT), `homelab` (rank 4, the existing
   photo as hero: three PowerEdge servers, the push-only data path, the honeynet), and
   `llm-security-auditor` at rank 3 with metrics and a results diagram.
-- **Q1, answered:** AgentCM shows `coming Oct 16` with no links until the repository is public;
-  its text is drafted from the AgentCM README, and the page ships once David approves the draft.
-  Until then the homelab stands in as the third featured card.
+- **Q1, answered:** AgentCM (featured 1) shows `coming Oct 16` with no links until the
+  repository is public; its text comes from the AgentCM README, approved by David. On release
+  day: add its `github` URL. The homelab is the fourth candidate, shown when a featured project
+  is missing.
 - **Q2, open:** only the homelab has a hero image. The others draw their text cover.
 - Also: the sitemap ranks `/projects` 0.9 and project pages 0.8 over `/blog` 0.6 and posts 0.5;
   `⚠` (in the LLM toolkit's text) joins the font subset; the client-side content index is gone
