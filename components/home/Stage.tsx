@@ -6,7 +6,6 @@ import { useFocus } from '@/contexts/FocusContext';
 import { useIsDesktop } from '@/hooks/useMediaQuery';
 
 // Views other than home load on first use; the lab's stay out of the bundle (LAB_UI_SPEC.md §3)
-const AboutContent = dynamic(() => import('@/components/tiles/content/AboutContent').then((m) => m.AboutContent));
 const ContactContent = dynamic(() => import('@/components/tiles/content/ContactContent').then((m) => m.ContactContent));
 const LabTelemetryTile = dynamic(() => import('@/components/lab/telemetry/TelemetryTile'), { ssr: false });
 const LabThreatsTile = dynamic(() => import('@/components/lab/threats/ThreatsTile'), { ssr: false });
@@ -21,8 +20,6 @@ export function Stage({ home }: { home: React.ReactNode }) {
   const isDesktop = useIsDesktop();
 
   switch (isDesktop ? activeContent.type : 'home') {
-    case 'about':
-      return <AboutContent />;
     case 'contact':
       return <ContactContent />;
     case 'lab-telemetry':

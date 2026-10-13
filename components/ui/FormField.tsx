@@ -86,7 +86,7 @@ export const FormField: React.FC<FormFieldProps> = ({
       <label
         htmlFor={fieldId}
         className="block font-medium mb-1"
-        style={{ color: 'var(--theme-text)', fontSize: 'clamp(11px, 2cqw, 18px)' }}
+        style={{ color: 'var(--theme-text)', fontSize: 'clamp(12px, 2cqw, 18px)' }}
       >
         {label}
         {required && (
@@ -116,7 +116,7 @@ export const FormField: React.FC<FormFieldProps> = ({
           aria-invalid={hasError}
           aria-describedby={ariaDescribedBy}
           className="w-full rounded px-3 py-2 resize-none transition-all"
-          style={{ ...baseInputStyles, fontSize: 'clamp(11px, 2cqw, 18px)' }}
+          style={{ ...baseInputStyles, fontSize: 'clamp(12px, 2cqw, 18px)' }}
         />
       ) : (
         <input
@@ -137,7 +137,7 @@ export const FormField: React.FC<FormFieldProps> = ({
             type === 'text' ? 'name' : type === 'email' ? 'email' : undefined
           }
           className="w-full rounded px-3 py-2 transition-all"
-          style={{ ...baseInputStyles, fontSize: 'clamp(11px, 2cqw, 18px)' }}
+          style={{ ...baseInputStyles, fontSize: 'clamp(12px, 2cqw, 18px)' }}
         />
       )}
 
@@ -148,7 +148,7 @@ export const FormField: React.FC<FormFieldProps> = ({
           className="mt-1"
           style={{
             color: isNearLimit ? 'var(--theme-warning)' : 'rgba(var(--theme-text-rgb), 0.72)',
-            fontSize: 'clamp(11px, 2cqw, 18px)'
+            fontSize: 'clamp(12px, 2cqw, 18px)'
           }}
           aria-live="polite"
         >
@@ -161,7 +161,7 @@ export const FormField: React.FC<FormFieldProps> = ({
         <div
           id={errorId}
           className="flex items-start gap-2 mt-2"
-          style={{ color: 'var(--theme-error)', fontSize: 'clamp(11px, 2cqw, 18px)' }}
+          style={{ color: 'var(--theme-error)', fontSize: 'clamp(12px, 2cqw, 18px)' }}
           role="alert"
           aria-live="polite"
         >

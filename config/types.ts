@@ -10,33 +10,12 @@ export interface PersonalInfo {
   contactEmail: string;  // Email for contact form submissions
   location: string;
   profilePhoto?: {
-    src: string;
     alt: string;
-    width?: number;
-    height?: number;
-    exif?: {
-      location?: string;
-      aperture?: string;
-      shutter?: string;
-      iso?: string;
-      model?: string;
-      task?: string;
-    };
-    detectionVariant?: {
-      src: string;
-      exif?: {
-        location?: string;
-        model?: string;
-        task?: string;
-      };
-    };
   };
   bio: {
-    // Structured bio fields for parallax mode
+    // The home view's pitch (one line) and bio (two or three sentences)
     intro?: string;
-    experience?: string;
-    leadership?: string;
-    tagline?: string;
+    summary?: string;
     // Legacy fields
     short: string;
     long: string;
@@ -58,8 +37,7 @@ export interface SkillCategory {
 }
 
 export interface Technology {
-  name: string;
-  icon: string;         // Icon identifier from react-icons (e.g., "SiPython")
+  name: string;         // Shown in the neofetch block's Stack row
   category?: string;    // Optional category for grouping
 }
 

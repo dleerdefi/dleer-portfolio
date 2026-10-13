@@ -23,7 +23,7 @@ function ViewEntry({ branch, label, active, onSelect }: { branch: string; label:
 }
 
 /**
- * The contents tile (desktop): the site as a file tree. home, about and contact switch the
+ * The contents tile (desktop): the site as a file tree. home and contact switch the
  * stage; projects/ opens with the featured three and links to the rest; lab/ is LabDirectory.
  */
 export default function NavTree() {
@@ -95,7 +95,6 @@ export default function NavTree() {
             }} />
           </li>
         )}
-        <ViewEntry branch="├──" label="about" active={is('about')} onSelect={view({ type: 'about' })} />
         <ViewEntry branch="└──" label="contact" active={is('contact')} onSelect={view({ type: 'contact' })} />
       </ul>
     </nav>

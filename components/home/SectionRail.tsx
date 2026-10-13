@@ -8,8 +8,6 @@ const LABELS: Record<string, string> = {
   top: 'Top',
   home: 'Featured',
   lab: 'Lab',
-  about: 'About',
-  stack: 'Stack',
   projects: 'Projects',
   contact: 'Contact',
 };

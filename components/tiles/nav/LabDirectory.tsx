@@ -7,7 +7,7 @@ import type { LabState } from '@/lib/lab/types';
 import { StatusGlyph } from '@/components/lab/shared/LabStatusBadge';
 
 /**
- * `lab/` in the contents tree (components/home/NavTree.tsx), between `projects/` and `about`.
+ * `lab/` in the contents tree (components/home/NavTree.tsx), between `projects/` and `contact`.
  * Clicking it opens the telemetry view; the arrow toggles `telemetry` and `threats` (only
  * `telemetry` while the threat map is off), which open their views in the stage.
  * Each child shows its view's status glyph once a lab fetch has reported it.

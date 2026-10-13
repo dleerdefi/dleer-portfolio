@@ -54,7 +54,6 @@ export interface ProjectData {
 
 export type ContentType =
   | { type: 'home' }
-  | { type: 'about' }
   | { type: 'project'; data: ProjectData }
   | { type: 'projects-overview' }
   | { type: 'blog-overview' }
@@ -204,9 +203,6 @@ export const FocusProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     switch (section) {
       case 'home':
         content = { type: 'home' };
-        break;
-      case 'about':
-        content = { type: 'about' };
         break;
       case 'projects':
         content = { type: 'projects-overview' };

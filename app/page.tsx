@@ -10,18 +10,18 @@ import { LabTile } from '@/components/home/LabIslands';
 import NavTree from '@/components/home/NavTree';
 import { Neofetch } from '@/components/home/Neofetch';
 import { Stage } from '@/components/home/Stage';
-import { AboutSection, ContactSection, ProjectsSection, StackSection } from '@/components/home/sections/PhoneSections';
+import { ContactSection, ProjectsSection } from '@/components/home/sections/PhoneSections';
 
 /**
  * The home page, server-rendered as one document (docs/PORTFOLIO_V2_SPEC.md §4.3). CSS lays the
  * same markup out as the desktop tiles (neofetch, contents, lab, stage) or the phone column
- * (hero, featured, lab, about, stack, projects, contact); nothing here depends on the width.
+ * (hero, featured, lab, projects, contact); nothing here depends on the width.
  */
 export default function Home() {
   const index = contentIndex();
   const lab = labEnabled();
   const others = otherProjects(index.projects, featuredProjects(index.projects));
-  const sectionIds = ['top', 'home', ...(lab ? ['lab'] : []), 'about', 'stack', 'projects', 'contact'];
+  const sectionIds = ['top', 'home', ...(lab ? ['lab'] : []), 'projects', 'contact'];
 
   return (
     <ContentIndexProvider value={index}>
@@ -41,8 +41,6 @@ export default function Home() {
               <LabTile />
             </FocusTile>
           )}
-          <AboutSection />
-          <StackSection />
           <ProjectsSection projects={others} />
           <ContactSection />
         </HomeShell>
