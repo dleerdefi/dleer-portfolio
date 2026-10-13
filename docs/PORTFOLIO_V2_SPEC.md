@@ -781,6 +781,28 @@ Findings: U10.
 
 Done when: both flag values build and pass; a crawl of the sitemap finds every post URL alive.
 
+**Results (2026-10-13).** Done; both flag values build and pass.
+
+- `features.blog` is `process.env.NEXT_PUBLIC_FEATURE_BLOG !== 'false'`. **Off** (dleer.ai, Q4's
+  recommendation, set in Railway before this reaches `main`): no polybar workspace, no `blog/` in
+  the contents tree, no phone section, and `/blog` opens with "An archive of earlier writing. The
+  current work is in projects." **On** (the default, for forks): a `blog` workspace, `blog/` with
+  the three newest posts and `N more`, and a phone "Writing" section with its rail dot, before
+  Contact. Either way the posts keep their URLs, the sitemap (posts at 0.5), RSS, the JSON feed and
+  the home page's `writing →` link. There is no About footer any more (the about view went in the
+  phase 2 follow-up).
+- `/blog` is the `/projects` grid: `PostCard` (path, date, title, summary, reading time and tags)
+  in the same card shell, server-rendered, with the shared `ListKeys`. `ZenList`, `BlogZenPage`
+  and `useKeyboardNav` are deleted; the contents tree's directories share one `LinkDir`.
+- A crawl of `/sitemap.xml` with either value: 20 URLs, all 200, the four posts among them;
+  `/rss.xml` and `/feed.json` 200.
+- `.env.example` documents the flag; the unwired `about` flag is gone from the config.
+
+| | after phase 3 | after phase 4 |
+|---|---|---|
+| `/blog` first-load JS | 114 KB (client list) | 115 KB (server grid) |
+| Lighthouse `/blog`, mobile / desktop | | 98 / 100 / 100 / 100 and 100 / 100 / 100 / 100 |
+
 ### Phase 5: the lab, promoted
 
 Findings: C5, U11. Design: 4.6. The lab's own spec set governs the details; this phase extends

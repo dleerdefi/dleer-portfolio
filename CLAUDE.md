@@ -192,9 +192,17 @@ Each project is a case study (spec §4.4). The frontmatter schema is `lib/conten
 - `links` (URLs, or site paths like `/lab`), `audience` (one phrase, "for ...").
 
 `/projects` is a server-rendered grid of `ProjectCard`s (featured first) with j/k/Esc keys
-(`ProjectsKeys.tsx`) and hints only for a fine pointer; `/projects/<slug>` is the case study:
+(`components/ui/ListKeys.tsx`) and hints only for a fine pointer; `/projects/<slug>` is the case study:
 hero, audience, summary, `MetricsRow`, `LinkRow`, stack, the MDX, next project. The home page's
 cards leave the covers out so the featured three fit the first screen.
+
+#### Blog (`content/blog/<slug>/index.mdx`)
+
+`/blog` is the same server-rendered grid as `/projects`, of `PostCard`s (`components/blog/`).
+`NEXT_PUBLIC_FEATURE_BLOG` (on unless `false`; dleer.ai sets `false`) decides the blog's entry
+points: a `blog` polybar workspace, `blog/` in the contents tree and a phone "Writing" section with
+its rail dot. With it off the posts stay at their URLs, in the sitemap (at lower priority), RSS and
+the JSON feed, and behind the home page's `writing →` link, and `/blog` says it is an archive.
 
 #### MDX Components
 
