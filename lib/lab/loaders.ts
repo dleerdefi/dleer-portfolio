@@ -1,13 +1,13 @@
 import 'server-only';
 import { labThreatsEnabled } from './flag';
 import { createLoader } from './load';
-import { demoDigest, demoHistoryDoc, demoLive, demoNow } from './demo/rebase';
-import { HistoryDoc, NowDoc } from './schemas/telemetry';
+import { demoDigest, demoHistoryDoc, demoLive, demoNow, demoTelemetryLive } from './demo/rebase';
+import { HistoryDoc, NowDoc, TelemetryLiveDoc } from './schemas/telemetry';
 import { DigestDoc, LiveDoc } from './schemas/threats';
 import type { LabPayload, LabSummary } from './types';
 
-// The four documents (LAB_UI_SPEC.md §5: key, size cap, memory cache, delayed ceiling) and the
-// home page summary built from them.
+// The five documents (LAB_UI_SPEC.md §5: key, size cap, memory cache, delayed ceiling) and the
+// home page summary built from now.json, history.json and threats.json.
 
 const KiB = 1024;
 
@@ -27,6 +27,17 @@ export const loadHistory = createLoader({
   delayedCeilingS: 3600,
   schema: HistoryDoc,
   demo: demoHistoryDoc,
+});
+
+// The last 10 minutes at 10 s steps, rewritten every 10 s with stale_after_s 40: the worst-case
+// age (labsnap 10 s + memory 5 s + edge 10 s + stale-while-revalidate 10 s) stays under it.
+export const loadTelemetryLive = createLoader({
+  key: 'v1/live.json',
+  maxBytes: 32 * KiB,
+  cacheMs: 5_000,
+  delayedCeilingS: 900,
+  schema: TelemetryLiveDoc,
+  demo: demoTelemetryLive,
 });
 
 export const loadDigest = createLoader({

@@ -17,6 +17,13 @@
       "sha256": "a61d5c1c7abe35dab2d907440a3c5184d288f458b6363e1e5cfb0780ed7b1d0a"
     },
     {
+      "path": "lib/lab/fixtures/live.v1.json",
+      "source": "stacks/monitoring/labsnap/examples/live.v1.json",
+      "branch": "main",
+      "commit": "a0225ce26fe8e42c79c422bc8278f7991cde3c1c",
+      "sha256": "da5231bf29fe0a302d132957a6778d0010e55568b71c90950718c9a6844303e2"
+    },
+    {
       "path": "lib/lab/fixtures/threats.v1.json",
       "source": "stacks/honeynet/threatsnap/examples/threats.v1.json",
       "branch": "main",
@@ -113,6 +120,13 @@
       "branch": "main",
       "commit": "6e4473a714e8f03fa309a4c5e79cd2a924cf42c9",
       "sha256": "94bcc8fc47646bc6a8f917dac3366c94fd6e3eeacd5178bdbcf6fec086e655d6"
+    },
+    {
+      "path": "tests/fixtures/homelab/invalid/labsnap/live-history-steps.json",
+      "source": "stacks/monitoring/labsnap/examples/invalid/live-history-steps.json",
+      "branch": "main",
+      "commit": "a0225ce26fe8e42c79c422bc8278f7991cde3c1c",
+      "sha256": "a61d5c1c7abe35dab2d907440a3c5184d288f458b6363e1e5cfb0780ed7b1d0a"
     },
     {
       "path": "tests/fixtures/homelab/invalid/threatsnap/threats-bad-cve-id.json",
