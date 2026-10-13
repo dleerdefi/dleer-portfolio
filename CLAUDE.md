@@ -111,15 +111,15 @@ The application uses a modular CSS architecture with styles split into 16 focuse
 5. **05-base.css** (70 lines) - CSS reset, base styles & container utilities
 6. **06-typography.css** (72 lines) - Links, headings, code blocks
 7. **07-terminal-ui.css** (75 lines) - Terminal UI components & ASCII box drawing
-8. **08-animations.css** (105 lines) - Keyframes & animation utilities, reduced-motion rules
+8. **08-animations.css** (98 lines) - Keyframes & animation utilities, reduced-motion rules (no transition takes time)
 9. **09-utilities.css** (102 lines) - Responsive, spacing & touch utilities
 10. **10-mobile.css** (133 lines) - Mobile-specific optimizations & safe areas
 11. **11-glass-effects.css** (93 lines) - Glass morphism & visual effects (the home tiles' chrome is in 15)
-12. **12-blog-content.css** (624 lines) - Blog prose styling, MDX components, figures, admonitions, code blocks
-13. **13-lab.css** (171 lines) - Lab (`~/lab`): attack-category colors per preset, `--lab-*` tokens, shared lab classes, the home lab card (carousel and slides)
-14. **14-lab-views.css** (272 lines) - Lab layouts: the framed `/lab` pages, the health line, NAS / CI blocks and tags, the globe's markers and tooltip, phone tweaks, `/lab`'s how-this-works footer
-15. **15-home-layout.css** (239 lines) - The home page's two arrangements of one DOM: neofetch and the desktop photo, the home view, the lab tile, the contents tree, the polybar tray and popovers, the section rail, the phone column, the desktop grid and tile chrome, the phone's scroll-driven animations
-16. **16-projects.css** (106 lines) - Projects: the cards and their covers, the `/projects` grid, the case-study pages, `--accent-text` (the accent at 4.5:1 for small link text)
+12. **12-blog-content.css** (637 lines) - Blog prose styling (links underlined), MDX components, figures, admonitions, code blocks
+13. **13-lab.css** (179 lines) - Lab (`~/lab`): attack-category colors per preset, `--lab-*` tokens, shared lab classes, the home lab card (carousel and slides)
+14. **14-lab-views.css** (278 lines) - Lab layouts: the framed `/lab` pages, the health line, NAS / CI blocks and tags, the globe's markers and tooltip, phone tweaks, `/lab`'s how-this-works footer
+15. **15-home-layout.css** (244 lines) - The home page's two arrangements of one DOM: neofetch and the desktop photo, the home view, the lab tile, the contents tree, the polybar tray and popovers, the section rail, the phone column, the desktop grid and tile chrome, the phone's scroll-driven animations
+16. **16-projects.css** (116 lines) - Projects: the cards and their covers, the `/projects` grid, the case-study pages, `--accent-text` (the accent at 4.5:1 for small link text)
 
 The main `app/globals.css` file imports all modules in the correct cascade order.
 
@@ -189,6 +189,10 @@ Each project is a case study (spec §4.4). The frontmatter schema is `lib/conten
 - `hero`: a 16:9 image (1600 px or more), the `/projects` card's cover and the page's hero. Without
   it the card draws the MDX's first `<Terminal>` diagram or code block as an SVG text cover
   (`lib/cover-text.ts`, `ProjectCover.tsx`).
+- A `<Terminal>` diagram is a template literal whose every line starts with a `|` margin
+  (`lib/terminal-text.ts` has an example; `content/projects/homelab/index.mdx` uses it): MDX
+  strips leading spaces inside a component, and even inside an expression, which shifts a
+  diagram's columns. It keeps its lines on a phone and scrolls sideways.
 - `metrics` (at most three; the card shows the first): a value of `"github"` with the label
   `stars` or `forks` is read from the GitHub API when the page is built and daily after
   (`lib/github.ts`, `GITHUB_TOKEN` optional); a failed read leaves it out, never a 0.
@@ -304,7 +308,13 @@ The theme system uses CSS variables that update based on the selected preset:
 4. **Mobile UX**:
    - One column of sections in a single document scroll; the hero recedes and sections rise with
      CSS scroll-driven animations where supported (transform and opacity on the hero only)
-   - The section rail and a scroll indicator; touch targets at least 32 px
+   - The section rail and a scroll indicator
+   - Below 1024 px no text is under 14 px (decorative art aside: the block-letter logo, the
+     `/lab` diagram, a cover's title bar) and every standalone control is a 44 px target; links
+     inside lines of text (prose, the neofetch rows, the attribution) keep their line, at a
+     24 px pitch at least. Each module's phone block holds its sizes (spec phase 6)
+   - Form fields are 16 px at least, or iOS Safari zooms the page when one takes focus
+   - With `prefers-reduced-motion` no transition takes any time (`08-animations.css`)
    - Nothing on the page grows after load: the neofetch lab line and the lab cards hold their
      space until the summary arrives
 

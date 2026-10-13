@@ -896,6 +896,73 @@ at 320, 360, 390, 430 and 768 px, plus landscape 844×390. The checklist to walk
 - Back navigation from a project page returns to the scroll position on the home page
   (`scroll-restoration` with the one-DOM layout should make this free; verify).
 
+**Results (2026-10-13).** Done. Measured with a sweep of eight routes (`/`, `/projects`, two case
+studies, `/blog`, a post, `/lab`, `/lab/threats`) at 320, 360, 390, 430, 768 and 844×390, phone
+user agent and touch, on a build with the threat map on.
+
+- **Type.** Below 1024 px nothing is under 14 px: status chips, card paths and meta, dates, list
+  counts, case-page chips and metric labels, the lab card's figures and badges, the lab pages'
+  tags, sub-block titles, quiet lines and footnote, the threat map's stat labels and legend, the
+  contact form, code blocks, the post page's reading time and the audio player. Each module has
+  a phone block; inline sizes in the phone-only lab views went to 0.875rem. Decorative art stays
+  smaller (the block-letter logo, the `/lab` diagram, a cover's title bar, a footnote mark).
+- **Targets.** Standalone controls are 44 px on phones: the rail's dots (the watts hide below
+  360 px so six dots fit the frame), the lab card's dots, the contact icons, the list pages'
+  close button, `← all projects`, the case page's link row, `all projects →`, `/lab ↗`, the
+  `/lab` teaser link, the threat tables' CVE and malware links (8 px apart), the code blocks'
+  copy buttons and the audio player. Targets of 44 px may abut (dots, list rows), as in a
+  segmented control. Links inside lines of text keep their line, WCAG's inline exception: prose,
+  the attribution, and the neofetch rows, which are lines of a terminal block (their social links
+  sit at a 25 px pitch; the two lab rows are now 24 px tall, which also fixes desktop's
+  `target-size` failure with the threat map on).
+- **The frame.** At rest nothing sits on the border at any width: at the top of each page the
+  first content clears the top border, at the end the last clears the bottom one. Content crosses
+  the border strips only while it scrolls through them, as designed. C8 does not recur.
+- **The rail** hides while the keyboard is up (the visual viewport shrinks) and, new, while a
+  text field has focus, for browsers that resize the layout instead. The page does not opt into
+  `viewport-fit=cover`, so Safari keeps the layout viewport clear of the home indicator; the rail
+  adds `env(safe-area-inset-bottom)` should that change.
+- **The threat map** works one-handed: `./render-globe` 170×44, `■ stop globe` 135×44 at the
+  right thumb, legend toggles 159×44, the feed read-only. `events 24 h` no longer strands its
+  `h`.
+- **Reduced motion.** No parallax and no fades were already true of the scroll-driven parts and
+  the globe; a global rule now makes every transition instant, inline ones included (the rail's
+  fade, the scroll indicator, the Send button, link and color transitions ran 200 to 500 ms).
+- **Contrast** on phones (Tokyo Night, the only phone preset under Q3): every text run is
+  4.5:1 or more (3:1 large). The post page's subtitle, date, reading time, figcaption, quote and
+  player time used `--theme-text-dimmed` (2.8:1) and now use the 0.72 secondary text.
+- **Back navigation** restores the home page's scroll position by itself (a project row, a
+  featured card, a lab slide, each then back: the same `scrollY`).
+- **Found on the way:** every `<Terminal>` diagram in eight case studies lost its indentation on
+  every device (MDX strips leading spaces inside a component, and up to two inside an
+  expression). Diagrams are now template literals with a `|` margin (`lib/terminal-text.ts`,
+  tested; the covers are unchanged) and scroll sideways on a phone instead of wrapping. Contact
+  form fields are 16 px, or iOS Safari zooms the page on focus. A post's audio player was found
+  in the browser after load and pushed the article down (CLS 0.22 on phones): the page now
+  renders it when `public/audio/blog/<slug>.mp3` exists. Prose links are underlined and use
+  `--accent-text` (desktop's `link-in-text-block` and contrast failures on posts). The speed
+  button's name matches its `1×`.
+
+| Sweep, 6 viewports × 8 routes | after phase 5 | after phase 6 |
+|---|---|---|
+| Routes with sideways scroll | 0 | 0 |
+| Text runs under 14 px (not decorative) | 316 | 0 |
+| Standalone targets under 44 px | 344 | 12 (the neofetch lab rows, 24 px lines) |
+| Text under 4.5:1 on phones | 8 runs on the post page | 0 |
+| Transitions over 150 ms with reduced motion | 6 kinds | 0 |
+
+| Lighthouse, mobile (perf / a11y) | after phase 5 | after phase 6 |
+|---|---|---|
+| `/` | 97 / 100 | 97 to 98 / 100 |
+| `/projects`, `/projects/homelab` | 98 / 100, 98 / 100 | 97 / 100, 97 to 99 / 100 |
+| a post | 87 / 96, CLS 0.22 | 97 to 98 / 100, CLS 0.001 |
+| `/lab`, `/lab/threats` | 97 / 100, 96 / 100 | 97 / 100, 97 / 100 |
+| desktop: `/` with the threat map on, a post (a11y) | 96, 93 | 100, 100 |
+
+Left for later: on desktop the Nord and Solarized Light presets draw some accent-colored text
+under 4.5:1 (the greeting, section titles, status chips, neofetch keys; approximate, the tiles
+are glass over a wallpaper). Phones never use them while Q3 stands; a theme pass can lift them.
+
 ### Phase 7: the GPU, visible (G1 and G5 consumer side)
 
 Only after the homelab produces the documents; the portfolio side is small and fixture-first:
