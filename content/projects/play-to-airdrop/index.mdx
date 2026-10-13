@@ -17,18 +17,18 @@ Gamified campaign platform that transformed user acquisition from passive airdro
 
 Built dynamic quest engine with anti-sybil protection using wallet clustering, behavioral analysis, and machine learning anomaly detection.
 
-<Terminal cmd="campaign system architecture">
-┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│  Next.js UI  │─────▶│  Campaign    │─────▶│  Reward      │
-│  (Quests)    │      │  Engine      │      │  Distribution│
-└──────┬───────┘      └──────┬───────┘      └──────┬───────┘
-       │                     │                      │
-       ▼                     ▼                      ▼
-  ┌──────────┐          ┌──────────┐          ┌──────────┐
-  │PostgreSQL│          │  Redis   │          │Chainlink │
-  │ Tracking │          │  Cache   │          │ Keepers  │
-  └──────────┘          └──────────┘          └──────────┘
-</Terminal>
+<Terminal cmd="campaign system architecture">{`
+|┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+|│  Next.js UI  │─────▶│  Campaign    │─────▶│  Reward      │
+|│  (Quests)    │      │  Engine      │      │  Distribution│
+|└──────┬───────┘      └──────┬───────┘      └──────┬───────┘
+|       │                     │                      │
+|       ▼                     ▼                      ▼
+|  ┌──────────┐          ┌──────────┐          ┌──────────┐
+|  │PostgreSQL│          │  Redis   │          │Chainlink │
+|  │ Tracking │          │  Cache   │          │ Keepers  │
+|  └──────────┘          └──────────┘          └──────────┘
+`}</Terminal>
 
 <Window title="sybil-detection/calculateRisk.ts">
 ```typescript

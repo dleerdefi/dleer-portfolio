@@ -37,10 +37,10 @@ export default async function Home() {
   return (
     <FocusProvider>
       <HomeShell hasLab={lab} sectionIds={sectionIds}>
-        <FocusTile id="neofetch" sectionId="top" label="Profile" dim className="home-hero">
+        <FocusTile id="neofetch" sectionId="top" label="Profile" className="home-hero">
           <Neofetch />
         </FocusTile>
-        <FocusTile id="navigation" sectionId="contents" label="Contents" dim className="home-nav">
+        <FocusTile id="navigation" sectionId="contents" label="Contents" className="home-nav">
           <NavTree
             featured={featured.map(link)}
             more={others.length}
@@ -52,7 +52,7 @@ export default async function Home() {
           <Stage home={<HomeView featured={featured} others={others} />} />
         </FocusTile>
         {lab && (
-          <FocusTile id="lab" sectionId="lab" label="Lab" dim className="home-lab">
+          <FocusTile id="lab" sectionId="lab" label="Lab" className="home-lab">
             <LabTile />
           </FocusTile>
         )}

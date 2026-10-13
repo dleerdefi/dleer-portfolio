@@ -252,8 +252,8 @@ export function PostAudio({
         aria-label={isPlaying ? 'Pause' : 'Play'}
         aria-pressed={isPlaying}
         style={{
-          width: '40px',
-          height: '40px',
+          width: '44px',
+          height: '44px',
           borderRadius: '50%',
           backgroundColor: 'var(--accent-color)',
           border: 'none',
@@ -318,8 +318,8 @@ export function PostAudio({
       <div
         style={{
           flex: '0 0 auto',
-          color: 'var(--theme-text-dimmed)',
-          fontSize: '13px',
+          color: 'rgba(var(--theme-text-rgb), 0.72)',
+          fontSize: '14px',
           fontFamily: 'var(--font-mono)',
         }}
       >
@@ -335,7 +335,7 @@ export function PostAudio({
         style={{
           flex: '1 1 200px',
           minWidth: '100px',
-          height: '36px',
+          height: '44px',
           display: 'flex',
           alignItems: 'center',
           cursor: 'pointer',
@@ -381,7 +381,7 @@ export function PostAudio({
                 backgroundColor: 'var(--theme-surface)',
                 border: '1px solid var(--theme-border)',
                 borderRadius: '4px',
-                fontSize: '12px',
+                fontSize: '14px',
                 color: 'var(--theme-text)',
                 whiteSpace: 'nowrap',
                 marginBottom: '4px',
@@ -397,14 +397,16 @@ export function PostAudio({
       {/* Speed button */}
       <button
         onClick={cycleSpeed}
-        aria-label={`Playback speed: ${speeds[speedIndex]}x`}
+        aria-label={`Playback speed: ${speeds[speedIndex]}×`}
         style={{
+          minWidth: '44px',
+          minHeight: '44px',
           padding: '6px 10px',
           backgroundColor: 'transparent',
           border: '1px solid var(--theme-border)',
           borderRadius: '4px',
           color: 'var(--theme-text)',
-          fontSize: '13px',
+          fontSize: '14px',
           fontFamily: 'var(--font-mono)',
           cursor: 'pointer',
           transition: 'background-color 0.2s',
@@ -422,8 +424,8 @@ export function PostAudio({
           aria-label="Download audio"
           title="Download audio"
           style={{
-            width: '32px',
-            height: '32px',
+            width: '44px',
+            height: '44px',
             padding: '6px',
             backgroundColor: 'transparent',
             border: '1px solid var(--theme-border)',
@@ -451,12 +453,15 @@ export function PostAudio({
           aria-label="View transcript"
           title="View transcript"
           style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            minHeight: '44px',
             padding: '6px 10px',
             backgroundColor: 'transparent',
             border: '1px solid var(--theme-border)',
             borderRadius: '4px',
             color: 'var(--theme-text)',
-            fontSize: '13px',
+            fontSize: '14px',
             cursor: 'pointer',
             textDecoration: 'none',
             transition: 'background-color 0.2s',

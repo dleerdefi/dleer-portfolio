@@ -65,7 +65,7 @@ const ContactContentComponent: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <h1 className="font-bold" style={{ color: 'var(--accent-color)', fontSize: 'clamp(1.5rem, 1.5rem + 3cqi, 1.75rem)' }}>Contact</h1>
+      <h1 className="font-bold" style={{ color: 'var(--accent-text)', fontSize: 'clamp(1.5rem, 1.5rem + 3cqi, 1.75rem)' }}>Contact</h1>
 
       <form onSubmit={handleSubmit}>
         {/* Honeypot field - hidden from users, visible to bots */}
@@ -128,7 +128,7 @@ const ContactContentComponent: React.FC = () => {
             style={{
               backgroundColor: isSubmitting
                 ? 'rgba(var(--accent-color-rgb), 0.5)'
-                : 'var(--accent-color)',
+                : 'var(--accent-text)',
               color: 'var(--theme-bg)',
               fontWeight: 'bold',
               cursor: isSubmitting ? 'not-allowed' : 'pointer',
