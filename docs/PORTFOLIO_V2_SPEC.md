@@ -148,7 +148,7 @@ Production build, lab and threat map on, demo data, no CDN, cold cache, headless
 | P10 | **The profile photo is served at 1920 px wide for a 280 to 400 px box.** `ProfilePhoto` passes `sizes` built from the config's intrinsic width (1536 px), so `next/image` picks the `w=1920` variant: **684 KB** on every desktop home load (the original is 908 KB; the 575 KB detection variant is a second file). With the real production values the desktop home moves 1,041 KB of images, of which the photo is two thirds. A `sizes` of `(min-width: 1024px) 400px, 100vw` and `quality` 80 makes it about 40 KB | `components/ui/ProfilePhoto.tsx:172`, `config/portfolio.config.ts` (`width: 1536`) |
 | P11 | **Layout shift after hydration.** Tile `padding`, `borderWidth` and `backdropFilter` are `framer-motion` `animate` targets, so the server HTML and first client render have the tiles unpadded and the text flush against the borders; once hydrated, every tile animates to 24 px padding and the content jumps (the audit script's `*-first-paint.png` versus the final screenshot). This is a measurable CLS on top of C1 and goes away with CSS-only tile chrome | `components/layout/LayoutManager.tsx` (every `animate={{ padding: ... }}`) |
 | P12 | **An invisible full-screen repaint every frame.** `SubtleBlobBackground` in the root layout followed the cursor with a `requestAnimationFrame` loop that never stopped, rewriting three CSS variables of a `blur(28px)` full-viewport layer each frame. `Background` paints an opaque layer above it on every page, so removing it changes no pixel (checked: at most 69 pixels differ, all live text). Removed in phase 1 | `components/SubtleBlobBackground.tsx` (deleted) |
-| P13 | **Open: desktop blocking time from the backdrop.** Under 4x CPU throttling in headless Chromium, hiding `Background` entirely cuts desktop main-thread blocking from about 520 ms to 200 ms, but hiding any one layer (noise, orbs, stars), pausing its animations or removing the tiles' backdrop blur does not. Headless software raster exaggerates paint, so trace it on real hardware before changing the look (phase 2) | `components/layout/Background.tsx` |
+| P13 | **Resolved in phase 2: desktop blocking time from the backdrop.** Under 4x CPU throttling in headless Chromium, hiding `Background` entirely cut desktop main-thread blocking from about 520 ms to 200 ms, but hiding any one layer (noise, orbs, stars), pausing its animations or removing the tiles' backdrop blur did not. The cause was next/image's `placeholder="blur"` on the wallpaper: an SVG Gaussian blur drawn at full screen as the image's background, 0.5 to 1 s of main thread per load. The wallpaper is already pre-blurred and a few KB, so phase 2 drops the placeholder; Lighthouse desktop TBT went to 0 ms | `components/layout/Background.tsx` |
 | P9 | **The lab is within budget.** `/lab` 127 KB and `/lab/threats` 131 KB first load; the globe chunk (573 KB measured, 590 KB stated in `GLOBE_KB`) loads only when a threats view is visible on desktop and only after a tap on phones, as specified. Keep it that way | appendix |
 
 ### 3.3 UX and layout
@@ -584,6 +584,76 @@ before on desktop; the phone column has no horizontal overflow at 320, 360, 390 
 rail jumps to every section; the lab tile shows live numbers in demo mode and disappears with
 the flag off; `/` first-load JS ≤ 150 KB; Lighthouse mobile performance ≥ 90 on `/`
 (moved here from phase 1) and P13 traced on real hardware.
+
+**Results (2026-10-13).** Every criterion met; P13 found and fixed rather than traced on
+hardware (it was not the backdrop).
+
+- `/` is one server-rendered document (`app/page.tsx`): `FocusTile` sections (`components/home/`)
+  around server components (`Neofetch`, `HomeView`, the phone sections) and small client shells
+  (`HomeShell`, `Stage`, `NavTree`, `SectionRail`). `app/styles/15-home-layout.css` lays it out
+  as the desktop grid at 1024 px and up, or the phone column below; the only width check in
+  script is `useIsDesktop` (`hooks/useMediaQuery.ts`, a `useSyncExternalStore` whose server
+  snapshot is desktop), which only decides what the stage shows and which keys apply.
+- Desktop: the polybar tray (`components/layout/polybar/`: presets, an accent popover, a
+  wallpaper popover with the orbs toggle, `?` keys) replaces the three settings tiles. Popovers
+  are `role="dialog"`, take focus (the panel itself when it has no control), trap Tab and close on
+  Esc, returning focus to their button. hjkl moves between tiles geometrically
+  (`lib/tile-navigation.ts`, unit tested); Tab is native and the focused tile follows DOM focus;
+  Esc brings the stage back to `home`. The hero row is as tall as the neofetch (at most half the
+  screen), so the contents and lab tiles get the rest at every size from 1024 x 768 up.
+- The stage's `home` view: greeting, pitch, the three featured projects as whole-card links and a
+  fourth card for the rest (`components/projects/ProjectCard.tsx`, `lib/projects.ts`).
+- The lab tile (`components/lab/home/LabTile.tsx`) sits beside the contents; its cards open their
+  views in the stage on desktop and their pages on phones. It and the neofetch lab rows are
+  client-side dynamic imports (`components/home/LabIslands.tsx`), fetched only when they render,
+  so the flag-off home loads no lab views (130 KB first load). Both fetch the summary once after
+  idle (one request between them), and the cards hold their height until it arrives, so nothing
+  grows while a phone scrolls past.
+- Phones: the hero, featured, lab, about, stack, projects and contact sections in one document
+  scroll; `SectionRail` is the phone's polybar (the lab's live watts beside its dot, hidden while
+  scrolling and while the keyboard is up). The active section is the last one whose top has passed
+  30 % of the viewport, from offsets a ResizeObserver caches, so a rail jump always marks the
+  section it jumped to. The hero recedes and sections rise with CSS scroll-driven animations where
+  supported (transform only, so contrast holds at every scroll position).
+- One theme path: `useEnforceMobileTheme`, `useParallaxTheme` and the resize recovery are gone.
+  **Q3 kept conservative**: phones still get Tokyo Night with the cyan accent, now from
+  `ThemeContext`'s preset at mount plus one CSS rule (`01-theme-variables.css`), because the rail
+  has no room for pickers yet; revisit in phase 6.
+- **Q6 answered differently**: the fourth card is "N more projects", not telemetry, because the
+  lab now has its own tile next to the stage on desktop and its own section on phones.
+- The bio's `experience` paragraph (`NEXT_PUBLIC_BIO_EXPERIENCE`) is wired up; it was set in
+  production but never shown.
+- Also fixed on the way: the `Δt` label on `/lab` (merged from main after phase 1) pulled the
+  92 KB full font, so U+0394 joins the subset; the audit script now scrolls the document when no
+  inner container overflows; Lighthouse accessibility issues on the phone home (link underlines in
+  the neofetch rows, label-in-name on the cards and the rail, dimmed text under 3:1 in the stack
+  labels and the form's character count).
+- Deleted: `LayoutManager`, `MobileParallaxLayout`, `ParallaxScrollContainer`, the four parallax
+  hooks, the bio, tech, projects and blog parallax sections, `NeofetchTile`, `NavigationTile`,
+  `ContentViewer`, the three settings tiles, `components/layout/Tile.tsx`, `hooks/useFocus.ts`,
+  `hooks/useEnforceMobileTheme.ts`.
+- Not done here: the project page still fails contrast in one place (Lighthouse accessibility
+  96, as after phase 1); phase 3 redesigns that page.
+
+| Production values, lab on, threat map off | after phase 1 | after phase 2 | budget |
+|---|---|---|---|
+| `/` first-load JS (build table) | 136 KB | 130 KB (flag off: 130 KB, was 134) | ≤ 150 KB |
+| `/projects`, `/blog` first-load JS | 115, 115 KB | 114, 114 KB | ≤ 130 KB |
+| Server HTML of `/` | empty layout shell | 107 KB (30 KB gzip), every section's content | |
+| Phone home: JS bodies / images / fonts (audit) | 147.5 / 4 / 52 KB | 144 / 4 / 53 KB | ≤ 150 / ≤ 160 combined |
+| Desktop home: images / fonts | 68 / 52 KB | 4 / 53 KB | ≤ 220 / ≤ 60 KB |
+| Horizontal overflow at 320, 360, 390, 430, 768 px and phone landscape | none | none | none |
+| Lighthouse mobile `/` (3 runs): performance | 78, 85, 88 | 96, 96, 96 | ≥ 90 |
+| Lighthouse mobile `/`: accessibility, best practices, SEO | 88, 96, 92 | 100, 100, 100 | |
+| Lighthouse mobile `/`: FCP / LCP / TBT / CLS | 1.1 s / 2.6 s / 360 to 770 ms / 0 | 1.1 s / 2.6 s / 70 to 110 ms / 0.005 | |
+| Lighthouse mobile `/`: observed first paint and LCP (trace) | 667 ms | 150 to 230 ms | |
+| Lighthouse desktop `/` (3 runs) | 75 | 100, 100, 100 (TBT 0 ms) | |
+| Lighthouse mobile project page | 78 | 98 | |
+
+The simulated mobile LCP stays at 2.6 s although the trace paints the neofetch (the LCP element)
+at about 200 ms: Lighthouse's model counts the JavaScript requested before that paint as
+blocking it. Real devices see the observed numbers; phase 6 can trim the shared runtime if the
+simulated figure matters.
 
 ### Phase 3: projects as the story
 
