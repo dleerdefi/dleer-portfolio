@@ -73,17 +73,18 @@
 /* Links */
 /* ============================================ */
 
+/* Links in running text are underlined (a color alone is not enough beside the text, WCAG 1.4.1)
+   and use --accent-text, the accent at 4.5:1 */
 .blog-prose a {
-  color: var(--accent-color);
-  text-decoration: none !important;
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-decoration-color: rgba(var(--accent-color-rgb), 0.5);
+  text-underline-offset: 3px;
   transition: all 0.2s ease;
 }
 
 .blog-prose a:hover {
-  text-decoration: underline !important;
   text-decoration-color: var(--accent-color);
-  text-decoration-style: solid !important;
-  text-underline-offset: 2px;
 }
 
 /* ============================================ */
@@ -122,7 +123,7 @@
   border: 1px solid rgba(var(--accent-color-rgb), 0.2);
   padding: 0.2em 0.4em;
   border-radius: 4px;
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 
 /* Remove Tailwind Typography backtick quotes */
@@ -376,7 +377,7 @@
   padding-left: 1.5rem;
   margin: 2rem 0;
   font-style: italic;
-  color: var(--theme-text-dimmed);
+  color: rgba(var(--theme-text-rgb), 0.72);
 }
 
 /* ============================================ */
@@ -599,7 +600,7 @@
 
   /* Code blocks styled by CodeBlock component - no mobile overrides needed */
 
-  /* MDX Components - Window & Terminal mobile wrapping */
+  /* MDX components: a Window's prose wraps; a Terminal keeps its lines and scrolls its own body */
   .blog-prose .mdx-code-wrapper {
     max-width: 100%;
     overflow-x: hidden;
@@ -616,14 +617,21 @@
     overflow-x: auto;
   }
 
-  /* Reduce font size in code blocks for better mobile readability */
+  /* Code blocks at 14 px: smaller is hard to read on a phone; long lines scroll */
   .blog-prose .mdx-code-wrapper {
-    font-size: 0.75rem; /* 12px */
+    font-size: 0.875rem;
   }
 
   /* Adjust PostAudio component for mobile */
   .blog-prose .post-audio-player {
     padding: 8px 12px !important;
     gap: 8px !important;
+  }
+}
+
+/* Phones, landscape included: fenced code at 14 px (its 0.9em is 13.5 px) */
+@media (max-width: 1023px) {
+  .blog-prose pre code {
+    font-size: 0.875rem;
   }
 }

@@ -3,9 +3,10 @@ import { compileMarkdown } from '@content-collections/markdown';
 import readingTime from 'reading-time';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
 import { z } from 'zod';
+import { projectSchema } from './lib/content-schema';
+import { extractCoverText } from './lib/cover-text';
 
 /**
  * Blog post schema using Zod (StandardSchema compliant)
@@ -58,24 +59,6 @@ const blog = defineCollection({
 });
 
 /**
- * Project schema using Zod (StandardSchema compliant)
- */
-const projectSchema = z.object({
-  title: z.string(),
-  slug: z.string(),
-  summary: z.string(),
-  date: z.string(), // YYYY-MM-DD format
-  updated: z.string().optional(),
-  tags: z.array(z.string()).default([]),
-  tech: z.array(z.string()).default([]), // Technology stack
-  cover: z.string().optional(),
-  status: z.enum(['concept', 'development', 'beta', 'production']).default('production'),
-  github: z.string().url().optional(),
-  demo: z.string().url().optional(),
-  featured: z.boolean().default(false), // Highlight on homepage
-});
-
-/**
  * Project collection schema
  * MDX files located in /content/projects/**\/index.mdx
  */
@@ -93,14 +76,12 @@ const projects = defineCollection({
       ],
     });
 
-    const readingTimeResult = readingTime(document.content);
-
     return {
       ...document,
       html,
       url: `/projects/${document.slug}`,
-      readingTime: readingTimeResult.text,
-      readingMinutes: Math.ceil(readingTimeResult.minutes),
+      // The card's cover until the project has a hero image
+      coverText: extractCoverText(document.content),
       ogTitle: document.title.length > 60
         ? `${document.title.substring(0, 57)}...`
         : document.title,

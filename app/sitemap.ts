@@ -19,17 +19,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily',
       priority: 1,
     },
-    {
-      url: `${siteUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
+    // Projects over the blog (docs/PORTFOLIO_V2_SPEC.md, phase 3): the case studies are the story
     {
       url: `${siteUrl}/projects`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.6,
     },
   ];
 
@@ -40,7 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteUrl}${blog.url}`,
       lastModified: new Date(blog.updated || blog.date),
       changeFrequency: 'monthly' as const,
-      priority: 0.8,
+      priority: 0.5,
     }));
 
   // Project pages
@@ -48,7 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${siteUrl}${project.url}`,
     lastModified: new Date(project.updated || project.date),
     changeFrequency: 'monthly' as const,
-    priority: 0.7,
+    priority: 0.8,
   }));
 
   // Lab pages, only when the lab is on, and /lab/threats only with the threat map (docs/lab)

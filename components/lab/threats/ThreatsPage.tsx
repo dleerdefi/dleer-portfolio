@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import React, { useState } from 'react';
 import type { Category } from '@/lib/lab/types';
 import { LabFramedHeader } from '@/components/lab/LabFramedHeader';
@@ -48,7 +49,11 @@ export default function ThreatsPage() {
         />
         <p className="lab-text-2" style={{ margin: 0 }}>
           A honeypot I run on a small cloud VM, plus decoy paths on this site. Every arc is a real attack from{' '}
-          {REPLAY_RECENCY}. No IP addresses are shown.
+          {REPLAY_RECENCY}. No IP addresses are shown.{' '}
+          {/* The link back to how it is built (docs/PORTFOLIO_V2_SPEC.md §4.6) */}
+          <Link href="/projects/homelab#the-honeynet" className="lab-link">
+            How it is built →
+          </Link>
         </p>
 
         {t.view === 'loading' && <LabStateLine>loading…</LabStateLine>}

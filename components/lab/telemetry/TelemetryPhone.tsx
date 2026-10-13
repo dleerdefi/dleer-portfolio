@@ -53,8 +53,8 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
             <HistoryOr history={t.history} offline={t.historyOffline} render={(h) => <Sparkline values={h.lab.power_w} height={64} />} />
           </div>
 
-          {now.hosts.map((h) => (
-            <section key={h.role} className="lab-card" style={{ opacity: h.up ? 1 : 0.5 }}>
+          {now.hosts.map((h, i) => (
+            <section key={h.role} id={i === 0 ? 'hosts' : undefined} className="lab-card" style={{ opacity: h.up ? 1 : 0.5 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem' }}>
                 <span className="font-bold">
                   {HOSTS[h.role].name}
@@ -68,7 +68,7 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
                 <span className="lab-text-2">mem</span>
                 <Meter value={h.up ? h.mem_ratio : null} width="100%" />
               </div>
-              <p className="lab-text-2" style={{ margin: '0.6rem 0 0', fontSize: '0.8rem', lineHeight: 1.6 }}>
+              <p className="lab-text-2" style={{ margin: '0.6rem 0 0', fontSize: '0.875rem', lineHeight: 1.6 }}>
                 {[
                   `inlet ${fmtCelsius(h.up ? h.inlet_c : null)}`,
                   ...(h.exhaust_c === null
@@ -96,14 +96,14 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
           ))}
 
           {now.gpus.length > 0 && (
-            <section className="lab-card" aria-label="GPUs">
+            <section className="lab-card" id="gpus" aria-label="GPUs">
               <table className="lab-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <tbody>
                   {now.gpus.map((g) => (
                     <tr key={`${g.role}:${g.index}`}>
                       <th scope="row" style={{ color: 'var(--theme-text)' }}>
                         <span style={{ whiteSpace: 'nowrap' }}>{gpuName(g.role, g.index)}</span>
-                        <div className="lab-text-2" style={{ fontSize: '0.8rem' }}>
+                        <div className="lab-text-2" style={{ fontSize: '0.875rem' }}>
                           <span style={{ whiteSpace: 'nowrap' }} title="video encoder / decoder load">
                             enc {fmtPct(g.enc_ratio)} · dec {fmtPct(g.dec_ratio)}
                           </span>
@@ -126,7 +126,7 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
             </section>
           )}
 
-          <p className="lab-text-2" style={{ margin: 0, fontSize: '0.75rem' }}>
+          <p className="lab-text-2" style={{ margin: 0, fontSize: '0.875rem' }}>
             * ≈ $ per 24 h: {COST_NOTE}.
           </p>
         </div>
@@ -134,7 +134,7 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
       {teaser && (
         <div className="lab-card" style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
           <span>honeypot · {fmtInt(teaser.events)} events</span>
-          <Link href="/lab/threats" className="lab-link" style={{ textDecoration: 'none' }}>
+          <Link href="/lab/threats" className="lab-link lab-teaser-link" style={{ textDecoration: 'none' }}>
             threats →
           </Link>
         </div>

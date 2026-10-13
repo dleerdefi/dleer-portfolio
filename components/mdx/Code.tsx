@@ -43,8 +43,8 @@ export function CodeBlock(props: PreProps) {
           }}
         >
           <span
-            className="text-xs font-mono font-medium uppercase tracking-wide"
-            style={{ color: 'var(--theme-text-dimmed)' }}
+            className="text-sm lg:text-xs font-mono font-medium uppercase tracking-wide"
+            style={{ color: 'rgba(var(--theme-text-rgb), 0.72)' }}
           >
             {lang}
           </span>
@@ -86,7 +86,7 @@ export function InlineCode(props: React.HTMLAttributes<HTMLElement>) {
       style={{
         backgroundColor: 'rgba(var(--accent-color-rgb), 0.1)',
         borderColor: 'rgba(var(--accent-color-rgb), 0.3)',
-        color: 'var(--accent-color)',
+        color: 'var(--accent-text)',
         boxDecorationBreak: 'clone',
         WebkitBoxDecorationBreak: 'clone',
       }}
@@ -115,9 +115,10 @@ function CopyButton({ text, inline = false }: { text: string; inline?: boolean }
     <button
       type="button"
       onClick={handleCopy}
-      className={`text-xs font-mono transition-opacity hover:opacity-70 ${inline ? '' : 'absolute right-3 top-3'}`}
+      // Phones: a 44 px target, its padding taken from the header's (or the corner's) own space
+      className={`inline-flex items-center justify-center min-h-11 min-w-11 text-sm lg:min-h-0 lg:min-w-0 lg:text-xs font-mono transition-opacity hover:opacity-70 ${inline ? '-my-2 lg:my-0' : 'absolute right-0 top-0 lg:right-3 lg:top-3'}`}
       style={{
-        color: 'var(--accent-color)',
+        color: 'var(--accent-text)',
       }}
       aria-label={copied ? 'Copied!' : 'Copy code'}
     >

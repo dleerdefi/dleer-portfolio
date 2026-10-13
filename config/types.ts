@@ -10,33 +10,12 @@ export interface PersonalInfo {
   contactEmail: string;  // Email for contact form submissions
   location: string;
   profilePhoto?: {
-    src: string;
     alt: string;
-    width?: number;
-    height?: number;
-    exif?: {
-      location?: string;
-      aperture?: string;
-      shutter?: string;
-      iso?: string;
-      model?: string;
-      task?: string;
-    };
-    detectionVariant?: {
-      src: string;
-      exif?: {
-        location?: string;
-        model?: string;
-        task?: string;
-      };
-    };
   };
   bio: {
-    // Structured bio fields for parallax mode
+    // The home view's pitch (one line) and bio (two or three sentences)
     intro?: string;
-    experience?: string;
-    leadership?: string;
-    tagline?: string;
+    summary?: string;
     // Legacy fields
     short: string;
     long: string;
@@ -58,8 +37,7 @@ export interface SkillCategory {
 }
 
 export interface Technology {
-  name: string;
-  icon: string;         // Icon identifier from react-icons (e.g., "SiPython")
+  name: string;         // Shown in the neofetch block's Stack row
   category?: string;    // Optional category for grouping
 }
 
@@ -148,7 +126,7 @@ export interface NavigationItem {
   id: string;
   name: string;
   type: 'project' | 'blog' | 'page' | 'external';
-  data?: any;
+  data?: unknown;
 }
 
 export interface ThemeConfig {
@@ -163,7 +141,6 @@ export interface SEOConfig {
   description: string;
   keywords: string[];
   author: string;
-  ogImage?: string;
   twitterHandle?: string;
 }
 
@@ -217,7 +194,6 @@ export interface PortfolioConfig {
   social: SocialLink[];
   skills?: SkillCategory[]; // Optional - legacy field, can be removed
   technologies?: TechnologiesConfig;
-  projects: Project[];
   blog?: BlogPost[]; // Optional - migrated to Content Collections (content/blog/*.mdx)
   system: SystemInfo;
   navigation?: NavigationSection[];
@@ -229,7 +205,6 @@ export interface PortfolioConfig {
     blog?: boolean;
     projects?: boolean;
     contact?: boolean;
-    about?: boolean;
     neofetch?: boolean;
     lab?: boolean;
   };

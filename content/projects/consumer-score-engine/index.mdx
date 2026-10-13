@@ -17,18 +17,18 @@ High-performance data pipeline processing across multiple chains to generate use
 
 Proprietary system powering ConsumerFi's user acquisition and ConsumerGraph inputs.
 
-<Terminal cmd="data pipeline architecture">
-┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│  Blockchain  │─────▶│    Kafka     │─────▶│  Score       │
-│  Events      │      │   Streams    │      │  Engine      │
-└──────┬───────┘      └──────┬───────┘      └──────┬───────┘
-       │                     │                      │
-       ▼                     ▼                      ▼
-  ┌──────────┐          ┌──────────┐          ┌──────────┐
-  │  Social  │          │  Neo4j   │          │  Redis   │
-  │  APIs    │          │  Graph   │          │  Cache   │
-  └──────────┘          └──────────┘          └──────────┘
-</Terminal>
+<Terminal cmd="data pipeline architecture">{`
+|┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+|│  Blockchain  │─────▶│    Kafka     │─────▶│  Score       │
+|│  Events      │      │   Streams    │      │  Engine      │
+|└──────┬───────┘      └──────┬───────┘      └──────┬───────┘
+|       │                     │                      │
+|       ▼                     ▼                      ▼
+|  ┌──────────┐          ┌──────────┐          ┌──────────┐
+|  │  Social  │          │  Neo4j   │          │  Redis   │
+|  │  APIs    │          │  Graph   │          │  Cache   │
+|  └──────────┘          └──────────┘          └──────────┘
+`}</Terminal>
 
 <Window title="scoring/calculate_user_score.py">
 ```python

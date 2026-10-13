@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { getImageUrl } from '@/lib/image-paths';
+import { themeBackgrounds } from '@/lib/wallpapers';
 
 // Theme preset types - Final three-tier system
 export type ThemePreset = 'solarized-light' | 'nord' | 'tokyo-night';
@@ -13,25 +13,8 @@ const themeDefaultAccents: Record<ThemePreset, AccentColor> = {
   'tokyo-night': 'purple'        // #bb9af7 maps to purple
 };
 
-// Background images for each theme preset
-export const themeBackgrounds: Record<ThemePreset, string[]> = {
-  'tokyo-night': [
-    getImageUrl('purple-girl.webp'),
-    getImageUrl('cat_anime-girl.webp'),
-    getImageUrl('shiny_purple.webp'),
-    getImageUrl('pixel_big_city.webp')
-  ],
-  'nord': [
-    getImageUrl('cool_rocks.webp'),
-    getImageUrl('lets_go_home.webp'),
-    getImageUrl('gradient-pb.webp')
-  ],
-  'solarized-light': [
-    getImageUrl('pastel-window.webp'),
-    getImageUrl('yellow_kyoto.webp'),
-    getImageUrl('ign_colorful.webp')
-  ]
-};
+// Wallpapers per preset live in lib/wallpapers.ts (plain TS, so tests can import them)
+export { themeBackgrounds };
 
 // Accent color types
 export type AccentColor =
@@ -104,10 +87,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const isMobile = window.innerWidth < 1024;
 
     if (isMobile) {
-      // Force Tokyo Night theme for mobile
+      // Phones get Tokyo Night; its cyan accent comes from CSS (01-theme-variables.css), so there
+      // is one theme system and nothing rewrites <html> behind ThemeContext's back
       setTheme({
         preset: 'tokyo-night',
-        accentColor: 'purple',  // Will be overridden by cyan in useEnforceMobileTheme
+        accentColor: 'purple',
         backgroundEffect: true,
         backgroundImage: themeBackgrounds['tokyo-night'][0]
       });
@@ -161,37 +145,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
 
   }, [theme]);
-
-  // Force theme class re-application when transitioning from mobile to desktop
-  // This recovers from MobileParallaxLayout's className override
-  useEffect(() => {
-    const handleResize = () => {
-      if (typeof window === 'undefined') return;
-
-      // Only act when in desktop view (where ThemeContext should be in control)
-      if (window.innerWidth >= 1024) {
-        const root = document.documentElement;
-
-        // CRITICAL: Remove inline styles set by MobileParallaxLayout
-        // Inline styles have higher CSS specificity than classes, so they override all theme changes
-        // Without this, accent color stays stuck at #7dcfff even when user changes theme/accent
-        root.style.removeProperty('--accent-color');
-        root.style.removeProperty('--accent-color-rgb');
-
-        const hasThemeClass = Array.from(root.classList).some(cls => cls.startsWith('theme-'));
-
-        // If theme classes are missing, mobile parallax left DOM in broken state
-        // Re-apply classes from current theme state
-        if (!hasThemeClass) {
-          root.classList.add(`theme-${theme.preset}`);
-          root.classList.add(`accent-${theme.accentColor}`);
-        }
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [theme.preset, theme.accentColor]);
 
   // Set theme preset - resets accent to theme default per spec
   const setThemePreset = useCallback((preset: ThemePreset) => {

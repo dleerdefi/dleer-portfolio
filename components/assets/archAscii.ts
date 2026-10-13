@@ -1,4 +1,4 @@
-// ASCII art variants for NeofetchTile
+// ASCII art variants for the neofetch block (components/home/Neofetch.tsx) and the OG cards
 export const archLogoASCII = `       /\\
       /  \\
      /\\   \\

@@ -2,99 +2,96 @@
 
 import React, { useState, useEffect } from 'react';
 import { useFocusState } from '@/contexts/FocusContext';
-import { useView } from '@/contexts/ViewContext';
 import { useFeatureFlags } from '@/lib/config';
+import { ThemeTray } from './polybar/ThemeTray';
 
 interface PolybarProps {
   onNavigate: (section: string) => void;
 }
 
+/**
+ * The desktop's top bar: workspaces on the left of center, the theme tray and the clock on the
+ * right (docs/PORTFOLIO_V2_SPEC.md §4.1). Phones have the section rail instead, so it is hidden
+ * below 1024 px.
+ */
 const Polybar: React.FC<PolybarProps> = ({ onNavigate }) => {
   const [time, setTime] = useState<Date | null>(null);
   const { activeContent } = useFocusState();
-  const { mode, section } = useView();
   const features = useFeatureFlags();
 
   useEffect(() => {
-    // Set initial time after mount to avoid hydration mismatch
+    // Set after mount (no hydration mismatch), then once a minute on the minute: the clock shows
+    // HH:MM, so a per-second tick re-rendered the bar 59 times a minute for nothing
     setTime(new Date());
-    const timer = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timer);
+    let interval: ReturnType<typeof setInterval> | undefined;
+    const toNextMinute = 60_000 - (Date.now() % 60_000);
+    const timeout = setTimeout(() => {
+      setTime(new Date());
+      interval = setInterval(() => setTime(new Date()), 60_000);
+    }, toNextMinute);
+    return () => {
+      clearTimeout(timeout);
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
   const workspaces = [
-    { id: 'about', label: 'about', icon: '●' },
-    { id: 'projects', label: 'projects', icon: '●' },
-    { id: 'blog', label: 'blog', icon: '●' },
-    ...(features.lab ? [{ id: 'lab', label: 'lab', icon: '●' }] : []),
-    { id: 'contact', label: 'contact', icon: '●' },
+    { id: 'home', label: 'home' },
+    { id: 'projects', label: 'projects' },
+    ...(features.lab ? [{ id: 'lab', label: 'lab' }] : []),
+    ...(features.blog ? [{ id: 'blog', label: 'blog' }] : []),
+    { id: 'contact', label: 'contact' },
   ];
 
-  const isActive = (workspace: string) => {
-    // When in zen mode, check ViewContext.section
-    if (mode === 'zen') {
-      return workspace === section;
-    }
-
-    // When in tiled mode, check FocusContext.activeContent
-    if (workspace === activeContent.type) return true;
-    // Check for projects section (legacy - shouldn't happen with zen-only)
-    if (workspace === 'projects' && activeContent.type === 'projects-overview') return true;
-    // Check for blog section (legacy - shouldn't happen with zen-only)
-    if (workspace === 'blog' && activeContent.type === 'blog-overview') return true;
-    // Lab: either lab view
-    if (workspace === 'lab' && activeContent.type.startsWith('lab-')) return true;
-    return false;
-  };
+  const isActive = (workspace: string) =>
+    workspace === activeContent.type ||
+    (workspace === 'projects' && activeContent.type === 'projects-overview') ||
+    (workspace === 'lab' && activeContent.type.startsWith('lab-'));
 
   return (
-    <>
-      <div className="h-9 backdrop-blur-md border-b-2 flex items-center justify-between px-3 font-mono text-xs relative z-50"
-        style={{
-          backgroundColor: 'rgba(var(--color-surface-rgb), 0.8)',
-          borderColor: 'rgba(var(--accent-color-rgb), 0.3)',
-          color: 'var(--color-text-body)'
-        }}>
-        {/* Left Section */}
-        <div className="flex items-center gap-2">
-          <span className="font-bold" style={{ color: 'var(--accent-color)' }}>[DLEER]</span>
-          <span className="hidden sm:inline" style={{ color: 'var(--color-text-dimmed)' }}>portfolio</span>
-        </div>
+    <header
+      className="polybar hidden lg:flex h-9 backdrop-blur-md border-b-2 items-center justify-between px-3 font-mono text-xs relative z-50"
+      style={{
+        backgroundColor: 'rgba(var(--color-surface-rgb), 0.92)',
+        borderColor: 'rgba(var(--accent-color-rgb), 0.3)',
+        color: 'var(--color-text-body)',
+      }}
+    >
+      <div className="flex items-center gap-2">
+        <span className="font-bold" style={{ color: 'var(--accent-text)' }}>
+          [DLEER]
+        </span>
+        <span style={{ color: 'rgba(var(--theme-text-rgb), 0.72)' }}>portfolio</span>
+      </div>
 
-        {/* Center Section - Workspaces */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          {workspaces.map((ws) => (
+      <nav aria-label="Workspaces" className="flex items-center gap-4">
+        {workspaces.map((ws) => {
+          const active = isActive(ws.id);
+          return (
             <button
               key={ws.id}
+              type="button"
               onClick={() => onNavigate(ws.id)}
-              className="flex items-center gap-1 transition-colors hover:opacity-80 focus:outline-none"
-              style={{
-                color: isActive(ws.id) ? 'var(--accent-color)' : 'var(--color-text-dimmed)',
-                outline: 'none'
-              }}
+              aria-current={active ? 'page' : undefined}
+              className="workspace flex items-center gap-1 transition-colors hover:underline underline-offset-4"
+              style={{ color: active ? 'var(--accent-text)' : 'rgba(var(--theme-text-rgb), 0.72)' }}
             >
-              <span style={{
-                color: isActive(ws.id) ? 'var(--accent-color)' : 'var(--color-text-muted)'
-              }}>
-                {ws.icon}
+              <span aria-hidden="true" style={{ color: active ? 'var(--accent-color)' : 'var(--color-text-muted)' }}>
+                ●
               </span>
-              <span className="hidden lg:inline">{ws.label}</span>
+              <span>{ws.label}</span>
             </button>
-          ))}
-        </div>
+          );
+        })}
+      </nav>
 
-        {/* Right Section */}
-        <div className="flex items-center gap-3">
-          <span style={{ color: 'var(--color-text-body)' }}>
-            {time ? time.toLocaleTimeString('en-US', {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: false
-            }) : '--:--'}
-          </span>
-        </div>
+      <div className="flex items-center gap-3">
+        <ThemeTray />
+        <span style={{ color: 'var(--color-text-body)' }} aria-label="Local time">
+          {time ? time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) : '--:--'}
+        </span>
       </div>
-    </>
+    </header>
   );
 };
 

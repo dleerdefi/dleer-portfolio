@@ -41,7 +41,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     a: (props) => {
       const href = props.href || '';
       const isExternal = href.startsWith('http://') || href.startsWith('https://');
-      const isHash = href.startsWith('#');
 
       // External links open in new tab with security attributes
       if (isExternal) {

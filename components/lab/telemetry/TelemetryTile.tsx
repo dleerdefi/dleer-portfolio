@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import type { ContentType } from '@/contexts/FocusContext';
 import { FONT_SIZES } from '@/lib/constants/typography';
@@ -18,13 +18,30 @@ import { threatsTeaser, useTelemetry, type HistoryLive } from './useTelemetry';
 const caption: React.CSSProperties = { color: 'var(--lab-text-2)', fontSize: FONT_SIZES.xs, margin: '0 0 0.4rem' };
 
 /** `~/lab/telemetry` in the content tile (TELEMETRY_VIEW.md §5.1, concept tile-telemetry). */
-export default function TelemetryTile({ onNavigate }: { onNavigate?: (content: ContentType) => void }) {
+export default function TelemetryTile({
+  onNavigate,
+  section,
+}: {
+  onNavigate?: (content: ContentType) => void;
+  /** Opened from a slide of the home lab card: scroll to the hosts or the GPUs once they render */
+  section?: 'hosts' | 'gpus';
+}) {
   const t = useTelemetry();
   const { now } = t;
   const teaser = threatsTeaser(t.threats);
+  const topRef = useRef<HTMLElement>(null);
+  const hostsRef = useRef<HTMLDivElement>(null);
+  const gpusRef = useRef<HTMLDivElement>(null);
+  const hasData = Boolean(now);
+  // The view stays mounted from one slide to the next, so no section means back to the tile's top
+  useEffect(() => {
+    if (!hasData) return;
+    if (section) (section === 'hosts' ? hostsRef : gpusRef).current?.scrollIntoView({ block: 'start' });
+    else topRef.current?.closest('[data-tile]')?.scrollTo({ top: 0 });
+  }, [hasData, section]);
 
   return (
-    <section className="lab-root" aria-label="Lab telemetry" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', minHeight: '100%' }}>
+    <section ref={topRef} className="lab-root" aria-label="Lab telemetry" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', minHeight: '100%' }}>
       <LabHeader
         title="~/lab/telemetry"
         state={t.view === 'loading' ? null : t.view}
@@ -72,10 +89,10 @@ export default function TelemetryTile({ onNavigate }: { onNavigate?: (content: C
           </div>
 
           {/* narrow tiles scroll the tables sideways rather than clip them */}
-          <div style={{ overflowX: 'auto' }}>
+          <div ref={hostsRef} style={{ overflowX: 'auto', scrollMarginTop: '1rem' }}>
             <HostTable hosts={now.hosts} />
           </div>
-          <div style={{ overflowX: 'auto' }}>
+          <div ref={gpusRef} style={{ overflowX: 'auto', scrollMarginTop: '1rem' }}>
             <GpuTable gpus={now.gpus} />
           </div>
 

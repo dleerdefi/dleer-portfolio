@@ -4,18 +4,16 @@ import type { Metadata } from 'next';
 import { EscKeyHandler } from '@/components/blog/EscKeyHandler';
 import { FramedPageLayout } from '@/components/layout/FramedPageLayout';
 import TelemetryPage from '@/components/lab/telemetry/TelemetryPage';
-import { getPortfolioConfig } from '@/config/portfolio.config';
 import { labEnabled } from '@/lib/lab/flag';
 
 const title = 'Lab: telemetry';
 const description = 'Live power, load and temperatures from the three PowerEdge servers in my homelab.';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const ogImage = getPortfolioConfig().seo.ogImage;
   return {
     title,
     description,
-    openGraph: { title, description, type: 'website', images: ogImage ? [ogImage] : undefined },
+    openGraph: { title, description, type: 'website' },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

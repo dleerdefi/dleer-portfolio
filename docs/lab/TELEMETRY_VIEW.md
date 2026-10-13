@@ -173,6 +173,10 @@ Concept `tile-telemetry`. Top to bottom, inside the content tile's usual padding
 Both tables sit in a sideways-scrolling wrapper, so a narrow tile scrolls them instead of
 clipping the last column.
 
+Opened from a slide of the home lab card (§5.4), the view arrives at that slide's part:
+`{ type: 'lab-telemetry', section: 'hosts' | 'gpus' }` scrolls the tile to the host or the GPU
+table once the numbers render, and the power slide (no `section`) scrolls it back to the top.
+
 ### 5.2 Framed page `/lab`
 
 Concept `page-lab`. Max content width as other framed pages; at ≥ 1024 px:
@@ -214,6 +218,17 @@ Concept `page-lab`. Max content width as other framed pages; at ≥ 1024 px:
    threats state is offline or unknown.
 10. **Footnote** (`--lab-text-2`, small): `* ≈ $ per 24 h: Puget Sound Energy residential rate,
    $0.2056/kWh; excludes the basic charge and taxes.`
+11. **How this works** (`LabHowItWorks.tsx`, a bordered card, last): the push-only path as a
+   vertical diagram about 35 columns wide (`labsnap, threatsnap` → push JSON on a timer →
+   `private bucket` → read-only token → `/api/lab/*`, validated and cached → `edge cache ──►
+   this page`; `aria-hidden`, the paragraph says the same), beside one paragraph from 768 px and
+   above it below: "Nothing at home serves this page. … When the pushes stop, the badge says so."
+   and `The full story →` to `/projects/homelab`. It renders after the first answer (data or
+   offline), so the numbers arriving never push it down.
+
+The first host card carries `id="hosts"` and the GPU card `id="gpus"` (on the phone layout too):
+the home lab card's slides link to `/lab#hosts` and `/lab#gpus`, and since those elements exist
+only once the data renders, the page scrolls to the hash then, once.
 
 Below 1024 px everything stacks: hero and stat boxes, the chart full width, the health line,
 host cards one per row, then GPUs.
@@ -226,15 +241,49 @@ and hosts to its right, the lab health line, `power, last 24 h` sparkline, one c
 host (name, watts, cpu and mem meters, then one quiet wrapping line `inlet · exhaust · Δt · fan ·
 psu`, exhaust and Δt omitted where `exhaust_c` is `null`; the T430 card adds the NAS block and
 the R720xd card the CI block, as in §5.2), one card listing the GPUs (name with `enc 31% · dec
-12%` and the `transcoding` tag under it, util meter, %, temperature), the cost footnote, and the
-honeypot teaser.
+12%` and the `transcoding` tag under it, util meter, %, temperature), the cost footnote, the
+honeypot teaser, and the how-this-works card (§5.2 item 11, the diagram above the paragraph).
 
-### 5.4 Mobile Lab section card
+### 5.4 Home lab card
 
-Concept `mobile-section`. In `ParallaxLabSection`, the first of two cards, the whole card a link
-to `/lab`: `~/lab` and the badge; hero watts at 34 px with `24.1 kWh / 24 h`, `≈ $4.96/day` (only
-when `summary.telemetry.energy_cost_usd_24h` is a number) and `3/3 hosts up` to the right; a sparkline of `summary.telemetry.power_24h`; `open telemetry →`. Data from
-`/api/lab/summary`. Offline: the card shows `lab offline` and stays a link.
+`components/lab/home/LabTile.tsx`, `LabCarousel.tsx`, `LabSlides.tsx` (docs/PORTFOLIO_V2_SPEC.md
+§4.6): the lab tile on desktop, the Lab section on phones. Under the heading `Lab`, a `/lab ↗`
+link and one line (`My homelab, live.`, or `My homelab and the honeypot I run, live.` with the
+threat map on), one card of fixed size that shows one slide at a time. Every slide is a whole
+link with the same frame: its path and the status badge, a few headline numbers, a call to
+action.
+
+| Slide | Path | Numbers (`/api/lab/summary`) | Desktop | Phone |
+|---|---|---|---|---|
+| power | `~/lab` | watts at 34 px; `24.1 kWh / 24 h`, `≈ $4.96/day` (when a number), `3/3 hosts up`; the `power_24h` sparkline | `lab-telemetry` in the stage | `/lab` |
+| hosts | `~/lab/hosts` | per host: short name and job, `cpu 12% · inlet 22 °C` or `down` | `lab-telemetry`, section `hosts` | `/lab#hosts` |
+| GPUs | `~/lab/gpus` | per GPU: name and host, `util 37% · 52 °C`, `· enc 31%` while encoding | `lab-telemetry`, section `gpus` | `/lab#gpus` |
+| storage and CI | `~/lab/nas+ci` | `NAS T430`: `pool healthy` (or `degraded`), `read · write`; `CI runners R720xd`: `14/22 online · 2 busy` | `lab-telemetry`, section `hosts` | `/lab#hosts` |
+| honeypot (threat map on) | `~/lab/threats` | events and countries in 24 h; the three largest categories with swatch, bar and count | `lab-threats` in the stage | `/lab/threats` |
+
+A slide whose numbers are missing (offline, or the block `null`) is left out; until the summary
+arrives, and while telemetry is offline, the power slide holds the card's space (`lab offline`).
+
+**Motion.** A row with scroll snapping: a phone swipes it, a dot or the timer scrolls it. On
+desktop it advances every 6 s, never while the pointer or focus is on the card, while it is off
+screen (`IntersectionObserver`) or the tab hidden, after the viewer presses `pause`, or with
+`prefers-reduced-motion` (WCAG 2.2.2); then there is no `pause` button. Phones never advance on
+their own.
+
+**Accessibility.** `section` with `aria-roledescription="carousel"`; each slide
+`aria-roledescription="slide"`, the ones out of view `aria-hidden` and out of the tab order; the
+row is a polite live region except while it plays; the dots are buttons (`Show hosts`,
+`aria-current` on the slide in view; 24 px targets on desktop, 44 px on phones, where the
+card's text is 14 px at least). Only the power slide's badge is a status
+region; the copies on the other slides are not, so a change is read once.
+
+**Narrow cards.** The card is a size container. Figures joined by ` · ` wrap between figures,
+never inside one (a dot that would start a line is clipped). At 270 px and less the power's
+stats go under the watts; at 180 px and less (the desktop tile at 1024 px) `inlet` drops to the
+bare temperature, the honeypot bars go (the counts stay) and the badge is its icon, the word
+kept for screen readers. On desktop screens 900 px tall and less the tile drops its intro line;
+at 820 px and less also its heading (still there for screen readers) and some padding, so the
+card and its dots fit without the tile scrolling down to 1024×768 and 1280×720.
 
 ### 5.5 Neofetch row
 
