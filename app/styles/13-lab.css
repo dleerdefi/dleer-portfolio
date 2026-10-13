@@ -4,8 +4,7 @@
 /* Lab: attack-category colors per preset and a few shared tokens.
    The lab has no theme settings of its own; it follows the site's preset and accent. */
 
-/* Tokyo Night also on :root: the mobile parallax layout sets className="tokyo-night"
-   (no theme- prefix), so only the :root defaults apply there. */
+/* Tokyo Night also on :root: the default before ThemeContext sets a preset class. */
 :root,
 .theme-tokyo-night {
   --lab-recon: #737aa2;

@@ -1,8 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
+import { useFocusNavigation } from '@/contexts/FocusContext';
+import { useAfterIdle } from '@/hooks/useAfterIdle';
 import { useLabData } from '@/hooks/useLabData';
+import { isDesktopNow } from '@/hooks/useMediaQuery';
 import { labThreatsEnabled } from '@/lib/lab/flag';
 import { fmtCount, fmtInt, fmtKwh, fmtUsd } from '@/lib/lab/format';
 import { categoryVar } from '@/lib/lab/names';
@@ -12,74 +15,65 @@ import { Sparkline } from '@/components/lab/shared/Sparkline';
 import { Swatch } from '@/components/lab/shared/Swatch';
 import { Value } from '@/components/lab/shared/Value';
 
-/** True once the element has come within one screen of the viewport. */
-function useNear(ref: React.RefObject<HTMLElement | null>): boolean {
-  const [near, setNear] = useState(false);
-  useEffect(() => {
-    if (near || !ref.current) return;
-    const io = new IntersectionObserver(([entry]) => entry.isIntersecting && setNear(true), { rootMargin: '100% 0px' });
-    io.observe(ref.current);
-    return () => io.disconnect();
-  }, [near, ref]);
-  return near;
-}
-
-const card: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '0.75rem',
-  padding: '1rem',
-  border: '1px solid var(--theme-border)',
-  background: 'rgba(var(--theme-surface-rgb), 0.5)',
-  color: 'var(--theme-text)',
-  textDecoration: 'none',
-};
-
 /**
- * The mobile home page's Lab section, between Blog and Contact (concept mobile-section): one
- * card links to /lab, one to /lab/threats. Data from /api/lab/summary only; no globe here.
- * The threats card is left out while the threat map is off, or once a summary arrives without
- * a threats block.
+ * The home page's lab: a tile beside the contents on desktop, the section after the featured
+ * projects on phones (docs/PORTFOLIO_V2_SPEC.md §4.1, §4.2; concept mobile-section). One card
+ * for telemetry and one for the threat map: on desktop a card opens its view in the stage, on a
+ * phone its page. Data from /api/lab/summary only; no globe here. The threats card is left out
+ * while the threat map is off, or once a summary arrives without a threats block.
  */
-export const ParallaxLabSection: React.FC = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const near = useNear(ref);
-  const { payload, receivedAt } = useLabData<LabSummary>('/api/lab/summary', 300_000, { enabled: near });
+export default function LabTile() {
+  // After idle, like the neofetch rows: the same summary (one request between them), and loaded
+  // before a phone scrolls here, so the cards never grow under the reader
+  const idle = useAfterIdle();
+  const { handleContentNavigation } = useFocusNavigation();
+  // Desktop: the stage shows the view; phones follow the link to the page
+  const openInStage = (type: 'lab-telemetry' | 'lab-threats') => (e: React.MouseEvent) => {
+    if (!isDesktopNow()) return;
+    e.preventDefault();
+    e.stopPropagation();
+    handleContentNavigation({ type });
+  };
+  const { payload, receivedAt } = useLabData<LabSummary>('/api/lab/summary', 300_000, { enabled: idle });
   const tel = payload?.telemetry;
   const thr = payload?.threats;
   const showThreats = labThreatsEnabled() && (payload === null || thr !== undefined);
 
   return (
-    <div ref={ref} className="p-6 lab-root" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      <h2 className="text-3xl font-bold" style={{ color: 'var(--accent-color)', margin: 0 }}>
-        Lab
-      </h2>
+    <div className="lab-root lab-tile">
+      <div className="lab-tile-head">
+        <h2 id="lab-title" className="section-title">
+          Lab
+        </h2>
+        <Link href="/lab" className="lab-tile-open lab-link">
+          /lab ↗
+        </Link>
+      </div>
       <p className="lab-text-2" style={{ margin: 0 }}>
         {showThreats ? 'My homelab and the honeypot I run, live.' : 'My homelab, live.'}
       </p>
 
-      <Link href="/lab" style={card} className="lab-focus">
+      <Link href="/lab" className="lab-card lab-focus" onClick={openInStage('lab-telemetry')}>
         <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' }}>
           <span className="font-bold">~/lab</span>
           {tel && <LabStatusBadge state={tel.state} compact receivedAt={receivedAt ?? undefined} style={{ fontSize: '0.8rem' }} />}
         </span>
-        {tel?.state === 'offline' && <span>lab offline</span>}
+        {!tel && <span className="lab-card-pending" aria-hidden="true" />}
+        {tel?.state === 'offline' && <span className="lab-card-pending">lab offline</span>}
         {tel && tel.state !== 'offline' && (
           <span className={tel.state === 'delayed' ? 'lab-dim' : undefined} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-            <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '0.75rem' }}>
+            <span className="lab-card-power">
               <span style={{ fontSize: '2.125rem', lineHeight: 1 }}>
                 <Value text={fmtInt(tel.power_w)} unit="W" unitScale={0.5} />
               </span>
-              <span className="lab-text-2" style={{ textAlign: 'right', fontSize: '0.85rem' }}>
-                {fmtKwh(tel.energy_kwh_24h)} / 24 h
+              <span className="lab-card-stats lab-text-2">
+                <span className="lab-stat">{fmtKwh(tel.energy_kwh_24h)} / 24 h</span>
                 {typeof tel.energy_cost_usd_24h === 'number' && (
-                  <>
-                    <br />
-                    {fmtUsd(tel.energy_cost_usd_24h)}/day
-                  </>
+                  <span className="lab-stat">{fmtUsd(tel.energy_cost_usd_24h)}/day</span>
                 )}
-                <br />
-                {tel.hosts_up}/{tel.hosts_expected} hosts up
+                <span className="lab-stat">
+                  {tel.hosts_up}/{tel.hosts_expected} hosts up
+                </span>
               </span>
             </span>
             {tel.power_24h && <Sparkline values={tel.power_24h} height={40} />}
@@ -89,12 +83,13 @@ export const ParallaxLabSection: React.FC = () => {
       </Link>
 
       {showThreats && (
-        <Link href="/lab/threats" style={card} className="lab-focus">
+        <Link href="/lab/threats" className="lab-card lab-focus" onClick={openInStage('lab-threats')}>
           <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' }}>
             <span className="font-bold">~/lab/threats</span>
             {thr && <LabStatusBadge state={thr.state} compact style={{ fontSize: '0.8rem' }} />}
           </span>
-          {thr?.state === 'offline' && <span>honeynet offline</span>}
+          {!thr && <span className="lab-card-pending lab-card-pending-threats" aria-hidden="true" />}
+          {thr?.state === 'offline' && <span className="lab-card-pending lab-card-pending-threats">honeynet offline</span>}
           {thr && thr.state !== 'offline' && thr.by_category && (
             <span className={thr.state === 'delayed' ? 'lab-dim' : undefined} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               <span>
@@ -111,7 +106,7 @@ export const ParallaxLabSection: React.FC = () => {
       )}
     </div>
   );
-};
+}
 
 /** The three largest categories: swatch, name, a bar in the category color, compact count. */
 function TopCategories({ counts }: { counts: Record<(typeof CATEGORIES)[number], number> }) {

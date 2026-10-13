@@ -3,7 +3,6 @@
 import React, { ReactNode, useEffect, useRef } from 'react';
 import Background from '@/components/layout/Background';
 import { ParallaxBorderFrame } from '@/components/layout/parallax/components/ParallaxBorderFrame';
-import { useEnforceMobileTheme } from '@/hooks/useEnforceMobileTheme';
 
 interface FramedPageLayoutProps {
   children: ReactNode;
@@ -39,9 +38,6 @@ export const FramedPageLayout: React.FC<FramedPageLayoutProps> = ({
   autoFocus = true,
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  // Enforce mobile theme consistency across all pages
-  useEnforceMobileTheme();
 
   // Auto-focus container on mount for immediate keyboard event handling
   // (disabled when wrapping interactive components like ZenList that handle their own focus)

@@ -40,6 +40,8 @@ export const portfolioConfig: PortfolioConfig = {
       intro: process.env.NEXT_PUBLIC_BIO_INTRO ||
         "Brief introduction about yourself and what you do.",
 
+      experience: process.env.NEXT_PUBLIC_BIO_EXPERIENCE || "",
+
       leadership: process.env.NEXT_PUBLIC_BIO_LEADERSHIP ||
         "Your professional background and expertise. Highlight key accomplishments and areas of focus.",
 

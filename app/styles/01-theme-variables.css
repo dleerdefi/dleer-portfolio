@@ -212,3 +212,13 @@
 .accent-lime { --accent-color: #84cc16; --accent-color-rgb: 132, 204, 22; }
 .accent-amber { --accent-color: #f59e0b; --accent-color-rgb: 245, 158, 11; }
 .accent-orange { --accent-color: #f97316; --accent-color-rgb: 249, 115, 22; }
+
+/* Phones (< 1024 px) use Tokyo Night with its cyan accent: ThemeContext keeps the preset there,
+   this keeps the accent. One rule, no script, so resizing across 1024 px cannot leave a stale
+   override behind. Spec Q3 decides whether phones get the theme pickers instead. */
+@media (max-width: 1023px) {
+  :root {
+    --accent-color: #7dcfff !important;
+    --accent-color-rgb: 125, 207, 255 !important;
+  }
+}

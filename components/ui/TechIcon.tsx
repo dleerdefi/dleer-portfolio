@@ -80,31 +80,15 @@ export const TechIcon: React.FC<TechIconProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-center gap-3 group cursor-pointer tech-icon-wrapper">
-      {/* Icon with white color and accent glow on hover */}
-      <IconComponent
-        size={size}
-        style={{
-          color: 'var(--theme-text)',
-          opacity: 0.9,
-          filter: 'drop-shadow(0 0 0px rgba(var(--accent-color-rgb), 0))',
-          transition: 'all 0.3s ease'
-        }}
-        className="tech-icon group-hover:opacity-100"
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          e.currentTarget.style.filter = 'drop-shadow(0 0 12px rgba(var(--accent-color-rgb), 0.6))';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = '';
-          e.currentTarget.style.filter = 'drop-shadow(0 0 0px rgba(var(--accent-color-rgb), 0))';
-        }}
-      />
+      {/* The glow and scale on hover are CSS (.tech-icon in 15-home-layout.css), so this renders on the server */}
+      <IconComponent size={size} className="tech-icon" />
 
       {/* Technology Name */}
       <span
         className="text-xs font-medium text-center transition-colors duration-300"
         style={{
-          color: 'var(--theme-text-dimmed)',
+          // The dimmed token (a comment color) is under 3:1 on the dark presets; 72% text passes AA
+          color: 'rgba(var(--theme-text-rgb), 0.72)',
           maxWidth: `${size + 32}px`,
           fontFamily: 'var(--font-jetbrains-mono), monospace'
         }}

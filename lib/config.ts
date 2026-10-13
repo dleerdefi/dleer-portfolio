@@ -19,7 +19,7 @@ export function usePersonalInfo() {
 }
 
 // Note: useSkills() removed - skills array deleted from config
-// Skills displayed in NeofetchTile (via config.system) and AboutTechGrid (via config.technologies)
+// Skills displayed in the neofetch block (via config.system) and AboutTechGrid (via config.technologies)
 
 /**
  * Get technologies from config

@@ -6,12 +6,10 @@ import { useLabStatus } from '@/lib/lab/status-store';
 import type { LabState } from '@/lib/lab/types';
 import { StatusGlyph } from '@/components/lab/shared/LabStatusBadge';
 
-const reset: React.CSSProperties = { background: 'none', border: 0, font: 'inherit', color: 'inherit', textAlign: 'left' };
-
 /**
- * `Lab/` in the nav tile, between `Blog/` and `Contact`. Clicking it opens the telemetry view;
- * the arrow toggles `telemetry` and `threats` (only `telemetry` while the threat map is off),
- * which open their views in the content tile.
+ * `lab/` in the contents tree (components/home/NavTree.tsx), between `projects/` and `about`.
+ * Clicking it opens the telemetry view; the arrow toggles `telemetry` and `threats` (only
+ * `telemetry` while the threat map is off), which open their views in the stage.
  * Each child shows its view's status glyph once a lab fetch has reported it.
  */
 export function LabDirectory({
@@ -28,7 +26,6 @@ export function LabDirectory({
   useEffect(() => {
     if (inLab) setOpen(true);
   }, [inLab]);
-  const expanded = open;
 
   const telemetry = { type: 'lab-telemetry' as const, label: 'telemetry', state: status.telemetry };
   // Rendered only while the lab is on, so the threats flag alone decides. Read directly (not via
@@ -39,79 +36,56 @@ export function LabDirectory({
       : [telemetry];
 
   return (
-    <div>
-      <div
-        className="touch-target touch-feedback px-2 py-1 rounded transition-all duration-200 flex items-center justify-between"
-        style={{ backgroundColor: inLab && !expanded ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent' }}
-        onMouseEnter={(e) => {
-          if (!(inLab && !expanded)) e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)';
-        }}
-        onMouseLeave={(e) => {
-          if (!(inLab && !expanded)) e.currentTarget.style.backgroundColor = 'transparent';
-        }}
-      >
+    <>
+      <div className="nav-dir">
         <button
           type="button"
-          className="cursor-pointer lab-focus"
-          style={reset}
+          className="nav-entry"
+          aria-current={inLab && !open ? 'page' : undefined}
           onClick={(e) => onSelect({ type: 'lab-telemetry' }, e)}
         >
-          <span style={{ color: 'var(--accent-color)' }}>├──</span>{' '}
-          <span style={{ color: inLab ? 'var(--accent-color)' : 'var(--theme-text)', fontWeight: inLab ? 'bold' : 'normal' }}>
-            Lab/
-          </span>
+          <span className="tree-branch" aria-hidden="true">
+            ├──
+          </span>{' '}
+          lab/
         </button>
         <button
           type="button"
-          aria-expanded={expanded}
-          aria-label={expanded ? 'Collapse Lab' : 'Expand Lab'}
-          className="hover:opacity-80 px-2 -mr-1 rounded cursor-pointer lab-focus"
-          style={{ ...reset, color: 'var(--accent-color)' }}
+          className="nav-toggle"
+          aria-expanded={open}
+          aria-label={open ? 'Collapse lab' : 'Expand lab'}
           onClick={(e) => {
             e.stopPropagation();
-            setOpen(!expanded);
+            setOpen(!open);
           }}
         >
-          {expanded ? '▼' : '▶'}
+          {open ? '▼' : '▶'}
         </button>
       </div>
-      {expanded && (
-        <div className="ml-4">
-          {children.map((child, i) => {
-            const active = activeType === child.type;
-            return (
+      {open && (
+        <ul className="nav-children" role="list">
+          {children.map((child, i) => (
+            <li key={child.type}>
               <button
-                key={child.type}
                 type="button"
-                aria-current={active ? 'page' : undefined}
-                className="touch-target touch-feedback cursor-pointer px-2 py-1 rounded transition-all duration-200 flex items-center justify-between w-full lab-focus"
-                style={{
-                  ...reset,
-                  backgroundColor: active ? 'rgba(var(--accent-color-rgb), 0.2)' : 'transparent',
-                  color: active ? 'var(--accent-color)' : 'inherit',
-                }}
-                onMouseEnter={(e) => {
-                  if (!active) e.currentTarget.style.backgroundColor = 'rgba(var(--accent-color-rgb), 0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  if (!active) e.currentTarget.style.backgroundColor = 'transparent';
-                }}
+                className="nav-entry"
+                aria-current={activeType === child.type ? 'page' : undefined}
                 onClick={(e) => onSelect({ type: child.type }, e)}
               >
-                <span>
-                  <span style={{ color: 'var(--accent-color)' }}>{i === children.length - 1 ? '└──' : '├──'}</span>{' '}
-                  {child.label}
-                </span>
+                <span className="tree-branch" aria-hidden="true">
+                  {i === children.length - 1 ? '└──' : '├──'}
+                </span>{' '}
+                {child.label}
                 {child.state && (
                   <span style={{ fontSize: '0.85em', marginLeft: 'auto', paddingLeft: '1em' }}>
                     <StatusGlyph state={child.state} />
                   </span>
                 )}
               </button>
-            );
-          })}
-        </div>
+            </li>
+          ))}
+        </ul>
       )}
-    </div>
+    </>
   );
 }

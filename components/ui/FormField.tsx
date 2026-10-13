@@ -147,7 +147,7 @@ export const FormField: React.FC<FormFieldProps> = ({
           id={charCountId}
           className="mt-1"
           style={{
-            color: isNearLimit ? 'var(--theme-warning)' : 'var(--theme-text-dimmed)',
+            color: isNearLimit ? 'var(--theme-warning)' : 'rgba(var(--theme-text-rgb), 0.72)',
             fontSize: 'clamp(11px, 2cqw, 18px)'
           }}
           aria-live="polite"

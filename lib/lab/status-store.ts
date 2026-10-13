@@ -9,6 +9,8 @@ export interface LabStatus {
   telemetry?: LabState;
   /** The threats view's badge: the worse of the digest and the live document, when known. */
   threats?: LabState;
+  /** Lab power from the latest summary while telemetry is not offline, for the phone rail. */
+  power_w?: number | null;
 }
 
 let digest: LabState | undefined;
@@ -17,7 +19,7 @@ let snapshot: LabStatus = {};
 const listeners = new Set<() => void>();
 
 function publish(next: LabStatus) {
-  if (next.telemetry === snapshot.telemetry && next.threats === snapshot.threats) return;
+  if (next.telemetry === snapshot.telemetry && next.threats === snapshot.threats && next.power_w === snapshot.power_w) return;
   snapshot = next;
   listeners.forEach((l) => l());
 }
@@ -34,8 +36,11 @@ export function reportLabState(doc: 'telemetry' | 'digest' | 'live', state: LabS
 export function reportFromPayload(url: string, payload: unknown) {
   const state = (payload as { state?: LabState } | null)?.state;
   if (url === '/api/lab/summary') {
-    const s = payload as { telemetry?: { state: LabState }; threats?: { state: LabState } };
-    if (s.telemetry) reportLabState('telemetry', s.telemetry.state);
+    const s = payload as { telemetry?: { state: LabState; power_w?: number | null }; threats?: { state: LabState } };
+    if (s.telemetry) {
+      reportLabState('telemetry', s.telemetry.state);
+      publish({ ...snapshot, power_w: s.telemetry.state === 'offline' ? undefined : s.telemetry.power_w });
+    }
     if (s.threats) reportLabState('digest', s.threats.state);
     return;
   }

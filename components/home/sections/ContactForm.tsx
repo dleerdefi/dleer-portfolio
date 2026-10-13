@@ -1,4 +1,7 @@
+'use client';
+
 import React, { useState } from 'react';
+import { useSocialLinks } from '@/lib/config';
 import { FormField } from '@/components/ui/FormField';
 import { useContactFormValidation } from '@/hooks/useContactFormValidation';
 
@@ -9,31 +12,10 @@ interface FormData {
   website?: string;
 }
 
-interface SocialLink {
-  platform: string;
-  url: string;
-}
-
-interface PersonalInfo {
-  email: string;
-}
-
-interface ParallaxContactSectionProps {
-  formData: FormData;
-  setFormData: (data: FormData) => void;
-  socialLinks: SocialLink[];
-  personal: PersonalInfo;
-}
-
-/**
- * Contact section component for parallax layout
- * Includes contact form and social links
- */
-export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
-  formData,
-  setFormData,
-  socialLinks
-}) => {
+/** The phone's Contact section: the form and the social links (desktop uses ContactContent). */
+export function ContactForm() {
+  const socialLinks = useSocialLinks();
+  const [formData, setFormData] = useState<FormData>({ name: '', email: '', message: '' });
   const [formRenderTime] = useState(new Date().toISOString());
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -93,19 +75,15 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Contact section wrapper - no glass morphism */}
-      <div className="p-8 space-y-6">
-        <h2
-          className="text-3xl font-bold"
-          style={{ color: 'var(--accent-color)' }}
-        >
+      <div className="space-y-6">
+        <h2 id="contact-title" className="section-title">
           Contact
         </h2>
 
         {/* Contact Form */}
         <form id="contact-form-mobile" onSubmit={handleSubmit}>
         {/* Honeypot field - hidden from users, visible to bots */}
-        <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+        <div style={{ position: 'absolute', left: '-9999px', top: 0 }} aria-hidden="true">
           <label htmlFor="website-mobile" aria-hidden="true">
             Website (leave blank)
           </label>
@@ -292,4 +270,4 @@ export const ParallaxContactSection: React.FC<ParallaxContactSectionProps> = ({
       </div>
     </div>
   );
-};
+}
