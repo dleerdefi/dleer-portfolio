@@ -12,6 +12,10 @@ export const HOSTS: Record<Role, { name: string; short: string; job: string }> =
 /** What `lab.energy_cost_usd_24h` is priced at (homelab status-contract.md). */
 export const COST_NOTE = 'Puget Sound Energy residential rate, $0.2056/kWh; excludes the basic charge and taxes';
 
+/** The hover text on a cost at the current draw, with the published rate. */
+export const drawNote = (rateUsdPerKwh: number) =>
+  `Current draw × Puget Sound Energy's residential rate ($${rateUsdPerKwh.toFixed(4)}/kWh, Schedule 7 plus riders; excludes the basic charge and tax).`;
+
 const GPUS: Record<string, string> = {
   'storage:0': 'Quadro RTX 4000',
   'gpu:0': 'RTX A4000 #0',

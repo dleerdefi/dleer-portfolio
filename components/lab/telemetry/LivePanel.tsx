@@ -4,8 +4,8 @@ import React, { useRef } from 'react';
 import { useLabData } from '@/hooks/useLabData';
 import { useOnScreen } from '@/hooks/useOnScreen';
 import { lastPointMs, windowText } from '@/lib/lab/live';
-import { fmtPct, withUnit } from '@/lib/lab/format';
-import { HOSTS, gpuName } from '@/lib/lab/names';
+import { costAtDraw, fmtPct, fmtPerDay, fmtPerHour, withUnit } from '@/lib/lab/format';
+import { HOSTS, drawNote, gpuName } from '@/lib/lab/names';
 import type { TelemetryLiveDoc } from '@/lib/lab/schemas/telemetry';
 import type { LabPayload } from '@/lib/lab/types';
 import { LabStatusBadge } from '@/components/lab/shared/LabStatusBadge';
@@ -21,7 +21,8 @@ const caption: React.CSSProperties = { color: 'var(--lab-text-2)', margin: 0 };
  * while the panel is near the viewport (and the tab visible): lab power large, then each host's
  * CPU and each GPU's utilisation as small multiples on one 0–100 % scale.
  */
-export function LivePanel() {
+/** `rate`: now.json's electricity price, for the cost of the latest point (hidden while null). */
+export function LivePanel({ rate = null }: { rate?: number | null }) {
   const box = useRef<HTMLElement>(null);
   const onScreen = useOnScreen(box);
   const { payload, error } = useLabData<LabPayload<TelemetryLiveDoc>>('/api/lab/status/live', 10_000, {
@@ -39,12 +40,12 @@ export function LivePanel() {
         {(live || offline) && <LabStatusBadge state={live ? live.state : 'offline'} compact announce={false} />}
       </header>
       {offline && <p style={caption}>The live feed is offline; the 24 h charts above still show the day.</p>}
-      {live && <LiveCharts live={live} />}
+      {live && <LiveCharts live={live} rate={rate} />}
     </section>
   );
 }
 
-function LiveCharts({ live }: { live: Live }) {
+function LiveCharts({ live, rate }: { live: Live; rate: number | null }) {
   const lastMs = lastPointMs(live);
   const minutes = Math.round(((live.points - 1) * live.step_s) / 60);
   const xLabels: [string, string, string] = [`-${minutes} min`, `-${minutes / 2} min`, 'now'];
@@ -56,6 +57,7 @@ function LiveCharts({ live }: { live: Live }) {
       <figure style={{ margin: 0 }}>
         <figcaption style={caption}>
           lab power <span style={{ color: 'var(--theme-text)' }}>{withUnit(latest(power), 'W')}</span>
+          <LiveCost watts={latest(power)} rate={rate} />
         </figcaption>
         <LiveChart
           {...shared}
@@ -124,6 +126,18 @@ function Multiples({
         ))}
       </div>
     </figure>
+  );
+}
+
+/** " · $0.154/h · $3.70/day": the latest point priced at the rate; it moves every 10 s. */
+export function LiveCost({ watts, rate }: { watts: number | null; rate: number | null }) {
+  const cost = costAtDraw(watts, rate);
+  if (!cost || rate === null) return null;
+  return (
+    <span title={drawNote(rate)}>
+      {' '}
+      · {fmtPerHour(cost.perHour)} · {fmtPerDay(cost.perDay)}
+    </span>
   );
 }
 

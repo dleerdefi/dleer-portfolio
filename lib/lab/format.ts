@@ -52,6 +52,21 @@ export function fmtTB(bytes: N): string {
 /** 99.9% from a 0–1 ratio, one decimal (ARC hit ratios live just under 100 %). */
 export const fmtPct1 = (ratio: N) => (known(ratio) ? `${(ratio * 100).toFixed(1)}%` : DASH);
 
+/**
+ * What the current draw costs at the electricity price (homelab status-contract.md):
+ * `power_w / 1000 × rate` per hour, × 24 per day, × 30 per month. Null if either is unknown.
+ */
+export function costAtDraw(watts: N, rateUsdPerKwh: N): { perHour: number; perDay: number; perMonth: number } | null {
+  if (!known(watts) || !known(rateUsdPerKwh)) return null;
+  const perHour = (watts / 1000) * rateUsdPerKwh;
+  return { perHour, perDay: perHour * 24, perMonth: perHour * 24 * 30 };
+}
+
+/** "$0.154/h": three decimals, so a 10 W step shows. */
+export const fmtPerHour = (usd: number) => `$${usd.toFixed(3)}/h`;
+/** "$3.70/day". */
+export const fmtPerDay = (usd: number) => `$${usd.toFixed(2)}/day`;
+
 /** An approximate daily cost: "≈ $4.96". */
 export const fmtUsd = (n: N) => (known(n) ? `≈ $${n.toFixed(2)}` : DASH);
 

@@ -7,6 +7,7 @@
     "power_w": 1028.5,
     "energy_kwh_24h": 24.14,
     "energy_cost_usd_24h": 4.96,
+    "energy_rate_usd_per_kwh": 0.205634,
     "vms_running": 6,
     "targets_up": 27,
     "targets_total": 27,

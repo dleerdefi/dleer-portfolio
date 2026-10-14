@@ -34,6 +34,8 @@ export const NowDoc = z.object({
     power_w: watts(10000),
     energy_kwh_24h: z.number().min(0).max(250).nullable(),
     energy_cost_usd_24h: z.number().min(0).max(100).nullable(),
+    // homelab PR #32: the electricity price; absent from an older now.json, which reads as null
+    energy_rate_usd_per_kwh: z.number().min(0).max(5).nullable().default(null),
     vms_running: count(500),
     targets_up: count(1000),
     targets_total: count(1000),

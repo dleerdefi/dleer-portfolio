@@ -11,8 +11,10 @@ import {
   fmtRate,
   fmtTB,
   fmtUsd,
+  costAtDraw,
+  fmtPerDay,
 } from '@/lib/lab/format';
-import { COST_NOTE } from '@/lib/lab/names';
+import { COST_NOTE, drawNote } from '@/lib/lab/names';
 import type { NowDoc } from '@/lib/lab/schemas/telemetry';
 
 // The public telemetry added in homelab PR #28 (TELEMETRY_VIEW.md §5): cost, the lab health
@@ -31,6 +33,20 @@ export function Cost({ usd, suffix = '' }: { usd: number | null; suffix?: string
     <span title={COST_NOTE}>
       {fmtUsd(usd)}
       {suffix}
+    </span>
+  );
+}
+
+/**
+ * "≈ $3.70/day at this draw": the current power priced at the published rate. Hidden while the
+ * rate is unknown (a now.json from before homelab PR #32) or the power is.
+ */
+export function AtDraw({ watts, rate, style }: { watts: number | null | undefined; rate: number | null | undefined; style?: React.CSSProperties }) {
+  const cost = costAtDraw(watts ?? null, rate ?? null);
+  if (!cost || rate == null) return null;
+  return (
+    <span className="lab-text-2" title={drawNote(rate)} style={style}>
+      ≈ {fmtPerDay(cost.perDay)} at this draw
     </span>
   );
 }

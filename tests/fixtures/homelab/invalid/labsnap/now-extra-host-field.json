@@ -9,6 +9,7 @@
     "hosts_up": 3,
     "hosts_expected": 3,
     "energy_cost_usd_24h": null,
+    "energy_rate_usd_per_kwh": null,
     "vms_running": null,
     "targets_up": null,
     "targets_total": null,
