@@ -46,6 +46,7 @@ export interface LabSummary {
     power_w?: number | null;
     energy_kwh_24h?: number | null;
     energy_cost_usd_24h?: number | null;
+    energy_rate_usd_per_kwh?: number | null;
     hosts_up?: number;
     hosts_expected?: number;
     power_24h?: (number | null)[];

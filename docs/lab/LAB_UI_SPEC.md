@@ -364,7 +364,7 @@ home page never downloads a full digest (about 1.3 KB with every block):
 {
   demo?: true,
   telemetry: { state: LabState; age_s?: number; power_w?: number | null; energy_kwh_24h?: number | null;
-               energy_cost_usd_24h?: number | null;
+               energy_cost_usd_24h?: number | null; energy_rate_usd_per_kwh?: number | null;
                hosts_up?: number; hosts_expected?: number;
                power_24h?: (number | null)[],   // history lab.power_w: the last 288 points, averaged in 3s → 96 points; a window with a null stays null
                // the lab card's slides (TELEMETRY_VIEW.md §5.4), in now.json's order

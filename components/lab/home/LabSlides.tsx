@@ -1,5 +1,5 @@
 import React from 'react';
-import { fmtCelsius, fmtCount, fmtInt, fmtKwh, fmtPct, fmtRate, fmtUsd } from '@/lib/lab/format';
+import { costAtDraw, fmtCelsius, fmtCount, fmtInt, fmtKwh, fmtPct, fmtPerDay, fmtRate, fmtUsd } from '@/lib/lab/format';
 import { categoryVar, gpuName, HOSTS } from '@/lib/lab/names';
 import { CATEGORIES, type LabSummary } from '@/lib/lab/types';
 import { Sparkline } from '@/components/lab/shared/Sparkline';
@@ -47,6 +47,7 @@ function RowName({ name, note }: { name: string; note: string }) {
 }
 
 export function PowerSlide({ tel }: { tel: Telemetry }) {
+  const atDraw = costAtDraw(tel.power_w ?? null, tel.energy_rate_usd_per_kwh ?? null);
   return (
     <span className={tel.state === 'delayed' ? 'lab-slide-body lab-dim' : 'lab-slide-body'}>
       <span className="lab-slide-power">
@@ -57,7 +58,9 @@ export function PowerSlide({ tel }: { tel: Telemetry }) {
           className="lab-slide-stats lab-text-2"
           items={[
             `${fmtKwh(tel.energy_kwh_24h)} / 24 h`,
-            typeof tel.energy_cost_usd_24h === 'number' && `${fmtUsd(tel.energy_cost_usd_24h)}/day`,
+            // The current draw priced at the published rate; before homelab PR #32 (no rate), the
+            // cost of the last 24 hours, labelled so
+            atDraw ? `≈ ${fmtPerDay(atDraw.perDay)} at this draw` : typeof tel.energy_cost_usd_24h === 'number' && `${fmtUsd(tel.energy_cost_usd_24h)} last 24 h`,
             `${tel.hosts_up}/${tel.hosts_expected} hosts up`,
           ]}
         />

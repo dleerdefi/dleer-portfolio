@@ -10,7 +10,7 @@ import { HOSTS } from '@/lib/lab/names';
 import { LabHeader, LabStateLine } from '@/components/lab/shared/LabHeader';
 import { Sparkline } from '@/components/lab/shared/Sparkline';
 import { Value } from '@/components/lab/shared/Value';
-import { Cost, HealthLine } from './LabExtras';
+import { AtDraw, Cost, HealthLine } from './LabExtras';
 import { HostTable, GpuTable } from './TelemetryTables';
 import { HostsGlyph, hostsText } from './HostsLine';
 import { threatsTeaser, useTelemetry, type HistoryLive } from './useTelemetry';
@@ -66,9 +66,10 @@ export default function TelemetryTile({
                 <Value text={fmtInt(now.lab.power_w)} unit="W" />
               </div>
               <div className="lab-text-2" style={{ marginTop: '0.5rem' }}>at the wall, now</div>
+              <AtDraw watts={now.lab.power_w} rate={now.lab.energy_rate_usd_per_kwh} style={{ display: 'block', marginTop: '0.25rem' }} />
             </div>
             <dl style={{ margin: 0, display: 'grid', gridTemplateColumns: 'auto auto', columnGap: '0.75em', rowGap: '0.3em', fontSize: FONT_SIZES.sm }}>
-              <dt className="lab-text-2">24 h</dt>
+              <dt className="lab-text-2">last 24 h</dt>
               <dd style={{ margin: 0 }}>
                 {fmtKwh(now.lab.energy_kwh_24h)} <span className="lab-text-2">·</span>{' '}
                 <Cost usd={now.lab.energy_cost_usd_24h} />

@@ -13,7 +13,7 @@ import { LineChart } from '@/components/lab/shared/LineChart';
 import { Sparkline } from '@/components/lab/shared/Sparkline';
 import { Value } from '@/components/lab/shared/Value';
 import { HostCard } from './HostCard';
-import { Cost, HealthLine } from './LabExtras';
+import { AtDraw, Cost, HealthLine } from './LabExtras';
 import { GpuTable } from './TelemetryTables';
 import { hostsText } from './HostsLine';
 import { HistoryOr } from './TelemetryTile';
@@ -81,14 +81,17 @@ export default function TelemetryPage() {
                     <div className="lab-text-2" style={{ marginTop: '0.5rem' }}>
                       at the wall, now
                     </div>
+                    <AtDraw watts={now.lab.power_w} rate={now.lab.energy_rate_usd_per_kwh} style={{ display: 'block', marginTop: '0.25rem' }} />
                     <div className="lab-stat-boxes">
                       <div className="lab-card">
-                        <div style={{ fontSize: '1.25rem' }}>{fmtDecimal(now.lab.energy_kwh_24h)}</div>
-                        <div className="lab-text-2">kWh, 24 h</div>
-                        <div className="lab-text-2" style={{ marginTop: '0.2rem' }}>
+                        <div style={{ fontSize: '1.25rem' }}>
+                          {fmtDecimal(now.lab.energy_kwh_24h)} <span className="lab-text-2">kWh</span>
+                        </div>
+                        <div className="lab-text-2">
                           <Cost usd={now.lab.energy_cost_usd_24h} />
                           <sup aria-hidden="true">*</sup>
                         </div>
+                        <div className="lab-text-2">last 24 h</div>
                       </div>
                       <div className="lab-card">
                         <div style={{ fontSize: '1.25rem' }}>{hostsText(now.lab.hosts_up, now.lab.hosts_expected)}</div>
@@ -117,7 +120,7 @@ export default function TelemetryPage() {
 
                 <HealthLine lab={now.lab} />
 
-                <LivePanel />
+                <LivePanel rate={now.lab.energy_rate_usd_per_kwh} />
 
                 <div className="lab-host-cards" id="hosts">
                   {now.hosts.map((host, i) => (

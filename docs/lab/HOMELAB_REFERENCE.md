@@ -180,6 +180,8 @@ files (the sha256 values did not change). `now.v1.json` was re-synced from `main
 invalid ones) from `main` at `6e4473a` (homelab PR #28: cost, lab health counts, airflow, PSU
 input, GPU video engines, `nas`, `ci`). `live.v1.json` and `invalid/live-history-steps.json`
 came from `main` at `a0225ce` (homelab PR #31: live.json, the last 10 minutes at 10 s steps).
+`now.v1.json` and the nine `invalid/now-*.json` were re-synced from `main` at `4b91ea7` (homelab
+PR #32: `lab.energy_rate_usd_per_kwh`, the electricity price).
 
 **Sync procedure** (when a homelab PR changes an example or a schema):
 

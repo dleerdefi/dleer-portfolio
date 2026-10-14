@@ -9,7 +9,7 @@ import { Meter } from '@/components/lab/shared/Meter';
 import { Sparkline } from '@/components/lab/shared/Sparkline';
 import { Value } from '@/components/lab/shared/Value';
 import { LivePanel } from './LivePanel';
-import { CiBlock, Cost, HealthLine, NasBlock, TranscodingBadge, airflowDelta, isTranscoding } from './LabExtras';
+import { AtDraw, CiBlock, Cost, HealthLine, NasBlock, TranscodingBadge, airflowDelta, isTranscoding } from './LabExtras';
 import { Down } from './TelemetryTables';
 import { HistoryOr } from './TelemetryTile';
 import { threatsTeaser, type useTelemetry } from './useTelemetry';
@@ -32,9 +32,10 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
               <div className="lab-text-2" style={{ marginTop: '0.4rem' }}>
                 at the wall, now
               </div>
+              <AtDraw watts={now.lab.power_w} rate={now.lab.energy_rate_usd_per_kwh} style={{ display: 'block', marginTop: '0.25rem' }} />
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div>{fmtKwh(now.lab.energy_kwh_24h)} 24 h</div>
+              <div>{fmtKwh(now.lab.energy_kwh_24h)} last 24 h</div>
               <div className="lab-text-2">
                 <Cost usd={now.lab.energy_cost_usd_24h} />
                 <sup aria-hidden="true">*</sup>
@@ -46,7 +47,7 @@ export function TelemetryPhone({ t }: { t: ReturnType<typeof useTelemetry> }) {
           </div>
 
           <HealthLine lab={now.lab} style={{ fontSize: '0.875rem' }} />
-          <LivePanel />
+          <LivePanel rate={now.lab.energy_rate_usd_per_kwh} />
 
           <div>
             <p className="lab-text-2" style={{ margin: '0 0 0.4rem' }}>
