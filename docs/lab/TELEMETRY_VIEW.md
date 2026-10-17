@@ -73,7 +73,7 @@ basic charge or taxes). Every key is required, as in the producer schema; each v
 Homelab PR #32 adds `energy_rate_usd_per_kwh` (that rate, 0–5; a `now.json` written before it
 has no key, read as `null`). The views price the current draw with it, `power_w / 1000 × rate`
 per hour (`costAtDraw` in `lib/lab/format.ts`): `≈ $3.70/day at this draw` under the watts on
-`/lab`, in the stage tile and on the home card's power slide, and `$0.154/h · $3.70/day` beside
+`/lab` and in the stage tile, `≈ $3.70/day now` on the home card's narrower power slide, and `$0.154/h · $3.70/day` beside
 the live panel's latest power, which moves every 10 s. The 24 h cost is labelled `last 24 h`.
 Each is hidden while the rate is `null`; the home slide then shows the 24 h cost instead.
 

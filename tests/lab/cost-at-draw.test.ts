@@ -80,13 +80,13 @@ describe('the at-draw figure', () => {
     expect(text(React.createElement(LiveCost, { watts: 750, rate: RATE }))).toBe(' · $0.154/h · $3.70/day');
   });
 
-  it('on the home slide: at this draw with a rate, the last 24 h without one', () => {
+  it('on the home slide: at the current draw with a rate, the last 24 h without one', () => {
     const tel: LabSummary['telemetry'] = { state: 'live', power_w: 750, energy_kwh_24h: 18.2, energy_cost_usd_24h: 3.74, hosts_up: 3, hosts_expected: 3 };
     const withRate = text(React.createElement(PowerSlide, { tel: { ...tel, energy_rate_usd_per_kwh: RATE } }));
-    expect(withRate).toContain('≈ $3.70/day at this draw');
+    expect(withRate).toContain('≈ $3.70/day now');
     expect(withRate).not.toContain('last 24 h');
     const without = text(React.createElement(PowerSlide, { tel: { ...tel, energy_rate_usd_per_kwh: null } }));
-    expect(without).not.toContain('at this draw');
+    expect(without).not.toContain('/day now');
     expect(without).toContain('≈ $3.74 last 24 h');
   });
 });

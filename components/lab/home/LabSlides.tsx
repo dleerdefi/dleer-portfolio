@@ -58,9 +58,9 @@ export function PowerSlide({ tel }: { tel: Telemetry }) {
           className="lab-slide-stats lab-text-2"
           items={[
             `${fmtKwh(tel.energy_kwh_24h)} / 24 h`,
-            // The current draw priced at the published rate; before homelab PR #32 (no rate), the
-            // cost of the last 24 hours, labelled so
-            atDraw ? `≈ ${fmtPerDay(atDraw.perDay)} at this draw` : typeof tel.energy_cost_usd_24h === 'number' && `${fmtUsd(tel.energy_cost_usd_24h)} last 24 h`,
+            // The current draw priced at the published rate ("now": the card is narrow on phones);
+            // before homelab PR #32 (no rate), the cost of the last 24 hours, labelled so
+            atDraw ? `≈ ${fmtPerDay(atDraw.perDay)} now` : typeof tel.energy_cost_usd_24h === 'number' && `${fmtUsd(tel.energy_cost_usd_24h)} last 24 h`,
             `${tel.hosts_up}/${tel.hosts_expected} hosts up`,
           ]}
         />
